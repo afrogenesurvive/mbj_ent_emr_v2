@@ -652,21 +652,52 @@ module.exports = buildSchema(`
   type RootQuery {
     testEmail: String
 
-    login(email: String!, password: String!): AuthData!
-    logout( activityId: ID!): User!
-
     getPocketVars(activityId: ID!): String
 
-    getAllUsers(activityId: ID!): [User]
-    getUserById(activityId: ID!, userId: ID!): User
-    getUsersByField(activityId: ID!, field: String!, query: String!): [User]
-    getUsersByFieldRegex(activityId: ID!, field: String!, query: String!): [User]
+    Login(email: String!, password: String!): AuthData!
+    Logout( activityId: ID!): Staff!
+
+    getAllStaff(activityId: ID!): [Staff]
+    getStaffById(activityId: ID!, staffId: ID!): Staff
+    getStaffByField(activityId: ID!, field: String!, query: String!): [Staff]
+    getStaffByFieldRegex(activityId: ID!, field: String!, query: String!): [Staff]
+
+    getAllPatients(activityId: ID!): [Patient]
+    getPatientById(activityId: ID!, userId: ID!): Patient
+    getPatientsByField(activityId: ID!, field: String!, query: String!): [Patient]
+    getPatientsByFieldRegex(activityId: ID!, field: String!, query: String!): [Patient]
+
+    getAllAppointments(activityId: ID!): [Appointment]
+    getAppointmentById(activityId: ID!, appointmentId: ID!): Appointment
+    getAppointmentsByField(activityId: ID!, field: String!, query: String!): [Appointment]
+    getAppointmentsByFieldRegex(activityId: ID!, field: String!, query: String!): [Appointment]
+
+    getVisits(activityId: ID!): [Visit]
+    getVisitById(activityId: ID!, visitId: ID!): Visit
+    getVisitsByField(activityId: ID!, field: String!, query: String!): [Visit]
+    getVisitsByFieldRegex(activityId: ID!, field: String!, query: String!): [Visit]
+
+    getReminders(activityId: ID!): [Reminder]
+    getReminderById(activityId: ID!, reminderId: ID!): Reminder
+    getRemindersByField(activityId: ID!, field: String!, query: String!): [Reminder]
+    getRemindersByFieldRegex(activityId: ID!, field: String!, query: String!): [Reminder]
 
   }
 
   type RootMutation {
 
-    createUser(userInput: UserInput!): User
+    createStaff(staffInput: StaffInput!): Staff
+
+    verifyStaff( staffInput: StaffInput!): Staff
+    staffOnline(activityId: ID!, staffId: ID! ): Staff
+    staffOffline(activityId: ID!, staffId: ID! ): Staff
+
+
+    createPatient(patientInput: UserInput!): Patient
+
+    verifyPatient( patientInput: UserInput!): Patient
+    patientOnline(activityId: ID!, patientId: ID! ): Patient
+    patientOffline(activityId: ID!, patientId: ID! ): Patient
 
   }
 
