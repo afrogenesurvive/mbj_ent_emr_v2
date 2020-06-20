@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const userSchema = new Schema({
+const visitSchema = new Schema({
   date: {type: Date},
   time: {type: String},
   title: {type: String},
@@ -13,31 +13,19 @@ const userSchema = new Schema({
       title: {type:String},
       description: {type:String},
       anamnesis: {type:String},
-      attachment: {
-          name: {type:String},
-          format: {type:String},
-          path: {type:String},
-        },
+      attachments:[{type: String}],
         _id: false
     }],
   surveys: [{
       title: {type:String},
       description: {type:String},
-      attachment: {
-          name: {type:String},
-          format: {type:String},
-          path: {type:String}
-        },
+      attachments:[{type: String}],
         _id: false
     }],
   systematicInquiry: [{
       title: {type:String},
       description: {type:String},
-      attachment: {
-          name: {type:String},
-          format: {type:String},
-          path: {type:String}
-        },
+      attachments:[{type: String}],
         _id: false
     }],
   vitals:[{
@@ -47,8 +35,10 @@ const userSchema = new Schema({
       rr: {type: Number},
       temp: {type: Number},
       ps02: {type: Number},
-      height: {type: Number},
-      weight: {type: Number},
+      heightUnit: {type: String},
+      heightValue: {type: Number},
+      weightUnit: {type: String},
+      weightValue: {type: Number},
       bmi: {type: Number},
       urine:{
         type: {type: String},
@@ -63,33 +53,21 @@ const userSchema = new Schema({
     value: {type:String},
     description: {type:String},
     followUp: {type:Boolean},
-    attachment: {
-        name: {type:String},
-        format: {type:String},
-        path: {type:String}
-    },
+    attachments:[{type: String}],
     _id: false
   }],
   investigation: [{
       type: {type: String},
       title: {type: String},
       description: {type: String},
-      attachment: {
-          name: {type: String},
-          format: {type: String},
-          path: {type: String},
-        },
+      attachments:[{type: String}],
         _id: false
     }],
   diagnosis: [{
       type: {type: String},
       title: {type: String},
       description: {type: String},
-      attachment: {
-          name: {type: String},
-          format: {type: String},
-          path: {type: String},
-        },
+      attachments:[{type: String}],
         _id: false
     }],
   treatment: [{
@@ -98,25 +76,17 @@ const userSchema = new Schema({
       description: {type: String},
       dose: {type: String},
       frequency: {type: String},
-      attachment: {
-          name: {type: String},
-          format: {type: String},
-          path: {type: String},
-        },
+      attachments:[{type: String}],
         _id: false
     }
   ],
   billing:[{
-    title: String,
+    title: {type: String},
     type: {type: String},
     description: String,
-    amount: Number,
+    amount: {type: Number},
     paid: {type: Boolean},
-    attachment:{
-        name: {type: String},
-        format: {type: String},
-        path: {type: String},
-      },
+    attachments:[{type: String}],
     notes: {type: String},
     _id: false
   }],
@@ -246,9 +216,21 @@ const userSchema = new Schema({
       }
     },
     _id: false
-  }]
+  }],
+  images: [{
+    name: {type:String},
+    type: {type: String},
+    path: {type: String},
+    _id : false
+  }],
+  files: [{
+    name: {type:String},
+    type: {type: String},
+    path: {type: String},
+    _id : false
+  }],
 },
   { timestamps: true }
 );
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('Visit', visitSchema);

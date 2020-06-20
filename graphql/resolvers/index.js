@@ -1,9 +1,17 @@
 const authResolver = require('./auth');
-const userResolver = require('./user');
+const staffResolver = require('./staff');
+const patientResolver = require('./patient');
+const appointmentResolver = require('./appointment');
+const visitResolver = require('./visit');
+const reminderResolver = require('./reminder');
 
 const rootResolver = {
   ...authResolver,
-  ...userResolver
+  ...staffResolver,
+  ...patientResolver,
+  ...appointmentResolver,
+  ...visitResolver,
+  ...reminderResolver,
 };
 
 module.exports = rootResolver;

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const patientSchema = new Schema({
-  active: {type: Boolean},
+  active: {type: Boolean, required: true},
   password: {type: String},
   title: {type: String},
   name: {type: String,required: true},
@@ -50,7 +50,7 @@ const patientSchema = new Schema({
   },
   attendingPhysician: {type: String},
   occupation: {
-    role: ,
+    role: {type: String},
     employer: {
       name: {type: String},
       phone: {type: String},
@@ -60,7 +60,7 @@ const patientSchema = new Schema({
   },
   insurance: {
     company: {type: String},
-    policyNumber: {type: Number},
+    policyNumber: {type: String},
     description: {type: String},
     expiryDate: {type: Date},
     subscriber: {
@@ -72,31 +72,23 @@ const patientSchema = new Schema({
     name: {type: String},
     relation: {type: String},
     contact: {type: String},
-    email: {type: String},
-    phone1: {type: String},
-    phone2: {type: String},
+      email: {type: String},
+      phone1: {type: String},
+      phone2: {type: String},
     _id: false
   }],
   allergies: [{
     type: {type:String},
     title: {type:String},
     description: {type:String},
-    attachment: {
-        name: {type: String},
-        format: {type: String},
-        path: {type: String},
-      },
+    attachments: [{type: String}],
       _id: false
   }],
   medication: [{
     title: {type: String},
     type: {type: String},
     description: {type: String},
-    attachment: {
-        name: {type: String},
-        format: {type: String},
-        path: {type: String},
-      },
+    attachments: [{type: String}],
       _id: false
   }],
   images: [{
@@ -113,7 +105,7 @@ const patientSchema = new Schema({
   }],
   notes: [{type: String}],
   tags: [{type: String}],
-  visit: [{type: Schema.Types.ObjectId,ref: 'Visit'}],
+  visits: [{type: Schema.Types.ObjectId,ref: 'Visit'}],
   reminders: [{type: Schema.Types.ObjectId,ref: 'Reminder'}],
   activity:[{
     date: {type: Date},
