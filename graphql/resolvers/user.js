@@ -1,19 +1,20 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const DataLoader = require('dataloader');
-// const nodemailer = require('nodemailer');
 const User = require('../../models/user');
 const util = require('util');
+const mongoose = require('mongoose');
 
 const { transformUser } = require('./merge');
 const { dateToString } = require('../../helpers/date');
 const { pocketVariables } = require('../../helpers/pocketVars');
 
-// const mailjet = require ('node-mailjet')
-// .connect(pocketVariables.mailjet.a, pocketVariables.mailjet.b)
+
+// You might need this
+// const foo = await mongoose.model('modelName').findOneAndUpdate({_id: args.staff/patientId},{$pull: {'messages._id': args.messageId}},{new: true, useFindAndModify: false});
+
 
 const sgMail = require('@sendgrid/mail');
-// const S3 = require('aws-sdk/clients/s3');
 const AWS = require('aws-sdk');
 // const stripe = require('stripe')(process.env.STRIPE_B);
 
