@@ -248,6 +248,7 @@ module.exports = buildSchema(`
   }
 
   type appointment {
+    _id: ID!
     title: String
     type: String
     subType: String
@@ -259,7 +260,7 @@ module.exports = buildSchema(`
     description: String
     visit: Visit
     patient: Patient
-    consultant: Staff
+    consultants: [Staff]
     inProgress: Boolean
     attended: Boolean
     important: Boolean
@@ -287,6 +288,7 @@ module.exports = buildSchema(`
   }
 
   type Visit {
+    _id: ID!
     date: String
     time: String
     title: String
@@ -565,6 +567,7 @@ module.exports = buildSchema(`
 
 
   type Reminder {
+    _id: ID!
     createDate: String
     sendDate: String
     sendTime: String
@@ -666,38 +669,146 @@ module.exports = buildSchema(`
     getPatientById(activityId: ID!, userId: ID!): Patient
     getPatientsByField(activityId: ID!, field: String!, query: String!): [Patient]
     getPatientsByFieldRegex(activityId: ID!, field: String!, query: String!): [Patient]
+    getPatientByVisits(activityId: ID!, visitIds: String!): Patient
+    getPatientsByTags(activityId: ID!, patientInput: PatientInput!): [Patient]
 
     getAllAppointments(activityId: ID!): [Appointment]
     getAppointmentById(activityId: ID!, appointmentId: ID!): Appointment
     getAppointmentsByField(activityId: ID!, field: String!, query: String!): [Appointment]
     getAppointmentsByFieldRegex(activityId: ID!, field: String!, query: String!): [Appointment]
+    getAppointmentByVisit(activityId: ID!, visitId: ID!): Appointment
+    getAppointmentsByPatient(activityId: ID!, patientId: ID!): [Appointment]
+    getAppointmentsByConsultants(activityId: ID!, consultantIds: String!): [Appointment]
+    getAppointmentsByTags(activityId: ID!, appointmentInput:AppointmentInput!): [Appointment]
 
     getVisits(activityId: ID!): [Visit]
     getVisitById(activityId: ID!, visitId: ID!): Visit
     getVisitsByField(activityId: ID!, field: String!, query: String!): [Visit]
     getVisitsByFieldRegex(activityId: ID!, field: String!, query: String!): [Visit]
+    getVisitByAppointment(activityId: ID!, appointmentId: ID!): Visit
 
     getReminders(activityId: ID!): [Reminder]
     getReminderById(activityId: ID!, reminderId: ID!): Reminder
     getRemindersByField(activityId: ID!, field: String!, query: String!): [Reminder]
     getRemindersByFieldRegex(activityId: ID!, field: String!, query: String!): [Reminder]
+    getRemindersByCreator(activityId: ID!, creatorId: ID!): [Staff]
+    getRemindersByAppointment(activityId: ID!, creatorId: ID!): [Staff]
+    getRemindersByRecipientsStaff(activityId: ID!, staffIds: String!): [Reminder]
+    getRemindersByRecipientsPatient(activityId: ID!, patientIds: String!): [Reminder]
 
   }
 
   type RootMutation {
 
     createStaff(staffInput: StaffInput!): Staff
+    updateStaffAllFields(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
+    updateStaffSingleField(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
+    addStaffAddress(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
+    addStaffAttendance(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
+    addStaffLeave(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
+    addStaffImage(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
+    addStaffFile(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
+    addStaffNote(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
+    addStaffReminder(activityId: ID!, staffId: ID!, ): Staff
+    addStaffActivity(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
+
+    deleteStaffById(activityId: ID!, staffId: ID!): Staff
+    deleteStaffAddress(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
+    deleteStaffAttendance(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
+    deleteStaffLeave(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
+    deleteStaffImage(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
+    deleteStaffFile(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
+    deleteStaffNote(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
+    deleteStaffReminder(activityId: ID!, staffId: ID!, reminderId: ID!): Staff
 
     verifyStaff( staffInput: StaffInput!): Staff
     staffOnline(activityId: ID!, staffId: ID! ): Staff
     staffOffline(activityId: ID!, staffId: ID! ): Staff
 
-
     createPatient(patientInput: UserInput!): Patient
+    updatePatientAllFields(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    updatePatientSingleField(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    addPatientAddress(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    addPatientNextOfKin(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    addPatientAllergy(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    addPatientMedication(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    addPatientImage(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    addPatientFile(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    addPatientNotes(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    addPatientTags(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    addPatientVisit(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    addPatientReminder(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+
+    deletePatientById(activityId: ID!, patientId: ID!): Patient
+    deletePatientAddress(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    deletePatientNextOfKin(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    deletePatientAllergy(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    deletePatientMedication(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    deletePatientImage(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    deletePatientFile(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    deletePatientNote(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    deletePatientTag(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    deletePatientVisit(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    deletePatientReminder(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
 
     verifyPatient( patientInput: UserInput!): Patient
     patientOnline(activityId: ID!, patientId: ID! ): Patient
     patientOffline(activityId: ID!, patientId: ID! ): Patient
+
+    createAppointment(activityId: ID!, appointmentInput: AppointmentInput!): Appointment
+    updateAppointmentAllFields(activityId: ID !, appointmentId: ID!, appointmentInput: AppointmentInput!): Appointment
+    updateAppointmentSingleField(activityId: ID !, appointmentId: ID!, appointmentInput: AppointmentInput!): Appointment
+    updateAppointmentVisit(activityId: ID !, appointmentId: ID!, visitId: ID!): Appointment
+    updateAppointmentPatient(activityId: ID !, appointmentId: ID!, patientId: ID!): Appointment
+    addAppointmentConsultant(activityId: ID !, appointmentId: ID!, consultantId: ID!): Appointment
+    addAppointmentNotes(activityId: ID !, appointmentId: ID!, appointmentInput: AppointmentInput!): Appointment
+    addAppointmentTags(activityId: ID !, appointmentId: ID!, appointmentInput: AppointmentInput!): Appointment
+
+    deleteAppointmentById(activityId: ID!, appointmentId: ID!): Appointment
+    deleteAppointmentConsultant(activityId: ID !, appointmentId: ID!, consultantId: ID!): Appointment
+    deleteAppointmentNote(activityId: ID !, appointmentId: ID!, appointmentInput: AppointmentInput!): Appointment
+    deleteAppointmentTag(activityId: ID !, appointmentId: ID!, appointmentInput: AppointmentInput!): Appointment
+
+    createVisit(activityId: ID!, visitInput: VisitInput!): Visit
+    updateVisitAllFields(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    updateVisitSingleFIeld(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    addVisitComplaint(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    addVisitSurvey(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    addVisitSysInquiry(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    addVisitVitals(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    addVisitExamination(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    addVisitInvestigation(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    addVisitDiagnosis(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    addVisitTreatment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    addVisitBilling(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    addVisitVigilance(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    addVisitImage(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    addVisitFile(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+
+    deleteVisitById(activityId: ID!, visitId: ID!): Visit
+    deleteVisitComplaint(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    deleteVisitSurvey(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    deleteVisitSysInquiry(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    deleteVisitVitals(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    deleteVisitExamination(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    deleteVisitInvestigation(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    deleteVisitDiagnosis(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    deleteVisitTreatment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    deleteVisitBilling(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    deleteVisitVigilance(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    deleteVisitImage(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    deleteVisitFile(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+
+    createReminder(activityId: ID!, appointmentId: ID!): Reminder
+    updateReminderAllFields(activityId: ID!, reminderId: ID!, reminderInput: ReminderInput!): Reminder
+    updateReminderSingleField(activityId: ID!, reminderId: ID!, reminderInput: ReminderInput!): Reminder
+    addReminderRecipientsStaff(activityId: ID!, staffId: ID!): Reminder
+    addReminderRecipientsPatient(activityId: ID!, patientId: ID!): Reminder
+
+    deleteReminderRecipientsStaff(activityId: ID!, staffId: ID!): Reminder
+    deleteReminderRecipientsPatient(activityId: ID!, patientId: ID!): Reminder
+
+    sendReminders(activityId: ID!): [Reminder]
 
   }
 

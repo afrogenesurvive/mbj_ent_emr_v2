@@ -16,7 +16,7 @@ module.exports = (req, res, next) => {
   }
   let decodedToken;
   try {
-    decodedToken = jwt.verify(token, 'CoronaWorkLife');
+    decodedToken = jwt.verify(token, 'ThaFamBizFile');
   } catch (err) {
     req.isAuth = false;
     return next();

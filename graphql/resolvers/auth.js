@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../../models/user');
+const Staff = require('../../models/staff');
 const { pocketVariables } = require('../../helpers/pocketVars');
 
 module.exports = {
@@ -43,7 +43,7 @@ module.exports = {
         error: 'Please  verify user 1st!'}
       // throw new Error('Please  verify user 1st!');
     }
-    const token = jwt.sign({ userId: user.id },'CoronaWorkLife',{expiresIn: '4h'});
+    const token = jwt.sign({ userId: user.id },'ThaFamBizFile',{expiresIn: '4h'});
 
     const userLoggedIn = await User.findOneAndUpdate({_id: user.id},{loggedIn: true},{new: true, useFindAndModify: false})
     // console.log("userLoggedIn", JSON.stringify(userLoggedIn.loggedIn));

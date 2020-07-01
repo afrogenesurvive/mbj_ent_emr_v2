@@ -14,7 +14,7 @@ const appointmentSchema = new Schema({
   description: {type: String,required: false},
   visit: {type: Schema.Types.ObjectId,ref: 'Patient'},
   patient: {type: Schema.Types.ObjectId,ref: 'Patient',required: true},
-  consultant: [{type: Schema.Types.ObjectId,ref: 'Staff'}],
+  consultants: [{type: Schema.Types.ObjectId,ref: 'Staff'}],
   inProgress: {type: Boolean},
   attended: {type: Boolean},
   important: {type: Boolean},
