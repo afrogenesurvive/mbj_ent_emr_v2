@@ -1,11 +1,16 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const DataLoader = require('dataloader');
-const User = require('../../models/user');
+const Staff = require('../../models/staff');
+const Patient = require('../../models/Patient');
+const Appointment = require('../../models/Appointment');
+const Visit = require('../../models/Visit');
+const Reminder = require('../../models/Reminder');
 const util = require('util');
 const mongoose = require('mongoose');
+const moment = require('moment');
 
-const { transformUser } = require('./merge');
+const { transformStaff } = require('./merge');
 const { dateToString } = require('../../helpers/date');
 const { pocketVariables } = require('../../helpers/pocketVars');
 
@@ -162,35 +167,41 @@ module.exports = {
       throw err;
     }
   },
-  createUser: async (args, req) => {
-    console.log("Resolver: createUser...");
-
+  createStaff: async (args, req) => {
+    console.log("Resolver: createStaff...");
     try {
-
-      const existingUserName = await User.findOne({ username: args.userInput.username});
+      const existingUserName = await Staff.findOne({ username: args.staffInput.username});
       if (existingUserName) {
-        throw new Error('User w/ that username exists already.');
+        throw new Error('Staff w/ that username exists already.');
       }
       const hashedPassword = await bcrypt.hash(args.userInput.password, 12);
-      const today = new Date();
+      const today = moment();
       let age = 0;
-      let dob = new Date(args.userInput.dob);
-      let ageDifMs = Date.now() - dob.getTime();
+      let dob = moment(args.userInput.dob).format('YYYY-MM-DD');
+      let dob2 = new Date(args.userInput.dob);
+      let ageDifMs = new Date() - dob2.getTime();
       let ageDate = new Date(ageDifMs);
       age =  Math.abs(ageDate.getUTCFullYear() - 1970);
-      let verfCode = null;
+      // console.log('dob',dob,'age',age);
+      let rando = Math.floor(Math.random() * 5) + 1;
+      let verfCode = moment().format()+'?'+args.userInput.username+'?'+rando+'';
+      const key = 'MBJ_ENT_emr_v2_Signup';
+      const encryptor = require('simple-encryptor')(key);
+      const encrypted = encryptor.encrypt(verfCode);
+      // console.log('rando',rando,'verfCode',verfCode,'encrypted',encrypted);
+      verfCode = encrypted;
+      console.log('verfCode',verfCode);
       const user = new User({
         password: hashedPassword,
         name: args.userInput.name,
         role: args.userInput.role,
+        type: args.userInput.type,
         username: args.userInput.username,
         dob: args.userInput.dob,
         age: age,
-        public: args.userInput.public,
         contact: {
           email: args.userInput.contactEmail,
-          phone: args.userInput.contactPhone,
-          phone2: args.userInput.contactPhone2
+          phone: args.userInput.contactPhone
         },
         addresses: [{
           type: args.userInput.addressType,
@@ -203,33 +214,23 @@ module.exports = {
           primary: true
         }],
         bio: args.userInput.bio,
-        profileImages: [],
-        socialMedia: [],
         interests: [],
-        perks: [],
-        promos: [],
-        friends: [],
         points: 0,
-        tags: [],
         clientConnected: false,
         loggedIn:false,
         verification: {
           verified: false,
           type: "email",
-          code: 'VERF001'
+          code: verfCode
         },
         activity: [{
           date: today,
           request: "initial activity... profile created..."
         }],
-        likedLessons: [],
-        bookedLessons: [],
-        attendedLessons: [],
-        taughtLessons: [],
+        liked: [],
         wishlist: [],
         cart: [],
-        comments: [],
-        messages: [],
+        reviews: [],
         orders: [],
         paymentInfo: []
       });
@@ -259,40 +260,20 @@ module.exports = {
         .then(() => {
           // console.log('Email Sent!');
           sendStatus = 'Email Sent!';
-          // console.log('sendStatus',sendStatus);
+          console.log('sendStatus',sendStatus);
         })
         .catch(error => {
           // console.error(error.toString());
           const {message, code, response} = error;
           const {headers, body} = response;
           sendStatus = error.toString()+response;
-          // console.log('sendStatus',sendStatus);
+          console.log('sendStatus',sendStatus);
         });
         console.log('verification: ',sendStatus);
 
       return {
         ...result._doc,
-        password: hashedPassword,
-        _id: result.id,
-        name: result.name,
-        role: result.role,
-        username: result.username,
-        dob: result.dob,
-        content: {
-          email: result.contact.email,
-          phone: result.contact.phone,
-          phone2: result.contact.phone2
-        },
-        addresses: [{
-          type: result.addresses[0].type,
-          number: result.addresses[0].number,
-          street: result.addresses[0].street,
-          town: result.addresses[0].town,
-          city: result.addresses[0].city,
-          country: result.addresses[0].country,
-          postalCode: result.addresses[0].postalCode
-        }],
-        bio: result.bio
+        _id: result.id
       };
     } catch (err) {
       throw err;
