@@ -22,12 +22,15 @@
     "graphql": "^15.1.0",
     "gulp": "^4.0.2",
     "jsonwebtoken": "^8.5.1",
+    "mailgun": "^0.5.0",
+    "mailgun-js": "^0.22.0",
     "moment": "^2.26.0",
     "mongodb": "^3.5.8",
     "mongoose": "^5.9.18",
     "node-cron": "^2.0.3",
     "path": "^0.12.7",
     "s3": "^4.4.0",
+    "sib-api-v3-sdk": "^7.2.3",
     "socket.io": "^2.3.0"
   },
   "devDependencies": {

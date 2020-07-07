@@ -1,13 +1,13 @@
 const DataLoader = require('dataloader');
-const Staff = require('../../models/staff');
+const User = require('../../models/user');
 const Patient = require('../../models/patient');
 const Appointment = require('../../models/appointment');
 const Visit = require('../../models/visit');
 const Reminder = require('../../models/reminder');
 const { dateToString } = require('../../helpers/date');
 
-const staffLoader = new DataLoader(staffIds => {
-  return staffs(staffIds);
+const userLoader = new DataLoader(userIds => {
+  return users(userIds);
 });
 const patientLoader = new DataLoader(patientIds => {
   return patients(patientIds);
@@ -23,16 +23,16 @@ const reminderLoader = new DataLoader(reminderIds => {
 });
 
 
-const staff = async staffIds => {
+const user = async userIds => {
   try {
-    const staff = await Staff.find({ _id: { $in: staffIds } });
-    staffs.sort((a, b) => {
+    const user = await User.find({ _id: { $in: userIds } });
+    users.sort((a, b) => {
       return (
-        userIds.indexOf(a._id.toString()) - staffIds.indexOf(b._id.toString())
+        userIds.indexOf(a._id.toString()) - userIds.indexOf(b._id.toString())
       );
     });
-    return staff.map(singleStaff => {
-      return transformStaff(singleStaff);
+    return user.map(singleUser => {
+      return transformUser(singleUser);
     });
   } catch (err) {
     throw err;
@@ -62,7 +62,7 @@ const appointments = async appointmentIds => {
       );
     });
     return appointments.map(appointment => {
-      return transformPatient(appointment);
+      return transformAppointment(appointment);
     });
   } catch (err) {
     throw err;
@@ -77,7 +77,7 @@ const visits = async visitIds => {
       );
     });
     return visits.map(visit => {
-      return transformPatient(visit);
+      return transformVisit(visit);
     });
   } catch (err) {
     throw err;
@@ -92,7 +92,7 @@ const reminders = async reminderIds => {
       );
     });
     return reminders.map(reminder => {
-      return transformPatient(reminder);
+      return transformReminder(reminder);
     });
   } catch (err) {
     throw err;
@@ -100,10 +100,10 @@ const reminders = async reminderIds => {
 };
 
 
-const singleStaff = async staffId => {
+const singleUser = async userId => {
   try {
-    const staff = await staffLoader.load(staffId.toString());
-    return staff;
+    const user = await userLoader.load(userId.toString());
+    return user;
   } catch (err) {
     throw err;
   }
@@ -142,12 +142,11 @@ const singleReminder = async reminderId => {
 };
 
 
-const transformStaff = staff => {
+const transformUser = user => {
   return {
-    ...staff._doc,
-    _id: staff.id,
-    name: staff.name,
-    email: staff.email,
+    ...user._doc,
+    _id: user.id,
+    name: user.name,
   };
 };
 const transformPatient = patient => {
@@ -155,7 +154,6 @@ const transformPatient = patient => {
     ...patient._doc,
     _id: patient.id,
     name: patient.name,
-    email: patient.email,
   };
 };
 const transformAppointment = appointment => {
@@ -185,7 +183,7 @@ const transformReminder = reminder => {
 
 
 
-exports.transformStaff = transformStaff;
+exports.transformUser = transformUser;
 exports.transformPatient = transformPatient;
 exports.transformAppointment = transformAppointment;
 exports.transformVisit = transformVisit;

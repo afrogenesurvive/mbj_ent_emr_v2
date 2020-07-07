@@ -15,7 +15,7 @@ const reminderSchema = new Schema({
       value: {type: Number}
     },
     appointment: {type: Schema.Types.ObjectId,ref: 'Appointment'},
-    staffRecipients: [{type: Schema.Types.ObjectId,ref: 'Staff'}],
+    staffRecipients: [{type: Schema.Types.ObjectId,ref: 'User'}],
     patientRecipients: [{type: Schema.Types.ObjectId,ref: 'Patient'}],
     body: {type: String},
     delivery: {

@@ -1,5 +1,5 @@
 const authResolver = require('./auth');
-const staffResolver = require('./staff');
+const userResolver = require('./user');
 // const patientResolver = require('./patient');
 // const appointmentResolver = require('./appointment');
 // const visitResolver = require('./visit');
@@ -7,7 +7,7 @@ const staffResolver = require('./staff');
 
 const rootResolver = {
   ...authResolver,
-  ...staffResolver,
+  ...userResolver,
   // ...patientResolver,
   // ...appointmentResolver,
   // ...visitResolver,

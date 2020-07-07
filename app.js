@@ -86,39 +86,39 @@ let connectedClients = [];
 
 io.on('connection', (socket) => {
 
-    // socket.on('unauthorizedClientConnect', function(data) {
-    //   console.log("a wild client appeared...socket..",socket.id);
-    //   // connectedClients.push({socket: socket.id, user: 'wild'});
-    //   // console.log('connectedClients',connectedClients);
-    // });
-    // socket.on('msg_subscribe', function(data) {
-    //     console.log('a domestic client appeared...socket...'+socket.id+'...user...'+data.user);
-    //     console.log('joining room', data.room);
-    //     socket.join(data.room);
-    //     connectedClients.push({socket: socket.id, user: data.user})
-    //     console.log('connectedClients',connectedClients);
-    //     userOnline(data.user);
-    // });
-    // socket.on('send message', function(data) {
-    //   console.log('sending room post', data.room);
-    //   socket.broadcast.to(data.room).emit('conversation private post', {
-    //       message: data.message
-    //   });
-    //   socket.emit("MESSAGE_SENT", {msg: "message sent!!"});
-    //   console.log('sender confirmation sent');
-    // });
-    // socket.on('disconnect', function(){
-    //   let clientToRemove = connectedClients.find(x => x.socket === socket.id);
-    //   if (clientToRemove === undefined) {
-    //     console.log('a wild client disappeared', socket.id);
-    //   } else {
-    //     console.log('a domestic client disappeared...',clientToRemove);
-    //     let connectedClientsUpdate = connectedClients.filter(x => x.socket !== socket.id)
-    //     connectedClients = connectedClientsUpdate;
-    //     console.log('connectedClients', connectedClients);
-    //     userOffline(clientToRemove.user);
-    //   }
-    // })
+    socket.on('unauthorizedClientConnect', function(data) {
+      console.log("a wild client appeared...socket..",socket.id);
+      // connectedClients.push({socket: socket.id, user: 'wild'});
+      // console.log('connectedClients',connectedClients);
+    });
+    socket.on('msg_subscribe', function(data) {
+        console.log('a domestic client appeared...socket...'+socket.id+'...user...'+data.user);
+        console.log('joining room', data.room);
+        socket.join(data.room);
+        connectedClients.push({socket: socket.id, user: data.user})
+        console.log('connectedClients',connectedClients);
+        userOnline(data.user);
+    });
+    socket.on('send message', function(data) {
+      console.log('sending room post', data.room);
+      socket.broadcast.to(data.room).emit('conversation private post', {
+          message: data.message
+      });
+      socket.emit("MESSAGE_SENT", {msg: "message sent!!"});
+      console.log('sender confirmation sent');
+    });
+    socket.on('disconnect', function(){
+      let clientToRemove = connectedClients.find(x => x.socket === socket.id);
+      if (clientToRemove === undefined) {
+        console.log('a wild client disappeared', socket.id);
+      } else {
+        console.log('a domestic client disappeared...',clientToRemove);
+        let connectedClientsUpdate = connectedClients.filter(x => x.socket !== socket.id)
+        connectedClients = connectedClientsUpdate;
+        console.log('connectedClients', connectedClients);
+        userOffline(clientToRemove.user);
+      }
+    })
 
 });
 

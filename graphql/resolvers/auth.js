@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const Staff = require('../../models/staff');
+const User = require('../../models/user');
 const { pocketVariables } = require('../../helpers/pocketVars');
 
 module.exports = {

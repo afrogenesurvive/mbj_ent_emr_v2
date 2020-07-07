@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const staffSchema = new Schema({
+const userSchema = new Schema({
   password: {type: String,required: true},
   title: {type: String},
   name: {type: String,required: true},
@@ -58,6 +58,7 @@ const staffSchema = new Schema({
     _id : false
   }],
   notes: [{type: String}],
+  appointments: [{type: Schema.Types.ObjectId,ref: 'Appointment'}],
   reminders: [{type: Schema.Types.ObjectId,ref: 'Reminder'}],
   activity:[{
     date: {type: Date},
@@ -68,4 +69,4 @@ const staffSchema = new Schema({
   { timestamps: true }
 );
 
-module.exports = mongoose.model('Staff', staffSchema);
+module.exports = mongoose.model('User', userSchema);

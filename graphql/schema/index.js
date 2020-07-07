@@ -4,7 +4,7 @@ const { buildSchema } = require('graphql');
 
 module.exports = buildSchema(`
 
-  type Staff {
+  type User {
     _id: ID!
     password: String
     title: String
@@ -20,26 +20,27 @@ module.exports = buildSchema(`
     loggedIn: Boolean
     clientConnected: Boolean
     verification: Verification
-    attendance: [StaffAttendance]
-    leave: [StaffLeave]
+    attendance: [UserAttendance]
+    leave: [UserLeave]
     images: [Image]
     files: [File]
     notes: [String]
+    appointments: [Appointment]
     reminders: [Reminder]
     activity: [Activity]
   }
-  type StaffAttendance {
+  type UserAttendance {
     date: String
     status: String
     description: String
   }
-  type StaffLeave {
+  type UserLeave {
     type: String
     startDate: String
     endDate: String
     description: String
   }
-  input StaffInput {
+  input UserInput {
     password: String
     title: String
     name: String
@@ -52,7 +53,7 @@ module.exports = buildSchema(`
     contactPhone: String
     contactPhone2: String
     conatctEmail: String
-    addressNumber:
+    addressNumber: Int
     addressStreet: String
     addressTown: String
     addressCity: String
@@ -247,7 +248,7 @@ module.exports = buildSchema(`
     activityRequest: String
   }
 
-  type appointment {
+  type Appointment {
     _id: ID!
     title: String
     type: String
@@ -260,7 +261,7 @@ module.exports = buildSchema(`
     description: String
     visit: Visit
     patient: Patient
-    consultants: [Staff]
+    consultants: [User]
     inProgress: Boolean
     attended: Boolean
     important: Boolean
@@ -571,25 +572,25 @@ module.exports = buildSchema(`
     createDate: String
     sendDate: String
     sendTime: String
-    creator: Staff
+    creator: User
     type: String
     subType: String
     title: String
     trigger: ReminderTrigger
     appointment: Appointment
-    staffRecipients: [Staff]
+    userRecipients: [User]
     patientRecipients: [Patient]
     body: String
     delivery: ReminderDelivery
   }
   type ReminderTrigger {
-    unit:
-    value:
+    unit: String
+    value: Float
   }
   type ReminderDelivery {
-    type:
-    params:
-    sent:
+    type: String
+    params: String
+    sent: Boolean
   }
 
   input ReminderInput {
@@ -623,7 +624,7 @@ module.exports = buildSchema(`
     primary: Boolean
   }
   type Verification {
-    verified:
+    verified: Boolean
     type: String
     code: String
   }
@@ -658,12 +659,14 @@ module.exports = buildSchema(`
     getPocketVars(activityId: ID!): String
 
     Login(email: String!, password: String!): AuthData!
-    Logout( activityId: ID!): Staff!
+    Logout( activityId: ID!): User!
+    getThisUser(activityId: ID!): User
 
-    getAllStaff(activityId: ID!): [Staff]
-    getStaffById(activityId: ID!, staffId: ID!): Staff
-    getStaffByField(activityId: ID!, field: String!, query: String!): [Staff]
-    getStaffByFieldRegex(activityId: ID!, field: String!, query: String!): [Staff]
+    getAllUsers(activityId: ID!): [User]
+    getUserById(activityId: ID!, userId: ID!): User
+    getUsersByField(activityId: ID!, field: String!, query: String!): [User]
+    getUsersByFieldRegex(activityId: ID!, field: String!, query: String!): [User]
+    getUsersByAppointment(activityId: ID!, appointmentId: ID!): [User]
 
     getAllPatients(activityId: ID!): [Patient]
     getPatientById(activityId: ID!, userId: ID!): Patient
@@ -691,39 +694,39 @@ module.exports = buildSchema(`
     getReminderById(activityId: ID!, reminderId: ID!): Reminder
     getRemindersByField(activityId: ID!, field: String!, query: String!): [Reminder]
     getRemindersByFieldRegex(activityId: ID!, field: String!, query: String!): [Reminder]
-    getRemindersByCreator(activityId: ID!, creatorId: ID!): [Staff]
-    getRemindersByAppointment(activityId: ID!, creatorId: ID!): [Staff]
-    getRemindersByRecipientsStaff(activityId: ID!, staffIds: String!): [Reminder]
+    getRemindersByCreator(activityId: ID!, creatorId: ID!): [User]
+    getRemindersByAppointment(activityId: ID!, creatorId: ID!): [User]
+    getRemindersByRecipientsUser(activityId: ID!, userIds: String!): [Reminder]
     getRemindersByRecipientsPatient(activityId: ID!, patientIds: String!): [Reminder]
 
   }
 
   type RootMutation {
 
-    createStaff(staffInput: StaffInput!): Staff
-    updateStaffAllFields(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
-    updateStaffSingleField(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
-    addStaffAddress(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
-    addStaffAttendance(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
-    addStaffLeave(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
-    addStaffImage(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
-    addStaffFile(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
-    addStaffNote(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
-    addStaffReminder(activityId: ID!, staffId: ID!, ): Staff
-    addStaffActivity(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
+    createUser(userInput: UserInput!): User
+    updateUserAllFields(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    updateUserSingleField(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    addUserAddress(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    addUserAttendance(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    addUserLeave(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    addUserImage(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    addUserFile(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    addUserNote(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    addUserReminder(activityId: ID!, userId: ID!, reminderId: ID!): User
+    addUserActivity(activityId: ID!, userId: ID!, userInput: UserInput!): User
 
-    deleteStaffById(activityId: ID!, staffId: ID!): Staff
-    deleteStaffAddress(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
-    deleteStaffAttendance(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
-    deleteStaffLeave(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
-    deleteStaffImage(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
-    deleteStaffFile(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
-    deleteStaffNote(activityId: ID!, staffId: ID!, staffInput: StaffInput!): Staff
-    deleteStaffReminder(activityId: ID!, staffId: ID!, reminderId: ID!): Staff
+    deleteUserById(activityId: ID!, userId: ID!): User
+    deleteUserAddress(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    deleteUserAttendance(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    deleteUserLeave(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    deleteUserImage(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    deleteUserFile(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    deleteUserNote(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    deleteUserReminder(activityId: ID!, userId: ID!, reminderId: ID!): User
 
-    verifyStaff( staffInput: StaffInput!): Staff
-    staffOnline(activityId: ID!, staffId: ID! ): Staff
-    staffOffline(activityId: ID!, staffId: ID! ): Staff
+    verifyUser( userInput: UserInput!): User
+    userOnline(activityId: ID!, userId: ID! ): User
+    userOffline(activityId: ID!, userId: ID! ): User
 
     createPatient(patientInput: UserInput!): Patient
     updatePatientAllFields(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
@@ -802,10 +805,10 @@ module.exports = buildSchema(`
     createReminder(activityId: ID!, appointmentId: ID!): Reminder
     updateReminderAllFields(activityId: ID!, reminderId: ID!, reminderInput: ReminderInput!): Reminder
     updateReminderSingleField(activityId: ID!, reminderId: ID!, reminderInput: ReminderInput!): Reminder
-    addReminderRecipientsStaff(activityId: ID!, staffId: ID!): Reminder
+    addReminderRecipientsUser(activityId: ID!, userId: ID!): Reminder
     addReminderRecipientsPatient(activityId: ID!, patientId: ID!): Reminder
 
-    deleteReminderRecipientsStaff(activityId: ID!, staffId: ID!): Reminder
+    deleteReminderRecipientsUser(activityId: ID!, userId: ID!): Reminder
     deleteReminderRecipientsPatient(activityId: ID!, patientId: ID!): Reminder
 
     sendReminders(activityId: ID!): [Reminder]
