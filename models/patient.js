@@ -26,6 +26,7 @@ const patientSchema = new Schema({
     street: {type: String},
     town: {type: String},
     city: {type:String},
+    parish: {type: String},
     country: {type:String},
     postalCode: {type:String},
     primary: {type: Boolean},

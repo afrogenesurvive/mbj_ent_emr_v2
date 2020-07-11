@@ -52,11 +52,12 @@ module.exports = buildSchema(`
     gender: String
     contactPhone: String
     contactPhone2: String
-    conatctEmail: String
+    contactEmail: String
     addressNumber: Int
     addressStreet: String
     addressTown: String
     addressCity: String
+    addressParish: String
     addressCountry: String
     addressPostalCode: String
     addressPrimary: Boolean
@@ -186,13 +187,14 @@ module.exports = buildSchema(`
     dob: String
     age: Int
     gender: String
-    conatctPhone: String
-    conatctPhone2: String
-    conatctEmail: String
+    contactPhone: String
+    contactPhone2: String
+    contactEmail: String
     addressNumber: Int
     addressStreet: String
     addressTown: String
     addressCity: String
+    addressParish: String
     addressCountry: String
     addressPostalCode: String
     addressPrimary: Boolean
@@ -619,6 +621,7 @@ module.exports = buildSchema(`
     street: String
     town: String
     city: String
+    parish: String
     country: String
     postalCode: String
     primary: Boolean
@@ -658,8 +661,8 @@ module.exports = buildSchema(`
 
     getPocketVars(activityId: ID!): String
 
-    Login(email: String!, password: String!): AuthData!
-    Logout( activityId: ID!): User!
+    login(email: String!, password: String!): AuthData!
+    logout( activityId: ID!): User!
     getThisUser(activityId: ID!): User
 
     getAllUsers(activityId: ID!): [User]
@@ -724,6 +727,8 @@ module.exports = buildSchema(`
     deleteUserNote(activityId: ID!, userId: ID!, userInput: UserInput!): User
     deleteUserReminder(activityId: ID!, userId: ID!, reminderId: ID!): User
 
+    requestPasswordReset(userInput: UserInput! ): User
+    resetUserPassword(userId: ID!, userInput: UserInput!):User
     verifyUser( userInput: UserInput!): User
     userOnline(activityId: ID!, userId: ID! ): User
     userOffline(activityId: ID!, userId: ID! ): User
