@@ -38,13 +38,15 @@ const userSchema = new Schema({
   attendance:[{
     date: {type: Date},
     status: {type: String},
-    description: {type: String}
+    description: {type: String},
+    _id : false
   }],
   leave: [{
     type: {type: String},
     startDate: {type:Date},
     endDate: {type:Date},
-    description: {type: String}
+    description: {type: String},
+    _id : false
   }],
   images: [{
     name: {type:String},

@@ -658,6 +658,7 @@ module.exports = buildSchema(`
 
   type RootQuery {
     testEmail: String
+    testPuppeteer: String
 
     getPocketVars(activityId: ID!): String
 
@@ -708,13 +709,14 @@ module.exports = buildSchema(`
 
     createUser(userInput: UserInput!): User
     updateUserAllFields(activityId: ID!, userId: ID!, userInput: UserInput!): User
-    updateUserSingleField(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    updateUserSingleField(activityId: ID!, userId: ID!, field: String!, query: String!): User
     addUserAddress(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    setUserAddressPrimary(activityId: ID!, userId: ID!, userInput: UserInput!): User
     addUserAttendance(activityId: ID!, userId: ID!, userInput: UserInput!): User
     addUserLeave(activityId: ID!, userId: ID!, userInput: UserInput!): User
     addUserImage(activityId: ID!, userId: ID!, userInput: UserInput!): User
     addUserFile(activityId: ID!, userId: ID!, userInput: UserInput!): User
-    addUserNote(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    addUserNotes(activityId: ID!, userId: ID!, userInput: UserInput!): User
     addUserReminder(activityId: ID!, userId: ID!, reminderId: ID!): User
     addUserActivity(activityId: ID!, userId: ID!, userInput: UserInput!): User
 
@@ -733,10 +735,11 @@ module.exports = buildSchema(`
     userOnline(activityId: ID!, userId: ID! ): User
     userOffline(activityId: ID!, userId: ID! ): User
 
-    createPatient(patientInput: UserInput!): Patient
+    createPatient(activityId: ID!, patientInput: UserInput!): Patient
     updatePatientAllFields(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     updatePatientSingleField(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientAddress(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    setPatientAddressPrimary(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientNextOfKin(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientAllergy(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientMedication(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient

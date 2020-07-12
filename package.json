@@ -30,6 +30,7 @@
     "node-cron": "^2.0.3",
     "node-mailjet": "^3.3.1",
     "path": "^0.12.7",
+    "puppeteer": "^5.0.0",
     "s3": "^4.4.0",
     "sib-api-v3-sdk": "^7.2.3",
     "simple-encryptor": "^4.0.0",

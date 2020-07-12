@@ -12,7 +12,7 @@ const moment = require('moment');
 const mailgun = require("mailgun-js");
 const puppeteer = require('puppeteer');
 
-const { transformUser } = require('./merge');
+const { transformPatient } = require('./merge');
 const { dateToString } = require('../../helpers/date');
 const { pocketVariables } = require('../../helpers/pocketVars');
 
@@ -26,150 +26,42 @@ const AWS = require('aws-sdk');
 // const stripe = require('stripe')(process.env.STRIPE_B);
 
 module.exports = {
-  cronTest: async (args) => {
-    console.log("Resolver: cronTest...",args);
-    // try {
-    //   return
-    // } catch (err) {
-    //   throw err;
-    // }
-  },
-  testPuppeteer: async () => {
-    console.log("Resolver: testPuppeteer...");
-
-    (async () => {
-      const browser = await puppeteer.launch();
-      const page = await browser.newPage();
-      await page.goto('https://example.com');
-      await page.screenshot({path: 'example.png'});
-
-      await browser.close();
-    })();
-
-    // try {
-    //   return
-    // } catch (err) {
-    //   throw err;
-    // }
-  },
-  testEmail: async () => {
-    console.log("Resolver: test email...");
-    try {
-      let sendStatus = null;
-
-      // const mailjet = require ('node-mailjet')
-      // .connect(process.env.MAILJET_A, process.env.MAILGUN_B)
-      // const request = mailjet
-      // .post("send", {'version': 'v3.1'})
-      // .request({
-      //   "Messages":[
-      //     {
-      //       "From": {
-      //         "Email": "african.genetic.survival@gmail.com",
-      //         "Name": "Michael"
-      //       },
-      //       "To": [
-      //         {
-      //           "Email": "african.genetic.survival@gmail.com",
-      //           "Name": "Michael"
-      //         }
-      //       ],
-      //       "Subject": "Greetings from Mailjet.",
-      //       "TextPart": "My first Mailjet email",
-      //       "HTMLPart": "<h3>Dear passenger 1, welcome to <a href='https://www.mailjet.com/'>Mailjet</a>!</h3><br />May the delivery force be with you!",
-      //       "CustomID": "AppGettingStartedTest"
-      //     }
-      //   ]
-      // })
-      // request
-      //   .then((result) => {
-      //     console.log(result.body)
-      //   })
-      //   .catch((err) => {
-      //     console.log(err.statusCode)
-      //   })
-
-
-      // const DOMAIN = process.env.MAILGUN_B;
-      // const mg = mailgun({apiKey: process.env.MAILGUN_A, domain: DOMAIN});
-      // const data = {
-      // 	from: 'Excited User <me@samples.mailgun.org>',
-      // 	to: 'bar@example.com, YOU@YOUR_DOMAIN_NAME',
-      // 	subject: 'Hello',
-      // 	text: 'Testing some Mailgun awesomness!'
-      // };
-      // mg.messages().send(data, function (error, body) {
-      // 	console.log(body);
-      // });
-
-      sgMail.setApiKey(process.env.SENDGRID_A);
-      const msg = {
-        to: 'african.genetic.survival@gmail.com',
-        from: 'michael.grandison@gmail.com',
-        subject: 'it was yah Booiii!!!',
-        text: 'and easy to do anywhere, even with Node.js',
-        html: '<strong>and easy to do anywhere, even with Node.js</strong>',
-      };
-      sgMail
-        .send(msg)
-        .then(() => {
-          console.log('Email Sent!');
-          sendStatus = 'Email Sent!';
-          console.log('sendStatus',sendStatus);
-        })
-        .catch(error => {
-          // console.error(error.toString());
-          const {message, code, response} = error;
-          const {headers, body} = response;
-          sendStatus = error.toString()+response;
-          console.log('sendStatus',sendStatus);
-        });
-
-      // return users.map(user => {
-      //   return transformUser(user,);
-      // });
-
-      return sendStatus;
-    } catch (err) {
-      throw err;
-    }
-  },
-  getAllUsers: async (args, req) => {
-    console.log("Resolver: getAllUsers...");
+  getAllPatients: async (args, req) => {
+    console.log("Resolver: getAllPatients...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-      const users = await User.find({})
+      const patients = await Patient.find({})
       .populate('appointments')
       .populate('reminders');
-      return users.map(user => {
-        return transformUser(user,);
+      return patients.map(patient => {
+        return transformPatient(patient,);
       });
     } catch (err) {
       throw err;
     }
   },
-  getUserById: async (args, req) => {
-    console.log("Resolver: getUserById...");
+  getPatientById: async (args, req) => {
+    console.log("Resolver: getPatientById...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-      const user = await User.findById(args.userId)
+      const patient = await Patient.findById(args.patientId)
       .populate('appointments')
       .populate('reminders');
       return {
-          ...user._doc,
-          _id: user.id,
-          name: user.name
+          ...patient._doc,
+          _id: patient.id,
+          name: patient.name
       };
     } catch (err) {
       throw err;
     }
   },
-  getUsersByField: async (args, req) => {
-    console.log("Resolver: getUsersByField...");
+  getPatientsByField: async (args, req) => {
+    console.log("Resolver: getPatientsByField...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
@@ -178,18 +70,18 @@ module.exports = {
       let resolverQuery = args.query;
       const query = {[resolverField]:resolverQuery};
       // console.log(query);
-      const users = await User.find(query)
+      const patients = await Patient.find(query)
       .populate('appointments')
       .populate('reminders');
-      return users.map(user => {
-        return transformUser(user);
+      return patients.map(patient => {
+        return transformPatient(patient);
       });
     } catch (err) {
       throw err;
     }
   },
-  getUsersByFieldRegex: async (args, req) => {
-    console.log("Resolver: getUsersByFieldRegex...");
+  getPatientsByFieldRegex: async (args, req) => {
+    console.log("Resolver: getPatientsByFieldRegex...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
@@ -199,29 +91,29 @@ module.exports = {
       let resolverQuery = {$regex: regExpQuery, $options: 'i'};
       const query = {[resolverField]:resolverQuery};
       // console.log(query);
-      const users = await User.find(query)
+      const patients = await Patient.find(query)
       .populate('appointments')
       .populate('reminders');
-      return users.map(user => {
-        return transformUser(user);
+      return patients.map(patient => {
+        return transformPatient(patient);
       });
     } catch (err) {
       throw err;
     }
   },
-  getUsersByAppointment: async (args, req) => {
-    console.log("Resolver: getUsersByAppointment...");
+  getPatientsByAppointment: async (args, req) => {
+    console.log("Resolver: getPatientsByAppointment...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-      const users = await User.find({
+      const patients = await Patient.find({
         appointments: args.appointmentId,
       })
       .populate('appointments')
       .populate('reminders');
-      return users.map(user => {
-        return transformUser(user);
+      return patients.map(patient => {
+        return transformPatient(patient);
       });
     } catch (err) {
       throw err;
@@ -242,43 +134,43 @@ module.exports = {
       throw err;
     }
   },
-  getThisUser: async (args, req) => {
-    console.log("Resolver: getThisUser...");
+  getThisPatient: async (args, req) => {
+    console.log("Resolver: getThisPatient...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-      const user = await User.findById({_id: args.activityId})
+      const patient = await Patient.findById({_id: args.activityId})
       .populate('appointments')
       .populate('reminders');
       return {
-        ...user._doc,
-        _id: user.id,
-        email: user.contact.email ,
-        name: user.name,
+        ...patient._doc,
+        _id: patient.id,
+        email: patient.contact.email ,
+        name: patient.name,
       };
     } catch (err) {
       throw err;
     }
   },
-  verifyUser: async (args, req) => {
-    console.log("Resolver: verifyUser...");
+  verifyPatient: async (args, req) => {
+    console.log("Resolver: verifyPatient...");
     // if (!req.isAuth) {
     //   throw new Error('Unauthenticated!');
     // }
     try {
-      // const hashedPassword = await bcrypt.hash(args.userInput.password, 12);
+      // const hashedPassword = await bcrypt.hash(args.patientInput.password, 12);
       const challenge = {
-        type: args.userInput.verificationType,
-        code: args.userInput.verificationCode,
+        type: args.patientInput.verificationType,
+        code: args.patientInput.verificationCode,
       }
-      const preUser = await User.findOne({
-        'contact.email': args.userInput.contactEmail,
-        username: args.userInput.username
+      const prePatient = await Patient.findOne({
+        'contact.email': args.patientInput.contactEmail,
+        username: args.patientInput.username
       });
       const response = {
-        type: preUser.verification.type,
-        code: preUser.verification.code,
+        type: prePatient.verification.type,
+        code: prePatient.verification.code,
       };
       // console.log('challenge', challenge, 'response',response, 'match',challenge.type === response.type && challenge.code === response.code);
       let match = challenge.type === response.type && challenge.code === response.code;
@@ -288,7 +180,7 @@ module.exports = {
       if (match === true) {
         console.log("success");;
       }
-      const user = await User.findOneAndUpdate({_id: preUser._id},{
+      const patient = await Patient.findOneAndUpdate({_id: prePatient._id},{
         verification: {
           verified: true,
           type: response.type,
@@ -300,56 +192,56 @@ module.exports = {
       .populate('appointments')
       .populate('reminders');
       return {
-        ...user._doc,
-        _id: user.id,
-        name: user.name,
-        username: user.username
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username
       };
     } catch (err) {
       throw err;
     }
   },
-  userOnline: async (args, req) => {
-    console.log("Resolver: userOnline...");
+  patientOnline: async (args, req) => {
+    console.log("Resolver: patientOnline...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-      const user = await User.findOneAndUpdate(
-        {_id:args.userId},
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId},
         {clientConnected: true},
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
       .populate('reminders');
       return {
-        ...user._doc,
-        _id: user.id,
-        email: user.contact.email ,
-        name: user.name,
+        ...patient._doc,
+        _id: patient.id,
+        email: patient.contact.email ,
+        name: patient.name,
       };
     } catch (err) {
       throw err;
     }
   },
-  userOffline: async (args, req) => {
-    console.log("Resolver: userOffline...");
+  patientOffline: async (args, req) => {
+    console.log("Resolver: patientOffline...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-      const user = await User.findOneAndUpdate(
-        {_id:args.userId},
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId},
         {clientConnected: false},
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
       .populate('reminders');
       return {
-        ...user._doc,
-        _id: user.id,
-        email: user.contact.email ,
-        name: user.name,
+        ...patient._doc,
+        _id: patient.id,
+        email: patient.contact.email ,
+        name: patient.name,
       };
     } catch (err) {
       throw err;
@@ -358,20 +250,20 @@ module.exports = {
   requestPasswordReset: async (args) => {
     console.log('Resolver: requestPasswordReset...');
     try {
-      const username = args.userInput.username;
-      const email = args.userInput.email;
-      const userExists = await User.findOne({username: args.userInput.username, 'contact.email': args.userInput.contactEmail})
-      if (!userExists) {
-        console.log('...user doesnt exist. Check your credentials and try again...');
-        throw new Error('...user doesnt exist. Check your credentials and try again...')
+      const username = args.patientInput.username;
+      const email = args.patientInput.email;
+      const patientExists = await Patient.findOne({username: args.patientInput.username, 'contact.email': args.patientInput.contactEmail})
+      if (!patientExists) {
+        console.log('...patient doesnt exist. Check your credentials and try again...');
+        throw new Error('...patient doesnt exist. Check your credentials and try again...')
       }
 
       let verificationCode = '0';
       let rando = Math.floor(Math.random() * 5) + 1;
-      verificationCode = moment().format()+userExists._id+'?000'+rando+'';
+      verificationCode = moment().format()+patientExists._id+'?000'+rando+'';
 
-      const user = await User.findOneAndUpdate(
-        {_id: userExists._id},
+      const patient = await Patient.findOneAndUpdate(
+        {_id: patientExists._id},
         {verification: {
           verified: false,
           type: 'passwordReset',
@@ -382,24 +274,24 @@ module.exports = {
       const key = 'Request_MBJ_ENT__emr_v2_Password';
       const encryptor = require('simple-encryptor')(key);
       const encrypted = encryptor.encrypt(verificationCode);
-      const resetUrl = 'localhost:3000/passwordReset/'+userExists._id+'@'+encrypted+'';
-      const userEmail = user.contact.email;
+      const resetUrl = 'localhost:3000/passwordReset/'+patientExists._id+'@'+encrypted+'';
+      const patientEmail = patient.contact.email;
       // console.log('resetUrl',resetUrl);
 
       let sendStatus = null;
 
       sgMail.setApiKey(process.env.SENDGRID_A);
       const msg = {
-        to: userEmail,
+        to: patientEmail,
         from: 'michael.grandison@gmail.com',
         subject: 'Password Reset',
         text: `
-          Hello ${user.username} use this url to reset your password...
+          Hello ${patient.username} use this url to reset your password...
           ${resetUrl} ...
         `,
         html: `
         <strong>
-        Hello ${user.username} use this url to reset your password...
+        Hello ${patient.username} use this url to reset your password...
         <a target="_blank">
         ${resetUrl}
         </a> ...
@@ -419,26 +311,26 @@ module.exports = {
         });
 
       return {
-          ...user._doc,
-          _id: user.id,
-          name: user.name
+          ...patient._doc,
+          _id: patient.id,
+          name: patient.name
       };
     } catch (err) {
       throw err;
     }
   },
-  resetUserPassword: async (args) => {
-    console.log('Resolver: resetUserPassword...');
+  resetPatientPassword: async (args) => {
+    console.log('Resolver: resetPatientPassword...');
     try {
 
       let verificationChallengeCode = 0;
       const key = 'Request_MBJ_ENT__emr_v2_Password';
       const decryptor = require('simple-encryptor')(key);
-      verificationChallengeCode = decryptor.decrypt(args.userInput.verificationCode);
+      verificationChallengeCode = decryptor.decrypt(args.patientInput.verificationCode);
 
       // console.log('verificationChallengeCode',verificationChallengeCode);
-      const preUser = await User.findById({_id: args.userId});
-      const verificationResponse = preUser.verification;
+      const prePatient = await Patient.findById({_id: args.patientId});
+      const verificationResponse = prePatient.verification;
 
       if (verificationResponse.type !== 'passwordReset') {
         console.log('...umm no... reset request doesnt match our records... are you hacking??');
@@ -452,10 +344,10 @@ module.exports = {
       else {
         console.log('...password reset verification success... resetting password...');
       }
-      const password = args.userInput.password;
+      const password = args.patientInput.password;
       const hashedPassword = await bcrypt.hash(password, 12);
-      const user = await User.findOneAndUpdate(
-        {_id: args.userId},
+      const patient = await Patient.findOneAndUpdate(
+        {_id: args.patientId},
         { $set:
           {password: hashedPassword,
             verification: {
@@ -467,58 +359,57 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       return {
-          ...user._doc,
-          _id: user.id,
-          name: user.name
+          ...patient._doc,
+          _id: patient.id,
+          name: patient.name
       };
     } catch (err) {
       throw err;
     }
   },
-  updateUserAllFields: async (args, req) => {
-    console.log("Resolver: updateUserAllFields...");
+  updatePatientAllFields: async (args, req) => {
+    console.log("Resolver: updatePatientAllFields...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-      let dob = moment(args.userInput.dob).format('YYYY-MM-DD');
-      let dob2 = new Date(args.userInput.dob);
+      let dob = moment(args.patientInput.dob).format('YYYY-MM-DD');
+      let dob2 = new Date(args.patientInput.dob);
       let ageDifMs = new Date() - dob2.getTime();
       let ageDate = new Date(ageDifMs);
       let age =  Math.abs(ageDate.getUTCFullYear() - 1970);
 
-      const user = await User.findOneAndUpdate(
-        {_id:args.userId},
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId},
         {
-          name: args.userInput.name,
-          title: args.userInput.title,
-          type: args.userInput.type,
-          username: args.userInput.username,
+          name: args.patientInput.name,
+          title: args.patientInput.title,
+          type: args.patientInput.type,
+          username: args.patientInput.username,
           dob: dob,
           age: age,
-          gender: args.userInput.gender,
+          gender: args.patientInput.gender,
           contact: {
-            email: args.userInput.contactEmail,
-            phone: args.userInput.contactPhone,
-            phone2: args.userInput.contactPhone2
-          },
-          bio: args.userInput.bio
+            email: args.patientInput.contactEmail,
+            phone: args.patientInput.contactPhone,
+            phone2: args.patientInput.contactPhone2
+          }
         },
         {new: true, useFindAndModify: false})
         .populate('appointments')
         .populate('reminders');
       return {
-        ...user._doc,
-        _id: user.id,
-        email: user.contact.email ,
-        name: user.name,
+        ...patient._doc,
+        _id: patient.id,
+        email: patient.contact.email ,
+        name: patient.name,
       };
     } catch (err) {
       throw err;
     }
   },
-  updateUserSingleField: async (args, req) => {
-    console.log("ResolverupdateUserSingleField...");
+  updatePatientSingleField: async (args, req) => {
+    console.log("ResolverupdatePatientSingleField...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
@@ -538,58 +429,58 @@ module.exports = {
           age: age
         }
       }
-      const user = await User.findOneAndUpdate(
-        {_id:args.userId},
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId},
         query,
         {new: true, useFindAndModify: false})
         .populate('appointments')
         .populate('reminders');
       return {
-        ...user._doc,
-        _id: user.id,
-        name: user.name,
-        username: user.username,
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
       };
     } catch (err) {
       throw err;
     }
   },
-  addUserAddress: async (args, req) => {
-    console.log("Resolver: addUserAddress...");
+  addPatientAddress: async (args, req) => {
+    console.log("Resolver: addPatientAddress...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
       const address = {
-        number: args.userInput.addressNumber,
-        street: args.userInput.addressStreet,
-        town: args.userInput.addressTown,
-        city: args.userInput.addressCity,
-        parish: args.userInput.addressParish,
-        country: args.userInput.addressCountry,
-        postalCode: args.userInput.addressPostalCode,
+        number: args.patientInput.addressNumber,
+        street: args.patientInput.addressStreet,
+        town: args.patientInput.addressTown,
+        city: args.patientInput.addressCity,
+        parish: args.patientInput.addressParish,
+        country: args.patientInput.addressCountry,
+        postalCode: args.patientInput.addressPostalCode,
         primary: false
       };
 
-      const user = await User.findOneAndUpdate(
-        {_id:args.userId},
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId},
         {$addToSet: {addresses: address}},
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
       .populate('reminders');
       return {
-        ...user._doc,
-        _id: user.id,
-        name: user.name,
-        username: user.username,
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
       };
     } catch (err) {
       throw err;
     }
   },
-  deleteUserAddress: async (args, req) => {
-    console.log("Resolver: deleteUserAddress...");
+  deletePatientAddress: async (args, req) => {
+    console.log("Resolver: deletePatientAddress...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
@@ -599,16 +490,16 @@ module.exports = {
       //   throw new Error("Yaah.. No! Only the owner or Admin can delete a User Address");
       // };
         const address = {
-          number: args.userInput.addressNumber,
-          street: args.userInput.addressStreet,
-          town: args.userInput.addressTown,
-          city: args.userInput.addressCity,
-          country: args.userInput.addressCountry,
-          postalCode: args.userInput.addressPostalCode,
-          primary: args.userInput.addressPrimary
+          number: args.patientInput.addressNumber,
+          street: args.patientInput.addressStreet,
+          town: args.patientInput.addressTown,
+          city: args.patientInput.addressCity,
+          country: args.patientInput.addressCountry,
+          postalCode: args.patientInput.addressPostalCode,
+          primary: args.patientInput.addressPrimary
         };
-        const user = await User.findOneAndUpdate(
-          {_id:args.userId},
+        const patient = await Patient.findOneAndUpdate(
+          {_id:args.patientId},
           {$pull: { 'addresses': address }},
           {new: true, useFindAndModify: false}
         )
@@ -620,45 +511,45 @@ module.exports = {
         .populate('affiliate.referrer');
 
         return {
-          ...user._doc,
-          _id: user.id,
-          email: user.contact.email ,
-          name: user.name,
+          ...patient._doc,
+          _id: patient.id,
+          email: patient.contact.email ,
+          name: patient.name,
         };
     } catch (err) {
       throw err;
     }
   },
-  setUserAddressPrimary: async (args, req) => {
-    console.log("Resolver: setUserAddressPrimary...");
+  setPatientAddressPrimary: async (args, req) => {
+    console.log("Resolver: setPatientAddressPrimary...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-      const nerfAllAddresses = await User.findOneAndUpdate(
-        {_id: args.userId},
-        // {_id: args.userId, 'addresses.type':args.userInput.addressType},
+      const nerfAllAddresses = await Patient.findOneAndUpdate(
+        {_id: args.patientId},
+        // {_id: args.patientId, 'addresses.type':args.patientInput.addressType},
         {$set: {'addresses.$[elem].primary': false}},
         {
-          arrayFilters: [ { "elem.type": args.userInput.addressType } ],
+          arrayFilters: [ { "elem.type": args.patientInput.addressType } ],
           new: true,
           useFindAndModify: false
         }
       )
       console.log('nerfAllAddresses', nerfAllAddresses);
       const address = {
-        number: args.userInput.addressNumber,
-        street: args.userInput.addressStreet,
-        town: args.userInput.addressTown,
-        city: args.userInput.addressCity,
-        parish: args.userInput.addressParish,
-        country: args.userInput.addressCountry,
-        postalCode: args.userInput.addressPostalCode,
+        number: args.patientInput.addressNumber,
+        street: args.patientInput.addressStreet,
+        town: args.patientInput.addressTown,
+        city: args.patientInput.addressCity,
+        parish: args.patientInput.addressParish,
+        country: args.patientInput.addressCountry,
+        postalCode: args.patientInput.addressPostalCode,
         primary: false,
       };
 
-      const user = await User.findOneAndUpdate(
-        {_id:args.userId,
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId,
           addresses: address
         },
         {'addresses.$.primary': true},
@@ -667,259 +558,199 @@ module.exports = {
       .populate('appointments')
       .populate('reminders');
       return {
-        ...user._doc,
-        _id: user.id,
-        email: user.contact.email,
-        name: user.name,
+        ...patient._doc,
+        _id: patient.id,
+        email: patient.contact.email,
+        name: patient.name,
       };
     } catch (err) {
       throw err;
     }
   },
-  addUserAttendance: async (args, req) => {
-    console.log("Resolver: addUserAttendance...");
+  addPatientAttendance: async (args, req) => {
+    console.log("Resolver: addPatientAttendance...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
       const attendance = {
-        date: args.userInput.attendanceDate,
-        status: args.userInput.attendanceStatus,
-        description: args.userInput.attendanceDescription
+        date: args.patientInput.attendanceDate,
+        status: args.patientInput.attendanceStatus,
+        description: args.patientInput.attendanceDescription
       };
 
-      const user = await User.findOneAndUpdate(
-        {_id:args.userId},
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId},
         {$addToSet: {attendance: attendance}},
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
       .populate('reminders');
       return {
-        ...user._doc,
-        _id: user.id,
-        name: user.name,
-        username: user.username,
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
       };
     } catch (err) {
       throw err;
     }
   },
-  deleteUserAttendance: async (args, req) => {
-    console.log("Resolver: deleteUserAttendance...");
+  deletePatientAttendance: async (args, req) => {
+    console.log("Resolver: deletePatientAttendance...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
       const attendance = {
-        date: args.userInput.attendanceDate,
-        status: args.userInput.attendanceStatus,
-        description: args.userInput.attendanceDescription
+        date: args.patientInput.attendanceDate,
+        status: args.patientInput.attendanceStatus,
+        description: args.patientInput.attendanceDescription
       };
 
-      const user = await User.findOneAndUpdate(
-        {_id:args.userId},
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId},
         {$pull: {attendance: attendance}},
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
       .populate('reminders');
       return {
-        ...user._doc,
-        _id: user.id,
-        name: user.name,
-        username: user.username,
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
       };
     } catch (err) {
       throw err;
     }
   },
-  addUserLeave: async (args, req) => {
-    console.log("Resolver: addUserLeave...");
-    if (!req.isAuth) {
-      throw new Error('Unauthenticated!');
-    }
-    try {
-      const leave = {
-        type: args.userInput.leaveType,
-        startDate: args.userInput.leaveStartDate,
-        endDate: args.userInput.leaveEndDate,
-        description: args.userInput.leaveDescription
-      };
-
-      const user = await User.findOneAndUpdate(
-        {_id:args.userId},
-        {$addToSet: {leave: leave}},
-        {new: true, useFindAndModify: false}
-      )
-      .populate('appointments')
-      .populate('reminders');
-      return {
-        ...user._doc,
-        _id: user.id,
-        name: user.name,
-        username: user.username,
-      };
-    } catch (err) {
-      throw err;
-    }
-  },
-  deleteUserLeave: async (args, req) => {
-    console.log("Resolver: deleteUserLeave...");
-    if (!req.isAuth) {
-      throw new Error('Unauthenticated!');
-    }
-    try {
-      const leave = {
-        type: args.userInput.leaveType,
-        startDate: args.userInput.leaveStartDate,
-        endDate: args.userInput.leaveEndDate,
-        description: args.userInput.leaveDescription
-      };
-
-      const user = await User.findOneAndUpdate(
-        {_id:args.userId},
-        {$pull: {leave: leave}},
-        {new: true, useFindAndModify: false}
-      )
-      .populate('appointments')
-      .populate('reminders');
-      return {
-        ...user._doc,
-        _id: user.id,
-        name: user.name,
-        username: user.username,
-      };
-    } catch (err) {
-      throw err;
-    }
-  },
-  addUserImage: async (args, req) => {
-    console.log("Resolver: addUserImage...");
+  addPatientImage: async (args, req) => {
+    console.log("Resolver: addPatientImage...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
       const image = {
-        name: args.userInput.imageName,
-        type: args.userInput.imageType,
-        path: args.userInput.imagePath
+        name: args.patientInput.imageName,
+        type: args.patientInput.imageType,
+        path: args.patientInput.imagePath
       };
 
-      const user = await User.findOneAndUpdate(
-        {_id:args.userId},
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId},
         {$addToSet: {images: image}},
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
       .populate('reminders');
       return {
-        ...user._doc,
-        _id: user.id,
-        name: user.name,
-        username: user.username,
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
       };
     } catch (err) {
       throw err;
     }
   },
-  deleteUserImage: async (args, req) => {
-    console.log("Resolver: deleteUserImage...");
+  deletePatientImage: async (args, req) => {
+    console.log("Resolver: deletePatientImage...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
       const image = {
-        name: args.userInput.imageName,
-        type: args.userInput.imageType,
-        path: args.userInput.imagePath
+        name: args.patientInput.imageName,
+        type: args.patientInput.imageType,
+        path: args.patientInput.imagePath
       };
 
-      const user = await User.findOneAndUpdate(
-        {_id:args.userId},
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId},
         {$pull: {images: image}},
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
       .populate('reminders');
       return {
-        ...user._doc,
-        _id: user.id,
-        name: user.name,
-        username: user.username,
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
       };
     } catch (err) {
       throw err;
     }
   },
-  addUserFile: async (args, req) => {
-    console.log("Resolver: addUserFile...");
+  addPatientFile: async (args, req) => {
+    console.log("Resolver: addPatientFile...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
       const file = {
-        name: args.userInput.fileName,
-        type: args.userInput.fileType,
-        path: args.userInput.filePath
+        name: args.patientInput.fileName,
+        type: args.patientInput.fileType,
+        path: args.patientInput.filePath
       };
 
-      const user = await User.findOneAndUpdate(
-        {_id:args.userId},
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId},
         {$addToSet: {files: file}},
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
       .populate('reminders');
       return {
-        ...user._doc,
-        _id: user.id,
-        name: user.name,
-        username: user.username,
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
       };
     } catch (err) {
       throw err;
     }
   },
-  deleteUserFile: async (args, req) => {
-    console.log("Resolver: deleteUserFile...");
+  deletePatientFile: async (args, req) => {
+    console.log("Resolver: deletePatientFile...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
       const file = {
-        name: args.userInput.fileName,
-        type: args.userInput.fileType,
-        path: args.userInput.filePath
+        name: args.patientInput.fileName,
+        type: args.patientInput.fileType,
+        path: args.patientInput.filePath
       };
 
-      const user = await User.findOneAndUpdate(
-        {_id:args.userId},
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId},
         {$pull: {files: file}},
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
       .populate('reminders');
       return {
-        ...user._doc,
-        _id: user.id,
-        name: user.name,
-        username: user.username,
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
       };
     } catch (err) {
       throw err;
     }
   },
-  addUserNotes: async (args, req) => {
-    console.log("Resolver: addUserNotes...");
+  addPatientNotes: async (args, req) => {
+    console.log("Resolver: addPatientNotes...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-      const notes = args.userInput.notes;
+      const notes = args.patientInput.notes;
       const splitNotes = notes.split(",");
-      const user = await User.findOneAndUpdate(
-        {_id:args.userId},
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId},
         {$addToSet: { notes: {$each: splitNotes} }},
         {new: true, useFindAndModify: false}
       )
@@ -927,76 +758,48 @@ module.exports = {
       .populate('reminders');
 
       return {
-        ...user._doc,
-        _id: user.id,
-        email: user.contact.email ,
-        name: user.name,
+        ...patient._doc,
+        _id: patient.id,
+        email: patient.contact.email ,
+        name: patient.name,
       };
     } catch (err) {
       throw err;
     }
   },
-  deleteUserNote: async (args, req) => {
-    console.log("Resolver: deleteUserNote...");
+  deletePatientNote: async (args, req) => {
+    console.log("Resolver: deletePatientNote...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-        const note = args.userInput.note;
-        const user = await User.findOneAndUpdate(
-          {_id:args.userId},
+        const note = args.patientInput.note;
+        const patient = await Patient.findOneAndUpdate(
+          {_id:args.patientId},
           {$pull: { notes: note }},
           {new: true, useFindAndModify: false}
         )
         .populate('appointments')
         .populate('reminders');
         return {
-          ...user._doc,
-          _id: user.id,
-          email: user.contact.email ,
-          name: user.name,
+          ...patient._doc,
+          _id: patient.id,
+          email: patient.contact.email ,
+          name: patient.name,
         };
     } catch (err) {
       throw err;
     }
   },
-  addUserActivity: async (args, req) => {
-    console.log("Resolver: addUserActivity...");
-    if (!req.isAuth) {
-      throw new Error('Unauthenticated!');
-    }
-    try {
-      const activity = {
-        date: args.userInput.activityDate,
-        request: args.userInput.activityRequest
-      }
-      const user = await User.findOneAndUpdate(
-        {_id:args.userId},
-        {$addToSet: { activity: activity }},
-        {new: true, useFindAndModify: false}
-      )
-      .populate('appointments')
-      .populate('reminders');
-
-      return {
-        ...user._doc,
-        _id: user.id,
-        email: user.contact.email ,
-        name: user.name,
-      };
-    } catch (err) {
-      throw err;
-    }
-  },
-  addUserReminder: async (args, req) => {
-    console.log("Resolver: addUserReminder...");
+  addPatientReminder: async (args, req) => {
+    console.log("Resolver: addPatientReminder...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
       const reminder = await Reminder.findById({_id: args.reminderId})
-      const user = await User.findOneAndUpdate(
-        {_id:args.userId},
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId},
         {$addToSet: { reminders: reminder }},
         {new: true, useFindAndModify: false}
       )
@@ -1004,23 +807,24 @@ module.exports = {
       .populate('reminders');
 
       return {
-        ...user._doc,
-        _id: user.id,
-        email: user.contact.email,
-        name: user.name,
+        ...patient._doc,
+        _id: patient.id,
+        email: patient.contact.email,
+        name: patient.name,
       };
     } catch (err) {
       throw err;
     }
   },
-  createUser: async (args, req) => {
-    console.log("Resolver: createUser...");
+  createPatient: async (args, req) => {
+    console.log("Resolver: createPatient...");
     try {
-      const existingUserName = await User.findOne({ username: args.userInput.username});
+      const existingUserName = await User.findOne({ username: args.patientInput.username});
       if (existingUserName) {
         throw new Error('User w/ that username exists already.');
       }
-      const hashedPassword = await bcrypt.hash(args.userInput.password, 12);
+
+      
       const today = moment();
       let age = 0;
       let dob = moment(args.userInput.dob).format('YYYY-MM-DD');
