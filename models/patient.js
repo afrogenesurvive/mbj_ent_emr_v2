@@ -72,10 +72,11 @@ const patientSchema = new Schema({
   nextOfKin: [{
     name: {type: String},
     relation: {type: String},
-    contact: {type: String},
+    contact: {
       email: {type: String},
       phone1: {type: String},
-      phone2: {type: String},
+      phone2: {type: String}
+    },
     _id: false
   }],
   allergies: [{
@@ -106,6 +107,7 @@ const patientSchema = new Schema({
   }],
   notes: [{type: String}],
   tags: [{type: String}],
+  appointments: [{type: Schema.Types.ObjectId,ref: 'Appointment'}],
   visits: [{type: Schema.Types.ObjectId,ref: 'Visit'}],
   reminders: [{type: Schema.Types.ObjectId,ref: 'Reminder'}],
   activity:[{

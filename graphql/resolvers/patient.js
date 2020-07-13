@@ -34,6 +34,7 @@ module.exports = {
     try {
       const patients = await Patient.find({})
       .populate('appointments')
+      .populate('visits')
       .populate('reminders');
       return patients.map(patient => {
         return transformPatient(patient,);
@@ -50,6 +51,7 @@ module.exports = {
     try {
       const patient = await Patient.findById(args.patientId)
       .populate('appointments')
+      .populate('visits')
       .populate('reminders');
       return {
           ...patient._doc,
@@ -384,7 +386,7 @@ module.exports = {
         {
           name: args.patientInput.name,
           title: args.patientInput.title,
-          type: args.patientInput.type,
+          role: args.patientInput.role,
           username: args.patientInput.username,
           dob: dob,
           age: age,
@@ -393,10 +395,41 @@ module.exports = {
             email: args.patientInput.contactEmail,
             phone: args.patientInput.contactPhone,
             phone2: args.patientInput.contactPhone2
-          }
+          },
+          expiryDate: args.patientInput.expiryDate,
+          referral: {
+            date: args.patientInput.referralDate,
+            reason: args.patientInput.referralReason,
+            physician: {
+              name: args.patientInput.referralPhysicianName,
+              email: args.patientInput.referralPhysicianEmail,
+              phone: args.patientInput.referralPhysicianPhone
+            }
+          },
+          attendingPhysician: args.patientInput.attendingPhysician,
+          occupation: {
+            role: args.patientInput.occupationRole,
+            employer: {
+              name: args.patientInput.occupationEmployerName,
+              phone: args.patientInput.occupationEmployerPhone,
+              email: args.patientInput.occupationEmployerEmail,
+              address: args.patientInput.occupationEmployerAddress
+            }
+          },
+          insurance: {
+            company: args.patientInput.insuranceCompany,
+            policyNumber: args.patientInput.insurancePolicyNumber,
+            description: args.patientInput.insuranceDescription,
+            expiryDate: args.patientInput.insuranceExpiryDate,
+            subscriber: {
+              company: args.patientInput.insuranceSubscriberCompany,
+              description: args.patientInput.insuranceSubscriberDescription
+            }
+          },
         },
         {new: true, useFindAndModify: false})
         .populate('appointments')
+        .populate('visits')
         .populate('reminders');
       return {
         ...patient._doc,
@@ -434,6 +467,7 @@ module.exports = {
         query,
         {new: true, useFindAndModify: false})
         .populate('appointments')
+        .populate('visits')
         .populate('reminders');
       return {
         ...patient._doc,
@@ -536,7 +570,6 @@ module.exports = {
           useFindAndModify: false
         }
       )
-      console.log('nerfAllAddresses', nerfAllAddresses);
       const address = {
         number: args.patientInput.addressNumber,
         street: args.patientInput.addressStreet,
@@ -567,24 +600,29 @@ module.exports = {
       throw err;
     }
   },
-  addPatientAttendance: async (args, req) => {
-    console.log("Resolver: addPatientAttendance...");
+  addPatientNextOfKin: async (args, req) => {
+    console.log("Resolver: addPatientNextOfKin...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-      const attendance = {
-        date: args.patientInput.attendanceDate,
-        status: args.patientInput.attendanceStatus,
-        description: args.patientInput.attendanceDescription
+      const nextOfKin = {
+        name: args.patientInput.nextOfKinName,
+        relation: args.patientInput.nextOfKinRelation,
+        contact:{
+          email: args.patientInput.nextOfKinContactEmail,
+          phone1: args.patientInput.nextOfKinContactPhone1,
+          phone2: args.patientInput.nextOfKinContactPhone2
+        }
       };
 
       const patient = await Patient.findOneAndUpdate(
         {_id:args.patientId},
-        {$addToSet: {attendance: attendance}},
+        {$addToSet: {nextOfKin: nextOfKin}},
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate('visits')
       .populate('reminders');
       return {
         ...patient._doc,
@@ -596,24 +634,95 @@ module.exports = {
       throw err;
     }
   },
-  deletePatientAttendance: async (args, req) => {
-    console.log("Resolver: deletePatientAttendance...");
+  deletePatientNextOfKin: async (args, req) => {
+    console.log("Resolver: deletePatientNextOfKin...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-      const attendance = {
-        date: args.patientInput.attendanceDate,
-        status: args.patientInput.attendanceStatus,
-        description: args.patientInput.attendanceDescription
+      const nextOfKin = {
+        name: args.patientInput.nextOfKinName,
+        relation: args.patientInput.nextOfKinRelation,
+        contact:{
+          email: args.patientInput.nextOfKinContactEmail,
+          phone1: args.patientInput.nextOfKinContactPhone1,
+          phone2: args.patientInput.nextOfKinContactPhone2
+        }
       };
 
       const patient = await Patient.findOneAndUpdate(
         {_id:args.patientId},
-        {$pull: {attendance: attendance}},
+        {$pull: {nextOfKin: nextOfKin}},
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate('visits')
+      .populate('reminders');
+      return {
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addPatientAllergy: async (args, req) => {
+    console.log("Resolver: addPatientAllergy...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const allergy = {
+        type: args.patientInput.allergyType,
+        title: args.patientInput.allergyTitle,
+        description: args.patientInput.allergyDescription,
+        attachments: [args.patientInput.allergyAttachment],
+      };
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId},
+        {$addToSet: {allergies: allergy}},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('visits')
+      .populate('reminders');
+      return {
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addPatientAllergyAttachment: async (args, req) => {
+    console.log("Resolver: addPatientAllergies...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const allergy = {
+        type: args.patientInput.allergyType,
+        title: args.patientInput.allergyTitle,
+        description: args.patientInput.allergyDescription,
+      };
+      const newAttachment = args.patient.allergyAttachment;
+
+      const patient = await Patient.findOneAndUpdate(
+        {
+          _id:args.patientId,
+          'allergies.type': allergy.type,
+          'allergies.title': allergy.title,
+          'allergies.description': allergy.description,
+        },
+        {$addToSet: {'allergies.$.attachments': attachment}},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('visits')
       .populate('reminders');
       return {
         ...patient._doc,
@@ -819,84 +928,116 @@ module.exports = {
   createPatient: async (args, req) => {
     console.log("Resolver: createPatient...");
     try {
-      const existingUserName = await User.findOne({ username: args.patientInput.username});
-      if (existingUserName) {
-        throw new Error('User w/ that username exists already.');
+
+      const staff = await User.findById({_id:args.activityId})
+      const active = args.patientInput.active;
+
+      const existingPatient = await Patient.findOne({
+        username: args.patientInput.username,
+        name: args.patientInput.name,
+        dob: args.patientInput.dob,
+        gender: args.patientInput.gender
+      });
+      if (existingPatient) {
+        throw new Error('Patient w/ that name,username,dob,gender exists already...check your data and call support in this error persists');
       }
 
-      
       const today = moment();
       let age = 0;
-      let dob = moment(args.userInput.dob).format('YYYY-MM-DD');
-      let dob2 = new Date(args.userInput.dob);
+      let dob = moment(args.patientInput.dob).format('YYYY-MM-DD');
+      let dob2 = new Date(args.patientInput.dob);
       let ageDifMs = new Date() - dob2.getTime();
       let ageDate = new Date(ageDifMs);
       age =  Math.abs(ageDate.getUTCFullYear() - 1970);
       // console.log('dob',dob,'age',age);
       let regNo = 0;
-      const userAmt = await User.find({});
-      regNo = args.userInput.name.substr(0,2)+moment().utc()+'?'+moment(dob).utc()+'?000'+(userAmt.length+1)+'';
-      // const regNoExists = await User.find({registrationNumber: regNo});
-      // console.log('1', regNo);
-      // console.log('2', regNoExists);
-      // if (regNoExists) {
-      //   throw new Error('...umm no! Regno Already exists..');
-      //   console.log('...umm no! Regno Already exists..');
-      // }
-      let rando = Math.floor(Math.random() * 5) + 1;
-      let verfCode = moment().format()+'?'+args.userInput.username+'?'+rando+'';
-      const key = 'MBJ_ENT_emr_v2_Signup';
-      const encryptor = require('simple-encryptor')(key);
-      const encrypted = encryptor.encrypt(verfCode);
-      // console.log('rando',rando,'verfCode',verfCode,'encrypted',encrypted);
-      verfCode = encrypted;
-      console.log('verfCode',verfCode);
-      const user = new User({
-        title: args.userInput.title,
-        password: hashedPassword,
-        name: args.userInput.name,
-        role: args.userInput.role,
-        type: args.userInput.type,
-        username: args.userInput.username,
-        registrationNumber: regNo,
-        dob: args.userInput.dob,
+      const patientAmt = await Patient.find({});
+      regNo = args.patientInput.name.substr(0,2)+moment().utc()+'?'+moment(dob).utc()+'?000'+(patientAmt.length+1)+'';
+
+      let password = "inactive";
+
+      const patient = new Patient({
+        active: active,
+        title: args.patientInput.title,
+        password: password,
+        name: args.patientInput.name,
+        role: args.patientInput.role,
+        username: args.patientInput.username,
+        registration: {
+          number: regNo,
+          date: moment().format('YYYY-MM-DD')
+        },
+        dob: args.patientInput.dob,
         age: age,
-        gender: args.userInput.gender,
+        gender: args.patientInput.gender,
         contact: {
-          email: args.userInput.contactEmail,
-          phone: args.userInput.contactPhone,
-          phone2: args.userInput.contactPhone2
+          email: args.patientInput.contactEmail,
+          phone: args.patientInput.contactPhone,
+          phone2: args.patientInput.contactPhone2
         },
         addresses: [{
-          number: args.userInput.addressNumber,
-          street: args.userInput.addressStreet,
-          town: args.userInput.addressTown,
-          city: args.userInput.addressCity,
-          parish: args.userInput.addressParish,
-          country: args.userInput.addressCountry,
-          postalCode: args.userInput.addressPostalCode,
+          number: args.patientInput.addressNumber,
+          street: args.patientInput.addressStreet,
+          town: args.patientInput.addressTown,
+          city: args.patientInput.addressCity,
+          parish: args.patientInput.addressParish,
+          country: args.patientInput.addressCountry,
+          postalCode: args.patientInput.addressPostalCode,
           primary: true
         }],
         clientConnected: false,
         loggedIn:false,
         verification: {
-          verified: false,
-          type: "email",
-          code: verfCode
+          verified: true,
+          type: "inactive",
+          code: ""
         },
-        attendance: [],
-        leave: [],
+        expiryDate: 0,
+        referral: {
+          date: args.patientInput.referralDate,
+          reason: args.patientInput.referralReason,
+          physician: {
+            name: args.patientInput.referralPhysicianName,
+            email: args.patientInput.referralPhysicianEmail,
+            phone: args.patientInput.referralPhysicianPhone
+          }
+        },
+        attendingPhysician: args.patientInput.attendingPhysician,
+        occupation: {
+          role: args.patientInput.occupationRole,
+          employer: {
+            name: args.patientInput.occupationEmployerName,
+            phone: args.patientInput.occupationEmployerPhone,
+            email: args.patientInput.occupationEmployerEmail,
+            address: args.patientInput.occupationEmployerAddress
+          }
+        },
+        insurance: {
+          company: args.patientInput.insuranceCompany,
+          policyNumber: args.patientInput.insurancePolicyNumber,
+          description: args.patientInput.insuranceDescription,
+          expiryDate: args.patientInput.insuranceExpiryDate,
+          subscriber: {
+            company: args.patientInput.insuranceSubscriberCompany,
+            description: args.patientInput.insuranceSubscriberDescription
+          }
+        },
+        nextOfKin: [],
+        allergies: [],
+        medication: [],
         images: [],
         files: [],
         notes: [],
+        tags: [],
         appointments: [],
+        visits: [],
         reminders: [],
         activity: [{
           date: today,
-          request: "initial activity... profile created..."
+          request: "initial activity... patient created... by"+staff.username+""
         }]
       });
-      const result = await user.save();
+      const result = await patient.save();
 
       // let sendStatus = null;
       // sgMail.setApiKey(process.env.SENDGRID_A);
@@ -930,7 +1071,6 @@ module.exports = {
       //     console.log('sendStatus',sendStatus);
       //   });
       //   console.log('verification: ',sendStatus);
-
 
       return {
         ...result._doc,

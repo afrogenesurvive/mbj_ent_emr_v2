@@ -114,6 +114,7 @@ module.exports = buildSchema(`
     files: [File]
     notes: [String]
     tags: [String]
+    appointments: [Appointment]
     visits: [Visit]
     reminders: [Reminder]
     activity: [Activity]
@@ -735,13 +736,14 @@ module.exports = buildSchema(`
     userOnline(activityId: ID!, userId: ID! ): User
     userOffline(activityId: ID!, userId: ID! ): User
 
-    createPatient(activityId: ID!, patientInput: UserInput!): Patient
+    createPatient(activityId: ID!, patientInput: PatientInput!): Patient
     updatePatientAllFields(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
-    updatePatientSingleField(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    updatePatientSingleField(activityId: ID!, patientId: ID!, field:String!, query:String!): Patient
     addPatientAddress(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     setPatientAddressPrimary(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientNextOfKin(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientAllergy(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    addPatientAllergyAttachment(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientMedication(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientImage(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientFile(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
