@@ -37,20 +37,27 @@ module.exports = {
   testPuppeteer: async () => {
     console.log("Resolver: testPuppeteer...");
 
-    (async () => {
       const browser = await puppeteer.launch();
       const page = await browser.newPage();
-      await page.goto('https://example.com');
-      await page.screenshot({path: '../../example.png'});
+      await page.goto('https://example.org/', { waitUntil: 'networkidle0' });
+
+      const data = await page.evaluate(() => document.querySelector('body').innerHTML);
+      // const data = await page.evaluate(() => document.querySelector('*').outerHTML);
+
+      // const data = await page.evaluate(
+      //   () =>  Array.from(document.querySelectorAll('*'))
+      //               .map(elem => elem.tagName)
+      // );
+
+    console.log('data',data);
 
       await browser.close();
-    })();
 
-    // try {
-    //   return
-    // } catch (err) {
-    //   throw err;
-    // }
+    try {
+      return JSON.stringify(data);
+    } catch (err) {
+      throw err;
+    }
   },
   testEmail: async () => {
     console.log("Resolver: test email...");
