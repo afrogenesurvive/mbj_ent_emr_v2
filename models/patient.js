@@ -80,7 +80,7 @@ const patientSchema = new Schema({
     _id: false
   }],
   allergies: [{
-    type: {type:String},
+    type: {type:String,enum: ['Food','Drug']},
     title: {type:String},
     description: {type:String},
     attachments: [{type: String}],

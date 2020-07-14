@@ -7,7 +7,7 @@ const appointmentSchema = new Schema({
   type: {type: String},
   subType: {type: String},
   date: {type: Date,required: true},
-  time: {type: String},
+  time: {type: String, required: true},
   checkinTime: {type: String},
   seenTime: {type: String},
   location: {type: String,required: false},
@@ -19,7 +19,9 @@ const appointmentSchema = new Schema({
   attended: {type: Boolean},
   important: {type: Boolean},
   notes: [{type:String}],
-  tags: [{type:String}]
+  tags: [{type:String}],
+  reminders: [{type: Schema.Types.ObjectId,ref: 'Reminder'}],
+  creator: {type: Schema.Types.ObjectId,ref: 'User'}
 },
   { timestamps: true }
 );

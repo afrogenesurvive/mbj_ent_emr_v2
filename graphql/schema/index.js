@@ -233,6 +233,7 @@ module.exports = buildSchema(`
     allergyTitle: String
     allergyDescription: String
     allergyAttachment: String
+    allergyAttachments: String
     medicationTitle: String
     medicationType: String
     medicationDescription: String
@@ -270,6 +271,8 @@ module.exports = buildSchema(`
     important: Boolean
     notes: [String]
     tags: [String]
+    reminders: [Reminder]
+    creator: User
   }
 
   input AppointmentInput {
@@ -674,7 +677,7 @@ module.exports = buildSchema(`
     getUsersByAppointment(activityId: ID!, appointmentId: ID!): [User]
 
     getAllPatients(activityId: ID!): [Patient]
-    getPatientById(activityId: ID!, userId: ID!): Patient
+    getPatientById(activityId: ID!, patientId: ID!): Patient
     getPatientsByField(activityId: ID!, field: String!, query: String!): [Patient]
     getPatientsByFieldRegex(activityId: ID!, field: String!, query: String!): [Patient]
     getPatientByVisits(activityId: ID!, visitIds: String!): Patient
@@ -768,9 +771,9 @@ module.exports = buildSchema(`
     patientOnline(activityId: ID!, patientId: ID! ): Patient
     patientOffline(activityId: ID!, patientId: ID! ): Patient
 
-    createAppointment(activityId: ID!, appointmentInput: AppointmentInput!): Appointment
+    createAppointment(activityId: ID!, patientId: ID!, appointmentInput: AppointmentInput!): Appointment
     updateAppointmentAllFields(activityId: ID !, appointmentId: ID!, appointmentInput: AppointmentInput!): Appointment
-    updateAppointmentSingleField(activityId: ID !, appointmentId: ID!, appointmentInput: AppointmentInput!): Appointment
+    updateAppointmentSingleField(activityId: ID !, appointmentId: ID!, field: String!, query: String!): Appointment
     updateAppointmentVisit(activityId: ID !, appointmentId: ID!, visitId: ID!): Appointment
     updateAppointmentPatient(activityId: ID !, appointmentId: ID!, patientId: ID!): Appointment
     addAppointmentConsultant(activityId: ID !, appointmentId: ID!, consultantId: ID!): Appointment

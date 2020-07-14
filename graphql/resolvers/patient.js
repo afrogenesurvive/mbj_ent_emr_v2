@@ -698,6 +698,37 @@ module.exports = {
       throw err;
     }
   },
+  deletePatientAllergy: async (args, req) => {
+    console.log("Resolver: deletePatientAllergy...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    console.log(args.patientInput.allergyAttachments.split(','));
+    try {
+      const allergy = {
+        type: args.patientInput.allergyType,
+        title: args.patientInput.allergyTitle,
+        description: args.patientInput.allergyDescription,
+        attachments: args.patientInput.allergyAttachments.split(','),
+      };
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId},
+        {$pull: {allergies: allergy}},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('visits')
+      .populate('reminders');
+      return {
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
   addPatientAllergyAttachment: async (args, req) => {
     console.log("Resolver: addPatientAllergies...");
     if (!req.isAuth) {
@@ -709,7 +740,7 @@ module.exports = {
         title: args.patientInput.allergyTitle,
         description: args.patientInput.allergyDescription,
       };
-      const newAttachment = args.patient.allergyAttachment;
+      const newAttachment = args.patientInput.allergyAttachment;
 
       const patient = await Patient.findOneAndUpdate(
         {
@@ -718,7 +749,7 @@ module.exports = {
           'allergies.title': allergy.title,
           'allergies.description': allergy.description,
         },
-        {$addToSet: {'allergies.$.attachments': attachment}},
+        {$addToSet: {'allergies.$.attachments': newAttachment}},
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
@@ -900,6 +931,56 @@ module.exports = {
       throw err;
     }
   },
+  addPatientTags: async (args, req) => {
+    console.log("Resolver: addPatientTags...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const tags = args.patientInput.tags;
+      const splitTags = tags.split(",");
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId},
+        {$addToSet: { tags: {$each: splitTags} }},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('reminders');
+
+      return {
+        ...patient._doc,
+        _id: patient.id,
+        email: patient.contact.email ,
+        name: patient.name,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deletePatientTag: async (args, req) => {
+    console.log("Resolver: deletePatientTag...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const tag = args.patientInput.tag;
+        const patient = await Patient.findOneAndUpdate(
+          {_id:args.patientId},
+          {$pull: { tags: tag }},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('appointments')
+        .populate('reminders');
+        return {
+          ...patient._doc,
+          _id: patient.id,
+          email: patient.contact.email ,
+          name: patient.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   addPatientReminder: async (args, req) => {
     console.log("Resolver: addPatientReminder...");
     if (!req.isAuth) {
@@ -921,6 +1002,23 @@ module.exports = {
         email: patient.contact.email,
         name: patient.name,
       };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deletePatientById: async (args, req) => {
+    console.log("Resolver: deletePatientById...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const patient = await Patient.findByIdAndRemove({_id:args.patientId});
+        return {
+          ...patient._doc,
+          _id: patient.id,
+          email: patient.contact.email ,
+          name: patient.name,
+        };
     } catch (err) {
       throw err;
     }

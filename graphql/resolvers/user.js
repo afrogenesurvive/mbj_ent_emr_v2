@@ -967,6 +967,23 @@ module.exports = {
       throw err;
     }
   },
+  deleteUserById: async (args, req) => {
+    console.log("Resolver: deleteUserById...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const user = await User.findByIdAndRemove({_id:args.userId});
+        return {
+          ...user._doc,
+          _id: user.id,
+          email: user.contact.email ,
+          name: user.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   addUserActivity: async (args, req) => {
     console.log("Resolver: addUserActivity...");
     if (!req.isAuth) {
