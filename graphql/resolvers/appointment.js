@@ -110,21 +110,63 @@ module.exports = {
       throw err;
     }
   },
-  getAppointmentsByAppointment: async (args, req) => {
-    console.log("Resolver: getAppointmentsByAppointment...");
+  getAppointmentsByTags: async (args, req) => {
+    console.log("Resolver: getAppointmentsByTags...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-      const patients = await Appointment.find({
-        appointments: args.appointmentId,
+      const tags = args.appointmentInput.tags.split(',');
+      const appointments = await Appointment.find({
+        'tags': {$all: tags}
       })
       .populate('consultants')
       .populate('visit')
       .populate('creator')
       .populate('patient');
-      return patients.map(patient => {
-        return transformAppointment(patient);
+      return appointments.map(appointment => {
+        return transformAppointment(appointment);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getAppointmentsByPatient: async (args, req) => {
+    console.log("Resolver: getAppointmentsByPatient...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const appointments = await Appointment.find({
+        patient: args.patientId
+      })
+      .populate('consultants')
+      .populate('visit')
+      .populate('creator')
+      .populate('patient');
+      return appointments.map(appointment => {
+        return transformAppointment(appointment);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getAppointmentsByConsultants: async (args, req) => {
+    console.log("Resolver: getAppointmentsByConsultants...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const consultants = args.consultantIds.split(',');
+      const appointments = await Appointment.find({
+        consultants: {$all: consultants}
+      })
+      .populate('consultants')
+      .populate('visit')
+      .populate('creator')
+      .populate('patient');
+      return appointments.map(appointment => {
+        return transformAppointment(appointment);
       });
     } catch (err) {
       throw err;
@@ -314,11 +356,10 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-      const consultant = await User.findById({_id: args.consultantId})
-      console.log('x',consultant);
+      const consultant = await User.findById({_id: args.consultantId});
       const appointment = await Appointment.findOneAndUpdate(
         {_id:args.appointmentId},
-        {$pull: {consultants: consultant}},
+        {$pull: {consultants: args.consultantId}},
         {new: true, useFindAndModify: false}
       )
       .populate('consultants')
@@ -397,8 +438,8 @@ module.exports = {
     try {
       const tags = args.appointmentInput.tags;
       const splitTags = tags.split(",");
-      const appoinment = await Appointment.findOneAndUpdate(
-        {_id:args.appoinmentId},
+      const appointment = await Appointment.findOneAndUpdate(
+        {_id:args.appointmentId},
         {$addToSet: { tags: {$each: splitTags} }},
         {new: true, useFindAndModify: false}
       )
@@ -471,14 +512,11 @@ module.exports = {
       }
       const patient = await Patient.findById({_id: args.patientId})
       const today = moment();
-      // console.log('a:', creator.role);
-      // console.log('1:', moment(args.appointmentInput.date));
-      // console.log('2:', moment());
-      // console.log('3:', moment(args.appointmentInput.date) > moment());
-      // console.log('4:', moment(args.appointmentInput.date) < moment());
-      if (moment(args.appointmentInput.date) < moment()) {
-        console.log('...ummm no! Please pick a date in the future...');
-        throw new Error('...ummm no! Please pick a date in the future...');
+      // console.log(today);
+
+      if (moment(args.appointmentInput.date).format('YYYY-MM-DD') < moment().format('YYYY-MM-DD')) {
+        console.log('...ummm no! Please pick a date today or in the future...');
+        throw new Error('...ummm no! Please pick a date today or in the future...');
       }
       const appointmentExists = await Appointment.find({
           date: args.appointmentInput.date,
@@ -489,12 +527,13 @@ module.exports = {
         console.log('...an appointment w/ this date & title exists already...check your info and try again...');
         throw new Error('...an appointment w/ this date & title exists already...check your info and try again...')
       }
-
+      // console.log('1:',moment(args.appointmentInput.date));
+      const date   = moment(args.appointmentInput.date);
       const appointment = new Appointment({
         title: args.appointmentInput.title,
         type: args.appointmentInput.type,
         subType: args.appointmentInput.subType,
-        date: args.appointmentInput.date,
+        date: date,
         time: args.appointmentInput.time,
         checkinTime:0,
         seenTime: 0,
@@ -531,7 +570,7 @@ module.exports = {
         // console.log('updateConsultants',updateConsultants);
       }
       console.log('end');
-
+      //
       return {
         ...result._doc,
         _id: result.id

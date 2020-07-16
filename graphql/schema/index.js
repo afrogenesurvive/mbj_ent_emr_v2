@@ -301,6 +301,8 @@ module.exports = buildSchema(`
     title: String
     type: String
     subType: String
+    patient: Patient
+    consultants: [User]
     appointment: Appointment
     complaints: [VisitComplaint]
     surveys: [VisitSurvey]
@@ -446,12 +448,15 @@ module.exports = buildSchema(`
     complaintDescription: String
     complaintAnamnesis: String
     complaintAttachment: String
+    complaintAttachments: String
     surveyTitle: String
     surveyDescription: String
     surveyAttachment: String
+    surveyAttachments: String
     systematicInquiryTitle: String
     systematicInquiryDescription: String
     systematicInquiryAttachment: String
+    systematicInquiryAttachments: String
     vitalsPr: Float
     vitalsBp1: Float
     vitalsBp2: Float
@@ -460,8 +465,8 @@ module.exports = buildSchema(`
     vitalsPs02: Float
     vitalsHeightUnit: String
     vitalsHeightValue: Float
-    vitalsweightUnit: String
-    vitalsweightValue: Float
+    vitalsWeightUnit: String
+    vitalsWeightValue: Float
     vitalsBmi: Float
     vitalsUrineType: String
     vitalsUrineValue: String
@@ -473,26 +478,31 @@ module.exports = buildSchema(`
     examinationDescription: String
     examinationFollowUp: Boolean
     examinationAttachment: String
+    examinationAttachments: String
     investigationType: String
     investigationTitle: String
     investigationDescription: String
     investigationAttachment: String
+    investigationAttachments: String
     diagnosisType: String
     diagnosisTitle: String
     diagnosisDescription: String
     diagnosisAttachment: String
+    diagnosisAttachments: String
     treatmentType: String
     treatmentTitle: String
     treatmentDescription: String
     treatmentDose: String
     treatmentFrequency: String
     treatmentAttachment: String
+    treatmentAttachments: String
     billingTitle: String
     billingType: String
     billingDescription: String
     billingAmount: Float
     billingPaid: Boolean
     billingAttachment: String
+    billingAttachments: String
     billingNotes: String
     vigilanceChronicIllnessDiabetesMedication: Boolean
     vigilanceChronicIllnessDiabetesTesting: Boolean
@@ -692,7 +702,7 @@ module.exports = buildSchema(`
     getAppointmentsByConsultants(activityId: ID!, consultantIds: String!): [Appointment]
     getAppointmentsByTags(activityId: ID!, appointmentInput:AppointmentInput!): [Appointment]
 
-    getVisits(activityId: ID!): [Visit]
+    getAllVisits(activityId: ID!): [Visit]
     getVisitById(activityId: ID!, visitId: ID!): Visit
     getVisitsByField(activityId: ID!, field: String!, query: String!): [Visit]
     getVisitsByFieldRegex(activityId: ID!, field: String!, query: String!): [Visit]
@@ -785,14 +795,20 @@ module.exports = buildSchema(`
     deleteAppointmentNote(activityId: ID !, appointmentId: ID!, appointmentInput: AppointmentInput!): Appointment
     deleteAppointmentTag(activityId: ID !, appointmentId: ID!, appointmentInput: AppointmentInput!): Appointment
 
-    createVisit(activityId: ID!, visitInput: VisitInput!): Visit
+    createVisit(activityId: ID!, appointmentId: ID!, visitInput: VisitInput!): Visit
     updateVisitAllFields(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
-    updateVisitSingleFIeld(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    updateVisitSingleField(activityId: ID!, visitId: ID!, field: String, query: String!): Visit
+    updateVisitPatient(activityId: ID!, visitId: ID!, patientId: ID!): Visit
+    addVisitConsultant(activityId: ID!, visitId: ID!, consultantId: ID!): Visit
     addVisitComplaint(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    addVisitComplaintAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitSurvey(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    addVisitSurveyAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitSysInquiry(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    addVisitSysInquiryAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitVitals(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitExamination(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    addVisitExaminationAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitInvestigation(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitDiagnosis(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitTreatment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
@@ -802,11 +818,16 @@ module.exports = buildSchema(`
     addVisitFile(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
 
     deleteVisitById(activityId: ID!, visitId: ID!): Visit
+    deleteVisitConsultant(activityId: ID!, visitId: ID!, consultantId: ID!): Visit
     deleteVisitComplaint(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    deleteVisitComplaintAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     deleteVisitSurvey(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    deleteVisitSurveyAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     deleteVisitSysInquiry(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    deleteVisitSysInquiryAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     deleteVisitVitals(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     deleteVisitExamination(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    deleteVisitExaminationAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     deleteVisitInvestigation(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     deleteVisitDiagnosis(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     deleteVisitTreatment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit

@@ -8,6 +8,8 @@ const visitSchema = new Schema({
   title: {type: String},
   type: {type: String},
   subType: {type: String},
+  patient: {type: Schema.Types.ObjectId,ref: 'Patient'},
+  consultants: [{type: Schema.Types.ObjectId,ref: 'User'}],
   appointment: {type: Schema.Types.ObjectId,ref: 'Appointment'},
   complaints: [{
       title: {type:String},

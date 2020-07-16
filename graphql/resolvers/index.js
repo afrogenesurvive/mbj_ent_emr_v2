@@ -2,7 +2,7 @@ const authResolver = require('./auth');
 const userResolver = require('./user');
 const patientResolver = require('./patient');
 const appointmentResolver = require('./appointment');
-// const visitResolver = require('./visit');
+const visitResolver = require('./visit');
 // const reminderResolver = require('./reminder');
 
 const rootResolver = {
@@ -10,7 +10,7 @@ const rootResolver = {
   ...userResolver,
   ...patientResolver,
   ...appointmentResolver,
-  // ...visitResolver,
+  ...visitResolver,
   // ...reminderResolver,
 };
 

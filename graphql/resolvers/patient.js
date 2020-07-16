@@ -103,6 +103,25 @@ module.exports = {
       throw err;
     }
   },
+  getPatientsByTags: async (args, req) => {
+    console.log("Resolver: getPatientsByTags...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const tags = args.patientInput.tags.split(',');
+      const patients = await Patient.find({
+        'tags': {$all: tags}
+      })
+      .populate('appointments')
+      .populate('reminders');
+      return patients.map(patient => {
+        return transformPatient(patient);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
   getPatientsByAppointment: async (args, req) => {
     console.log("Resolver: getPatientsByAppointment...");
     if (!req.isAuth) {
