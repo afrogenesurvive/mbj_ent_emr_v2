@@ -918,18 +918,792 @@ module.exports = {
     try {
         const attachments = args.visitInput.investigationAttachments.split(',');
         const investigation = {
-          general: args.visitInput.investigationGeneral,
-          area: args.visitInput.investigationArea,
           type: args.visitInput.investigationType,
-          measure: args.visitInput.investigationMeasure,
-          value: args.visitInput.investigationValue,
+          title: args.visitInput.investigationTitle,
           description: args.visitInput.investigationDescription,
-          followUp: args.visitInput.investigationFollowUp,
-          attachments: attachments
+          attachments: attachments,
         }
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$pull: {investigation: investigation}},
+          {new: true, useFindAndModify: false}
+        );
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addVisitDiagnosis: async (args, req) => {
+    console.log("Resolver: addVisitDiagnosis...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const diagnosis = {
+          type: args.visitInput.diagnosisType,
+          title: args.visitInput.diagnosisTitle,
+          description: args.visitInput.diagnosisDescription,
+          attachments: [args.visitInput.diagnosisAttachment],
+        }
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId},
+          {$addToSet: {diagnosis: diagnosis}},
+          {new: true, useFindAndModify: false}
+        );
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addVisitDiagnosisAttachment: async (args, req) => {
+    console.log("Resolver: addVisitDiagnosisAttachment...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const diagnosis = {
+          type: args.visitInput.diagnosisType,
+          title: args.visitInput.diagnosisTitle,
+          description: args.visitInput.diagnosisDescription,
+        }
+        const newAttachment = args.visitInput.diagnosisAttachment;
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,
+            'diagnosis.type': diagnosis.type,
+            'diagnosis.title': diagnosis.title,
+            'diagnosis.description': diagnosis.description
+          },
+          {$addToSet: {'diagnosis.$.attachments': newAttachment}},
+          {new: true, useFindAndModify: false}
+        );
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteVisitDiagnosisAttachment: async (args, req) => {
+    console.log("Resolver: deleteVisitDiagnosisAttachment...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const diagnosis = {
+          type: args.visitInput.diagnosisType,
+          title: args.visitInput.diagnosisTitle,
+          description: args.visitInput.diagnosisDescription,
+        }
+        const oldAttachment = args.visitInput.diagnosisAttachment;
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,
+            'diagnosis.type': diagnosis.type,
+            'diagnosis.title': diagnosis.title,
+            'diagnosis.description': diagnosis.description
+          },
+          {$pull: {'diagnosis.$.attachments': oldAttachment}},
+          {new: true, useFindAndModify: false}
+        );
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteVisitDiagnosis: async (args, req) => {
+    console.log("Resolver: deleteVisitDiagnosis...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const attachments = args.visitInput.diagnosisAttachments.split(',');
+        const diagnosis = {
+          type: args.visitInput.diagnosisType,
+          title: args.visitInput.diagnosisTitle,
+          description: args.visitInput.diagnosisDescription,
+          attachments: attachments,
+        }
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId},
+          {$pull: {diagnosis: diagnosis}},
+          {new: true, useFindAndModify: false}
+        );
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addVisitTreatment: async (args, req) => {
+    console.log("Resolver: addVisitTreatment...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const treatment = {
+          type: args.visitInput.treatmentType,
+          title: args.visitInput.treatmentTitle,
+          description: args.visitInput.treatmentDescription,
+          dose: args.visitInput.treatmentDose,
+          frequency: args.visitInput.treatmentFrequency,
+          attachments: [args.visitInput.treatmentAttachment],
+        }
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId},
+          {$addToSet: {treatment: treatment}},
+          {new: true, useFindAndModify: false}
+        );
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addVisitTreatmentAttachment: async (args, req) => {
+    console.log("Resolver: addVisitTreatmentAttachment...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const treatment = {
+          type: args.visitInput.treatmentType,
+          title: args.visitInput.treatmentTitle,
+          description: args.visitInput.treatmentDescription,
+          dose: args.visitInput.treatmentDose,
+          frequency: args.visitInput.treatmentFrequency,
+        }
+        console.log('v',treatment);
+        const newAttachment = args.visitInput.treatmentAttachment;
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,
+            'treatment.type': treatment.type,
+            'treatment.title': treatment.title,
+            'treatment.description': treatment.description,
+            'treatment.dose': treatment.dose,
+            'treatment.frequency': treatment.frequency
+          },
+          {$addToSet: {'treatment.$.attachments': newAttachment}},
+          {new: true, useFindAndModify: false}
+        );
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteVisitTreatmentAttachment: async (args, req) => {
+    console.log("Resolver: deleteVisitTreatmentAttachment...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const treatment = {
+          type: args.visitInput.treatmentType,
+          title: args.visitInput.treatmentTitle,
+          description: args.visitInput.treatmentDescription,
+          dose: args.visitInput.treatmentDose,
+          frequency: args.visitInput.treatmentFrequency,
+        }
+        const oldAttachment = args.visitInput.treatmentAttachment;
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,
+            'treatment.type': treatment.type,
+            'treatment.title': treatment.title,
+            'treatment.description': treatment.description,
+            'treatment.dose': treatment.dose,
+            'treatment.frequency': treatment.frequency
+          },
+          {$pull: {'treatment.$.attachments': oldAttachment}},
+          {new: true, useFindAndModify: false}
+        );
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteVisitTreatment: async (args, req) => {
+    console.log("Resolver: deleteVisitTreatment...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const attachments = args.visitInput.treatmentAttachments.split(',');
+        const treatment = {
+          type: args.visitInput.treatmentType,
+          title: args.visitInput.treatmentTitle,
+          description: args.visitInput.treatmentDescription,
+          attachments: attachments,
+        }
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId},
+          {$pull: {treatment: treatment}},
+          {new: true, useFindAndModify: false}
+        );
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addVisitBilling: async (args, req) => {
+    console.log("Resolver: addVisitBilling...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const billing = {
+          title: args.visitInput.billingTitle,
+          type: args.visitInput.billingType,
+          description: args.visitInput.billingDescription,
+          amount: args.visitInput.billingAmount,
+          paid: args.visitInput.billingPaid,
+          attachments: [args.visitInput.billingAttachment],
+          notes: args.visitInput.billingNotes
+        }
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId},
+          {$addToSet: {billing: billing}},
+          {new: true, useFindAndModify: false}
+        );
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addVisitBillingAttachment: async (args, req) => {
+    console.log("Resolver: addVisitBillingAttachment...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const billing = {
+          title: args.visitInput.billingTitle,
+          type: args.visitInput.billingType,
+          description: args.visitInput.billingDescription,
+          amount: args.visitInput.billingAmount,
+          paid: args.visitInput.billingPaid,
+          notes: args.visitInput.billingNotes
+        }
+        const newAttachment = args.visitInput.billingAttachment;
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,
+            'billing.title': billing.title,
+            'billing.type': billing.type,
+            'billing.description': billing.description,
+            'billing.amount': billing.amount,
+            'billing.paid': billing.paid,
+            'billing.notes': billing.notes
+          },
+          {$addToSet: {'billing.$.attachments': newAttachment}},
+          {new: true, useFindAndModify: false}
+        );
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteVisitBillingAttachment: async (args, req) => {
+    console.log("Resolver: deleteVisitBillingAttachment...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const billing = {
+          title: args.visitInput.billingTitle,
+          type: args.visitInput.billingType,
+          description: args.visitInput.billingDescription,
+          amount: args.visitInput.billingAmount,
+          paid: args.visitInput.billingPaid,
+          notes: args.visitInput.billingNotes
+        }
+        const oldAttachment = args.visitInput.billingAttachment;
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,
+            'billing.title': billing.title,
+            'billing.type': billing.type,
+            'billing.description': billing.description,
+            'billing.amount': billing.amount,
+            'billing.paid': billing.paid,
+            'billing.notes': billing.notes
+          },
+          {$pull: {'billing.$.attachments': oldAttachment}},
+          {new: true, useFindAndModify: false}
+        );
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteVisitBilling: async (args, req) => {
+    console.log("Resolver: deleteVisitBilling...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const attachments = args.visitInput.billingAttachments.split(',');
+        const billing = {
+          title: args.visitInput.billingTitle,
+          type: args.visitInput.billingType,
+          description: args.visitInput.billingDescription,
+          amount: args.visitInput.billingAmount,
+          paid: args.visitInput.billingPaid,
+          attachments: attachments,
+          notes: args.visitInput.billingNotes
+        }
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId},
+          {$pull: {billing: billing}},
+          {new: true, useFindAndModify: false}
+        );
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addVisitImage: async (args, req) => {
+    console.log("Resolver: addVisitImage...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const image = {
+          name: args.visitInput.imageName,
+          type: args.visitInput.imageType,
+          path: args.visitInput.imagePath
+        }
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId},
+          {$addToSet: {images: image}},
+          {new: true, useFindAndModify: false}
+        );
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteVisitImage: async (args, req) => {
+    console.log("Resolver: deleteVisitImage...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const image = {
+          name: args.visitInput.imageName,
+          type: args.visitInput.imageType,
+          path: args.visitInput.imagePath
+        }
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId},
+          {$pull: {images: image}},
+          {new: true, useFindAndModify: false}
+        );
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addVisitFile: async (args, req) => {
+    console.log("Resolver: addVisitFile...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const file = {
+          name: args.visitInput.fileName,
+          type: args.visitInput.fileType,
+          path: args.visitInput.filePath
+        }
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId},
+          {$addToSet: {files: file}},
+          {new: true, useFindAndModify: false}
+        );
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteVisitFile: async (args, req) => {
+    console.log("Resolver: deleteVisitFile...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const file = {
+          name: args.visitInput.fileName,
+          type: args.visitInput.fileType,
+          path: args.visitInput.filePath
+        }
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId},
+          {$pull: {files: file}},
+          {new: true, useFindAndModify: false}
+        );
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addVisitVigilance: async (args, req) => {
+    console.log("Resolver: addVisitVigilance...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const vigilance = {
+          chronicIllness: {
+            diabetes: {
+              medication: args.visitInput.vigilanceChronicIllnessDiabetesMedication,
+              testing: args.visitInput.vigilanceChronicIllnessDiabetesTesting,
+              comment: args.visitInput.vigilanceChronicIllnessDiabetesComment
+            },
+            hbp: {
+              medication: args.visitInput.vigilanceChronicIllnessHbpMedication,
+              testing: args.visitInput.vigilanceChronicIllnessHbpTesting,
+              comment: args.visitInput.vigilanceChronicIllnessHbpComment
+            },
+            dyslipidemia: {
+              medication: args.visitInput.vigilanceChronicIllnessHbpDyslipidemiaMedication,
+              testing: args.visitInput.vigilanceChronicIllnessHbpDyslipidemiaTesting,
+              comment: args.visitInput.vigilanceChronicIllnessHbpDyslipidemiaComment
+            },
+            cad: {
+              medication: args.visitInput.vigilanceChronicIllnessCadMedication,
+              testing: args.visitInput.vigilanceChronicIllnessCadTesting,
+              comment: args.visitInput.vigilanceChronicIllnessCadComment
+            }
+          },
+          lifestyle: {
+            weight: {
+              medication: args.visitInput.vigilanceLifestyleWeightMedication,
+              testing: args.visitInput.vigilanceLifestyleWeightTesting,
+              comment: args.visitInput.vigilanceLifestyleWeightComment
+            },
+            diet: {
+              medication: args.visitInput.vigilanceLifestyleDietMedication,
+              testing: args.visitInput.vigilanceLifestyleDietTesting,
+              comment: args.visitInput.vigilanceLifestyleDietComment
+            },
+            smoking: {
+              medication: args.visitInput.vigilanceLifestyleSmokingMedication,
+              testing: args.visitInput.vigilanceLifestyleSmokingTesting,
+              comment: args.visitInput.vigilanceLifestyleSmokingComment
+            },
+            substanceAbuse: {
+              medication: args.visitInput.vigilanceLifestyleSubstanceAbuseMedication,
+              testing: args.visitInput.vigilanceLifestyleSubstanceAbuseTesting,
+              comment: args.visitInput.vigilanceLifestyleSubstanceAbuseComment
+            },
+            exercise: {
+              medication: args.visitInput.vigilanceLifestyleExerciseMedication,
+              testing: args.visitInput.vigilanceLifestyleExerciseTesting,
+              comment: args.visitInput.vigilanceLifestyleExerciseComment
+            },
+            allergies: {
+              medication: args.visitInput.vigilanceLifestyleAllergiesMedication,
+              testing: args.visitInput.vigilanceLifestyleAllergiesTesting,
+              comment: args.visitInput.vigilanceLifestyleAllergiesComment
+            },
+            asthma: {
+              medication: args.visitInput.vigilanceLifestyleAsthmaMedication,
+              testing: args.visitInput.vigilanceLifestyleAsthmaTesting,
+              comment: args.visitInput.vigilanceLifestyleAsthmaComment
+            }
+          },
+          screening: {
+            breast: {
+              medication: args.visitInput.vigilanceScreeningBreastMedication,
+              testing: args.visitInput.vigilanceScreeningBreastTesting,
+              comment: args.visitInput.vigilanceScreeningBreastComment
+            },
+            prostate: {
+              medication: args.visitInput.vigilanceScreeningProstateMedication,
+              testing: args.visitInput.vigilanceScreeningProstateTesting,
+              comment: args.visitInput.vigilanceScreeningProstateComment
+            },
+            cervix: {
+              medication: args.visitInput.vigilanceScreeningCervixMedication,
+              testing: args.visitInput.vigilanceScreeningCervixTesting,
+              comment: args.visitInput.vigilanceScreeningCervixComment
+            },
+            colon: {
+              medication: args.visitInput.vigilanceScreeningColonMedication,
+              testing: args.visitInput.vigilanceScreeningColonTesting,
+              comment: args.visitInput.vigilanceScreeningColonComment
+            },
+            dental: {
+              medication: args.visitInput.vigilanceScreeningDentalMedication,
+              testing: args.visitInput.vigilanceScreeningDentalTesting,
+              comment: args.visitInput.vigilanceScreeningDentalComment
+            }
+          },
+          vaccines: {
+            influenza: {
+              medication: args.visitInput.vigilanceVaccinesInfluenzaMedication,
+              testing: args.visitInput.vigilanceVaccinesInfluenzaTesting,
+              comment: args.visitInput.vigilanceVaccinesInfluenzaComment
+            },
+            varicella: {
+              medication: args.visitInput.vigilanceVaccinesVaricellaMedication,
+              testing: args.visitInput.vigilanceVaccinesVaricellaTesting,
+              comment: args.visitInput.vigilanceVaccinesVaricellaComment
+            },
+            hpv: {
+              medication: args.visitInput.vigilanceVaccinesHpvMedication,
+              testing: args.visitInput.vigilanceVaccinesHpvTesting,
+              comment: args.visitInput.vigilanceVaccinesHpvComment
+            },
+            mmr: {
+              medication: args.visitInput.vigilanceVaccinesMmrMedication,
+              testing: args.visitInput.vigilanceVaccinesMmrTesting,
+              comment: args.visitInput.vigilanceVaccinesMmrComment
+            },
+            tetanus: {
+              medication: args.visitInput.vigilanceVaccinesTetanusMedication,
+              testing: args.visitInput.vigilanceVaccinesTetanusTesting,
+              comment: args.visitInput.vigilanceVaccinesTetanusComment
+            },
+            pneumovax: {
+              medication: args.visitInput.vigilanceVaccinesPneumovaxMedication,
+              testing: args.visitInput.vigilanceVaccinesPneumovaxTesting,
+              comment: args.visitInput.vigilanceVaccinesPneumovaxComment
+            },
+            other: {
+              name: args.visitInput.vigilanceVaccinesOtherName,
+              medication: args.visitInput.vigilanceVaccinesOtherMedication,
+              testing: args.visitInput.vigilanceVaccinesOtherTesting,
+              comment: args.visitInput.vigilanceVaccinesOtherComment
+            }
+          }
+        }
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId},
+          {$addToSet: {vigilance: vigilance}},
+          {new: true, useFindAndModify: false}
+        );
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteVisitVigilance: async (args, req) => {
+    console.log("Resolver: deleteVisitVigilance...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const vigilance = {
+          chronicIllness: {
+            diabetes: {
+              medication: args.visitInput.vigilanceChronicIllnessDiabetesMedication,
+              testing: args.visitInput.vigilanceChronicIllnessDiabetesTesting,
+              comment: args.visitInput.vigilanceChronicIllnessDiabetesComment
+            },
+            hbp: {
+              medication: args.visitInput.vigilanceChronicIllnessHbpMedication,
+              testing: args.visitInput.vigilanceChronicIllnessHbpTesting,
+              comment: args.visitInput.vigilanceChronicIllnessHbpComment
+            },
+            dyslipidemia: {
+              medication: args.visitInput.vigilanceChronicIllnessHbpDyslipidemiaMedication,
+              testing: args.visitInput.vigilanceChronicIllnessHbpDyslipidemiaTesting,
+              comment: args.visitInput.vigilanceChronicIllnessHbpDyslipidemiaComment
+            },
+            cad: {
+              medication: args.visitInput.vigilanceChronicIllnessCadMedication,
+              testing: args.visitInput.vigilanceChronicIllnessCadTesting,
+              comment: args.visitInput.vigilanceChronicIllnessCadComment
+            }
+          },
+          lifestyle: {
+            weight: {
+              medication: args.visitInput.vigilanceLifestyleWeightMedication,
+              testing: args.visitInput.vigilanceLifestyleWeightTesting,
+              comment: args.visitInput.vigilanceLifestyleWeightComment
+            },
+            diet: {
+              medication: args.visitInput.vigilanceLifestyleDietMedication,
+              testing: args.visitInput.vigilanceLifestyleDietTesting,
+              comment: args.visitInput.vigilanceLifestyleDietComment
+            },
+            smoking: {
+              medication: args.visitInput.vigilanceLifestyleSmokingMedication,
+              testing: args.visitInput.vigilanceLifestyleSmokingTesting,
+              comment: args.visitInput.vigilanceLifestyleSmokingComment
+            },
+            substanceAbuse: {
+              medication: args.visitInput.vigilanceLifestyleSubstanceAbuseMedication,
+              testing: args.visitInput.vigilanceLifestyleSubstanceAbuseTesting,
+              comment: args.visitInput.vigilanceLifestyleSubstanceAbuseComment
+            },
+            exercise: {
+              medication: args.visitInput.vigilanceLifestyleExerciseMedication,
+              testing: args.visitInput.vigilanceLifestyleExerciseTesting,
+              comment: args.visitInput.vigilanceLifestyleExerciseComment
+            },
+            allergies: {
+              medication: args.visitInput.vigilanceLifestyleAllergiesMedication,
+              testing: args.visitInput.vigilanceLifestyleAllergiesTesting,
+              comment: args.visitInput.vigilanceLifestyleAllergiesComment
+            },
+            asthma: {
+              medication: args.visitInput.vigilanceLifestyleAsthmaMedication,
+              testing: args.visitInput.vigilanceLifestyleAsthmaTesting,
+              comment: args.visitInput.vigilanceLifestyleAsthmaComment
+            }
+          },
+          screening: {
+            breast: {
+              medication: args.visitInput.vigilanceScreeningBreastMedication,
+              testing: args.visitInput.vigilanceScreeningBreastTesting,
+              comment: args.visitInput.vigilanceScreeningBreastComment
+            },
+            prostate: {
+              medication: args.visitInput.vigilanceScreeningProstateMedication,
+              testing: args.visitInput.vigilanceScreeningProstateTesting,
+              comment: args.visitInput.vigilanceScreeningProstateComment
+            },
+            cervix: {
+              medication: args.visitInput.vigilanceScreeningCervixMedication,
+              testing: args.visitInput.vigilanceScreeningCervixTesting,
+              comment: args.visitInput.vigilanceScreeningCervixComment
+            },
+            colon: {
+              medication: args.visitInput.vigilanceScreeningColonMedication,
+              testing: args.visitInput.vigilanceScreeningColonTesting,
+              comment: args.visitInput.vigilanceScreeningColonComment
+            },
+            dental: {
+              medication: args.visitInput.vigilanceScreeningDentalMedication,
+              testing: args.visitInput.vigilanceScreeningDentalTesting,
+              comment: args.visitInput.vigilanceScreeningDentalComment
+            }
+          },
+          vaccines: {
+            influenza: {
+              medication: args.visitInput.vigilanceVaccinesInfluenzaMedication,
+              testing: args.visitInput.vigilanceVaccinesInfluenzaTesting,
+              comment: args.visitInput.vigilanceVaccinesInfluenzaComment
+            },
+            varicella: {
+              medication: args.visitInput.vigilanceVaccinesVaricellaMedication,
+              testing: args.visitInput.vigilanceVaccinesVaricellaTesting,
+              comment: args.visitInput.vigilanceVaccinesVaricellaComment
+            },
+            hpv: {
+              medication: args.visitInput.vigilanceVaccinesHpvMedication,
+              testing: args.visitInput.vigilanceVaccinesHpvTesting,
+              comment: args.visitInput.vigilanceVaccinesHpvComment
+            },
+            mmr: {
+              medication: args.visitInput.vigilanceVaccinesMmrMedication,
+              testing: args.visitInput.vigilanceVaccinesMmrTesting,
+              comment: args.visitInput.vigilanceVaccinesMmrComment
+            },
+            tetanus: {
+              medication: args.visitInput.vigilanceVaccinesTetanusMedication,
+              testing: args.visitInput.vigilanceVaccinesTetanusTesting,
+              comment: args.visitInput.vigilanceVaccinesTetanusComment
+            },
+            pneumovax: {
+              medication: args.visitInput.vigilanceVaccinesPneumovaxMedication,
+              testing: args.visitInput.vigilanceVaccinesPneumovaxTesting,
+              comment: args.visitInput.vigilanceVaccinesPneumovaxComment
+            },
+            other: {
+              name: args.visitInput.vigilanceVaccinesOtherName,
+              medication: args.visitInput.vigilanceVaccinesOtherMedication,
+              testing: args.visitInput.vigilanceVaccinesOtherTesting,
+              comment: args.visitInput.vigilanceVaccinesOtherComment
+            }
+          }
+        }
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId},
+          {$pull: {vigilance: vigilance}},
           {new: true, useFindAndModify: false}
         );
         return {

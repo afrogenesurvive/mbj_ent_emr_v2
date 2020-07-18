@@ -388,7 +388,7 @@ module.exports = buildSchema(`
     amount: Float
     paid: Boolean
     attachments: [String]
-    notes: [String]
+    notes: String
   }
   type VisitVigilance {
     chronicIllness: VisitVigilanceChronicIllness
@@ -594,7 +594,7 @@ module.exports = buildSchema(`
     title: String
     trigger: ReminderTrigger
     appointment: Appointment
-    userRecipients: [User]
+    staffRecipients: [User]
     patientRecipients: [Patient]
     body: String
     delivery: ReminderDelivery
@@ -708,13 +708,13 @@ module.exports = buildSchema(`
     getVisitsByFieldRegex(activityId: ID!, field: String!, query: String!): [Visit]
     getVisitByAppointment(activityId: ID!, appointmentId: ID!): Visit
 
-    getReminders(activityId: ID!): [Reminder]
+    getAllReminders(activityId: ID!): [Reminder]
     getReminderById(activityId: ID!, reminderId: ID!): Reminder
     getRemindersByField(activityId: ID!, field: String!, query: String!): [Reminder]
     getRemindersByFieldRegex(activityId: ID!, field: String!, query: String!): [Reminder]
-    getRemindersByCreator(activityId: ID!, creatorId: ID!): [User]
-    getRemindersByAppointment(activityId: ID!, creatorId: ID!): [User]
-    getRemindersByRecipientsUser(activityId: ID!, userIds: String!): [Reminder]
+    getRemindersByCreator(activityId: ID!, creatorId: ID!): [Reminder]
+    getRemindersByAppointment(activityId: ID!, appointmentId: ID!): [Reminder]
+    getRemindersByRecipientsStaff(activityId: ID!, staffIds: String!): [Reminder]
     getRemindersByRecipientsPatient(activityId: ID!, patientIds: String!): [Reminder]
 
   }
@@ -810,9 +810,13 @@ module.exports = buildSchema(`
     addVisitExamination(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitExaminationAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitInvestigation(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    addVisitInvestigationAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitDiagnosis(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    addVisitDiagnosisAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitTreatment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    addVisitTreatmentAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitBilling(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    addVisitBillingAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitVigilance(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitImage(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitFile(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
@@ -829,21 +833,28 @@ module.exports = buildSchema(`
     deleteVisitExamination(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     deleteVisitExaminationAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     deleteVisitInvestigation(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    deleteVisitInvestigationAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     deleteVisitDiagnosis(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    deleteVisitDiagnosisAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     deleteVisitTreatment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    deleteVisitTreatmentAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     deleteVisitBilling(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    deleteVisitBillingAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     deleteVisitVigilance(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     deleteVisitImage(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     deleteVisitFile(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
 
-    createReminder(activityId: ID!, appointmentId: ID!): Reminder
+    createReminder(activityId: ID!, appointmentId: ID!, reminderInput: ReminderInput!): Reminder
     updateReminderAllFields(activityId: ID!, reminderId: ID!, reminderInput: ReminderInput!): Reminder
-    updateReminderSingleField(activityId: ID!, reminderId: ID!, reminderInput: ReminderInput!): Reminder
-    addReminderRecipientsUser(activityId: ID!, userId: ID!): Reminder
-    addReminderRecipientsPatient(activityId: ID!, patientId: ID!): Reminder
+    updateReminderSingleField(activityId: ID!, reminderId: ID!, field:String!, query:String!): Reminder
+    updateReminderTrigger(activityId: ID!, reminderId: ID!, appointmentId: ID!, reminderInput: ReminderInput!): Reminder
+    updateReminderDelivery(activityId: ID!, reminderId: ID!, reminderInput: ReminderInput!): Reminder
+    addReminderRecipientStaff(activityId: ID!, reminderId: ID!, staffId: ID!): Reminder
+    addReminderRecipientPatient(activityId: ID!, reminderId: ID!, patientId: ID!): Reminder
 
-    deleteReminderRecipientsUser(activityId: ID!, userId: ID!): Reminder
-    deleteReminderRecipientsPatient(activityId: ID!, patientId: ID!): Reminder
+    deleteReminderRecipientStaff(activityId: ID!, reminderId: ID!, staffId: ID!): Reminder
+    deleteReminderRecipientPatient(activityId: ID!, reminderId: ID!, patientId: ID!): Reminder
+    deleteReminderById(activityId: ID!, reminderId: ID!): Reminder
 
     sendReminders(activityId: ID!): [Reminder]
 
