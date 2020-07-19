@@ -1,26 +1,233 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import LandingPage from './pages/landing';
+import AuthContext from './context/auth-context';
+import io from 'socket.io-client';
+
+import './App.css';
+
+class App extends Component {
+  state = {
+    token: null,
+    activityId: null,
+    role: null,
+    context: this.context,
+    sessionCookiePresent: false,
+    passwordResetState: 'incomplete',
+    passwordResetMessage: '...'
+  };
+
+  static contextType = AuthContext;
+
+  constructor(props) {
+    super(props);
+    this.sessionStorageAuth = null;
+    this.socket = io('http://localhost:9099');
+  }
+
+  login = (token, activityId, role, tokenExpiration) => {
+    this.setState({
+      token: token,
+      activityId: activityId,
+      role: role
+    });
+    this.context.token = token;
+    this.context.activityId = activityId;
+    this.context.role = role;
+    // this.socket.emit('msg_subscribe', {user: activityId, room:'msg'+activityId});
+  };
+
+  logout = () => {
+      this.logout2();
+  };
+
+
+  componentDidMount() {
+    // console.log(this.socket.connected);
+    console.log('...app component mounted...');
+
+    if (sessionStorage.getItem('login info') && this.state.token === null) {
+
+      let seshStore = sessionStorage.getItem('login info');
+      this.context.token = seshStore.token;
+      this.context.activityId = seshStore.activityId;
+      this.context.role = seshStore.role;
+      this.setState({
+        sessionCookiePresent: true,
+        activityId: seshStore.activityId,
+        token: seshStore.token,
+        });
+    };
+
+    // const conversationId = this.context.activityId;
+    this.socket.emit('unauthorizedClientConnect');
+    console.log("socket listening....");
+  }
+
+  componentWillUnmount() {
+    console.log('...app component un-mounting...');
+  }
+
+  logout2 () {
+    console.log('...logging you out...');
+    const token = this.context.token;
+    const activityId = this.context.activityId;
+    const requestBody = {
+      query:`
+        query{logout(
+          activityId:"${activityId}")
+        {_id,loggedIn}}
+      `};
+
+    fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Failed!');
+        }
+        return res.json();
+      })
+      .then(resData => {
+
+        this.setState({
+           token: null,
+           activityId: null,
+           role: null,
+           sessionCookiePresent: null
+          });
+        sessionStorage.clear();
+        this.context = {
+          token: null,
+          activityId: null,
+          activityA: null,
+          activityB: null,
+          activityC: null,
+          role: null,
+          userId: null,
+          user: {},
+          users:[],
+          selectedUser: null,
+          lesson: {},
+          lessons: [],
+          selectedLesson: null,
+          selectedPerk: null,
+          selectedPromo: null,
+          selectedReview: null,
+          sender: null,
+          receiver: null,
+          userAlert: "...",
+          file: null,
+          fancyDate: null,
+          login: this.login,
+          logout: this.logout,
+        };
+
+      })
+      .catch(err => {
+        console.log(err);
+        // this.setState({userAlert: err});
+      });
+  }
+
+  passwordReset = (event) => {
+    event.preventDefault();
+    console.log('...reset password submission...');
+      const params = event.target.formGridParams.value.split('@');
+      const verificationCode = params[1];
+      const userId = params[0];
+      const password = event.target.formGridPassword.value;
+      // console.log('params',params);
+
+      const requestBody = {
+        query:`
+          mutation {resetUserPassword(
+            userId:"${userId}",
+            verification:"${verificationCode}",
+            userInput:{
+              password:"${password}"
+            })
+            {_id,password,verification{verified}}}
+        `};
+
+      fetch('http://localhost:8088/graphql', {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(res => {
+          if (res.status !== 200 && res.status !== 201) {
+            throw new Error('Failed!');
+          }
+          return res.json();
+        })
+        .then(resData => {
+          console.log('passwordReset',resData);
+          if (resData.errors) {
+            this.setState({passwordResetState: 'error', passwordResetMessage: resData.errors[0].message+'..if not, try making a new reset request..' })
+          } else {
+            this.setState({passwordResetState: 'complete' })
+          }
+
+        })
+        .catch(err => {
+          console.log(err);
+          this.setState({passwordResetState: 'error', passwordResetMessage: err })
+        });
+  }
+  cancelPasswordReset = () => {
+    this.setState({passwordResetState: 'cancelled'})
+  }
+
+  render() {
+    return (
+      <BrowserRouter>
+        <React.Fragment>
+          <AuthContext.Provider
+            value={{
+              token: this.state.token,
+              activityId: this.state.activityId,
+              activityA: null,
+              role: this.state.role,
+              userId: null,
+              user: {},
+              users:[],
+              selectedUser: {},
+              sender: null,
+              receiver: null,
+              userAlert: "...",
+              file: null,
+              fancyDate: null,
+              login: this.login,
+              logout: this.logout,
+            }}
+          >
+            <main className="main-content">
+              <Switch>
+              <Route path="/landing" render={(props) => <LandingPage {...props}
+
+              />}/>
+              <Redirect from="/" to="/landing" exact />
+              <Redirect from="*" to="/landing" exact />
+              </Switch>
+            </main>
+
+          </AuthContext.Provider>
+        </React.Fragment>
+      </BrowserRouter>
+    );
+  }
 }
 
 export default App;
