@@ -4,7 +4,11 @@ import { createBrowserHistory } from 'history';
 import logo from './logo.svg';
 import './App.css';
 
-import LandingPage from './pages/landing';
+import LandingPage from './pages/landing/landing';
+import LoginPage from './pages/auth/login';
+import SignupPage from './pages/auth/signup';
+import MenuDrawer from './components/menu/menuDrawer';
+import AlertBox from './components/alertBox/alertBox';
 import AuthContext from './context/auth-context';
 import io from 'socket.io-client';
 
@@ -213,13 +217,22 @@ class App extends Component {
               logout: this.logout,
             }}
           >
+            <MenuDrawer />
+            <AlertBox />
             <main className="main-content">
               <Switch>
-              <Route path="/landing" render={(props) => <LandingPage {...props}
+                <Route path="/landing" render={(props) => <LandingPage {...props}
+                  title="landing"
+                />}/>
+                <Route path="/login" render={(props) => <LoginPage {...props}
+                  title="login"
+                />}/>
+                <Route path="/signup" render={(props) => <SignupPage {...props}
+                  title="signup"
+                />}/>
 
-              />}/>
-              <Redirect from="/" to="/landing" exact />
-              <Redirect from="*" to="/landing" exact />
+                <Redirect from="/" to="/landing" exact />
+                <Redirect from="*" to="/landing" exact />
               </Switch>
             </main>
 

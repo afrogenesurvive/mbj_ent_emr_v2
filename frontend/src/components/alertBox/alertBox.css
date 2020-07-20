@@ -1,0 +1,12 @@
+.alertDiv {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 9;
+  width: 17rem;
+  /* height: 5rem; */
+}
+.alertBoxPaper {
+  height: 6rem;
+  padding: 1rem;
+}
