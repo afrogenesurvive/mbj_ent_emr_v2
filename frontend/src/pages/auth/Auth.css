@@ -1,0 +1,39 @@
+.auth-form {
+  width: 35rem;
+  max-width: 80%;
+  margin: 5rem auto;
+}
+
+.loginButton {
+  margin: 1rem 2rem 0 0;
+}
+
+.signupRow {
+  margin: 10rem auto;
+    height: 30vh;
+    width: 70vw;
+}
+
+.loginPageContainer {
+  margin: 8vh 1rem 0 1rem;
+  text-align: center;
+}
+.loginPageContainerRow1 {
+  margin-top: 7rem;
+  /* height: 100%; */
+}
+.loginPageContainerCol1 {
+  /* border: 1px black solid; */
+  /* height: 90%; */
+  /* margin: 7rem auto; */
+  display: block;
+}
+
+.loginPageTitle {
+  display: block;
+  margin: 5rem auto;
+}
+
+.loginButton1 {
+  margin: 0 5rem;
+}

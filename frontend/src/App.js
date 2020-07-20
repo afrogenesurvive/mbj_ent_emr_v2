@@ -4,11 +4,14 @@ import { createBrowserHistory } from 'history';
 import logo from './logo.svg';
 import './App.css';
 
-import LandingPage from './pages/landing/landing';
-import LoginPage from './pages/auth/login';
-import SignupPage from './pages/auth/signup';
-import MenuDrawer from './components/menu/menuDrawer';
-import AlertBox from './components/alertBox/alertBox';
+import AlertBox from './components/alertBox/AlertBox';
+import MainNavigation from './components/Navigation/MainNavigation';
+import LandingPage from './pages/landing/Landing';
+import HomePage from './pages/landing/Home';
+import HomePage2 from './pages/landing/Home2';
+import LoginPage from './pages/auth/Login';
+import SignupPage from './pages/auth/Signup';
+
 import AuthContext from './context/auth-context';
 import io from 'socket.io-client';
 
@@ -20,54 +23,64 @@ class App extends Component {
     activityId: null,
     role: null,
     context: this.context,
+    sessionStorageAuth: JSON.parse(sessionStorage.getItem('logInfo')),
     sessionCookiePresent: false,
     passwordResetState: 'incomplete',
-    passwordResetMessage: '...'
+    passwordResetMessage: '...',
+    userAlert: null,
   };
 
   static contextType = AuthContext;
 
   constructor(props) {
     super(props);
-    this.sessionStorageAuth = null;
+    this.sessionStorageAuth = JSON.parse(sessionStorage.getItem('logInfo'));
     this.socket = io('http://localhost:9099');
   }
 
   login = (token, activityId, role, tokenExpiration) => {
+    console.log('...context login...');
     this.setState({
       token: token,
       activityId: activityId,
-      role: role
+      role: role,
+      sessionStorageAuth: {
+        token: token,
+        activityId: activityId,
+        role: role,
+        tokenExpiration: tokenExpiration
+      }
     });
+    this.sessionStorageAuth = {
+      token: token,
+      activityId: activityId,
+      role: role,
+      tokenExpiration: tokenExpiration
+    }
     this.context.token = token;
     this.context.activityId = activityId;
     this.context.role = role;
-    // this.socket.emit('msg_subscribe', {user: activityId, room:'msg'+activityId});
   };
 
   logout = () => {
       this.logout2();
   };
 
-
   componentDidMount() {
-    // console.log(this.socket.connected);
     console.log('...app component mounted...');
-
-    if (sessionStorage.getItem('login info') && this.state.token === null) {
-
-      let seshStore = sessionStorage.getItem('login info');
-      this.context.token = seshStore.token;
-      this.context.activityId = seshStore.activityId;
-      this.context.role = seshStore.role;
-      this.setState({
-        sessionCookiePresent: true,
-        activityId: seshStore.activityId,
-        token: seshStore.token,
-        });
-    };
-
-    // const conversationId = this.context.activityId;
+    if (sessionStorage.getItem('logInfo') && this.state.token === null) {
+      console.log('...sessionStorageFound...');
+      const seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
+      this.login(
+        seshStore.token,
+        seshStore.activityId,
+        seshStore.role,
+        seshStore.tokenExpiration,
+      )
+    }
+    if (!this.sessionStorageAuth) {
+      console.log('...noSessionStorageFound...');
+    }
     this.socket.emit('unauthorizedClientConnect');
     console.log("socket listening....");
   }
@@ -107,26 +120,20 @@ class App extends Component {
            token: null,
            activityId: null,
            role: null,
-           sessionCookiePresent: null
-          });
+           sessionCookiePresent: null,
+           sessionStorageAuth: null,
+        });
+        this.sessionStorageAuth = null;
         sessionStorage.clear();
         this.context = {
           token: null,
           activityId: null,
           activityA: null,
-          activityB: null,
-          activityC: null,
           role: null,
           userId: null,
           user: {},
           users:[],
           selectedUser: null,
-          lesson: {},
-          lessons: [],
-          selectedLesson: null,
-          selectedPerk: null,
-          selectedPromo: null,
-          selectedReview: null,
           sender: null,
           receiver: null,
           userAlert: "...",
@@ -194,6 +201,10 @@ class App extends Component {
     this.setState({passwordResetState: 'cancelled'})
   }
 
+  setUserAlert = (args) => {
+    console.log('...setUserAlert...',args);
+  }
+
   render() {
     return (
       <BrowserRouter>
@@ -217,22 +228,66 @@ class App extends Component {
               logout: this.logout,
             }}
           >
-            <MenuDrawer />
-            <AlertBox />
+            <MainNavigation
+              role={this.state.role}
+            />
+            <AlertBox
+              authId={this.context.activityId}
+              alert={this.state.userAlert}
+            />
             <main className="main-content">
               <Switch>
+
+              {this.state.sessionStorageAuth && (
+                <Redirect from="/login" to="/home" exact />
+              )}
+
+              {this.state.sessionStorageAuth && (
+                <Route path="/home" render={(props) => <HomePage {...props}
+                  title="home"
+                />}/>
+              )}
+              {this.state.sessionStorageAuth && (
+                <Route path="/home2" render={(props) => <HomePage2 {...props}
+                  title="home2"
+                />}/>
+              )}
+
+              {this.state.sessionStorageAuth && (
+                <Redirect from="/" to="/home" exact />
+              )}
+              {this.state.sessionStorageAuth && (
+                <Redirect from="*" to="/home" exact />
+              )}
+
+
+
+              {!this.state.sessionStorageAuth && (
                 <Route path="/landing" render={(props) => <LandingPage {...props}
                   title="landing"
                 />}/>
+              )}
+              {!this.state.sessionStorageAuth && (
                 <Route path="/login" render={(props) => <LoginPage {...props}
                   title="login"
                 />}/>
+              )}
+              {!this.state.sessionStorageAuth && (
                 <Route path="/signup" render={(props) => <SignupPage {...props}
                   title="signup"
                 />}/>
+              )}
 
+              {!this.state.sessionStorageAuth && (
+                <Redirect from="/home" to="/landing" exact />
+              )}
+              {!this.state.sessionStorageAuth && (
                 <Redirect from="/" to="/landing" exact />
+              )}
+              {!this.state.sessionStorageAuth && (
                 <Redirect from="*" to="/landing" exact />
+              )}
+
               </Switch>
             </main>
 

@@ -1,0 +1,47 @@
+.CreateFormContainer, .UpdateFormContainer, .SearchFormContainer {
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  /* position: fixed; */
+  top: 2rem;
+  left: 5rem;
+  /* z-index: 15; */
+  margin-top: 1rem;
+}
+
+.UpdateArrayFormContainer {
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  /* position: fixed; */
+  top: 2rem;
+  left: 5rem;
+  z-index: 15;
+}
+
+.appointmentTimeInput {
+    width: 6rem !important;
+    height: 2.5rem !important;
+    border-radius: 5px;
+    padding-left: 1rem;
+    margin: 2rem auto;
+}
+
+.formButton {
+  margin-right: 3rem;
+  margin-top: 1.5rem;
+}
+
+.bpInput {
+  width: 50%;
+  margin: 0 !important;
+}
+
+.bpInputGroup {
+  width: 25%;
+
+}
+
+.signupTitle {
+  margin: 2rem auto;;
+}

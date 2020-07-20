@@ -10,7 +10,7 @@ import AlertBox from '../../components/alertBox/AlertBox';
 import LoadingOverlay from '../../components/overlay/LoadingOverlay';
 import './landing.css';
 
-class LandingPage extends Component {
+class HomePage2 extends Component {
   state = {
     role: null,
     userAlert: "landing",
@@ -32,13 +32,6 @@ componentDidMount () {
       <React.Fragment>
 
       {
-        <AlertBox
-        authUserId={this.context.userId}
-        alert={this.state.userAlert}
-      />
-    }
-
-      {
         this.state.overlay === true && (
         <LoadingOverlay
           status={this.state.overlayStatus}
@@ -49,23 +42,13 @@ componentDidMount () {
 
       <Row className="loginPageContainerRow2">
       <Col className="loginPageContainerCol2">
-        <h1> Welcome to MBJ ENT EMR</h1>
+        <h1> MBJ ENT EMR Home2</h1>
       </Col>
       <Col className="loginPageContainerCol2">
 
       </Col>
       <Col className="loginPageContainerCol2">
         <p>.</p>
-      </Col>
-      <Col className="loginPageContainerCol2">
-
-          {this.state.isGuest === true && (
-            <NavLink to="/login">Login</NavLink>
-          )}
-          {this.state.isGuest === true && (
-            <NavLink to="/signup">Signup</NavLink>
-          )}
-
       </Col>
       </Row>
       </Container>
@@ -78,4 +61,4 @@ componentDidMount () {
 
 }
 
-export default LandingPage;
+export default HomePage2;
