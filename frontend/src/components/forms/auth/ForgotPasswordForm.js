@@ -11,34 +11,25 @@ const ForgotPasswordForm = (props) => {
 return (
 <div className="CreateFormContainer">
 <Form onSubmit={props.onConfirm}>
+  <h1>Forgot Password</h1>
+  <Form.Row>
+    <Form.Group as={Col} controlId="username">
+      <Form.Label>Username</Form.Label>
+      <Form.Control type="text" placeholder="username"/>
+    </Form.Group>
+  </Form.Row>
 
-<Form.Row>
-<Form.Group as={Col} controlId="formGridUsername">
-  <Form.Label>Username</Form.Label>
-  <Form.Control type="text" placeholder="Enter username"/>
-</Form.Group>
+  <Form.Row>
+    <Form.Group as={Col} controlId="email">
+      <Form.Label>email</Form.Label>
+      <Form.Control type="email" placeholder="email"/>
+    </Form.Group>
+  </Form.Row>
 
-</Form.Row>
-
-<Form.Row>
-<Form.Group as={Col} controlId="formGridEmail">
-  <Form.Label>Email</Form.Label>
-  <Form.Control type="email" placeholder="Enter email"/>
-</Form.Group>
-
-</Form.Row>
-
-<Form.Row>
-  <Button variant="danger" className="formButton" onClick={props.onCancel}>Cancel</Button>
-
-  <Button variant="primary" className="formButton" type="submit">
-  Submit
-  </Button>
-
-<p>{props.successText}</p>
-</Form.Row>
-
-
+  <Form.Row>
+    <Button variant="danger" className="formButton" onClick={props.onCancel}>Cancel</Button>
+    <Button variant="primary" className="formButton" type="submit">Request New Password</Button>
+  </Form.Row>
 </Form>
 </div>
 

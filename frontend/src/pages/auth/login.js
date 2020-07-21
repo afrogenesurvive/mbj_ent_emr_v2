@@ -28,23 +28,24 @@ class LoginPage extends Component {
     user: {},
     activityA: null,
     requestingPasswordReset: false,
+    showForm: 'login',
   };
   static contextType = AuthContext;
 
   componentDidMount() {
-    console.log('...login component mounted...');
+    console.log('...login component mounted...');;
   }
 
   submitLoginForm = (event) => {
     event.preventDefault();
-    this.setState({ userAlert: "...submitLoginForm..."})
+    this.context.setUserAlert("...submitLoginForm...")
     console.log("...submitLoginForm...");
 
     const email = event.target.email.value;
     const password = event.target.password.value;
 
     if (email.trim().length === 0 || password.trim().length === 0) {
-      this.setState({ userAlert: "...blank fields!!!..."})
+      this.context.setUserAlert("...blank fields!!!...")
       return;
     }
     let requestBody = {
@@ -71,7 +72,7 @@ class LoginPage extends Component {
         error = resData.data.login.error;
         responseAlert = error;
       }
-      this.setState({userAlert: responseAlert})
+      this.context.setUserAlert(responseAlert)
       if (resData.data.login.token !== "") {
         this.context.login(
           resData.data.login.token,
@@ -85,50 +86,17 @@ class LoginPage extends Component {
           role: resData.data.login.role,
           tokenExpiration: resData.data.login.tokenExpiration
         }
+        this.context.setUserAlert(responseAlert)
        sessionStorage.setItem('logInfo', JSON.stringify(sessionObject));
        this.setState({ activityA: `login?${sessionObject.activityId}`})
        this.logUserActivity();
       }
     })
     .catch(err => {
-      this.setState({userAlert: err});
+      this.context.setUserAlert(err);
     });
   };
 
-  getThisUser() {
-    console.log("get this user...");
-    const activityId = sessionStorage.getItem('activityId');
-    const token = sessionStorage.getItem('token');
-    const requestBody = {
-      query: `
-        query {getThisUser(activityId:"${activityId}")
-        {_id,name,role,username,dob,public,age,addresses{type,number,street,town,city,country,postalCode,primary},contact{phone,phone2,email},bio,profileImages{name,type,path},socialMedia{platform,handle,link},interests,perks{_id},promos{_id},friends{_id,name,username,loggedIn,clientConnected,contact{phone,phone2,email},profileImages{name,type,path},socialMedia{platform,handle,link}},points,tags,loggedIn,clientConnected,verification{verified,type,code},activity{date,request},likedLessons{_id,title,category,price},bookedLessons{date,session{date,title,time},ref{_id,title,category,price}},attendedLessons{date,ref{_id,title,category,price}},toTeachLessons{_id,title,category,price},taughtLessons{date,ref{_id,title,category,price}},wishlist{date,ref{_id,title,category,price},booked},cart{dateAdded,sessionDate,sessionTitle,lesson{_id,title,sku,price}},reviews{_id,date,type,title,author{_id,username},lesson{_id,title},body,rating},comments{_id},messages{_id,date,time,type,sender{_id,username},receiver{_id,username},subject,message,read},orders{_id,date,time,type,totals{a,b,c},buyer{_id},receiver{_id},lessons{price,ref{_id}}},paymentInfo{date,type,description,body,valid,primary},friendRequests{date,sender{_id,username},receiver{_id,username}}}}
-      `};
-
-    fetch('http://localhost:8088/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }})
-      .then(res => {
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error('Failed!');
-        }
-        return res.json();
-      })
-      .then(resData => {
-        const thisUser = resData.data.getThisUser;
-        this.context.user = thisUser;
-        this.setState({ activityA: '...autoLogin by '+thisUser._id+''})
-        // this.logUserActivity();
-        this.retrieveLogin();
-      })
-      .catch(err => {
-        this.setState({userAlert: err});
-      });
-  }
   logUserActivity() {
     console.log('...logUserActivity...');
     const seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
@@ -175,19 +143,22 @@ class LoginPage extends Component {
   verifyUser = (event) => {
     event.preventDefault();
     console.log('...verify user...');
-    const contactEmail = event.target.formGridEmail.value;
-    const verificationType = event.target.formGridType.value;
-    const verificationCode = event.target.formGridCode.value;
+    const email = event.target.email.value;
+    const type = event.target.type.value;
+    const code = event.target.code.value;
+    const username = event.target.username.value;
 
     const requestBody = {
       query: `
-      mutation {verifyUser(
-        userInput:{
-          contactEmail:"${contactEmail}",
-          verificationType:"${verificationType}",
-          verificationCode:"${verificationCode}"
-        })
-      {_id,name,role,username,dob,public,age,addresses{type,number,street,town,city,country,postalCode,primary},contact{phone,phone2,email},bio,profileImages{name,type,path},socialMedia{platform,handle,link},interests,perks{_id},promos{_id},friends{_id,username,loggedIn,clientConnected,contact{phone,phone2,email},profileImages{name,type,path}},points,tags,loggedIn,clientConnected,verification{verified,type,code},activity{date,request},likedLessons{_id,title,category,price},bookedLessons{date,session{date,title},ref{_id,title,category,price}},attendedLessons{date,ref{_id,title,category,price}},taughtLessons{date,ref{_id,title,category,price}},wishlist{date,ref{_id,title,category,price},booked},cart{dateAdded,sessionDate,lesson{_id,title,sku,price}},reviews{_id,date,type,title},comments{_id},messages{_id,date,time,type,sender{_id,username},receiver{_id,username}},orders{_id,date,time,type,buyer{_id},receiver{_id},lessons{price,ref{_id}}},paymentInfo{date,type,description,body,valid,primary},friendRequests{date,sender{_id,username},receiver{_id,username}}}}
+        mutation {verifyUser(
+          userInput:{
+            username:"${username}",
+            contactEmail:"${email}",
+            verificationType:"${type}",
+            verificationCode:"${code}"
+          }
+        )
+        {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id},reminders{_id},activity{date,request}}}
         `};
 
     fetch('http://localhost:8088/graphql', {
@@ -203,26 +174,37 @@ class LoginPage extends Component {
         return res.json();
       })
       .then(resData => {
-        // console.log(resData.data.verifyUser);
-        this.setState({userAlert: 'Verified...Please try loggin in again..'});
+        console.log('...resData...',resData.data.verifyUser);
+        this.context.setUserAlert('Verified...Please try loggin in again..')
       })
       .catch(err => {
-        this.setState({userAlert: err});
+        this.context.setUserAlert(err)
       });
   }
 
-  startVerification = () => {
-    this.setState({verifying: true})
-  };
-  closeVerification = () => {
-    this.setState({verifying: false})
-  };
+  toggleVerification = () => {
+    if (this.state.showForm === 'verify') {
+      this.setState({
+        showForm: 'login'
+      })
+    } else {
+      this.setState({
+        showForm: 'verify'
+      })
+    }
 
-  startForgotPassword = () => {
-    this.setState({requestingPasswordReset: true})
-  }
-  cancelPasswordReset = () => {
-    this.setState({requestingPasswordReset: false})
+  };
+  toggleForgotPassword = () => {
+    if (this.state.showForm === 'forgotPassword') {
+      this.setState({
+        showForm: 'login'
+      })
+    } else {
+      this.setState({
+        showForm: 'forgotPassword'
+      })
+    }
+
   }
 
   requestPasswordReset = (event) => {
@@ -230,9 +212,8 @@ class LoginPage extends Component {
     console.log('...requesting password reset...');
     this.setState({isLoading: true})
 
-    const username = event.target.formGridUsername.value;
-    const email = event.target.formGridEmail.value;
-
+    const username = event.target.username.value;
+    const email = event.target.email.value;
     const requestBody = {
       query: `
          mutation {requestPasswordReset(
@@ -256,11 +237,13 @@ class LoginPage extends Component {
         return res.json();
       })
       .then(resData => {
-        // console.log(resData)
+        console.log('...resData...',resData.data.requestPasswordReset)
         if (resData.errors) {
-          this.setState({userAlert: resData.errors[0].message});
+          this.context.setUserAlert(resData.errors[0].message);
         } else {
-          this.setState({userAlert: '...password reset email sent...',isLoading: false, requestingPasswordReset: false});
+          this.context.setUserAlert('...password reset request sent...');
+          this.setState({isLoading: false, requestingPasswordReset: false});
+          this.toggleForgotPassword();
         }
 
       })
@@ -269,50 +252,53 @@ class LoginPage extends Component {
       });
   }
 
-
   render() {
     return (
-      <Container className="loginPageContainer">
-      <AlertBox
-        authId={this.context.activityId}
-        alert={this.state.userAlert}
-      />
+      <Container className="authPageContainer">
+
       {this.state.overlay === true && (
         <LoadingOverlay
           status={this.state.overlayStatus}
         />
       )}
-      <Row className="loginPageContainerRow2">
-        <Col className="loginPageContainerCol2">
-          <LoginForm
-            onConfirm={this.submitLoginForm}
-          />
-        </Col>
-      </Row>
 
-        {this.state.requestingPasswordReset === true && (
-          <Row>
-            <Col>
-              <ForgotPasswordForm
-                onCancel={this.cancelPasswordReset}
-                onConfirm={this.requestPasswordReset}
-              />
-            </Col>
-          </Row>
-        )}
-        <Row className="loginPageContainerRow2">
-          <Col className="loginPageContainerCol2">
-            <Button variant="outline-primary" onClick={this.startVerification}>Verify</Button>
-            {this.state.verifying === true && (
-              <VerifyUserForm
-                canCancel
-                canConfirm
-                onCancel={this.closeVerification}
-                onConfirm={this.verifyUser}
-              />
-            )}
+      {this.state.showForm === 'login' && (
+        <Row className="authPageContainerRow">
+          <Col className="authPageContainerCol">
+            <LoginForm
+              onConfirm={this.submitLoginForm}
+              onStartForgotPassword={this.toggleForgotPassword}
+              onStartVerification={this.toggleVerification}
+            />
           </Col>
         </Row>
+      )}
+
+      {this.state.showForm === 'verify' && (
+        <Row className="authPageContainerRow">
+          <Col className="authPageContainerCol">
+            <VerifyUserForm
+              canCancel
+              canConfirm
+              onCancel={this.toggleVerification}
+              onConfirm={this.verifyUser}
+            />
+          </Col>
+        </Row>
+      )}
+
+
+      {this.state.showForm === 'forgotPassword' && (
+        <Row className="authPageContainerRow">
+          <Col className="authPageContainerCol">
+            <ForgotPasswordForm
+              onCancel={this.toggleForgotPassword}
+              onConfirm={this.requestPasswordReset}
+            />
+          </Col>
+        </Row>
+      )}
+
       </Container>
 
     );

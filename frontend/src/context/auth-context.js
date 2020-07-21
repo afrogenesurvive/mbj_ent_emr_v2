@@ -13,5 +13,6 @@ export default React.createContext({
     file: null,
     fancyDate: null,
     login: (token, activityId, role, tokenExpiration) => {},
-    logout: () => {}
+    logout: () => {},
+    setUserAlert: (args) => {},
 });

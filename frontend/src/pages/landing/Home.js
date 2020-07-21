@@ -38,16 +38,16 @@ componentDidMount () {
         />
       )
     }
-      <Container className="loginPageContainer">
+      <Container className="landingPageContainer">
 
-      <Row className="loginPageContainerRow2">
-      <Col className="loginPageContainerCol2">
+      <Row className="landingPageRow">
+      <Col className="landingPageCol">
         <h1> MBJ ENT EMR Home</h1>
       </Col>
-      <Col className="loginPageContainerCol2">
+      <Col className="landingPageCol">
 
       </Col>
-      <Col className="loginPageContainerCol2">
+      <Col className="landingPageCol">
         <p>.</p>
       </Col>
       </Row>

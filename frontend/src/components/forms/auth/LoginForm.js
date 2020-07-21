@@ -10,26 +10,29 @@ const LoginForm = (props) => {
 return (
 <div className="loginFormTopDiv">
   <Form onSubmit={props.onConfirm}>
-    <Form.Group controlId="email">
-      <Form.Label>Email address</Form.Label>
-      <Form.Control type="email" placeholder="Enter email"/>
-      <Form.Text className="text-muted">
-        User Login
-      </Form.Text>
-    </Form.Group>
-    <Form.Group controlId="password">
-      <Form.Label>Password</Form.Label>
-      <Form.Control type="password" placeholder="Password" />
-    </Form.Group>
-    <Button variant="outline-success" type="submit" className="loginFormBtn">
-      Login
-    </Button>
-    <Button variant="outline-warning" className="loginFormBtn">
-      <NavLink to="/signup">Signup</NavLink>
-    </Button>
-    <Button variant="outline-secondary" className="loginFormBtn">
-      ForgotPassword
-    </Button>
+    <h1>Login</h1>
+    <Form.Row>
+      <Form.Group as={Col} controlId="email">
+        <Form.Label>Email address</Form.Label>
+        <Form.Control type="email" placeholder="Enter email"/>
+      </Form.Group>
+    </Form.Row>
+
+    <Form.Row>
+      <Form.Group as={Col} controlId="password">
+        <Form.Label>Password</Form.Label>
+        <Form.Control type="password" placeholder="Password" />
+      </Form.Group>
+    </Form.Row>
+
+    <Form.Row>
+      <Button variant="outline-success" type="submit" className="loginFormBtn">Login</Button>
+      <Button variant="outline-primary" onClick={props.onStartVerification}>Verify</Button>
+      <Button variant="outline-secondary" className="loginFormBtn" onClick={props.onStartForgotPassword}>ForgotPassword</Button>
+      <Button variant="outline-warning" className="loginFormBtn">
+        <NavLink to="/signup">Signup</NavLink>
+      </Button>
+    </Form.Row>
   </Form>
 </div>
 

@@ -11,6 +11,7 @@ import HomePage from './pages/landing/Home';
 import HomePage2 from './pages/landing/Home2';
 import LoginPage from './pages/auth/Login';
 import SignupPage from './pages/auth/Signup';
+import PasswordResetPage from './pages/auth/PasswordReset';
 
 import AuthContext from './context/auth-context';
 import io from 'socket.io-client';
@@ -141,6 +142,7 @@ class App extends Component {
           fancyDate: null,
           login: this.login,
           logout: this.logout,
+          setUserAlert: this.setUserAlert,
         };
 
       })
@@ -203,6 +205,7 @@ class App extends Component {
 
   setUserAlert = (args) => {
     console.log('...setUserAlert...',args);
+    this.setState({userAlert: args})
   }
 
   render() {
@@ -226,6 +229,7 @@ class App extends Component {
               fancyDate: null,
               login: this.login,
               logout: this.logout,
+              setUserAlert: this.setUserAlert,
             }}
           >
             <MainNavigation
@@ -275,8 +279,17 @@ class App extends Component {
               {!this.state.sessionStorageAuth && (
                 <Route path="/signup" render={(props) => <SignupPage {...props}
                   title="signup"
+                  setUserAlert={this.setUserAlert}
                 />}/>
               )}
+
+              <Route path="/passwordReset/:params" render={(props) => <PasswordResetPage {...props}
+                passwordReset={this.passwordReset}
+                cancelPasswordReset={this.cancelPasswordReset}
+                resetState={this.state.passwordResetState}
+                message={this.state.passwordResetMessage}
+                />}
+              />
 
               {!this.state.sessionStorageAuth && (
                 <Redirect from="/home" to="/landing" exact />

@@ -367,7 +367,7 @@ module.exports = {
     try {
       const username = args.userInput.username;
       const email = args.userInput.email;
-      const userExists = await User.findOne({username: args.userInput.username, 'contact.email': args.userInput.contactEmail})
+      const userExists = await User.findOne({username: args.userInput.username, 'contact.email': args.userInput.contactEmail});
       if (!userExists) {
         console.log('...user doesnt exist. Check your credentials and try again...');
         throw new Error('...user doesnt exist. Check your credentials and try again...')
@@ -377,6 +377,12 @@ module.exports = {
       let rando = Math.floor(Math.random() * 5) + 1;
       verificationCode = moment().format()+userExists._id+'?000'+rando+'';
 
+
+      const key = 'Request_MBJ_ENT__emr_v2_Password';
+      const encryptor = require('simple-encryptor')(key);
+      const encrypted = encryptor.encrypt(verificationCode);
+      // verificationCode = encrypted;
+      const resetUrl = 'localhost:3000/passwordReset/'+userExists._id+'@'+encrypted+'';
       const user = await User.findOneAndUpdate(
         {_id: userExists._id},
         {verification: {
@@ -386,44 +392,40 @@ module.exports = {
         }},
         {new: true, useFindAndModify: false}
       )
-      const key = 'Request_MBJ_ENT__emr_v2_Password';
-      const encryptor = require('simple-encryptor')(key);
-      const encrypted = encryptor.encrypt(verificationCode);
-      const resetUrl = 'localhost:3000/passwordReset/'+userExists._id+'@'+encrypted+'';
       const userEmail = user.contact.email;
-      // console.log('resetUrl',resetUrl);
+      console.log('resetUrl',resetUrl);
+      // console.log('verificationCode',verificationCode);
 
-      let sendStatus = null;
-
-      sgMail.setApiKey(process.env.SENDGRID_A);
-      const msg = {
-        to: userEmail,
-        from: 'michael.grandison@gmail.com',
-        subject: 'Password Reset',
-        text: `
-          Hello ${user.username} use this url to reset your password...
-          ${resetUrl} ...
-        `,
-        html: `
-        <strong>
-        Hello ${user.username} use this url to reset your password...
-        <a target="_blank">
-        ${resetUrl}
-        </a> ...
-        </strong>`,
-      };
-      sgMail
-        .send(msg)
-        .then(() => {
-          sendStatus = 'Email Sent!';
-          console.log('sendStatus',sendStatus);
-        })
-        .catch(error => {
-          const {message, code, response} = error;
-          const {headers, body} = response;
-          sendStatus = error.toString()+response;
-          console.log('sendStatus',sendStatus);
-        });
+      // let sendStatus = null;
+      // sgMail.setApiKey(process.env.SENDGRID_A);
+      // const msg = {
+      //   to: userEmail,
+      //   from: 'michael.grandison@gmail.com',
+      //   subject: 'Password Reset',
+      //   text: `
+      //     Hello ${user.username} use this url to reset your password...
+      //     ${resetUrl} ...
+      //   `,
+      //   html: `
+      //   <strong>
+      //   Hello ${user.username} use this url to reset your password...
+      //   <a target="_blank">
+      //   ${resetUrl}
+      //   </a> ...
+      //   </strong>`,
+      // };
+      // sgMail
+      //   .send(msg)
+      //   .then(() => {
+      //     sendStatus = 'Email Sent!';
+      //     console.log('sendStatus',sendStatus);
+      //   })
+      //   .catch(error => {
+      //     const {message, code, response} = error;
+      //     const {headers, body} = response;
+      //     sendStatus = error.toString()+response;
+      //     console.log('sendStatus',sendStatus);
+      //   });
 
       return {
           ...user._doc,
@@ -443,10 +445,11 @@ module.exports = {
       const decryptor = require('simple-encryptor')(key);
       verificationChallengeCode = decryptor.decrypt(args.userInput.verificationCode);
 
-      // console.log('verificationChallengeCode',verificationChallengeCode);
+
       const preUser = await User.findById({_id: args.userId});
       const verificationResponse = preUser.verification;
-
+      console.log('challenge',verificationChallengeCode);
+      console.log('response',verificationResponse.code);
       if (verificationResponse.type !== 'passwordReset') {
         console.log('...umm no... reset request doesnt match our records... are you hacking??');
         throw new Error('...umm no... reset request doesnt match our records... are you hacking??')
@@ -1040,9 +1043,9 @@ module.exports = {
   createUser: async (args, req) => {
     console.log("Resolver: createUser...");
     try {
-      const existingUserName = await User.findOne({ username: args.userInput.username});
+      const existingUserName = await User.findOne({ username: args.userInput.username, email: args.userInput.email });
       if (existingUserName) {
-        throw new Error('User w/ that username exists already.');
+        throw new Error('User w/ that username & email exists already.');
       }
       const hashedPassword = await bcrypt.hash(args.userInput.password, 12);
       const today = moment();

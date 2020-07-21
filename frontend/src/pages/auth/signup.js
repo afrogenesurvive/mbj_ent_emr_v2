@@ -12,7 +12,7 @@ import './Auth.css';
 import AuthContext from '../../context/auth-context';
 import AlertBox from '../../components/alertBox/AlertBox';
 import LoadingOverlay from '../../components/overlay/LoadingOverlay';
-// import SignupForm from '../../components/forms/auth/SignupForm';
+import SignupForm from '../../components/forms/auth/SignupForm';
 
 class SignUpPage extends Component {
   state = {
@@ -26,29 +26,84 @@ class SignUpPage extends Component {
     user: {},
     activityA: null,
     requestingPasswordReset: false,
+    signupStatus: null,
   };
   static contextType = AuthContext;
 
   componentDidMount() {
     console.log('...signup component mounted...');
+    // this.context.setUserAlert('...signup component mounted...')
   }
 
 
-  submitLoginForm = (event) => {
+  submitSignupForm = (event) => {
     event.preventDefault();
-    this.setState({ userAlert: "...submitLoginForm..."})
-    console.log("...submitLoginForm...");
+    this.context.setUserAlert("...submitSignupForm...")
+    console.log("...submitSignupForm...");
 
     const email = event.target.email.value;
     const password = event.target.password.value;
+    const role = event.target.role.value;
+    const name = event.target.name.value;
+    const title = event.target.title.value;
+    const username = event.target.username.value;
+    const dob = event.target.dob.value;
+    const gender = event.target.gender.value;
+    const phone = event.target.phone.value;
+    const phone2 = event.target.phone2.value;
+    const addressNumber = event.target.addressNumber.value;
+    const addressStreet = event.target.addressStreet.value;
+    const addressTown = event.target.addressTown.value;
+    const addressCity = event.target.addressCity.value;
+    const addressParish = event.target.addressParish.value;
+    const addressCountry = event.target.addressCountry.value;
+    const addressPostalCode = event.target.addressPostalCode.value;
 
-    if (email.trim().length === 0 || password.trim().length === 0) {
-      this.setState({ userAlert: "...blank fields!!!..."})
+    if (email.trim().length === 0 ||
+        password.trim().length === 0 ||
+        role.trim().length === 0 ||
+        name.trim().length === 0 ||
+        username.trim().length === 0 ||
+        dob.trim().length === 0 ||
+        gender.trim().length === 0 ||
+        phone.trim().length === 0 ||
+        phone2.trim().length === 0 ||
+        addressNumber.trim().length === 0 ||
+        addressStreet.trim().length === 0 ||
+        addressTown.trim().length === 0 ||
+        addressCity.trim().length === 0 ||
+        addressParish.trim().length === 0 ||
+        addressCountry.trim().length === 0 ||
+        addressPostalCode.trim().length === 0
+        ) {
+      this.context.setUserAlert("...blank fields!!!...");
       return;
     }
     let requestBody = {
         query: `
-          {login(email:"${email}",password:"${password}"){activityId,role,token,tokenExpiration,error}}`};
+            mutation {createUser(
+              userInput:{
+                password:"${password}",
+                title:"${title}",
+                name:"${name}",
+                role:"${role}",
+                username:"${username}",
+                dob:"${dob}",
+                gender:"${gender}",
+                contactPhone:"${phone}",
+                contactPhone2:"${phone2}",
+                contactEmail:"${email}",
+                addressNumber:${addressNumber},
+                addressStreet:"${addressStreet}",
+                addressTown:"${addressTown}",
+                addressCity:"${addressCity}",
+                addressParish:"${addressParish}",
+                addressCountry:"${addressCountry}",
+                addressPostalCode:"${addressPostalCode}"
+              }
+            )
+            {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id},reminders{_id},activity{date,request}}}
+          `};
     fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
@@ -63,96 +118,46 @@ class SignUpPage extends Component {
       return res.json();
     })
     .then(resData => {
-      // console.log('...resData...',resData.data.login);
-      let responseAlert = '...login success!...';
+      console.log('...resData...',resData.data.createUser);
+      let responseAlert = '...Signup success!...';
       let error = null;
-      if (resData.data.login.error) {
-        error = resData.data.login.error;
+      if (resData.data.createUser.error) {
+        error = resData.data.createUser.error;
         responseAlert = error;
       }
-      this.setState({userAlert: responseAlert})
-      if (resData.data.login.token !== "") {
-        this.context.login(
-          resData.data.login.token,
-          resData.data.login.activityId,
-          resData.data.login.role,
-          resData.data.login.tokenExpiration
-        );
-        const sessionObject = {
-          token: resData.data.login.token,
-          activityId: resData.data.login.activityId,
-          role: resData.data.login.role,
-          tokenExpiration: resData.data.login.tokenExpiration
-        }
-       sessionStorage.setItem('logInfo', JSON.stringify(sessionObject));
-       this.setState({ activityA: `login?${sessionObject.activityId}`})
-       this.logUserActivity();
-      }
+      responseAlert = '...verificationCode: '+resData.data.createUser.verification.code+'';
+      this.context.setUserAlert(responseAlert);
+      this.setState({signupStatus: 'success'})
     })
     .catch(err => {
-      this.setState({userAlert: err});
+      this.context.setUserAlert(err);
     });
-  };
-
-  logUserActivity() {
-    console.log('...logUserActivity...');
-    const seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
-    const activityId = seshStore.activityId;
-    const token = seshStore.token;
-    const userId = activityId;
-    const request = this.state.activityA;
-    const activityDate = moment().format('YYYY-MM-DD');
-    let requestBody = {
-      query: `
-        mutation {addUserActivity(
-          activityId:"${activityId}",userId:"${userId}",
-          userInput:{
-            activityDate:"${activityDate}",
-            activityRequest:"${request}"
-          })
-        {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id},reminders{_id},activity{date,request}}}
-      `};
-    fetch('http://localhost:8088/graphql', {
-        method: 'POST',
-        body: JSON.stringify(requestBody),
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token
-        }
-      })
-      .then(res => {
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error('Failed!');
-        }
-        return res.json();
-      })
-      .then(resData => {
-        // console.log('...resData...',resData.data.addUserActivity);
-        if (resData.data.addUserActivity.error) {
-          console.log('...resDataError...',resData.data.addUserActivity.error);
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
   };
 
 
   render() {
     return (
       <Container className="authPageContainer">
-        <AlertBox
-          authId={this.context.activityId}
-          alert={this.state.userAlert}
-        />
         {this.state.overlay === true && (
           <LoadingOverlay
             status={this.state.overlayStatus}
           />
         )}
-        <Row className="authPageContainerRow2">
-          <Col className="authPageContainerCol2">
-
+        <Row className="authPageContainerRow">
+          <Col className="authPageContainerCol">
+          {this.state.signupStatus !== 'success' && (
+            <SignupForm
+              onConfirm={this.submitSignupForm}
+            />
+          )}
+          {this.state.signupStatus === 'success' && (
+            <React.Fragment>
+              <h1>SignUp Success...Proceed to Login</h1>
+              <Button variant="outline-warning" className="loginFormBtn">
+                <NavLink to="/login">Login</NavLink>
+              </Button>
+            </React.Fragment>
+          )}
           </Col>
         </Row>
       </Container>

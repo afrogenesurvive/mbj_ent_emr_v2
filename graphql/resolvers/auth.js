@@ -19,10 +19,9 @@ module.exports = {
         error: 'User does not exist!'
       }
     }
-    // console.log(user._id);
+    
     const isEqual = await bcrypt.compare(password, user.password);
     if (!isEqual) {
-      // throw new Error('Password is incorrect!');
       return{
         activityId: 0,
         role:"",
@@ -31,7 +30,7 @@ module.exports = {
         error: 'Password is incorrect!'
       }
     }
-    // console.log("user.verification",user.verification);
+
     if (user.verification.verified !== true) {
 
       console.log('Please  verify user 1st!');
@@ -41,7 +40,6 @@ module.exports = {
         token:"",
         tokenExpiration:0 ,
         error: 'Please  verify user 1st!'}
-      // throw new Error('Please  verify user 1st!');
     }
     const token = jwt.sign({ userId: user.id },'ThaFamBizFile',{expiresIn: '4h'});
 

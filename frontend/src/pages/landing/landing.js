@@ -45,19 +45,19 @@ componentDidMount () {
         />
       )
     }
-      <Container className="loginPageContainer">
+      <Container className="landingPageContainer">
 
-      <Row className="loginPageContainerRow2">
-      <Col className="loginPageContainerCol2">
+      <Row className="landingPageRow">
+      <Col className="landingPageCol">
         <h1> Welcome to MBJ ENT EMR</h1>
       </Col>
-      <Col className="loginPageContainerCol2">
+      <Col className="landingPageCol">
 
       </Col>
-      <Col className="loginPageContainerCol2">
+      <Col className="landingPageCol">
         <p>.</p>
       </Col>
-      <Col className="loginPageContainerCol2">
+      <Col className="landingPageCol">
 
           {this.state.isGuest === true && (
             <NavLink to="/login">Login</NavLink>
