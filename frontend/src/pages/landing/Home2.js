@@ -13,7 +13,7 @@ import './landing.css';
 class HomePage2 extends Component {
   state = {
     role: null,
-    userAlert: "landing",
+    userAlert: "home page 2",
     overlay: false,
     overlayStatus: "test",
     isGuest: true,
@@ -21,9 +21,7 @@ class HomePage2 extends Component {
   };
 
 componentDidMount () {
-  if (AuthContext._currentValue.activityId !== null && AuthContext._currentValue.token !== null ) {
-    this.setState({isGuest: false})
-  }
+
 }
 
   render() {
@@ -31,23 +29,22 @@ componentDidMount () {
     return (
       <React.Fragment>
 
-      {
-        this.state.overlay === true && (
+      {this.state.overlay === true && (
         <LoadingOverlay
           status={this.state.overlayStatus}
         />
-      )
-    }
-      <Container className="loginPageContainer">
+      )}
 
-      <Row className="loginPageContainerRow2">
-      <Col className="loginPageContainerCol2">
+      <Container className="landingPageContainer">
+
+      <Row className="landingPageContainerRow">
+      <Col className="landingPageContainerCol">
         <h1> MBJ ENT EMR Home2</h1>
       </Col>
-      <Col className="loginPageContainerCol2">
+      <Col className="landingPageContainerCol">
 
       </Col>
-      <Col className="loginPageContainerCol2">
+      <Col className="landingPageContainerCol">
         <p>.</p>
       </Col>
       </Row>

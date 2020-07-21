@@ -381,7 +381,6 @@ module.exports = {
       const key = 'Request_MBJ_ENT__emr_v2_Password';
       const encryptor = require('simple-encryptor')(key);
       const encrypted = encryptor.encrypt(verificationCode);
-      // verificationCode = encrypted;
       const resetUrl = 'localhost:3000/passwordReset/'+userExists._id+'@'+encrypted+'';
       const user = await User.findOneAndUpdate(
         {_id: userExists._id},
@@ -394,7 +393,6 @@ module.exports = {
       )
       const userEmail = user.contact.email;
       console.log('resetUrl',resetUrl);
-      // console.log('verificationCode',verificationCode);
 
       // let sendStatus = null;
       // sgMail.setApiKey(process.env.SENDGRID_A);

@@ -1,0 +1,44 @@
+.profilePageContainer {
+  margin-top: 5rem;
+  border: 1px solid red;
+  height: 87vh;
+  /* overflow: hidden; */
+}
+.profilePageContainerCol {
+  border: 1px solid purple;
+
+}
+.headRow {
+  border: 1px solid blue;
+}
+.mainRow {
+  border: 1px solid green;
+  text-align: center;
+
+}
+.mainRow2 {
+  border: 1px solid blue;
+  text-align: center;
+  max-height: 78%;
+  overflow: scroll;
+}
+.specialCol1 {
+
+}
+.loadingGif {
+  height: 3rem;
+}
+.profileBasicListGroup {
+  text-align: left;
+}
+.listGroupText {
+  display: inline-block;
+  margin: 0 .5rem;
+}
+.bold {
+  font-weight: bold;
+}
+.menuSwitch {
+  /* margin: .1rem; */
+  height: 2rem;
+}

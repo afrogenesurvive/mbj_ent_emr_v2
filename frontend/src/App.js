@@ -9,6 +9,7 @@ import MainNavigation from './components/Navigation/MainNavigation';
 import LandingPage from './pages/landing/Landing';
 import HomePage from './pages/landing/Home';
 import HomePage2 from './pages/landing/Home2';
+import MyProfilePage from './pages/profile/Profile';
 import LoginPage from './pages/auth/Login';
 import SignupPage from './pages/auth/Signup';
 import PasswordResetPage from './pages/auth/PasswordReset';
@@ -61,6 +62,7 @@ class App extends Component {
     this.context.token = token;
     this.context.activityId = activityId;
     this.context.role = role;
+    this.userOnline();
   };
 
   logout = () => {
@@ -84,6 +86,7 @@ class App extends Component {
     }
     this.socket.emit('unauthorizedClientConnect');
     console.log("socket listening....");
+    this.userOnline();
   }
 
   componentWillUnmount() {
@@ -130,6 +133,7 @@ class App extends Component {
           token: null,
           activityId: null,
           activityA: null,
+          activityUser: null,
           role: null,
           userId: null,
           user: {},
@@ -143,14 +147,20 @@ class App extends Component {
           login: this.login,
           logout: this.logout,
           setUserAlert: this.setUserAlert,
+          userOnline: this.userOnline,
         };
-
+        this.setState({userAlert: '...logout success...'});
       })
       .catch(err => {
-        console.log(err);
-        // this.setState({userAlert: err});
+        this.setState({userAlert: err});
       });
   }
+
+  userOnline = () => {
+    console.log('...domesticating socket client...');
+    this.socket.emit('msg_subscribe', {user: this.context.activityId, room:'msg'+this.context.activityId});
+  }
+
 
   passwordReset = (event) => {
     event.preventDefault();
@@ -217,6 +227,7 @@ class App extends Component {
               token: this.state.token,
               activityId: this.state.activityId,
               activityA: null,
+              activityUser: null,
               role: this.state.role,
               userId: null,
               user: {},
@@ -230,6 +241,7 @@ class App extends Component {
               login: this.login,
               logout: this.logout,
               setUserAlert: this.setUserAlert,
+              userOnline: this.userOnline,
             }}
           >
             <MainNavigation
@@ -254,6 +266,11 @@ class App extends Component {
               {this.state.sessionStorageAuth && (
                 <Route path="/home2" render={(props) => <HomePage2 {...props}
                   title="home2"
+                />}/>
+              )}
+              {this.state.sessionStorageAuth && (
+                <Route path="/profile" render={(props) => <MyProfilePage {...props}
+                  title="profile"
                 />}/>
               )}
 

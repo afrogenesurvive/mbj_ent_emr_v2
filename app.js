@@ -17,8 +17,8 @@ const app = express();
 const server = require('http').Server(app);
 const https = require("https");
 const io = require('socket.io')(server);
-var cron = require('node-cron');
-
+let cron = require('node-cron');
+const User = require('./models/user');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -81,6 +81,24 @@ mongoose.connect('mongodb://localhost:27017/mbj_ent_emr_v2',
     console.log(err);
 });
 
+const userOffline = async function (args) {
+  console.log("Socket.io: userOffline...",args);
+  try {
+    const user = await User.findOneAndUpdate({_id:args},{clientConnected: false},{new: true, useFindAndModify: false})
+      return ;
+  } catch (err) {
+    throw err;
+  }
+};
+const userOnline = async function (args) {
+  console.log("Socket.io: userOnline...",args);
+  try {
+    const user = await User.findOneAndUpdate({_id:args},{clientConnected: true},{new: true, useFindAndModify: false})
+      return ;
+  } catch (err) {
+    throw err;
+  }
+};
 
 let connectedClients = [];
 

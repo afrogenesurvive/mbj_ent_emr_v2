@@ -13,7 +13,7 @@ import './landing.css';
 class LandingPage extends Component {
   state = {
     role: null,
-    userAlert: "landing",
+    userAlert: "landing page",
     overlay: false,
     overlayStatus: "test",
     isGuest: true,
@@ -21,9 +21,6 @@ class LandingPage extends Component {
   };
 
 componentDidMount () {
-  if (AuthContext._currentValue.activityId !== null && AuthContext._currentValue.token !== null ) {
-    this.setState({isGuest: false})
-  }
 }
 
   render() {
@@ -31,20 +28,11 @@ componentDidMount () {
     return (
       <React.Fragment>
 
-      {
-        <AlertBox
-        authUserId={this.context.userId}
-        alert={this.state.userAlert}
-      />
-    }
-
-      {
-        this.state.overlay === true && (
+      {this.state.overlay === true && (
         <LoadingOverlay
           status={this.state.overlayStatus}
         />
-      )
-    }
+      )}
       <Container className="landingPageContainer">
 
       <Row className="landingPageRow">

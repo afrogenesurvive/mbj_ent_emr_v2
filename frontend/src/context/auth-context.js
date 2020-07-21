@@ -4,6 +4,7 @@ export default React.createContext({
     token: null,
     activityId: null,
     activityA: null,
+    activityUser: null,
     role: null,
     userId: null,
     user: {},
@@ -15,4 +16,5 @@ export default React.createContext({
     login: (token, activityId, role, tokenExpiration) => {},
     logout: () => {},
     setUserAlert: (args) => {},
+    userOnline: () => {},
 });

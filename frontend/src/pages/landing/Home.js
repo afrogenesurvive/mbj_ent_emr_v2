@@ -21,9 +21,7 @@ class HomePage extends Component {
   };
 
 componentDidMount () {
-  if (AuthContext._currentValue.activityId !== null && AuthContext._currentValue.token !== null ) {
-    this.setState({isGuest: false})
-  }
+  
 }
 
   render() {
