@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
-// import Button from 'react-bootstrap/Button';
+import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
@@ -16,6 +16,19 @@ import AlertBox from '../../components/alertBox/AlertBox';
 import LoadingOverlay from '../../components/overlay/LoadingOverlay';
 
 import UserAddressList from '../../components/lists/user/UserAddressList'
+import UserAttendanceList from '../../components/lists/user/UserAttendanceList'
+import UserLeaveList from '../../components/lists/user/UserLeaveList'
+import UserImageList from '../../components/lists/user/UserImageList'
+import UserFileList from '../../components/lists/user/UserFileList'
+import UserAppointmentList from '../../components/lists/user/UserAppointmentList'
+import UserNoteList from '../../components/lists/user/UserNoteList'
+
+import FilterAddressForm from '../../components/forms/filter/FilterAddressForm';
+import FilterAttendanceForm from '../../components/forms/filter/FilterAttendanceForm';
+import FilterLeaveForm from '../../components/forms/filter/FilterLeaveForm';
+import FilterImageForm from '../../components/forms/filter/FilterImageForm';
+import FilterFileForm from '../../components/forms/filter/FilterFileForm';
+import FilterNoteForm from '../../components/forms/filter/FilterNoteForm';
 import loadingGif from '../../assets/loading.gif';
 import { faBath } from '@fortawesome/free-solid-svg-icons';
 import './profile.css';
@@ -38,6 +51,7 @@ class MyProfilePage extends Component {
       key: null,
       value: null
     },
+    menuSelected: null,
   };
   static contextType = AuthContext;
 
@@ -154,8 +168,46 @@ toggleSideCol = () => {
   if (this.state.sideCol === 'menu') {
     this.setState({sideCol: 'filter'})
   } else {
-    this.setState({sideCol: 'menu'})
+    this.setState({
+      sideCol: 'menu',
+      // filter: {
+      //   field: null,
+      //   key: null,
+      //   value: null
+      // }
+    })
   }
+
+}
+menuSelect = (args) => {
+  this.setState({menuSelect: args})
+}
+
+submitFilterForm = (event) => {
+  event.preventDefault();
+  let field = event.target.field.value;
+  let key = event.target.key.value;
+  let value = event.target.value.value;
+  console.log('foo',value === 'false');
+  if (value === 'true') {
+    value = true
+  }
+  if (value === 'false') {
+    value = false
+  }
+  console.log('bar',value === false);
+  this.setState({
+    filter: {
+      field: field,
+      key: key,
+      value: value
+    }
+  })
+
+}
+
+addAddress = () => {
+
 }
 
 render() {
@@ -185,7 +237,7 @@ render() {
 
       <Row className="profilePageContainerRow mainRow">
         <Col md={2} className="profilePageContainerCol">
-          <FontAwesomeIcon icon={faBath} className="menuSwitch" onClick={this.toggleSideCol}/>
+
         </Col>
         <Col md={10} className="profilePageContainerCol">
           {!this.state.activityUser && (
@@ -203,50 +255,85 @@ render() {
           {this.state.sideCol === 'menu' && (
             <Nav variant="pills" className="flex-column">
               <Nav.Item>
-                <Nav.Link eventKey="1">Basic</Nav.Link>
+                <Nav.Link eventKey="1" onClick={this.menuSelect.bind(this, 'basic')}>Basic</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="2">Admin</Nav.Link>
+                <Nav.Link eventKey="2" onClick={this.menuSelect.bind(this, 'admin')}>Admin</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="3">Addresses</Nav.Link>
+                <Nav.Link eventKey="3" onClick={this.menuSelect.bind(this, 'address')}>Addresses</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="4">Attendance</Nav.Link>
+                <Nav.Link eventKey="4" onClick={this.menuSelect.bind(this, 'attendance')}>Attendance</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="5">Leave</Nav.Link>
+                <Nav.Link eventKey="5" onClick={this.menuSelect.bind(this, 'leave')}>Leave</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="6">Images</Nav.Link>
+                <Nav.Link eventKey="6" onClick={this.menuSelect.bind(this, 'image')}>Images</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="7">Files</Nav.Link>
+                <Nav.Link eventKey="7" onClick={this.menuSelect.bind(this, 'file')}>Files</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="8">Appointments</Nav.Link>
+                <Nav.Link eventKey="8" onClick={this.menuSelect.bind(this, 'appointment')}>Appointments</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="9">Notes</Nav.Link>
+                <Nav.Link eventKey="9" onClick={this.menuSelect.bind(this, 'note')}>Notes</Nav.Link>
               </Nav.Item>
             </Nav>
           )}
           {this.state.sideCol === 'filter' && (
-            <Nav variant="pills" className="flex-column">
-              <Nav.Item>
-                <Nav.Link eventKey="10">Basic</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="11">Admin</Nav.Link>
-              </Nav.Item>
-            </Nav>
+            <Col>
+              {this.state.menuSelect === 'address' && (
+                <FilterAddressForm
+                  onCancel={this.toggleSideCol}
+                  onConfirm={this.submitFilterForm}
+                />
+              )}
+              {this.state.menuSelect === 'attendance' && (
+                <FilterAttendanceForm
+                  onCancel={this.toggleSideCol}
+                  onConfirm={this.submitFilterForm}
+                />
+              )}
+              {this.state.menuSelect === 'leave' && (
+                <FilterLeaveForm
+                  onCancel={this.toggleSideCol}
+                  onConfirm={this.submitFilterForm}
+                />
+              )}
+              {this.state.menuSelect === 'image' && (
+                <FilterImageForm
+                  onCancel={this.toggleSideCol}
+                  onConfirm={this.submitFilterForm}
+                />
+              )}
+              {this.state.menuSelect === 'file' && (
+                <FilterFileForm
+                  onCancel={this.toggleSideCol}
+                  onConfirm={this.submitFilterForm}
+                />
+              )}
+              {this.state.menuSelect === 'appointment' && (
+                <p>Appointments Filter Form</p>
+              )}
+              {this.state.menuSelect === 'note' && (
+                <FilterNoteForm
+                  onCancel={this.toggleSideCol}
+                  onConfirm={this.submitFilterForm}
+                />
+              )}
+            </Col>
+
           )}
-
-
-
           </Col>
+
           {this.state.activityUser && (
             <Col md={10} className="profilePageContainerCol specialCol2">
+
+              <h3> xxx </h3>
+
               <Tab.Content>
                 <Tab.Pane eventKey="1">
                   User Basic:
@@ -293,6 +380,10 @@ render() {
                   User Admin
                   <ListGroup className="profileBasicListGroup">
                     <ListGroup.Item>
+                      <p className="listGroupText">Id:</p>
+                      <p className="listGroupText bold">{this.state.activityUser._id}</p>
+                    </ListGroup.Item>
+                    <ListGroup.Item>
                       <p className="listGroupText">LoggedIn:</p>
                       <p className="listGroupText bold">{this.state.activityUser.loggedIn.toString()}</p>
                     </ListGroup.Item>
@@ -311,10 +402,10 @@ render() {
                   </ListGroup>
                 </Tab.Pane>
                 <Tab.Pane eventKey="3">
-                  <Row>
-                    <p>User Address List</p>
-                    <p>Filter</p>
-                    <p>Add</p>
+                  <Row className="displayPaneHeadRow">
+                    <p className="displayPaneTitle">User Address List:</p>
+                    <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                    <Button variant="outline-success" onClick={this.addAddress}>Add</Button>
                   </Row>
                   <UserAddressList
                     filter={this.state.filter}
@@ -323,30 +414,70 @@ render() {
                   />
                 </Tab.Pane>
                 <Tab.Pane eventKey="4">
-                  User Attendance List
+                  <Row className="displayPaneHeadRow">
+                    <p className="displayPaneTitle">User Attendance List:</p>
+                    <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                  </Row>
+                  <UserAttendanceList
+                    filter={this.state.filter}
+                    attendance={this.state.activityUser.attendance}
+                    authId={this.state.activityUser._id}
+                  />
                 </Tab.Pane>
                 <Tab.Pane eventKey="5">
-                  User Leave List
+                  <Row className="displayPaneHeadRow">
+                    <p className="displayPaneTitle">User Leave List:</p>
+                    <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                  </Row>
+                  <UserLeaveList
+                    filter={this.state.filter}
+                    leave={this.state.activityUser.leave}
+                    authId={this.state.activityUser._id}
+                  />
                 </Tab.Pane>
                 <Tab.Pane eventKey="6">
-                  User Image List
+                  <Row className="displayPaneHeadRow">
+                    <p className="displayPaneTitle">User Image List:</p>
+                    <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                  </Row>
+                  <UserImageList
+                    filter={this.state.filter}
+                    images={this.state.activityUser.images}
+                    authId={this.state.activityUser._id}showListDetails={this.showListDetails}
+                  />
                 </Tab.Pane>
                 <Tab.Pane eventKey="7">
-                  User File List
+                  <Row className="displayPaneHeadRow">
+                    <p className="displayPaneTitle">User File List:</p>
+                    <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                  </Row>
+                  <UserFileList
+                    filter={this.state.filter}
+                    files={this.state.activityUser.files}
+                    authId={this.state.activityUser._id}
+                  />
                 </Tab.Pane>
                 <Tab.Pane eventKey="8">
-                  User Appointment List
+                  <Row className="displayPaneHeadRow">
+                    <p className="displayPaneTitle">User Appointment List:</p>
+                    <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                  </Row>
+                  <UserAppointmentList
+                    filter={this.state.filter}
+                    appointments={this.state.activityUser.appointments}
+                    authId={this.state.activityUser._id}
+                  />
                 </Tab.Pane>
                 <Tab.Pane eventKey="9">
-                  User Notes:
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus auctor, massa a volutpat pulvinar, mi tortor pulvinar dui, quis varius tellus augue sed purus. Vivamus non efficitur neque, quis elementum elit. Donec fermentum auctor est, at posuere nisl tempus nec. Etiam accumsan, risus in dignissim sagittis, turpis dui convallis metus, ac facilisis sem dui id est. Sed ut orci posuere, blandit purus pulvinar, vulputate nulla. Curabitur volutpat augue nunc, sed condimentum justo vehicula ac. Donec purus augue, viverra sed felis in, aliquet euismod mauris. Fusce vel mi ac massa posuere bibendum. In faucibus lorem nec enim ultrices, non sollicitudin turpis porta. Sed cursus, nulla at porta porttitor, enim velit dignissim nisi, vel congue libero mi non nisl. Nam gravida massa sed pulvinar finibus. Sed aliquam volutpat est, et eleifend libero vulputate quis. Vivamus lobortis tristique lacus, sed accumsan urna pharetra tristique.
-                  Nulla gravida sodales diam a imperdiet. Praesent in urna justo. In feugiat cursus dolor placerat malesuada. Sed eget massa mattis, pharetra neque a, maximus est. In vitae mollis est. Maecenas rutrum euismod nunc. Vivamus eleifend mattis metus, sed fermentum diam suscipit vitae. Aliquam suscipit tellus a purus posuere, ut viverra quam convallis. Vestibulum ornare nisl eget quam feugiat, sed imperdiet nibh sodales. Nunc sit amet nisi id tortor tempor venenatis eu vitae nisi. Morbi rhoncus lorem sit amet nulla cursus tristique. Nunc semper blandit justo, id bibendum enim bibendum id. Nullam et velit in ex ullamcorper pharetra. Morbi pretium lorem sit amet tortor facilisis mollis. Fusce sit amet aliquam lacus.
-                  Phasellus vestibulum vitae lorem vel finibus. Aenean tincidunt, eros ut ultrices auctor, massa massa semper quam, non gravida turpis erat quis neque. Nulla vel suscipit nisl. Ut et pellentesque mauris. Pellentesque fringilla erat nec volutpat consequat. Donec luctus libero quis elementum dictum. Aliquam ac tincidunt nibh. Nullam cursus sodales neque, vel fringilla dolor placerat at. In eget lectus lobortis, interdum libero at, ornare massa.
-                  Duis interdum mauris eu nulla egestas malesuada. Integer rhoncus justo justo, tincidunt laoreet velit finibus nec. Mauris porta tempus tempus. Duis gravida ultricies nisl, vel molestie mi auctor sit amet. Praesent tincidunt orci urna, non porta neque tincidunt in. Nam lacinia, ex vel sagittis sagittis, odio neque sagittis magna, et malesuada velit enim ut lorem. Integer ac ornare leo. Sed pretium ullamcorper mi, at tempus dolor ultricies quis. Mauris lacus enim, congue in est in, consectetur volutpat turpis. Aenean venenatis mollis viverra. Pellentesque tristique sollicitudin pulvinar. Duis nec fringilla libero. Quisque dignissim, urna ut hendrerit ullamcorper, dui ligula egestas nisi, in laoreet lectus purus et arcu.
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus auctor, massa a volutpat pulvinar, mi tortor pulvinar dui, quis varius tellus augue sed purus. Vivamus non efficitur neque, quis elementum elit. Donec fermentum auctor est, at posuere nisl tempus nec. Etiam accumsan, risus in dignissim sagittis, turpis dui convallis metus, ac facilisis sem dui id est. Sed ut orci posuere, blandit purus pulvinar, vulputate nulla. Curabitur volutpat augue nunc, sed condimentum justo vehicula ac. Donec purus augue, viverra sed felis in, aliquet euismod mauris. Fusce vel mi ac massa posuere bibendum. In faucibus lorem nec enim ultrices, non sollicitudin turpis porta. Sed cursus, nulla at porta porttitor, enim velit dignissim nisi, vel congue libero mi non nisl. Nam gravida massa sed pulvinar finibus. Sed aliquam volutpat est, et eleifend libero vulputate quis. Vivamus lobortis tristique lacus, sed accumsan urna pharetra tristique.
-                  Nulla gravida sodales diam a imperdiet. Praesent in urna justo. In feugiat cursus dolor placerat malesuada. Sed eget massa mattis, pharetra neque a, maximus est. In vitae mollis est. Maecenas rutrum euismod nunc. Vivamus eleifend mattis metus, sed fermentum diam suscipit vitae. Aliquam suscipit tellus a purus posuere, ut viverra quam convallis. Vestibulum ornare nisl eget quam feugiat, sed imperdiet nibh sodales. Nunc sit amet nisi id tortor tempor venenatis eu vitae nisi. Morbi rhoncus lorem sit amet nulla cursus tristique. Nunc semper blandit justo, id bibendum enim bibendum id. Nullam et velit in ex ullamcorper pharetra. Morbi pretium lorem sit amet tortor facilisis mollis. Fusce sit amet aliquam lacus.
-                  Phasellus vestibulum vitae lorem vel finibus. Aenean tincidunt, eros ut ultrices auctor, massa massa semper quam, non gravida turpis erat quis neque. Nulla vel suscipit nisl. Ut et pellentesque mauris. Pellentesque fringilla erat nec volutpat consequat. Donec luctus libero quis elementum dictum. Aliquam ac tincidunt nibh. Nullam cursus sodales neque, vel fringilla dolor placerat at. In eget lectus lobortis, interdum libero at, ornare massa.
-                  Duis interdum mauris eu nulla egestas malesuada. Integer rhoncus justo justo, tincidunt laoreet velit finibus nec. Mauris porta tempus tempus. Duis gravida ultricies nisl, vel molestie mi auctor sit amet. Praesent tincidunt orci urna, non porta neque tincidunt in. Nam lacinia, ex vel sagittis sagittis, odio neque sagittis magna, et malesuada velit enim ut lorem. Integer ac ornare leo. Sed pretium ullamcorper mi, at tempus dolor ultricies quis. Mauris lacus enim, congue in est in, consectetur volutpat turpis. Aenean venenatis mollis viverra. Pellentesque tristique sollicitudin pulvinar. Duis nec fringilla libero. Quisque dignissim, urna ut hendrerit ullamcorper, dui ligula egestas nisi, in laoreet lectus purus et arcu.
+                  <Row className="displayPaneHeadRow">
+                    <p className="displayPaneTitle">User Notes:</p>
+                    <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                  </Row>
+                  <UserNoteList
+                    filter={this.state.filter}
+                    notes={this.state.activityUser.notes}
+                    authId={this.state.activityUser._id}
+                  />
                 </Tab.Pane>
               </Tab.Content>
             </Col>

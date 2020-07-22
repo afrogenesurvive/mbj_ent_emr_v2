@@ -42,3 +42,10 @@
   /* margin: .1rem; */
   height: 2rem;
 }
+.displayPaneHeadRow > * {
+  display: inline-block;
+  margin: 0 .5rem;
+}
+.displayPaneTitle {
+  font-weight: bold;
+}

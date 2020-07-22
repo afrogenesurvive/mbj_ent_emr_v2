@@ -20,6 +20,9 @@ const AddressItem = props => (
           Town: <span className="bold">{props.address.town}</span>
         </Card.Text>
         <Card.Text className="cardText">
+          City: <span className="bold">{props.address.city}</span>
+        </Card.Text>
+        <Card.Text className="cardText">
           Parish: <span className="bold">{props.address.parish}</span>
         </Card.Text>
         <Card.Text className="cardText">

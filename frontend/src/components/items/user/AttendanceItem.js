@@ -1,0 +1,27 @@
+import React from 'react';
+import Card from 'react-bootstrap/Card';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
+import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
+
+import './UserItem.css';
+
+const AttendanceItem = props => (
+  <li key={props.key} className="">
+    <Card>
+      <Card.Body className="cardBody">
+        <Card.Text className="cardText">
+          Date: <span className="bold">{props.attendance.date}</span>
+        </Card.Text>
+        <Card.Text className="cardText">
+          Status: <span className="bold">{props.attendance.status}</span>
+        </Card.Text>
+        <Card.Text className="cardText">
+          Description: <span className="bold">{props.attendance.description}</span>
+        </Card.Text>
+      </Card.Body>
+    </Card>
+  </li>
+);
+
+export default AttendanceItem;
