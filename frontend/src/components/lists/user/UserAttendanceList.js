@@ -39,6 +39,7 @@ const UserAttendanceList = props => {
         key={count}
         attendance={attendanceItem}
         canDelete={props.canDelete}
+        onDelete={props.onDelete}
       />
     );
   });

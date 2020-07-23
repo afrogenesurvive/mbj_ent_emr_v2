@@ -1,5 +1,6 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
 import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
@@ -19,6 +20,9 @@ const AttendanceItem = props => (
         <Card.Text className="cardText">
           Description: <span className="bold">{props.attendance.description}</span>
         </Card.Text>
+        {props.canDelete === true && (
+          <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.attendance)}>Delete</Button>
+        )}
       </Card.Body>
     </Card>
   </li>

@@ -53,6 +53,7 @@ const AddressItem = props => {
               <Card.Text className="cardText">
                 Primary: <span className="bold"> {props.address.primary === true && (<FontAwesomeIcon icon={faBatteryThreeQuarters} className="listIcon"/>)} {props.address.primary === false && (<FontAwesomeIcon icon={faBatteryEmpty} className="listIcon"/>)}</span>
               </Card.Text>
+              <Button variant="outline-primary" onClick={props.makePrimary.bind(this, props.address)}>Set Primary</Button>
               {props.canDelete === true && (
                 <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.address)}>Delete</Button>
               )}

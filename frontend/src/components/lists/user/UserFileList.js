@@ -45,6 +45,7 @@ const UserFileList = props => {
         key={count}
         file={file}
         canDelete={props.canDelete}
+        onDelete={props.onDelete}
       />
     );
   });

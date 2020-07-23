@@ -45,6 +45,7 @@ const UserLeaveList = props => {
         key={count}
         leave={leaveItem}
         canDelete={props.canDelete}
+        onDelete={props.onDelete}
       />
     );
   });

@@ -249,7 +249,13 @@ render() {
                   <Nav.Link eventKey="1" onClick={this.menuSelect.bind(this, 'list')}>List</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="2" onClick={this.menuSelect.bind(this, 'create')}>New</Nav.Link>
+                  <Nav.Link eventKey="2" onClick={this.menuSelect.bind(this, 'search')}>Search</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link eventKey="3" onClick={this.menuSelect.bind(this, 'detail')}>Details</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link eventKey="4" onClick={this.menuSelect.bind(this, 'create')}>New</Nav.Link>
                 </Nav.Item>
               </Nav>
             )}
@@ -278,6 +284,12 @@ render() {
                   />
                 </Tab.Pane>
                 <Tab.Pane eventKey="2">
+                  <h3>search User Form + results + filter</h3>
+                </Tab.Pane>
+                <Tab.Pane eventKey="3">
+                  <h3>User detail + lists/filter + edit single field</h3>
+                </Tab.Pane>
+                <Tab.Pane eventKey="4">
                   <h3>Create User Form</h3>
                 </Tab.Pane>
               </Tab.Content>

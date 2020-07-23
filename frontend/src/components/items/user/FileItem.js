@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
+import Row from 'react-bootstrap/Row';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
 import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
@@ -32,7 +34,11 @@ const FileItem = (props) => {
           </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           {state === true && (
-            <p>Details</p>
+            <Row>
+              {props.canDelete === true && (
+                <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.file)}>Delete</Button>
+              )}
+            </Row>
           )}
         </Card.Body>
       </Card>

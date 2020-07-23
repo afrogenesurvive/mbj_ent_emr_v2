@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
@@ -13,6 +14,9 @@ const NoteItem = props => (
         <Card.Text className="cardText">
           Note: <span className="bold">{props.note}</span>
         </Card.Text>
+        {props.canDelete === true && (
+          <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.note)}>Delete</Button>
+        )}
       </Card.Body>
     </Card>
   </li>
