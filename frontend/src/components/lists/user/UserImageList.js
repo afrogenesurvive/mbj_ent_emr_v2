@@ -44,6 +44,7 @@ const UserImageList = props => {
       <ImageItem
         key={count}
         image={image}
+        canDelete={props.canDelete}
       />
     );
   });

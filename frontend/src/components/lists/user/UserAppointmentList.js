@@ -9,15 +9,39 @@ const UserAppointmentList = props => {
   let appointments2 = props.appointments;
   let propsAppointments = [];
 
-  // if (filter.field === 'userMasterList' && filter.key === 'username' && filter.value === 'Ascending') {
-  //   propsAddresses = addresses2.sort((a, b) => (a.username > b.username) ? 1 : -1);
-  // }
-  // if (filter.field === 'userMasterList' && filter.key === 'username' && filter.value === 'Descending') {
-  //   propsAddresses = addresses2.sort((a, b) => (a.username < b.username) ? 1 : -1);
-  // }
-  // if (filter.field === 'userMasterList' && filter.key === 'role') {
-  //   propsAddresses = addresses2.filter(x => x.role === filter.value);
-  // }
+  if (filter.field === 'appointment' && filter.key === 'title' && filter.value === 'Ascending') {
+    propsAppointments = appointments2.sort((a, b) => (a.title > b.title) ? 1 : -1);
+  }
+  if (filter.field === 'appointment' && filter.key === 'title' && filter.value === 'Descending') {
+    propsAppointments = appointments2.sort((a, b) => (a.title < b.title) ? 1 : -1);
+  }
+  if (filter.field === 'appointment' && filter.key === 'type' && filter.value === 'Ascending') {
+    propsAppointments = appointments2.sort((a, b) => (a.type > b.type) ? 1 : -1);
+  }
+  if (filter.field === 'appointment' && filter.key === 'type' && filter.value === 'Descending') {
+    propsAppointments = appointments2.sort((a, b) => (a.type < b.type) ? 1 : -1);
+  }
+  if (filter.field === 'appointment' && filter.key === 'subType' && filter.value === 'Ascending') {
+    propsAppointments = appointments2.sort((a, b) => (a.subType > b.subType) ? 1 : -1);
+  }
+  if (filter.field === 'appointment' && filter.key === 'subType' && filter.value === 'Descending') {
+    propsAppointments = appointments2.sort((a, b) => (a.subType < b.subType) ? 1 : -1);
+  }
+  if (filter.field === 'appointment' && filter.key === 'date' && filter.value === 'Ascending') {
+    propsAppointments = appointments2.sort((a, b) => (a.date > b.date) ? 1 : -1);
+  }
+  if (filter.field === 'appointment' && filter.key === 'date' && filter.value === 'Descending') {
+    propsAppointments = appointments2.sort((a, b) => (a.date < b.date) ? 1 : -1);
+  }
+  if (filter.field === 'appointment' && filter.key === 'time' && filter.value === 'Ascending') {
+    propsAppointments = appointments2.sort((a, b) => (a.time > b.time) ? 1 : -1);
+  }
+  if (filter.field === 'appointment' && filter.key === 'time' && filter.value === 'Descending') {
+    propsAppointments = appointments2.sort((a, b) => (a.time < b.time) ? 1 : -1);
+  }
+  if (filter.field === 'appointment' && filter.key === 'important') {
+    propsAppointments = appointments2.filter(x => x.important === filter.value);
+  }
   if (filter.field !== 'appointment') {
     propsAppointments = appointments2;
   }

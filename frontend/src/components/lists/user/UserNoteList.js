@@ -32,6 +32,7 @@ const UserNoteList = props => {
       <NoteItem
         key={count}
         note={note}
+        canDelete={props.canDelete}
       />
     );
   });

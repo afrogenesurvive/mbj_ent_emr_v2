@@ -733,6 +733,7 @@ module.exports = buildSchema(`
     addUserNotes(activityId: ID!, userId: ID!, userInput: UserInput!): User
     addUserReminder(activityId: ID!, userId: ID!, reminderId: ID!): User
     addUserActivity(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    addUserAppointment(activityId: ID!, userId: ID!, appointmentId: ID!): User
 
     deleteUserById(activityId: ID!, userId: ID!): User
     deleteUserAddress(activityId: ID!, userId: ID!, userInput: UserInput!): User

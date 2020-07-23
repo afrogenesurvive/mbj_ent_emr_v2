@@ -44,6 +44,7 @@ const UserFileList = props => {
       <FileItem
         key={count}
         file={file}
+        canDelete={props.canDelete}
       />
     );
   });

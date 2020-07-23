@@ -13,6 +13,7 @@ import MyProfilePage from './pages/profile/Profile';
 import LoginPage from './pages/auth/Login';
 import SignupPage from './pages/auth/Signup';
 import PasswordResetPage from './pages/auth/PasswordReset';
+import StaffPage from './pages/staff/Staff';
 
 import AuthContext from './context/auth-context';
 import io from 'socket.io-client';
@@ -271,6 +272,11 @@ class App extends Component {
               {this.state.sessionStorageAuth && (
                 <Route path="/profile" render={(props) => <MyProfilePage {...props}
                   title="profile"
+                />}/>
+              )}
+              {this.state.sessionStorageAuth && (
+                <Route path="/staff" render={(props) => <StaffPage {...props}
+                  title="staff"
                 />}/>
               )}
 

@@ -28,7 +28,10 @@ import FilterAttendanceForm from '../../components/forms/filter/FilterAttendance
 import FilterLeaveForm from '../../components/forms/filter/FilterLeaveForm';
 import FilterImageForm from '../../components/forms/filter/FilterImageForm';
 import FilterFileForm from '../../components/forms/filter/FilterFileForm';
+import FilterAppointmentForm from '../../components/forms/filter/FilterAppointmentForm';
 import FilterNoteForm from '../../components/forms/filter/FilterNoteForm';
+
+import AddAddressForm from '../../components/forms/add/AddAddressForm';
 import loadingGif from '../../assets/loading.gif';
 import { faBath } from '@fortawesome/free-solid-svg-icons';
 import './profile.css';
@@ -52,6 +55,11 @@ class MyProfilePage extends Component {
       value: null
     },
     menuSelected: null,
+    adding: {
+      state: null,
+      field: null
+    },
+    canDelete: false,
   };
   static contextType = AuthContext;
 
@@ -82,7 +90,7 @@ getThisUser (args) {
         activityId:"${activityId}",
         userId:"${userId}"
       )
-      {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id},reminders{_id},activity{date,request}}}
+      {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
   fetch('http://localhost:8088/graphql', {
       method: 'POST',
@@ -113,6 +121,11 @@ getThisUser (args) {
         activityA: `getUserById?activityId:${activityId},userId:${userId}`
       });
       this.context.activityUser = resData.data.getUserById;
+      if (resData.data.getUserById.role === 'Admin') {
+        this.setState({
+          canDelete: true
+        })
+      }
       this.logUserActivity(args);
     })
     .catch(err => {
@@ -164,6 +177,144 @@ logUserActivity(args) {
     });
 };
 
+submitAddAddressForm = (event) => {
+  event.preventDefault();
+  console.log('...adding address...');
+  this.context.setUserAlert('...adding address...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.state.activityUser._id;
+  const userId = activityId;
+  const number = event.target.number.value;
+  const street = event.target.street.value;
+  const town = event.target.town.value;
+  const city = event.target.city.value;
+  const parish = event.target.parish.value;
+  const country = event.target.country.value;
+  const postalCode = event.target.postalCode.value;
+
+  let requestBody = {
+    query: `
+      mutation {addUserAddress(
+        activityId:"${activityId}",
+        userId:"${userId}",
+        userInput:{
+          addressNumber:${number},
+          addressStreet:"${street}",
+          addressTown:"${town}",
+          addressCity:"${city}",
+          addressParish:"${parish}",
+          addressCountry:"${country}",
+          addressPostalCode:"${postalCode}"
+        })
+        {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+    `};
+  fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.addUserAddress);
+      let responseAlert = '...address add success!...';
+      let error = null;
+      if (resData.data.addUserAddress.error) {
+        error = resData.data.addUserAddress.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.setState({
+        isLoading: false,
+        activityUser: resData.data.addUserAddress,
+        activityA: `addUserAddress?activityId:${activityId},userId:${userId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.activityUser = resData.data.addUserAddress;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+}
+deleteAddress = (args) => {
+  console.log('...deleting address...');
+  this.context.setUserAlert('...deleting address...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.state.activityUser._id;
+  const userId = activityId;
+
+  let requestBody = {
+    query: `
+      mutation {deleteUserAddress(
+        activityId:"${activityId}",
+        userId:"${userId}",
+        userInput:{
+          addressNumber:${args.number},
+          addressStreet:"${args.street}",
+          addressTown:"${args.town}",
+          addressCity:"${args.city}",
+          addressParish:"${args.parish}",
+          addressCountry:"${args.country}",
+          addressPostalCode:"${args.postalCode}",
+          addressPrimary: ${args.primary}
+        })
+        {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+    `};
+  fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.deleteUserAddress);
+      let responseAlert = '...address delete success!...';
+      let error = null;
+      if (resData.data.deleteUserAddress.error) {
+        error = resData.data.deleteUserAddress.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.setState({
+        isLoading: false,
+        activityUser: resData.data.deleteUserAddress,
+        activityA: `deleteUserAddress?activityId:${activityId},userId:${userId}`
+      });
+      this.context.activityUser = resData.data.deleteUserAddress;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+}
+
 toggleSideCol = () => {
   if (this.state.sideCol === 'menu') {
     this.setState({sideCol: 'filter'})
@@ -188,14 +339,12 @@ submitFilterForm = (event) => {
   let field = event.target.field.value;
   let key = event.target.key.value;
   let value = event.target.value.value;
-  console.log('foo',value === 'false');
   if (value === 'true') {
     value = true
   }
   if (value === 'false') {
     value = false
   }
-  console.log('bar',value === false);
   this.setState({
     filter: {
       field: field,
@@ -206,8 +355,21 @@ submitFilterForm = (event) => {
 
 }
 
-addAddress = () => {
-
+startAdd = (args) => {
+  this.setState({
+    adding: {
+      state: true,
+      field: args
+    }
+  })
+}
+cancelAdd = () => {
+  this.setState({
+    adding: {
+      state: null,
+      field: null
+    }
+  })
 }
 
 render() {
@@ -316,7 +478,10 @@ render() {
                 />
               )}
               {this.state.menuSelect === 'appointment' && (
-                <p>Appointments Filter Form</p>
+                <FilterAppointmentForm
+                  onCancel={this.toggleSideCol}
+                  onConfirm={this.submitFilterForm}
+                />
               )}
               {this.state.menuSelect === 'note' && (
                 <FilterNoteForm
@@ -405,12 +570,21 @@ render() {
                   <Row className="displayPaneHeadRow">
                     <p className="displayPaneTitle">User Address List:</p>
                     <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                    <Button variant="outline-success" onClick={this.addAddress}>Add</Button>
+                    <Button variant="outline-success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
                   </Row>
+                  {this.state.adding.state === true &&
+                    this.state.adding.field === 'address' && (
+                      <AddAddressForm
+                        onConfirm={this.submitAddAddressForm}
+                        onCancel={this.cancelAdd}
+                      />
+                  )}
                   <UserAddressList
                     filter={this.state.filter}
                     addresses={this.state.activityUser.addresses}
                     authId={this.state.activityUser._id}
+                    onDelete={this.deleteAddress}
+                    canDelete={this.state.canDelete}
                   />
                 </Tab.Pane>
                 <Tab.Pane eventKey="4">
@@ -422,6 +596,7 @@ render() {
                     filter={this.state.filter}
                     attendance={this.state.activityUser.attendance}
                     authId={this.state.activityUser._id}
+                    canDelete={this.state.canDelete}
                   />
                 </Tab.Pane>
                 <Tab.Pane eventKey="5">
@@ -444,6 +619,7 @@ render() {
                     filter={this.state.filter}
                     images={this.state.activityUser.images}
                     authId={this.state.activityUser._id}showListDetails={this.showListDetails}
+                    canDelete={this.state.canDelete}
                   />
                 </Tab.Pane>
                 <Tab.Pane eventKey="7">
@@ -455,6 +631,7 @@ render() {
                     filter={this.state.filter}
                     files={this.state.activityUser.files}
                     authId={this.state.activityUser._id}
+                    canDelete={this.state.canDelete}
                   />
                 </Tab.Pane>
                 <Tab.Pane eventKey="8">
@@ -477,6 +654,7 @@ render() {
                     filter={this.state.filter}
                     notes={this.state.activityUser.notes}
                     authId={this.state.activityUser._id}
+                    canDelete={this.state.canDelete}
                   />
                 </Tab.Pane>
               </Tab.Content>

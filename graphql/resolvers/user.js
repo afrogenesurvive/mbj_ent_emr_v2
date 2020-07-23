@@ -1038,6 +1038,31 @@ module.exports = {
       throw err;
     }
   },
+  addUserAppointment: async (args, req) => {
+    console.log("Resolver: addUserAppointment...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const appointment = await Appointment.findById({_id: args.appointmentId})
+      const user = await User.findOneAndUpdate(
+        {_id:args.userId},
+        {$addToSet: { appointments: appointment }},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('reminders');
+
+      return {
+        ...user._doc,
+        _id: user.id,
+        email: user.contact.email,
+        name: user.name,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
   createUser: async (args, req) => {
     console.log("Resolver: createUser...");
     try {

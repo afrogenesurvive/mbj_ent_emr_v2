@@ -1,0 +1,12 @@
+.addFormTopDiv {
+  margin: 2rem;
+  border: 1px solid black;
+}
+.formBtnRow {
+  /* text-align: center; */
+  /* margin: 0 auto; */
+  padding-left: 3rem;
+}
+.addFormBtn {
+  margin: 0 1rem;
+}

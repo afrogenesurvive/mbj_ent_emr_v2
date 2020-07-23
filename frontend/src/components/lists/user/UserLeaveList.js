@@ -44,6 +44,7 @@ const UserLeaveList = props => {
       <LeaveItem
         key={count}
         leave={leaveItem}
+        canDelete={props.canDelete}
       />
     );
   });

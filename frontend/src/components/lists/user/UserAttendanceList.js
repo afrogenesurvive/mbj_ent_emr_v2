@@ -38,6 +38,7 @@ const UserAttendanceList = props => {
       <AttendanceItem
         key={count}
         attendance={attendanceItem}
+        canDelete={props.canDelete}
       />
     );
   });

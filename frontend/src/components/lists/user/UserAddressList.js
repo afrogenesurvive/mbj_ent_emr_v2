@@ -68,6 +68,8 @@ const UserAddressList = props => {
       <AddressItem
         key={count}
         address={address}
+        onDelete={props.onDelete}
+        canDelete={props.canDelete}
       />
     );
   });
