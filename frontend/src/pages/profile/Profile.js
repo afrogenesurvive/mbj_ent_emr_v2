@@ -136,6 +136,7 @@ getThisUser (args) {
           canDelete: true
         })
       }
+      console.log('foo',moment.unix(this.state.activityUser.dob.substr(0,9)).format('YYYY-MM-DD'));
       this.logUserActivity(args);
     })
     .catch(err => {
@@ -1293,7 +1294,7 @@ render() {
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <p className="listGroupText">DOB:</p>
-                      <p className="listGroupText bold">{this.state.activityUser.dob}</p>
+                      <p className="listGroupText bold">{moment.unix(this.state.activityUser.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
                       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
                       <p className="listGroupText">Age:</p>
                       <p className="listGroupText bold">{this.state.activityUser.age}</p>

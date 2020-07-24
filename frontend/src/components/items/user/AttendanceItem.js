@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
 import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
+import moment from 'moment';
 
 import './UserItem.css';
 
@@ -12,7 +13,7 @@ const AttendanceItem = props => (
     <Card>
       <Card.Body className="cardBody">
         <Card.Text className="cardText">
-          Date: <span className="bold">{props.attendance.date}</span>
+          Date: <span className="bold">{moment.unix(props.attendance.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
         </Card.Text>
         <Card.Text className="cardText">
           Status: <span className="bold">{props.attendance.status}</span>

@@ -31,3 +31,9 @@
   padding: 0;
   margin: 1.5rem;
 }
+.searchUserList {
+  list-style-type: none;
+  margin: 0 auto;
+  padding: 0;
+  width: 80%;
+}

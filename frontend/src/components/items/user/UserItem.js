@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
+import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
 import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
+import moment from 'moment';
 
 import './UserItem.css';
 
@@ -25,6 +27,9 @@ const UserItem = (props) => {
           <Card.Text className="cardText">
             Username: <span className="bold">{props.user.username}</span>
           </Card.Text>
+          <Card.Text className="cardText">
+            role: <span className="bold">{props.user.role}</span>
+          </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           {state === true && (
             <Row>
@@ -44,7 +49,7 @@ const UserItem = (props) => {
                 role: <span className="bold">{props.user.role}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                dob: <span className="bold">{props.user.dob}</span>
+                dob: <span className="bold">{moment.unix(props.user.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 age: <span className="bold">{props.user.age}</span>
@@ -55,6 +60,7 @@ const UserItem = (props) => {
               <Card.Text className="cardText">
                 loggedIn: <span className="bold">{props.user.loggedIn === true && (<FontAwesomeIcon icon={faBatteryThreeQuarters} className="listIcon"/>)} {props.user.loggedIn === false && (<FontAwesomeIcon icon={faBatteryEmpty} className="listIcon"/>)}</span>
               </Card.Text>
+              <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.user)}>Details</Button>
             </Row>
           )}
         </Card.Body>

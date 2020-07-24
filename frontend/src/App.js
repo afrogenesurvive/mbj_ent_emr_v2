@@ -8,7 +8,6 @@ import AlertBox from './components/alertBox/AlertBox';
 import MainNavigation from './components/Navigation/MainNavigation';
 import LandingPage from './pages/landing/Landing';
 import HomePage from './pages/landing/Home';
-import HomePage2 from './pages/landing/Home2';
 import MyProfilePage from './pages/profile/Profile';
 import LoginPage from './pages/auth/Login';
 import SignupPage from './pages/auth/Signup';
@@ -215,7 +214,7 @@ class App extends Component {
   }
 
   setUserAlert = (args) => {
-    console.log('...setUserAlert...',args);
+    // console.log('...setUserAlert...',args);
     this.setState({userAlert: args})
   }
 
@@ -262,11 +261,6 @@ class App extends Component {
               {this.state.sessionStorageAuth && (
                 <Route path="/home" render={(props) => <HomePage {...props}
                   title="home"
-                />}/>
-              )}
-              {this.state.sessionStorageAuth && (
-                <Route path="/home2" render={(props) => <HomePage2 {...props}
-                  title="home2"
                 />}/>
               )}
               {this.state.sessionStorageAuth && (

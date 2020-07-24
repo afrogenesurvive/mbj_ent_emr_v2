@@ -6,7 +6,6 @@
 }
 .profilePageContainerCol {
   border: 1px solid purple;
-
 }
 .headRow {
   border: 1px solid blue;
@@ -23,7 +22,10 @@
   overflow: scroll;
 }
 .specialCol1 {
-
+  padding-top: 2rem;
+}
+.specialCol2 {
+  padding-top: 2rem;
 }
 .loadingGif {
   height: 3rem;
@@ -45,6 +47,7 @@
 .displayPaneHeadRow > * {
   display: inline-block;
   margin: 0 .5rem;
+  text-align: center;
 }
 .displayPaneTitle {
   font-weight: bold;

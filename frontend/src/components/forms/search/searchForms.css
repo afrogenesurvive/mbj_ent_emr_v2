@@ -1,0 +1,14 @@
+.userSearchCol {
+
+}
+.userSearchRow {
+  margin: 2rem auto;
+}
+.results {
+  padding-top: 1rem;
+}
+.searchFormTopDiv {
+  margin: 0 auto;
+  border: 1px solid black;
+  padding: 1rem;
+}

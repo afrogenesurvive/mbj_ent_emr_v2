@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
 import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
+import moment from 'moment';
 
 import './UserItem.css';
 
@@ -28,7 +29,7 @@ const AppointmentItem = props => {
             Type: <span className="bold">{props.appointment.type}</span>
           </Card.Text>
           <Card.Text className="cardText">
-            Date: <span className="bold">{props.appointment.date}</span>
+            Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
           </Card.Text>
           <Card.Text className="cardText">
             Time: <span className="bold">{props.appointment.time}</span>

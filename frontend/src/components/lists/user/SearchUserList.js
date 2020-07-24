@@ -3,7 +3,7 @@ import React from 'react';
 import UserItem from '../../items/user/UserItem';
 import './UserList.css';
 
-const UserList = props => {
+const SearchUserList = props => {
 
   const {...filter} = props.filter;
   let users2 = props.users;
@@ -74,7 +74,7 @@ const UserList = props => {
     );
   });
 
-  return <ul className="userList">{users}</ul>;
+  return <ul className="searchUserList">{users}</ul>;
 };
 
-export default UserList;
+export default SearchUserList;

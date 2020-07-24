@@ -39,9 +39,6 @@ const mainNavigation = props => (
                     <NavLink to="/home">Home</NavLink>
                   </li>
                   <li>
-                    <NavLink to="/home2">Home2</NavLink>
-                  </li>
-                  <li>
                     <NavLink to="/profile">My Profile</NavLink>
                   </li>
                   <li>
