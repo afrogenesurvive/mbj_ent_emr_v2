@@ -1,0 +1,20 @@
+.displayPaneHeadRow > * {
+  display: inline-block;
+  margin: 0 .5rem;
+}
+.staffPageContainer {
+  margin-top: 5rem;
+  border: 1px solid red;
+  height: 87vh;
+  /* overflow: hidden; */
+}
+.staffPageContainerCol {
+  border: 1px solid purple;
+
+}
+.specialCol1 {
+  padding-top: 2rem;
+}
+.specialCol2 {
+  padding: 0rem 1rem;
+}

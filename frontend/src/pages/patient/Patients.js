@@ -19,14 +19,19 @@ import UserList from '../../components/lists/user/UserList';
 import SearchUserList from '../../components/lists/user/SearchUserList';
 import UserDetail from '../../components/details/UserDetail';
 
+// FilterPatientForm
+// PatientList
+// PatientSearchForm
+// SearchPatientList
+
 import FilterUserForm from '../../components/forms/filter/FilterUserForm';
 import UserSearchForm from '../../components/forms/search/UserSearchForm';
 
 import loadingGif from '../../assets/loading.gif';
 import { faBath } from '@fortawesome/free-solid-svg-icons';
-import './staff.css';
+import './patient.css';
 
-class StaffPage extends Component {
+class PatientPage extends Component {
   state = {
     activityA: null,
     role: null,
@@ -36,7 +41,8 @@ class StaffPage extends Component {
     context: null,
     activityUser: null,
     users: null,
-    searchUsers: null,
+    patients: null,
+    searchPatients: null,
     isLoading: false,
     seshStore: null,
     profileLoaded: false,
@@ -53,23 +59,24 @@ class StaffPage extends Component {
     },
     showDetails: false,
     selectedUser: null,
+    selectedPatient: null,
   };
   static contextType = AuthContext;
 
 componentDidMount () {
-  console.log('...all users component mounted...');
+  console.log('...all patients component mounted...');
   if (sessionStorage.getItem('logInfo')) {
     const seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
-    this.getAllUsers(seshStore);
+    this.getAllPatients(seshStore);
   }
 }
 componentWillUnmount() {
 
 }
 
-getAllUsers (args) {
-  console.log('...retrieving all users...');
-  this.context.setUserAlert('...retrieving all users...')
+getAllPatients (args) {
+  console.log('...retrieving all patients...');
+  this.context.setUserAlert('...retrieving all patients...')
   this.setState({isLoading: true});
 
   const token = args.token;
@@ -78,9 +85,10 @@ getAllUsers (args) {
 
   let requestBody = {
     query: `
-      query {getAllUsers(
-        activityId:"${activityId}" )
-        {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+      query {getAllPatients(
+        activityId:"${activityId}"
+      )
+      {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id},visits{_id},reminders{_id},activity{date,request}}}
     `};
   fetch('http://localhost:8088/graphql', {
       method: 'POST',
@@ -97,18 +105,18 @@ getAllUsers (args) {
       return res.json();
     })
     .then(resData => {
-      // console.log('...resData...',resData.data.getAllUsers);
-      let responseAlert = '...all users retrieval success!...';
+      // console.log('...resData...',resData.data.getAllPatients);
+      let responseAlert = '...all patients retrieval success!...';
       let error = null;
-      if (resData.data.getAllUsers.error) {
-        error = resData.data.getAllUsers.error;
+      if (resData.data.getAllPatients.error) {
+        error = resData.data.getAllPatients.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
       this.setState({
         isLoading: false,
-        users: resData.data.getAllUsers,
-        activityA: `getAllUsers?activityId:${activityId},userId:${userId}`
+        patients: resData.data.getAllPatients,
+        activityA: `getAllPatients?activityId:${activityId},userId:${userId}`
       });
       this.logUserActivity({activityId: activityId,token: token});
     })
@@ -160,10 +168,10 @@ logUserActivity(args) {
     });
 };
 
-searchUsers = (event) => {
+searchPatients = (event) => {
   event.preventDefault();
-  console.log('...searching users...');
-  this.context.setUserAlert('...searching users...')
+  console.log('...searching patients...');
+  this.context.setUserAlert('...searching patients...')
   // this.setState({isLoading: true});
 
   const token = this.context.token;
@@ -172,16 +180,19 @@ searchUsers = (event) => {
   const field = event.target.field.value;
   const query = event.target.query.value;
   let regex = true;
-  if (field === 'age' ||
+  if (field === 'active' ||
+      field === 'age' ||
       field === 'dob' ||
       field === 'addresses.number' ||
       field === 'addresses.primary' ||
       field === 'loggedIn' ||
       field === 'clientConnected' ||
       field === 'verification.verified' ||
-      field === 'attendance.date' ||
-      field === 'leave.startDate' ||
-      field === 'leave.endDate'
+      field === 'registration.date' ||
+      field === 'expiryDate' ||
+      field === 'referral.date' ||
+      field === 'insurance.expiryDate' ||
+      field === 'insurance.expiryDate'
     ) {
       regex = false;
   }
@@ -191,23 +202,23 @@ searchUsers = (event) => {
   if (regex === true) {
     requestBody = {
       query: `
-        query {getUsersByFieldRegex(
+        query {getPatientsByFieldRegex(
           activityId:"${activityId}",
           field:"${field}",
           query:"${query}"
         )
-        {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+        {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id},visits{_id},reminders{_id},activity{date,request}}}
       `};
   }
   if (regex === false) {
     requestBody = {
       query: `
-        query {getUsersByField(
+        query {getPatientsByField(
           activityId:"${activityId}",
           field:"${field}",
           query:"${query}"
         )
-        {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+        {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id},visits{_id},reminders{_id},activity{date,request}}}
       `};
   }
   fetch('http://localhost:8088/graphql', {
@@ -226,24 +237,24 @@ searchUsers = (event) => {
     })
     .then(resData => {
       if (regex === true) {
-        console.log('...resData...',resData.data.getUsersByFieldRegex);
+        console.log('...resData...',resData.data.getPatientsByFieldRegex);
       }
       if (regex === false) {
-        console.log('...resData...',resData.data.getUsersByField);
+        console.log('...resData...',resData.data.getPatientsByField);
       }
 
-      let responseAlert = '...staff search success!...';
+      let responseAlert = '...patient search success!...';
       let error = null;
 
       if (regex === true) {
-        if (resData.data.getUsersByFieldRegex.error) {
-          error = resData.data.getUsersByFieldRegex.error;
+        if (resData.data.getPatientsByFieldRegex.error) {
+          error = resData.data.getPatientsByFieldRegex.error;
           responseAlert = error;
         }
       }
       if (regex === false) {
-        if (resData.data.getUsersByField.error) {
-          error = resData.data.getUsersByField.error;
+        if (resData.data.getPatientsByField.error) {
+          error = resData.data.getPatientsByField.error;
           responseAlert = error;
         }
       }
@@ -253,18 +264,16 @@ searchUsers = (event) => {
       if (regex === true) {
         this.setState({
           isLoading: false,
-          searchUsers: resData.data.getUsersByFieldRegex,
-          activityA: `getUsersByFieldRegex?activityId:${activityId},userId:${userId}`
+          searchPatients: resData.data.getPatientsByFieldRegex,
+          activityA: `getPatientsByFieldRegex?activityId:${activityId},userId:${userId}`
         });
-        this.context.activityUser = resData.data.getUsersByFieldRegex;
       }
       if (regex === false) {
         this.setState({
           isLoading: false,
-          searchUsers: resData.data.getUsersByField,
-          activityA: `getUsersByField?activityId:${activityId},userId:${userId}`
+          searchUsers: resData.data.getPatientsByField,
+          activityA: `getPatientsByField?activityId:${activityId},userId:${userId}`
         });
-        this.context.activityUser = resData.data.getUsersByField;
       }
 
       this.logUserActivity({activityId: activityId,token: token});
@@ -355,7 +364,7 @@ render() {
     <Container className="staffPageContainer">
       <Row className="staffPageContainerRow headRow">
         <Col md={9} className="staffPageContainerCol">
-          <h1>Staff List</h1>
+          <h1>Patient List</h1>
         </Col>
         <Col md={3} className="staffPageContainerCol">
           {this.state.isLoading ? (
@@ -385,55 +394,61 @@ render() {
             )}
             {this.state.sideCol === 'filter' && (
               <Col>
-                <FilterUserForm
-                  onCancel={this.toggleSideCol}
-                  onConfirm={this.submitFilterForm}
-                />
+                {
+                  // <FilterPatientForm
+                  //   onCancel={this.toggleSideCol}
+                  //   onConfirm={this.submitFilterForm}
+                  // />
+                }
               </Col>
             )}
           </Col>
 
-          {this.state.users && (
+          {this.state.patients && (
             <Col md={10} className="staffPageContainerCol specialCol2">
               <Tab.Content>
                 <Tab.Pane eventKey="1">
                   <Row className="displayPaneHeadRow">
                     <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
                   </Row>
-                  <UserList
-                    filter={this.state.filter}
-                    users={this.state.users}
-                    authId={this.context.activityId}
-                    canDelete={this.state.canDelete}
-                    showDetails={this.showDetails}
-                  />
+                  {
+                    // <PatientList
+                    //   filter={this.state.filter}
+                    //   patients={this.state.patients}
+                    //   authId={this.context.activityId}
+                    //   canDelete={this.state.canDelete}
+                    //   showDetails={this.showDetails}
+                    // />
+                  }
                 </Tab.Pane>
                 <Tab.Pane eventKey="2">
                 <Col className="userSearchCol">
                   <h3>Search Staff</h3>
                   <Row className="userSearchRow">
-                    <UserSearchForm
-                      onConfirm={this.searchUsers}
-                    />
+                    {
+                      // <PatientSearchForm
+                      //   onConfirm={this.searchPatients}
+                      // />
+                    }
                   </Row>
                   <Row className="userSearchRow results">
-                    {this.state.searchUsers && (
-                      <SearchUserList
-                        filter={this.state.filter}
-                        users={this.state.searchUsers}
-                        authId={this.context.activityId}
-                        showDetails={this.showDetails}
-                      />
-                    )}
+                    {
+                      // this.state.searchPatients && (
+                      //   <SearchPatientList
+                      //     filter={this.state.filter}
+                      //     patients={this.state.searchPatients}
+                      //     authId={this.context.activityId}
+                      //     showDetails={this.showDetails}
+                      //   />
+                      // )
+                    }
                   </Row>
                 </Col>
                 </Tab.Pane>
                 <Tab.Pane eventKey="3">
                 {this.state.showDetails === true &&
-                  this.state.selectedUser && (
-                  <UserDetail
-                    user={this.state.selectedUser}
-                  />
+                  this.state.selectedPatient && (
+                  <h3>Patient Detail</h3>
                 )}
                 </Tab.Pane>
               </Tab.Content>
@@ -450,4 +465,4 @@ render() {
 
 }
 
-export default StaffPage;
+export default PatientPage;
