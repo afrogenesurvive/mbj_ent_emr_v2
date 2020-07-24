@@ -145,7 +145,6 @@ getThisUser (args) {
       this.setState({isLoading: false })
     });
 };
-
 logUserActivity(args) {
   console.log('...logUserActivity...');
   const activityId = args.activityId;

@@ -318,10 +318,12 @@ submitFilterForm = (event) => {
 }
 
 showDetails = (args) => {
+  // console.log('bar',args.contact);
   this.setState({
     showDetails: true,
     selectedUser: args
   })
+  this.context.selectedUser = args;
 }
 startAdd = (args) => {
   this.setState({
