@@ -15,17 +15,15 @@ import AuthContext from '../../context/auth-context';
 import AlertBox from '../../components/alertBox/AlertBox';
 import LoadingOverlay from '../../components/overlay/LoadingOverlay';
 
-import UserList from '../../components/lists/user/UserList';
-import SearchUserList from '../../components/lists/user/SearchUserList';
+import PatientList from '../../components/lists/patient/PatientList';
+import SearchPatientList from '../../components/lists/patient/SearchPatientList';
 import UserDetail from '../../components/details/UserDetail';
 
-// FilterPatientForm
-// PatientList
 // PatientSearchForm
 // SearchPatientList
 
-import FilterUserForm from '../../components/forms/filter/FilterUserForm';
-import UserSearchForm from '../../components/forms/search/UserSearchForm';
+import FilterPatientForm from '../../components/forms/filter/FilterPatientForm';
+import PatientSearchForm from '../../components/forms/search/PatientSearchForm';
 
 import loadingGif from '../../assets/loading.gif';
 import { faBath } from '@fortawesome/free-solid-svg-icons';
@@ -271,7 +269,7 @@ searchPatients = (event) => {
       if (regex === false) {
         this.setState({
           isLoading: false,
-          searchUsers: resData.data.getPatientsByField,
+          searchPatients: resData.data.getPatientsByField,
           activityA: `getPatientsByField?activityId:${activityId},userId:${userId}`
         });
       }
@@ -329,7 +327,7 @@ showDetails = (args) => {
   // console.log('bar',args.contact);
   this.setState({
     showDetails: true,
-    selectedUser: args
+    selectedPatient: args
   })
   this.context.selectedUser = args;
 }
@@ -394,12 +392,10 @@ render() {
             )}
             {this.state.sideCol === 'filter' && (
               <Col>
-                {
-                  // <FilterPatientForm
-                  //   onCancel={this.toggleSideCol}
-                  //   onConfirm={this.submitFilterForm}
-                  // />
-                }
+                <FilterPatientForm
+                  onCancel={this.toggleSideCol}
+                  onConfirm={this.submitFilterForm}
+                />
               </Col>
             )}
           </Col>
@@ -411,44 +407,38 @@ render() {
                   <Row className="displayPaneHeadRow">
                     <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
                   </Row>
-                  {
-                    // <PatientList
-                    //   filter={this.state.filter}
-                    //   patients={this.state.patients}
-                    //   authId={this.context.activityId}
-                    //   canDelete={this.state.canDelete}
-                    //   showDetails={this.showDetails}
-                    // />
-                  }
+                    <PatientList
+                      filter={this.state.filter}
+                      patients={this.state.patients}
+                      authId={this.context.activityId}
+                      canDelete={this.state.canDelete}
+                      showDetails={this.showDetails}
+                    />
                 </Tab.Pane>
                 <Tab.Pane eventKey="2">
                 <Col className="userSearchCol">
-                  <h3>Search Staff</h3>
+                  <h3>Search Patient</h3>
                   <Row className="userSearchRow">
-                    {
-                      // <PatientSearchForm
-                      //   onConfirm={this.searchPatients}
-                      // />
-                    }
+                    <PatientSearchForm
+                      onConfirm={this.searchPatients}
+                    />
                   </Row>
                   <Row className="userSearchRow results">
-                    {
-                      // this.state.searchPatients && (
-                      //   <SearchPatientList
-                      //     filter={this.state.filter}
-                      //     patients={this.state.searchPatients}
-                      //     authId={this.context.activityId}
-                      //     showDetails={this.showDetails}
-                      //   />
-                      // )
-                    }
+                    {this.state.searchPatients && (
+                      <SearchPatientList
+                        filter={this.state.filter}
+                        patients={this.state.searchPatients}
+                        authId={this.context.activityId}
+                        showDetails={this.showDetails}
+                      />
+                    )}
                   </Row>
                 </Col>
                 </Tab.Pane>
                 <Tab.Pane eventKey="3">
                 {this.state.showDetails === true &&
                   this.state.selectedPatient && (
-                  <h3>Patient Detail</h3>
+                  <h3>Patient Detail {this.state.selectedPatient.username}</h3>
                 )}
                 </Tab.Pane>
               </Tab.Content>

@@ -1,0 +1,39 @@
+.addressList {
+  list-style-type: none;
+  padding: 0;
+}
+.attendanceList {
+  list-style-type: none;
+  padding: 0;
+}
+.leaveList {
+  list-style-type: none;
+  padding: 0;
+}
+.imageList {
+  list-style-type: none;
+  padding: 0;
+}
+.fileList {
+  list-style-type: none;
+  padding: 0;
+}
+.appointmentList {
+  list-style-type: none;
+  padding: 0;
+}
+.noteList {
+  list-style-type: none;
+  padding: 0;
+}
+.userList {
+  list-style-type: none;
+  padding: 0;
+  margin: 1.5rem;
+}
+.searchUserList {
+  list-style-type: none;
+  margin: 0 auto;
+  padding: 0;
+  width: 80%;
+}

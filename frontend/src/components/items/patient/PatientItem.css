@@ -1,0 +1,14 @@
+.cardText {
+  display: inline-block;
+  margin: 0 .5rem;
+}
+.cardBody {
+  padding: .7rem;
+  text-align: left;
+}
+.bold {
+  font-weight: bold;
+}
+.listIcon {
+  margin: 0 1rem;
+}

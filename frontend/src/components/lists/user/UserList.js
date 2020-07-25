@@ -48,7 +48,7 @@ const UserList = props => {
   if (filter.field === 'staff' && filter.key === 'gender' && filter.value === 'Ascending') {
     propsUsers = users2.sort((a, b) => (a.gender > b.gender) ? 1 : -1);
   }
-  if (filter.field === 'staff' && filter.key === 'age' && filter.value === 'Descending') {
+  if (filter.field === 'staff' && filter.key === 'gender' && filter.value === 'Descending') {
     propsUsers = users2.sort((a, b) => (a.gender < b.gender) ? 1 : -1);
   }
   if (filter.field === 'staff' && filter.key === 'loggedIn') {

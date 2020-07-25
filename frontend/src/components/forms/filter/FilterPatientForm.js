@@ -12,7 +12,7 @@ return (
   <Form onSubmit={props.onConfirm}>
     <Form.Row>
       <Form.Group as={Col} controlId="field">
-        <Form.Control type="text" hidden='true' value="staff"/>
+        <Form.Control type="text" hidden='true' value="patient"/>
       </Form.Group>
     </Form.Row>
 
@@ -20,6 +20,7 @@ return (
       <Form.Group as={Col} controlId="key">
         <Form.Label>Field</Form.Label>
         <Form.Control as="select">
+          <option>active</option>
           <option>name</option>
           <option>username</option>
           <option>title</option>
@@ -27,6 +28,21 @@ return (
           <option>dob</option>
           <option>age</option>
           <option>gender</option>
+          <option>registration.date</option>
+          <option>registration.number</option>
+          <option>contact.email</option>
+          <option>contact.phone</option>
+          <option>contact.phone2</option>
+          <option>addresses.number</option>
+          <option>addresses.street</option>
+          <option>addresses.town</option>
+          <option>addresses.city</option>
+          <option>addresses.parish</option>
+          <option>addresses.country</option>
+          <option>addresses.postalCode</option>
+          <option>addresses.primary</option>
+          <option>verification.verified</option>
+          <option>expiryDate</option>
           <option>loggedIn</option>
         </Form.Control>
       </Form.Group>
