@@ -226,10 +226,10 @@ searchUsers = (event) => {
     })
     .then(resData => {
       if (regex === true) {
-        console.log('...resData...',resData.data.getUsersByFieldRegex);
+        // console.log('...resData...',resData.data.getUsersByFieldRegex);
       }
       if (regex === false) {
-        console.log('...resData...',resData.data.getUsersByField);
+        // console.log('...resData...',resData.data.getUsersByField);
       }
 
       let responseAlert = '...staff search success!...';

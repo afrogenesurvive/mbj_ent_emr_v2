@@ -17,10 +17,7 @@ import LoadingOverlay from '../../components/overlay/LoadingOverlay';
 
 import PatientList from '../../components/lists/patient/PatientList';
 import SearchPatientList from '../../components/lists/patient/SearchPatientList';
-import UserDetail from '../../components/details/UserDetail';
-
-// PatientSearchForm
-// SearchPatientList
+import PatientDetail from '../../components/details/PatientDetail';
 
 import FilterPatientForm from '../../components/forms/filter/FilterPatientForm';
 import PatientSearchForm from '../../components/forms/search/PatientSearchForm';
@@ -329,7 +326,7 @@ showDetails = (args) => {
     showDetails: true,
     selectedPatient: args
   })
-  this.context.selectedUser = args;
+  this.context.selectedPatient = args;
 }
 startAdd = (args) => {
   this.setState({
@@ -438,7 +435,9 @@ render() {
                 <Tab.Pane eventKey="3">
                 {this.state.showDetails === true &&
                   this.state.selectedPatient && (
-                  <h3>Patient Detail {this.state.selectedPatient.username}</h3>
+                  <PatientDetail
+                    patient={this.state.selectedPatient}
+                  />
                 )}
                 </Tab.Pane>
               </Tab.Content>
