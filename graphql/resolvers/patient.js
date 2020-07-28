@@ -74,6 +74,7 @@ module.exports = {
       // console.log(query);
       const patients = await Patient.find(query)
       .populate('appointments')
+      .populate('visits')
       .populate('reminders');
       return patients.map(patient => {
         return transformPatient(patient);
@@ -95,6 +96,7 @@ module.exports = {
       // console.log(query);
       const patients = await Patient.find(query)
       .populate('appointments')
+      .populate('visits')
       .populate('reminders');
       return patients.map(patient => {
         return transformPatient(patient);
@@ -114,6 +116,7 @@ module.exports = {
         'tags': {$all: tags}
       })
       .populate('appointments')
+      .populate('visits')
       .populate('reminders');
       return patients.map(patient => {
         return transformPatient(patient);
@@ -132,6 +135,7 @@ module.exports = {
         appointments: args.appointmentId,
       })
       .populate('appointments')
+      .populate('visits')
       .populate('reminders');
       return patients.map(patient => {
         return transformPatient(patient);
@@ -163,6 +167,7 @@ module.exports = {
     try {
       const patient = await Patient.findById({_id: args.activityId})
       .populate('appointments')
+      .populate('visits')
       .populate('reminders');
       return {
         ...patient._doc,
@@ -211,6 +216,7 @@ module.exports = {
       {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate('visits')
       .populate('reminders');
       return {
         ...patient._doc,
@@ -234,6 +240,7 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate('visits')
       .populate('reminders');
       return {
         ...patient._doc,
@@ -257,6 +264,7 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate('visits')
       .populate('reminders');
       return {
         ...patient._doc,
@@ -403,6 +411,7 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate('visits')
       .populate('reminders');
       return {
         ...patient._doc,
@@ -438,12 +447,9 @@ module.exports = {
           {$pull: { 'addresses': address }},
           {new: true, useFindAndModify: false}
         )
-        .populate('wishlist')
-        .populate('liked')
-        .populate('cart')
-        .populate('reviews')
-        .populate('orders')
-        .populate('affiliate.referrer');
+        .populate('appointments')
+        .populate('visits')
+        .populate('reminders');
 
         return {
           ...patient._doc,
@@ -490,6 +496,7 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate('visits')
       .populate('reminders');
       return {
         ...patient._doc,
@@ -549,7 +556,7 @@ module.exports = {
           phone2: args.patientInput.nextOfKinContactPhone2
         }
       };
-      console.log(nextOfKin);
+      // console.log(nextOfKin);
       const patient = await Patient.findOneAndUpdate(
         {_id:args.patientId},
         {$pull: {nextOfKin: nextOfKin}},
@@ -780,6 +787,7 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate('visits')
       .populate('reminders');
       return {
         ...patient._doc,
@@ -809,6 +817,7 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate('visits')
       .populate('reminders');
       return {
         ...patient._doc,
@@ -838,6 +847,7 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate('visits')
       .populate('reminders');
       return {
         ...patient._doc,
@@ -867,6 +877,7 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate('visits')
       .populate('reminders');
       return {
         ...patient._doc,
@@ -892,6 +903,7 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate('visits')
       .populate('reminders');
 
       return {
@@ -917,6 +929,7 @@ module.exports = {
           {new: true, useFindAndModify: false}
         )
         .populate('appointments')
+        .populate('visits')
         .populate('reminders');
         return {
           ...patient._doc,
@@ -942,6 +955,7 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate('visits')
       .populate('reminders');
 
       return {
@@ -967,6 +981,7 @@ module.exports = {
           {new: true, useFindAndModify: false}
         )
         .populate('appointments')
+        .populate('visits')
         .populate('reminders');
         return {
           ...patient._doc,
@@ -991,6 +1006,7 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate('visits')
       .populate('reminders');
 
       return {

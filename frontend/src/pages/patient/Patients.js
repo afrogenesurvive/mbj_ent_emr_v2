@@ -15,6 +15,7 @@ import AuthContext from '../../context/auth-context';
 import AlertBox from '../../components/alertBox/AlertBox';
 import LoadingOverlay from '../../components/overlay/LoadingOverlay';
 
+import CreatePatientForm from '../../components/forms/create/CreatePatientForm';
 import PatientList from '../../components/lists/patient/PatientList';
 import SearchPatientList from '../../components/lists/patient/SearchPatientList';
 import PatientDetail from '../../components/details/PatientDetail';
@@ -55,6 +56,8 @@ class PatientPage extends Component {
     showDetails: false,
     selectedUser: null,
     selectedPatient: null,
+    creatingPatient: false,
+    newPatient: null,
   };
   static contextType = AuthContext;
 
@@ -281,6 +284,161 @@ searchPatients = (event) => {
 
 }
 
+onStartCreateNewPatient = () => {
+  this.setState({
+    creatingPatient: true
+  })
+}
+cancelCreateNewPatient = () => {
+  this.setState({
+    creatingPatient: false
+  })
+}
+submitCreateNewPatientForm = (event) => {
+  event.preventDefault();
+  console.log('...creating new patient...');
+  this.context.setUserAlert('...creating new patient...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+
+  const active = event.target.active.value;
+  const title = event.target.title.value;
+  const name = event.target.name.value;
+  const username = event.target.username.value;
+  const dob = event.target.dob.value;
+  const role = event.target.role.value;
+  const gender = event.target.gender.value;
+  const contactEmail = event.target.contactEmail.value;
+  const contactPhone = event.target.contactPhone.value;
+  const contactPhone2 = event.target.contactPhone2.value;
+  const addressNumber = event.target.addressNumber.value;
+  const addressStreet = event.target.addressStreet.value;
+  const addressTown = event.target.addressTown.value;
+  const addressCity = event.target.addressCity.value;
+  const addressParish = event.target.addressParish.value;
+  const addressCountry = event.target.addressCountry.value;
+  const addressPostalCode = event.target.addressPostalCode.value;
+  const referralDate = event.target.referralDate.value;
+  const referralReason = event.target.referralReason.value;
+  const referralPhysicianName = event.target.referralPhysicianName.value;
+  const referralPhysicianPhone = event.target.referralPhysicianPhone.value;
+  const referralPhysicianEmail = event.target.referralPhysicianEmail.value;
+  const referralPhysicianAddress = event.target.referralPhysicianAddress.value;
+  const attendingPhysician = event.target.attendingPhysician.value;
+  const occupationRole = event.target.occupationRole.value;
+  const occupationEmployerName = event.target.occupationEmployerName.value;
+  const occupationEmployerEmail = event.target.occupationEmployerEmail.value;
+  const occupationEmployerPhone = event.target.occupationEmployerPhone.value;
+  const occupationEmployerAddress = event.target.occupationEmployerAddress.value;
+  const insuranceCompany = event.target.insuranceCompany.value;
+  const insurancePolicyNumber = event.target.insurancePolicyNumber.value;
+  const insuranceDescription = event.target.insuranceDescription.value;
+  const insuranceExpiryDate = event.target.insuranceExpiryDate.value;
+  const insuranceSubscriberCompany = event.target.insuranceSubscriberCompany.value;
+  const insuranceSubscriberDescription = event.target.insuranceSubscriberDescription.value;
+
+  if (
+      active.trim().length === 0 ||
+      title.trim().length === 0 ||
+      name.trim().length === 0 ||
+      username.trim().length === 0 ||
+      dob.trim().length === 0 ||
+      role.trim().length === 0 ||
+      gender.trim().length === 0 ||
+      contactEmail.trim().length === 0 ||
+      contactPhone.trim().length === 0 ||
+      contactPhone2.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank fields!!!...")
+    return;
+  }
+
+  let requestBody = {
+    query: `
+      mutation {createPatient(
+        activityId:"${activityId}",
+        patientInput:{
+          active:${active},
+          username:"${username}",
+          dob:"${dob}",
+          title:"${title}",
+          name:"${name}",
+          role:"${role}",
+          gender:"${gender}",
+          contactEmail:"${contactEmail}",
+          contactPhone:"${contactPhone}",
+          contactPhone2:"${contactPhone2}",
+          addressNumber:${addressNumber},
+          addressStreet:"${addressStreet}",
+          addressTown:"${addressTown}",
+          addressCity:"${addressCity}",
+          addressParish:"${addressParish}",
+          addressCountry:"${addressCountry}",
+          addressPostalCode:"${addressPostalCode}",
+          referralDate:"${referralDate}",
+          referralReason:"${referralReason}",
+          referralPhysicianName:"${referralPhysicianName}",
+          referralPhysicianEmail:"${referralPhysicianEmail}",
+          referralPhysicianPhone:"${referralPhysicianPhone}",
+          attendingPhysician:"${attendingPhysician}",
+          occupationRole:"${occupationRole}",
+          occupationEmployerName:"${occupationEmployerName}",
+          occupationEmployerPhone:"${occupationEmployerPhone}",
+          occupationEmployerEmail:"${occupationEmployerEmail}",
+          occupationEmployerAddress:"${occupationEmployerAddress}",
+          insuranceCompany:"${insuranceCompany}",
+          insurancePolicyNumber:"${insurancePolicyNumber}",
+          insuranceDescription:"${insuranceDescription}",
+          insuranceExpiryDate:"${insuranceExpiryDate}",
+          insuranceSubscriberCompany:"${insuranceSubscriberCompany}",
+          insuranceSubscriberDescription:"${insuranceSubscriberDescription}"
+        })
+        {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
+    `};
+  fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.createPatient);
+      let responseAlert = '...create patient success!...';
+      let error = null;
+      if (resData.data.createPatient.error) {
+        error = resData.data.createPatient.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.setState({
+        isLoading: false,
+        creatingPatient: false,
+        selectedPatient: resData.data.createPatient,
+        newPatient: resData.data.createPatient,
+        activityA: `createPatient?activityId:${activityId},patientId:${resData.data.createPatient._id}`
+      });
+      this.logUserActivity({activityId: activityId,token: token});
+      const seshStore = JSON.parse(sessionStorage.getItem('logInfo'))
+      this.getAllPatients(seshStore);
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+
+}
+
 toggleSideCol = () => {
   if (this.state.sideCol === 'menu') {
     this.setState({sideCol: 'filter'})
@@ -321,7 +479,7 @@ submitFilterForm = (event) => {
 }
 
 showDetails = (args) => {
-  // console.log('bar',args.contact);
+  console.log('bar',args.visits);
   this.setState({
     showDetails: true,
     selectedPatient: args
@@ -385,6 +543,9 @@ render() {
                 <Nav.Item>
                   <Nav.Link eventKey="3" onClick={this.menuSelect.bind(this, 'detail')}>Details</Nav.Link>
                 </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link eventKey="4" onClick={this.menuSelect.bind(this, 'new')}>New</Nav.Link>
+                </Nav.Item>
               </Nav>
             )}
             {this.state.sideCol === 'filter' && (
@@ -438,6 +599,23 @@ render() {
                   <PatientDetail
                     patient={this.state.selectedPatient}
                   />
+                )}
+                </Tab.Pane>
+                <Tab.Pane eventKey="4">
+                {this.state.creatingPatient === false && (
+                  <Button variant="outline-secondary" className="filterFormBtn" onClick={this.onStartCreateNewPatient}>Create New</Button>
+                )}
+                {this.state.creatingPatient === true && (
+                  <CreatePatientForm
+                    onConfirm={this.submitCreateNewPatientForm}
+                    onCancel={this.cancelCreateNewPatient}
+                  />
+                )}
+                {this.state.newPatient && (
+                  <Row>
+                    <h3>Review New Patient</h3>
+                    {this.state.newPatient.username}
+                  </Row>
                 )}
                 </Tab.Pane>
               </Tab.Content>

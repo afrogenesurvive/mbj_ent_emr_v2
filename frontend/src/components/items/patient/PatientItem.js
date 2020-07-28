@@ -49,7 +49,7 @@ const PatientItem = (props) => {
                 role: <span className="bold">{props.patient.role}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                dob: <span className="bold">{moment.unix(props.patient.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</span>
+                dob: <span className="bold">{moment.unix(props.patient.dob.substr(0,8)).add(1,'days').format('YYYY-MM-DD')}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 age: <span className="bold">{props.patient.age}</span>

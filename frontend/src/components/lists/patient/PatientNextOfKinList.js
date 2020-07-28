@@ -18,7 +18,7 @@ const PatientNextOfKinList = props => {
   if (filter.field === 'nextOfKin' && filter.key === 'relation' && filter.value === 'Ascending') {
     propsNextOfKin = nextOfKin2.sort((a, b) => (a.relation > b.relation) ? 1 : -1);
   }
-  if (filter.field === 'nextOfKin' && filter.key === 'realtion' && filter.value === 'Descending') {
+  if (filter.field === 'nextOfKin' && filter.key === 'relation' && filter.value === 'Descending') {
     propsNextOfKin = nextOfKin2.sort((a, b) => (a.relation < b.relation) ? 1 : -1);
   }
   // if (filter.field === 'nextOfKin' && filter.key === 'primary') {

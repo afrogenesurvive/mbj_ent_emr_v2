@@ -26,12 +26,15 @@ import PatientNoteList from '../lists/patient/PatientNoteList'
 import PatientTagList from '../lists/patient/PatientTagList'
 
 import FilterAddressForm from '../forms/filter/FilterAddressForm';
-import FilterAttendanceForm from '../forms/filter/FilterAttendanceForm';
-import FilterLeaveForm from '../forms/filter/FilterLeaveForm';
+import FilterAllergyForm from '../forms/filter/FilterAllergyForm';
+import FilterMedicationForm from '../forms/filter/FilterMedicationForm';
+import FilterNextOfKinForm from '../forms/filter/FilterNextOfKinForm';
+import FilterVisitForm from '../forms/filter/FilterVisitForm';
 import FilterImageForm from '../forms/filter/FilterImageForm';
 import FilterFileForm from '../forms/filter/FilterFileForm';
 import FilterAppointmentForm from '../forms/filter/FilterAppointmentForm';
 import FilterNoteForm from '../forms/filter/FilterNoteForm';
+import FilterTagForm from '../forms/filter/FilterTagForm';
 
 import UpdatePatientSingleFieldForm from '../forms/add/UpdatePatientSingleFieldForm';
 import AddAddressForm from '../forms/add/AddAddressForm';
@@ -179,7 +182,7 @@ submitAddAddressForm = (event) => {
           addressCountry:"${country}",
           addressPostalCode:"${postalCode}"
         })
-      {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id},visits{_id},reminders{_id},activity{date,request}}}
+      {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
     `};
   fetch('http://localhost:8088/graphql', {
       method: 'POST',
@@ -246,7 +249,7 @@ deleteAddress = (args) => {
           addressPostalCode:"${args.postalCode}",
           addressPrimary:${args.primary}
         })
-      {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id},visits{_id},reminders{_id},activity{date,request}}}
+      {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
     `};
   fetch('http://localhost:8088/graphql', {
       method: 'POST',
@@ -293,7 +296,6 @@ setAddressPrimary = (args) => {
   const token = this.context.token;
   const activityId = this.context.activityId;
   const patientId = this.state.selectedPatient._id;
-  console.log('foo',args);
 
   let requestBody = {
     query: `
@@ -309,7 +311,7 @@ setAddressPrimary = (args) => {
           addressCountry:"${args.country}",
           addressPostalCode:"${args.postalCode}"
         })
-        {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id},visits{_id},reminders{_id},activity{date,request}}}
+        {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
     `};
   fetch('http://localhost:8088/graphql', {
       method: 'POST',
@@ -1239,7 +1241,6 @@ deleteTag = (args) => {
     });
 }
 
-
 submitUpdateSingleFieldForm = (event) => {
   event.preventDefault();
   console.log('...updating single field...');
@@ -1248,19 +1249,19 @@ submitUpdateSingleFieldForm = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const userId = this.state.selectedUser._id;
+  const patientId = this.state.selectedPatient._id;
   const field = event.target.field.value;
   const query = event.target.query.value;
 
   let requestBody = {
     query: `
-      mutation {updateUserSingleField(
-        activityId:"${activityId}",
-        userId:"${userId}",
-        field:"${field}",
-        query:"${query}"
-      )
-        {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+    mutation {updatePatientSingleField(
+      activityId:"${activityId}",
+      patientId:"${patientId}",
+      field:"${field}",
+      query:"${query}"
+    )
+    {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
     `};
   fetch('http://localhost:8088/graphql', {
       method: 'POST',
@@ -1277,24 +1278,24 @@ submitUpdateSingleFieldForm = (event) => {
       return res.json();
     })
     .then(resData => {
-      // console.log('...resData...',resData.data.updateUserSingleField);
+      // console.log('...resData...',resData.data.updatePatientSingleField);
       let responseAlert = '...field update success!...';
       let error = null;
-      if (resData.data.updateUserSingleField.error) {
-        error = resData.data.updateUserSingleField.error;
+      if (resData.data.updatePatientSingleField.error) {
+        error = resData.data.updatePatientSingleField.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
       this.setState({
         isLoading: false,
-        selectedPatient: resData.data.updateUserSingleField,
-        activityA: `updateUserSingleField?activityId:${activityId},userId:${userId}`,
+        selectedPatient: resData.data.updatePatientSingleField,
+        activityA: `updatePatientSingleField?activityId:${activityId},patientId:${patientId}`,
         updateSingleField: {
           state: null,
           field: null
         }
       });
-      this.context.selectedPatient = resData.data.updateUserSingleField;
+      this.context.selectedPatient = resData.data.updatePatientSingleField;
       this.logUserActivity({activityId: activityId,token: token});
     })
     .catch(err => {
@@ -1347,7 +1348,7 @@ submitFilterForm = (event) => {
     value = true
   }
   if (value === 'false') {
-    value = false
+    value = false 
   }
   this.setState({
     filter: {
@@ -1453,13 +1454,22 @@ render() {
                   />
                 )}
                 {this.state.menuSelect === 'nextOfKin' && (
-                  <h3>Next of Kin Filter form</h3>
+                  <FilterNextOfKinForm
+                    onCancel={this.toggleSideCol}
+                    onConfirm={this.submitFilterForm}
+                  />
                 )}
                 {this.state.menuSelect === 'allergy' && (
-                  <h3>Allergy Filter form</h3>
+                  <FilterAllergyForm
+                    onCancel={this.toggleSideCol}
+                    onConfirm={this.submitFilterForm}
+                  />
                 )}
                 {this.state.menuSelect === 'medication' && (
-                  <h3>Medication Filter form</h3>
+                  <FilterMedicationForm
+                    onCancel={this.toggleSideCol}
+                    onConfirm={this.submitFilterForm}
+                  />
                 )}
                 {this.state.menuSelect === 'image' && (
                   <FilterImageForm
@@ -1480,7 +1490,10 @@ render() {
                   />
                 )}
                 {this.state.menuSelect === 'visit' && (
-                  <h3>Visit Filter Form</h3>
+                  <FilterVisitForm
+                    onCancel={this.toggleSideCol}
+                    onConfirm={this.submitFilterForm}
+                  />
                 )}
                 {this.state.menuSelect === 'note' && (
                   <FilterNoteForm
@@ -1489,7 +1502,10 @@ render() {
                   />
                 )}
                 {this.state.menuSelect === 'tag' && (
-                  <h3>Tag Filter Form</h3>
+                  <FilterTagForm
+                    onCancel={this.toggleSideCol}
+                    onConfirm={this.submitFilterForm}
+                  />
                 )}
               </Col>
 
@@ -1523,7 +1539,7 @@ render() {
                       </ListGroup.Item>
                       <ListGroup.Item>
                         <p className="listGroupText">DOB:</p>
-                        <p className="listGroupText bold">{moment.unix(this.state.selectedPatient.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                        <p className="listGroupText bold">{moment.unix(this.state.selectedPatient.dob.substr(0,8)).add(1,'days').format('YYYY-MM-DD')}</p>
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
                         <p className="listGroupText">Age:</p>
                         <p className="listGroupText bold">{this.state.selectedPatient.age}</p>
@@ -1548,23 +1564,28 @@ render() {
                         <p className="listGroupText">Registration:</p>
                         <p className="listGroupText bold">{moment.unix(this.state.selectedPatient.registration.date.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
                         <p className="listGroupText bold">{this.state.selectedPatient.registration.number}</p>
-                      </ListGroup.Item>
-                      <ListGroup.Item>
                         <p className="listGroupText">Expiry Date:</p>
                         <p className="listGroupText bold">{moment.unix(this.state.selectedPatient.expiryDate.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                      </ListGroup.Item>
+                      <ListGroup.Item>
                         <p className="listGroupText">Referral:</p>
+                        <p className="listGroupText">Date:</p>
                         <p className="listGroupText bold">{moment.unix(this.state.selectedPatient.referral.date.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                        <p className="listGroupText">Reason:</p>
                         <p className="listGroupText bold">{this.state.selectedPatient.referral.reason}</p>
+                        <p className="listGroupText">Referral Physician:</p>
                         <p className="listGroupText bold">{this.state.selectedPatient.referral.physician.name}</p>
                         <p className="listGroupText bold">{this.state.selectedPatient.referral.physician.email}</p>
                         <p className="listGroupText bold">{this.state.selectedPatient.referral.physician.phone}</p>
-                      </ListGroup.Item>
-                      <ListGroup.Item>
                         <p className="listGroupText">Attending Physician:</p>
                         <p className="listGroupText bold">{this.state.selectedPatient.attendingPhysician}</p>
+                      </ListGroup.Item>
+                      <ListGroup.Item>
                         <p className="listGroupText">Occupation:</p>
                         <p className="listGroupText bold">{this.state.selectedPatient.occupation.role}</p>
+                        <p className="listGroupText">Employer:</p>
                         <p className="listGroupText bold">{this.state.selectedPatient.occupation.employer.name}</p>
+                        <p className="listGroupText">Contact:</p>
                         <p className="listGroupText bold">{this.state.selectedPatient.occupation.employer.phone}</p>
                         <p className="listGroupText bold">{this.state.selectedPatient.occupation.employer.email}</p>
                         <p className="listGroupText bold">{this.state.selectedPatient.occupation.employer.address}</p>
@@ -1575,6 +1596,7 @@ render() {
                         <p className="listGroupText bold">{this.state.selectedPatient.insurance.policyNumber}</p>
                         <p className="listGroupText bold">{this.state.selectedPatient.insurance.description}</p>
                         <p className="listGroupText bold">{moment.unix(this.state.selectedPatient.insurance.expiryDate.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                        <p className="listGroupText">Subscriber:</p>
                         <p className="listGroupText bold">{this.state.selectedPatient.insurance.subscriber.company}</p>
                         <p className="listGroupText bold">{this.state.selectedPatient.insurance.subscriber.description}</p>
                       </ListGroup.Item>
