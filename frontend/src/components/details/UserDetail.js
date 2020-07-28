@@ -31,7 +31,7 @@ import FilterFileForm from '../forms/filter/FilterFileForm';
 import FilterAppointmentForm from '../forms/filter/FilterAppointmentForm';
 import FilterNoteForm from '../forms/filter/FilterNoteForm';
 
-import UpdateSingleFieldForm from '../forms/add/UpdateSingleFieldForm';
+import UpdateUserSingleFieldForm from '../forms/add/UpdateUserSingleFieldForm';
 import AddAddressForm from '../forms/add/AddAddressForm';
 import AddAttendanceForm from '../forms/add/AddAttendanceForm';
 import AddLeaveForm from '../forms/add/AddLeaveForm';
@@ -1206,7 +1206,7 @@ render() {
             <Col md={10} className="detailPageContainerCol specialCol2">
               <h3> xxx </h3>
               {this.state.updateSingleField.state === true && (
-                <UpdateSingleFieldForm
+                <UpdateUserSingleFieldForm
                   field={this.state.updateSingleField.field}
                   onConfirm={this.submitUpdateSingleFieldForm}
                   onCancel={this.cancelUpdateSingleField}
@@ -1375,7 +1375,8 @@ render() {
                   <UserImageList
                     filter={this.state.filter}
                     images={this.state.selectedUser.images}
-                    authId={this.context.activityId}showListDetails={this.showListDetails}
+                    authId={this.context.activityId}
+                    showListDetails={this.showListDetails}
                     canDelete={this.state.canDelete}
                     onDelete={this.deleteImage}
                   />

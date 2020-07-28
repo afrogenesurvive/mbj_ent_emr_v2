@@ -31,7 +31,7 @@ import FilterFileForm from '../../components/forms/filter/FilterFileForm';
 import FilterAppointmentForm from '../../components/forms/filter/FilterAppointmentForm';
 import FilterNoteForm from '../../components/forms/filter/FilterNoteForm';
 
-import UpdateSingleFieldForm from '../../components/forms/add/UpdateSingleFieldForm';
+import UpdateUserSingleFieldForm from '../../components/forms/add/UpdateUserSingleFieldForm';
 import AddAddressForm from '../../components/forms/add/AddAddressForm';
 import AddAttendanceForm from '../../components/forms/add/AddAttendanceForm';
 import AddLeaveForm from '../../components/forms/add/AddLeaveForm';
@@ -1262,7 +1262,7 @@ render() {
 
               <h3> xxx </h3>
               {this.state.updateSingleField.state === true && (
-                <UpdateSingleFieldForm
+                <UpdateUserSingleFieldForm
                   field={this.state.updateSingleField.field}
                   onConfirm={this.submitUpdateSingleFieldForm}
                   onCancel={this.cancelUpdateSingleField}

@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 import DatePicker from "react-datepicker";
 import './addForms.css';
 
-const UpdateSingleFieldForm = (props) => {
+const UpdateUserSingleFieldForm = (props) => {
 
 return (
 <div className="addFormTopDiv">
@@ -33,4 +33,4 @@ return (
 
 )};
 
-export default UpdateSingleFieldForm;
+export default UpdateUserSingleFieldForm;

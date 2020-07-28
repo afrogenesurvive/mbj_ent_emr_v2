@@ -238,6 +238,7 @@ module.exports = buildSchema(`
     medicationType: String
     medicationDescription: String
     medicationAttachment: String
+    medicationAttachments: String
     imageName: String
     imageType: String
     imagePath: String
@@ -759,6 +760,7 @@ module.exports = buildSchema(`
     addPatientAllergy(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientAllergyAttachment(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientMedication(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    addPatientMedicationAttachment(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientImage(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientFile(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientNotes(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
@@ -770,7 +772,9 @@ module.exports = buildSchema(`
     deletePatientAddress(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     deletePatientNextOfKin(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     deletePatientAllergy(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    deletePatientAllergyAttachment(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     deletePatientMedication(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    deletePatientMedicationAttachment(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     deletePatientImage(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     deletePatientFile(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     deletePatientNote(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient

@@ -3,7 +3,7 @@ import React from 'react';
 import FileItem from '../../items/patient/FileItem';
 import './UserList.css';
 
-const PatientFileList = props => {
+const UserFileList = props => {
 
   const {...filter} = props.filter;
   let files2 = props.files;
@@ -53,4 +53,4 @@ const PatientFileList = props => {
   return <ul className="fileList">{files}</ul>;
 };
 
-export default PatientFileList;
+export default UserFileList;

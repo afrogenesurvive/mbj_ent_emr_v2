@@ -269,7 +269,7 @@ module.exports = {
     }
   },
 
-  
+
   updatePatientAllFields: async (args, req) => {
     console.log("Resolver: updatePatientAllFields...");
     if (!req.isAuth) {
@@ -516,7 +516,6 @@ module.exports = {
           phone2: args.patientInput.nextOfKinContactPhone2
         }
       };
-
       const patient = await Patient.findOneAndUpdate(
         {_id:args.patientId},
         {$addToSet: {nextOfKin: nextOfKin}},
@@ -550,7 +549,7 @@ module.exports = {
           phone2: args.patientInput.nextOfKinContactPhone2
         }
       };
-
+      console.log(nextOfKin);
       const patient = await Patient.findOneAndUpdate(
         {_id:args.patientId},
         {$pull: {nextOfKin: nextOfKin}},
@@ -630,6 +629,67 @@ module.exports = {
       throw err;
     }
   },
+  addPatientMedication: async (args, req) => {
+    console.log("Resolver: addPatientMedication...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const medication = {
+        type: args.patientInput.medicationType,
+        title: args.patientInput.medicationTitle,
+        description: args.patientInput.medicationDescription,
+        attachments: [args.patientInput.medicationAttachment],
+      };
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId},
+        {$addToSet: {medication: medication}},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('visits')
+      .populate('reminders');
+      return {
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deletePatientMedication: async (args, req) => {
+    console.log("Resolver: deletePatientMedication...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    console.log(args.patientInput.medicationAttachments.split(','));
+    try {
+      const medication = {
+        type: args.patientInput.medicationType,
+        title: args.patientInput.medicationTitle,
+        description: args.patientInput.medicationDescription,
+        attachments: args.patientInput.medicationAttachments.split(','),
+      };
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId},
+        {$pull: {medication: medication}},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('visits')
+      .populate('reminders');
+      return {
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
   addPatientAllergyAttachment: async (args, req) => {
     console.log("Resolver: addPatientAllergies...");
     if (!req.isAuth) {
@@ -651,6 +711,42 @@ module.exports = {
           'allergies.description': allergy.description,
         },
         {$addToSet: {'allergies.$.attachments': newAttachment}},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('visits')
+      .populate('reminders');
+      return {
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deletePatientAllergyAttachment: async (args, req) => {
+    console.log("Resolver: deletePatientAllergies...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const allergy = {
+        type: args.patientInput.allergyType,
+        title: args.patientInput.allergyTitle,
+        description: args.patientInput.allergyDescription,
+      };
+      const oldAttachment = args.patientInput.allergyAttachment;
+
+      const patient = await Patient.findOneAndUpdate(
+        {
+          _id:args.patientId,
+          'allergies.type': allergy.type,
+          'allergies.title': allergy.title,
+          'allergies.description': allergy.description,
+        },
+        {$pull: {'allergies.$.attachments': oldAttachment}},
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
