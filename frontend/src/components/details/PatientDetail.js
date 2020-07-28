@@ -1348,7 +1348,7 @@ submitFilterForm = (event) => {
     value = true
   }
   if (value === 'false') {
-    value = false 
+    value = false
   }
   this.setState({
     filter: {
