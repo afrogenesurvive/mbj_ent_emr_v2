@@ -14,6 +14,7 @@ import SignupPage from './pages/auth/Signup';
 import PasswordResetPage from './pages/auth/PasswordReset';
 import StaffPage from './pages/staff/Staff';
 import PatientPage from './pages/patient/Patients';
+import AppointmentPage from './pages/appointment/Appointment';
 
 import AuthContext from './context/auth-context';
 import io from 'socket.io-client';
@@ -283,6 +284,11 @@ class App extends Component {
               {this.state.sessionStorageAuth && (
                 <Route path="/patients" render={(props) => <PatientPage {...props}
                   title="patients"
+                />}/>
+              )}
+              {this.state.sessionStorageAuth && (
+                <Route path="/appointments" render={(props) => <AppointmentPage {...props}
+                  title="appointments"
                 />}/>
               )}
 

@@ -91,7 +91,6 @@ class PatientDetail extends Component {
 
 componentDidMount () {
   console.log('...patient details component mounted...');
-
   if (sessionStorage.getItem('logInfo')) {
     const seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
   }

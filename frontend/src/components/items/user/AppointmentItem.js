@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import Card from 'react-bootstrap/Card';
+import Row from 'react-bootstrap/Row';
+import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
 import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
@@ -8,7 +10,7 @@ import moment from 'moment';
 
 import './UserItem.css';
 
-const AppointmentItem = props => {
+const AppointmentItem = (props) => {
   const [state, setState] = useState(false);
   const handleStateChange = () => {
     if (state === true) {
@@ -29,17 +31,39 @@ const AppointmentItem = props => {
             Type: <span className="bold">{props.appointment.type}</span>
           </Card.Text>
           <Card.Text className="cardText">
-            Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
-          </Card.Text>
-          <Card.Text className="cardText">
-            Time: <span className="bold">{props.appointment.time}</span>
-          </Card.Text>
-          <Card.Text className="cardText">
-            Important: <span className="bold">{props.appointment.important === true && (<FontAwesomeIcon icon={faBatteryThreeQuarters} className="listIcon"/>)} {props.appointment.important === false && (<FontAwesomeIcon icon={faBatteryEmpty} className="listIcon"/>)}</span>
+            Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,8)).add(1,'days').format('YYYY-MM-DD')}</span>
           </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           {state === true && (
-            <p>Details</p>
+            <Row>
+              <Card.Text className="cardText">
+                id: <span className="bold">{props.appointment._id}</span>
+              </Card.Text>
+              <Card.Text className="cardText">
+                time: <span className="bold">{props.appointment.time}</span>
+              </Card.Text>
+              <Card.Text className="cardText">
+                checkinTime: <span className="bold">{props.appointment.checkinTime}</span>
+              </Card.Text>
+              <Card.Text className="cardText">
+                seenTime: <span className="bold">{props.appointment.seenTime}</span>
+              </Card.Text>
+              <Card.Text className="cardText">
+                location: <span className="bold">{props.appointment.location}</span>
+              </Card.Text>
+              <Card.Text className="cardText">
+                description: <span className="bold">{props.appointment.description}</span>
+              </Card.Text>
+              <Card.Text className="cardText">
+                inProgress: <span className="bold">{props.appointment.inProgress.toString()}</span>
+              </Card.Text>
+              <Card.Text className="cardText">
+                attended: <span className="bold">{props.appointment.attended.toString()}</span>
+              </Card.Text>
+              <Card.Text className="cardText">
+                important: <span className="bold">{props.appointment.important.toString()}</span>
+              </Card.Text>
+            </Row>
           )}
         </Card.Body>
       </Card>

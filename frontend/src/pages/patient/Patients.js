@@ -355,6 +355,7 @@ submitCreateNewPatientForm = (event) => {
     return;
   }
 
+
   let requestBody = {
     query: `
       mutation {createPatient(
@@ -424,7 +425,7 @@ submitCreateNewPatientForm = (event) => {
         isLoading: false,
         creatingPatient: false,
         selectedPatient: resData.data.createPatient,
-        newPatient: resData.data.createPatient,
+        // newPatient: resData.data.createPatient,
         activityA: `createPatient?activityId:${activityId},patientId:${resData.data.createPatient._id}`
       });
       this.logUserActivity({activityId: activityId,token: token});

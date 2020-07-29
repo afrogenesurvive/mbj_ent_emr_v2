@@ -8,9 +8,9 @@ import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 
-import './PatientItem.css';
+import './AppointmentItem.css';
 
-const PatientItem = (props) => {
+const AppointmentItem = (props) => {
   const [state, setState] = useState(false);
   const handleStateChange = () => {
     if (state === true) {
@@ -25,44 +25,45 @@ const PatientItem = (props) => {
       <Card>
         <Card.Body className="cardBody">
           <Card.Text className="cardText">
-            Username: <span className="bold">{props.patient.username}</span>
+            Title: <span className="bold">{props.appointment.title}</span>
           </Card.Text>
           <Card.Text className="cardText">
-            role: <span className="bold">{props.patient.role}</span>
+            Type: <span className="bold">{props.appointment.type}</span>
+          </Card.Text>
+          <Card.Text className="cardText">
+            Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,8)).add(1,'days').format('YYYY-MM-DD')}</span>
           </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           {state === true && (
             <Row>
               <Card.Text className="cardText">
-                id: <span className="bold">{props.patient._id}</span>
+                id: <span className="bold">{props.appointment._id}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                name: <span className="bold">{props.patient.name}</span>
+                time: <span className="bold">{props.appointment.time}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                username: <span className="bold">{props.patient.username}</span>
+                checkinTime: <span className="bold">{props.appointment.checkinTime}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                title: <span className="bold">{props.patient.title}</span>
+                seenTime: <span className="bold">{props.appointment.seenTime}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                role: <span className="bold">{props.patient.role}</span>
+                location: <span className="bold">{props.appointment.location}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                dob: <span className="bold">{moment.unix(props.patient.dob.substr(0,8)).add(1,'days').format('YYYY-MM-DD')}</span>
+                description: <span className="bold">{props.appointment.description}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                age: <span className="bold">{props.patient.age}</span>
+                inProgress: <span className="bold">{props.appointment.inProgress.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                gender: <span className="bold">{props.patient.gender}</span>
+                attended: <span className="bold">{props.appointment.attended.toString()}</span>
               </Card.Text>
-              {props.appointmentPage === true && (
-                <Button variant="outline-primary" onClick={props.onSelect.bind(this, props.patient)}>Details</Button>
-              )}
-              {props.appointmentPage !== true && (
-                <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.patient)}>Select</Button>
-              )}
+              <Card.Text className="cardText">
+                important: <span className="bold">{props.appointment.important.toString()}</span>
+              </Card.Text>
+              <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.appointment)}>Details</Button>
             </Row>
           )}
         </Card.Body>
@@ -71,4 +72,4 @@ const PatientItem = (props) => {
   )
 };
 
-export default PatientItem;
+export default AppointmentItem;

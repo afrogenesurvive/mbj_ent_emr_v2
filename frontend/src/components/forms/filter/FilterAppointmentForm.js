@@ -25,7 +25,10 @@ return (
           <option>subType</option>
           <option>date</option>
           <option>time</option>
+          <option>location</option>
           <option>important</option>
+          <option>inProgress</option>
+          <option>attended</option>
         </Form.Control>
       </Form.Group>
     </Form.Row>

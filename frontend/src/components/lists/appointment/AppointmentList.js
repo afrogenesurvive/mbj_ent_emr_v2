@@ -1,9 +1,8 @@
 import React from 'react';
+import AppointmentItem from '../../items/appointment/AppointmentItem';
+import './AppointmentList.css'
 
-import AppointmentItem from '../../items/user/AppointmentItem';
-import './UserList.css';
-
-const UserAppointmentList = props => {
+const AppointmentList = props => {
 
   const {...filter} = props.filter;
   let appointments2 = props.appointments;
@@ -54,25 +53,28 @@ const UserAppointmentList = props => {
   if (filter.field === 'appointment' && filter.key === 'attended') {
     propsAppointments = appointments2.filter(x => x.attended === filter.value);
   }
+
   if (filter.field !== 'appointment') {
     propsAppointments = appointments2;
   }
 
   let count = 0;
 
-  const appointments = propsAppointments.map(appointment => {
+  const appointments = propsAppointments.map(appointment=> {
 
-    count = propsAppointments.indexOf(appointment)+1;
+    count = propsAppointments.indexOf(appointment+1);
 
     return (
       <AppointmentItem
         key={count}
         appointment={appointment}
+        canDelete={props.canDelete}
+        showDetails={props.showDetails}
       />
     );
   });
 
-  return <ul className="appointmentList">{appointments}</ul>;
+  return <ul className="userList">{appointments}</ul>;
 };
 
-export default UserAppointmentList;
+export default AppointmentList;

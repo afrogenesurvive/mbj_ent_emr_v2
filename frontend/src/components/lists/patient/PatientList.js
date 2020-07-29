@@ -74,6 +74,8 @@ const PatientList = props => {
         patient={patient}
         canDelete={props.canDelete}
         showDetails={props.showDetails}
+        appointmentPage={props.appointmentPage}
+        onSelect={props.onSelect}
       />
     );
   });
