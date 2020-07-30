@@ -42,6 +42,7 @@ class PatientPage extends Component {
     isLoading: false,
     seshStore: null,
     profileLoaded: false,
+    canDelete: false,
     sideCol: 'menu',
     filter: {
       field: null,
@@ -65,6 +66,9 @@ componentDidMount () {
   console.log('...all patients component mounted...');
   if (sessionStorage.getItem('logInfo')) {
     const seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
+    if (seshStore.role === 'Admin') {
+      this.setState({canDelete:true})
+    }
     this.getAllPatients(seshStore);
   }
 }
@@ -504,10 +508,15 @@ cancelAdd = () => {
 }
 
 updatePatient = (args) => {
-  console.log('...updating patient...');
+  console.log('...updating selected patient...');
   this.setState({
     selectedPatient: args
   })
+}
+
+deletePatient = (args) => {
+  console.log('...deleteing patient...',args);
+  this.context.setUserAlert('...deleteing patient...')
 }
 
 render() {
@@ -578,6 +587,7 @@ render() {
                       authId={this.context.activityId}
                       canDelete={this.state.canDelete}
                       showDetails={this.showDetails}
+                      onDelete={this.deletePatient}
                     />
                 </Tab.Pane>
                 <Tab.Pane eventKey="2">

@@ -69,7 +69,10 @@ const UserList = props => {
         key={count}
         user={user}
         canDelete={props.canDelete}
+        onDelete={props.onDelete}
         showDetails={props.showDetails}
+        appointmentPage={props.appointmentPage}
+        selectUser={props.selectUser}
       />
     );
   });

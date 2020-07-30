@@ -60,8 +60,16 @@ const UserItem = (props) => {
               <Card.Text className="cardText">
                 loggedIn: <span className="bold">{props.user.loggedIn === true && (<FontAwesomeIcon icon={faBatteryThreeQuarters} className="listIcon"/>)} {props.user.loggedIn === false && (<FontAwesomeIcon icon={faBatteryEmpty} className="listIcon"/>)}</span>
               </Card.Text>
-              <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.user)}>Details</Button>
+              {!props.appointmentPage && (
+                <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.user)}>Details</Button>
+              )}
+              {props.canDelete && (
+                <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.user)}>Delete</Button>
+              )}
             </Row>
+          )}
+          {props.selectUser && (
+            <Button variant="outline-primary" onClick={props.selectUser.bind(this, props.user)}>Add</Button>
           )}
         </Card.Body>
       </Card>

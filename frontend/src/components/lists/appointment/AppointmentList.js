@@ -69,6 +69,7 @@ const AppointmentList = props => {
         key={count}
         appointment={appointment}
         canDelete={props.canDelete}
+        onDelete={props.onDelete}
         showDetails={props.showDetails}
       />
     );

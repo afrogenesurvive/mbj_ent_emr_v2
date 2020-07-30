@@ -22,32 +22,21 @@ import PatientMedicationList from '../lists/patient/PatientMedicationList'
 import PatientImageList from '../lists/patient/PatientImageList'
 import PatientFileList from '../lists/patient/PatientFileList'
 import UserAppointmentList from '../lists/user/UserAppointmentList'
-import PatientNoteList from '../lists/patient/PatientNoteList'
-import PatientTagList from '../lists/patient/PatientTagList'
+import AppointmentNoteList from '../lists/appointment/AppointmentNoteList'
+import AppointmentTagList from '../lists/appointment/AppointmentTagList'
+import UserList from '../lists/user/UserList'
 
-import FilterAddressForm from '../forms/filter/FilterAddressForm';
-import FilterAllergyForm from '../forms/filter/FilterAllergyForm';
-import FilterMedicationForm from '../forms/filter/FilterMedicationForm';
-import FilterNextOfKinForm from '../forms/filter/FilterNextOfKinForm';
-import FilterVisitForm from '../forms/filter/FilterVisitForm';
-import FilterImageForm from '../forms/filter/FilterImageForm';
-import FilterFileForm from '../forms/filter/FilterFileForm';
+
 import FilterAppointmentForm from '../forms/filter/FilterAppointmentForm';
 import FilterNoteForm from '../forms/filter/FilterNoteForm';
 import FilterTagForm from '../forms/filter/FilterTagForm';
+import FilterUserForm from '../forms/filter/FilterUserForm';
 
 import UpdatePatientSingleFieldForm from '../forms/add/UpdatePatientSingleFieldForm';
-import AddAddressForm from '../forms/add/AddAddressForm';
-import AddAttendanceForm from '../forms/add/AddAttendanceForm';
-import AddLeaveForm from '../forms/add/AddLeaveForm';
+
+import AddUserForm from '../forms/add/AddUserForm';
 import AddNoteForm from '../forms/add/AddNoteForm';
 import AddTagForm from '../forms/add/AddTagForm';
-import AddImageForm from '../forms/add/AddImageForm';
-import AddFileForm from '../forms/add/AddFileForm';
-import AddNextOfKinForm from '../forms/add/AddNextOfKinForm';
-import AddAllergyForm from '../forms/add/AddAllergyForm';
-import AddMedicationForm from '../forms/add/AddMedicationForm';
-import AddAttachmentForm from '../forms/add/AddAttachmentForm';
 import loadingGif from '../../assets/loading.gif';
 import { faBath } from '@fortawesome/free-solid-svg-icons';
 import './details.css';
@@ -81,22 +70,25 @@ class AppointmentDetail extends Component {
       field: null
     },
     selectedUser: null,
-    selectedPatient:
+    selectedPatient: null,
     selectedAppointment: this.props.appointment,
     addAttachmentForm: false,
     addAttachmentArgs: null,
+    showAddConsultantForm: false,
+    users: null,
   };
   static contextType = AuthContext;
 
   constructor(props) {
     super(props);
-    this.propsPatient = this.props.patient;
+    this.propsPatient = this.props.appointment;
   }
 
 componentDidMount () {
   console.log('...appointment details component mounted...');
+  let seshStore;
   if (sessionStorage.getItem('logInfo')) {
-    const seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
+    seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
   }
   this.setState({
     selectedPatient: this.context.selectedPatient
@@ -106,6 +98,7 @@ componentDidMount () {
       canDelete: true
     })
   }
+  this.getAllUsers(seshStore);
 }
 componentWillUnmount() {
 
@@ -153,39 +146,20 @@ logUserActivity(args) {
       console.log(err);
     });
 };
-
-submitAddAddressForm = (event) => {
-  event.preventDefault();
-  console.log('...adding address...');
-  this.context.setUserAlert('...adding address...')
+getAllUsers (args) {
+  console.log('...retrieving all users...');
+  this.context.setUserAlert('...retrieving all users...')
   this.setState({isLoading: true});
 
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
-  const number = event.target.number.value;
-  const street = event.target.street.value;
-  const town = event.target.town.value;
-  const city = event.target.city.value;
-  const parish = event.target.parish.value;
-  const country = event.target.country.value;
-  const postalCode = event.target.postalCode.value;
+  const token = args.token;
+  const activityId = args.activityId;
+  const userId = activityId;
 
   let requestBody = {
     query: `
-      mutation {addPatientAddress(
-        activityId:"${activityId}",
-        patientId:"${patientId}",
-        patientInput:{
-          addressNumber:${number},
-          addressStreet:"${street}",
-          addressTown:"${town}",
-          addressCity:"${city}",
-          addressParish:"${parish}",
-          addressCountry:"${country}",
-          addressPostalCode:"${postalCode}"
-        })
-      {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
+      query {getAllUsers(
+        activityId:"${activityId}" )
+        {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
   fetch('http://localhost:8088/graphql', {
       method: 'POST',
@@ -202,24 +176,19 @@ submitAddAddressForm = (event) => {
       return res.json();
     })
     .then(resData => {
-      // console.log('...resData...',resData.data.addPatientAddress);
-      let responseAlert = '...address add success!...';
+      // console.log('...resData...',resData.data.getAllUsers);
+      let responseAlert = '...all users retrieval success!...';
       let error = null;
-      if (resData.data.addPatientAddress.error) {
-        error = resData.data.addPatientAddress.error;
+      if (resData.data.getAllUsers.error) {
+        error = resData.data.getAllUsers.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
       this.setState({
         isLoading: false,
-        selectedPatient: resData.data.addPatientAddress,
-        activityA: `addPatientAddress?activityId:${activityId},patientId:${patientId}`,
-        adding: {
-          state: null,
-          field: null
-        }
+        users: resData.data.getAllUsers,
+        activityA: `getAllUsers?activityId:${activityId},userId:${userId}`
       });
-      this.context.selectedPatient = resData.data.addPatientAddress;
       this.logUserActivity({activityId: activityId,token: token});
     })
     .catch(err => {
@@ -227,930 +196,7 @@ submitAddAddressForm = (event) => {
       this.context.setUserAlert(err);
       this.setState({isLoading: false })
     });
-}
-deleteAddress = (args) => {
-  console.log('...deleting address...');
-  this.context.setUserAlert('...deleting address...')
-  this.setState({isLoading: true});
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
-
-  let requestBody = {
-    query: `
-      mutation {deletePatientAddress(
-        activityId:"${activityId}",
-        patientId:"${patientId}",
-        patientInput:{
-          addressNumber:${args.number},
-          addressStreet:"${args.street}",
-          addressTown:"${args.town}",
-          addressCity:"${args.city}",
-          addressParish:"${args.parish}",
-          addressCountry:"${args.country}",
-          addressPostalCode:"${args.postalCode}",
-          addressPrimary:${args.primary}
-        })
-      {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
-    `};
-  fetch('http://localhost:8088/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      // console.log('...resData...',resData.data.deletePatientAddress);
-      let responseAlert = '...address delete success!...';
-      let error = null;
-      if (resData.data.deletePatientAddress.error) {
-        error = resData.data.deletePatientAddress.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      this.setState({
-        isLoading: false,
-        selectedPatient: resData.data.deletePatientAddress,
-        activityA: `deletePatientAddress?activityId:${activityId},patientId:${patientId}`
-      });
-      this.context.selectedPatient = resData.data.deletePatientAddress;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false })
-    });
-}
-setAddressPrimary = (args) => {
-  console.log('...setting primary address...');
-  this.context.setUserAlert('...setting primary address...')
-  this.setState({isLoading: true});
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
-
-  let requestBody = {
-    query: `
-      mutation {setPatientAddressPrimary(
-        activityId:"${activityId}",
-        patientId:"${patientId}",
-        patientInput:{
-          addressNumber:${args.number},
-          addressStreet:"${args.street}",
-          addressTown:"${args.town}",
-          addressCity:"${args.city}",
-          addressParish:"${args.parish}",
-          addressCountry:"${args.country}",
-          addressPostalCode:"${args.postalCode}"
-        })
-        {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
-    `};
-  fetch('http://localhost:8088/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      // console.log('...resData...',resData.data.setPatientAddressPrimary);
-      let responseAlert = '...address set primary success!...';
-      let error = null;
-      if (resData.data.setPatientAddressPrimary.error) {
-        error = resData.data.setPatientAddressPrimary.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      this.setState({
-        isLoading: false,
-        selectedPatient: resData.data.setPatientAddressPrimary,
-        activityA: `setPatientAddressPrimary?activityId:${activityId},patientId:${patientId}`
-      });
-      this.context.selectedPatient = resData.data.setPatientAddressPrimary;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false })
-    });
-}
-
-submitAddNextOfKinForm = (event) => {
-  event.preventDefault();
-  console.log('...add next of kin...');
-  this.context.setUserAlert('...adding next of kin...')
-  this.setState({isLoading: true});
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
-  const name = event.target.name.value;
-  const relation = event.target.relation.value;
-  const email = event.target.email.value;
-  const phone = event.target.phone.value;
-  const phone2 = event.target.phone2.value;
-
-  let requestBody = {
-    query: `
-      mutation {addPatientNextOfKin(
-        activityId:"${activityId}",
-        patientId:"${patientId}",
-        patientInput:{
-          nextOfKinName:"${name}",
-          nextOfKinRelation:"${relation}",
-          nextOfKinContactEmail:"${email}",
-          nextOfKinContactPhone1:"${phone}",
-          nextOfKinContactPhone2:"${phone2}"
-        })
-      {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
-    `};
-  fetch('http://localhost:8088/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      // console.log('...resData...',resData.data.addPatientNextOfKin);
-      let responseAlert = '...next of kin add success!...';
-      let error = null;
-      if (resData.data.addPatientNextOfKin.error) {
-        error = resData.data.addPatientNextOfKin.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      this.setState({
-        isLoading: false,
-        selectedPatient: resData.data.addPatientNextOfKin,
-        activityA: `addPatientNextOfKin?activityId:${activityId},patientId:${patientId}`,
-        adding: {
-          state: null,
-          field: null
-        }
-      });
-      this.context.selectedPatient = resData.data.addPatientNextOfKin;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false })
-    });
-}
-deleteNextOfKin = (args) => {
-  console.log('...deleting next of kin...');
-  this.context.setUserAlert('...deleting next of kin....')
-  this.setState({isLoading: true});
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
-
-  let requestBody = {
-    query: `
-      mutation {deletePatientNextOfKin(
-        activityId:"${activityId}",
-        patientId:"${patientId}",
-        patientInput:{
-          nextOfKinName:"${args.name}",
-          nextOfKinRelation:"${args.relation}",
-          nextOfKinContactEmail:"${args.contact.email}",
-          nextOfKinContactPhone1:"${args.contact.phone1}",
-          nextOfKinContactPhone2:"${args.contact.phone2}"
-        })
-      {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
-    `};
-  fetch('http://localhost:8088/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      console.log('...resData...',resData.data.deletePatientNextOfKin);
-      let responseAlert = '...next of kin delete success!...';
-      let error = null;
-      if (resData.data.deletePatientNextOfKin.error) {
-        error = resData.data.deletePatientNextOfKin.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      this.setState({
-        isLoading: false,
-        selectedPatient: resData.data.deletePatientNextOfKin,
-        activityA: `deletePatientNextOfKin?activityId:${activityId},patientId:${patientId}`,
-        adding: {
-          state: null,
-          field: null
-        }
-      });
-      this.context.selectedPatient = resData.data.deletePatientNextOfKin;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false })
-    });
-}
-
-submitAddAllergyForm = (event) => {
-  event.preventDefault();
-  console.log('...add allergy...');
-  this.context.setUserAlert('...adding allergy...')
-  this.setState({isLoading: true});
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
-  const title = event.target.title.value;
-  const type = event.target.type.value;
-  const description = event.target.description.value;
-  const attachment = event.target.attachment.value;
-
-  let requestBody = {
-    query: `
-      mutation {addPatientAllergy(
-        activityId:"${activityId}",
-        patientId:"${patientId}",
-        patientInput:{
-          allergyType:"${type}",
-          allergyTitle:"${title}",
-          allergyDescription:"${description}",
-          allergyAttachment:"${attachment}"
-        })
-      {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
-    `};
-  fetch('http://localhost:8088/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      // console.log('...resData...',resData.data.addPatientAllergy);
-      let responseAlert = '...allergy add success!...';
-      let error = null;
-      if (resData.data.addPatientAllergy.error) {
-        error = resData.data.addPatientAllergy.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      this.setState({
-        isLoading: false,
-        selectedPatient: resData.data.addPatientAllergy,
-        activityA: `addPatientAllergy?activityId:${activityId},patientId:${patientId}`,
-        adding: {
-          state: null,
-          field: null
-        }
-      });
-      this.context.selectedPatient = resData.data.addPatientAllergy;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false })
-    });
-}
-deleteAllergy = (args) => {
-  console.log('...deleting allergy...');
-  this.context.setUserAlert('...deleting allergy...')
-  this.setState({isLoading: true});
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
-
-  let requestBody = {
-    query: `
-      mutation {deletePatientAllergy(
-        activityId:"${activityId}",
-        patientId:"${patientId}",
-        patientInput:{
-          allergyType:"${args.type}",
-          allergyTitle:"${args.title}",
-          allergyDescription:"${args.description}",
-          allergyAttachments:"${args.attachments}"
-        })
-      {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
-    `};
-  fetch('http://localhost:8088/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      // console.log('...resData...',resData.data.deletePatientAllergy);
-      let responseAlert = '...allergy delete success!...';
-      let error = null;
-      if (resData.data.deletePatientAllergy.error) {
-        error = resData.data.deletePatientAllergy.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      this.setState({
-        isLoading: false,
-        selectedPatient: resData.data.deletePatientAllergy,
-        activityA: `deletePatientAllergy?activityId:${activityId},patientId:${patientId}`,
-        adding: {
-          state: null,
-          field: null
-        }
-      });
-      this.context.selectedPatient = resData.data.deletePatientAllergy;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false })
-    });
-}
-submitAddMedicationForm = (event) => {
-  event.preventDefault();
-  console.log('...add medication...');
-  this.context.setUserAlert('...adding medication...')
-  this.setState({isLoading: true});
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
-  const title = event.target.title.value;
-  const type = event.target.type.value;
-  const description = event.target.description.value;
-  const attachment = event.target.attachment.value;
-
-  let requestBody = {
-    query: `
-      mutation {addPatientMedication(
-        activityId:"${activityId}",
-        patientId:"${patientId}",
-        patientInput:{
-          medicationType:"${type}",
-          medicationTitle:"${title}",
-          medicationDescription:"${description}",
-          medicationAttachment:"${attachment}"
-        })
-      {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
-    `};
-  fetch('http://localhost:8088/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      // console.log('...resData...',resData.data.addPatientMedication);
-      let responseAlert = '...medication add success!...';
-      let error = null;
-      if (resData.data.addPatientMedication.error) {
-        error = resData.data.addPatientMedication.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      this.setState({
-        isLoading: false,
-        selectedPatient: resData.data.addPatientMedication,
-        activityA: `addPatientMedication?activityId:${activityId},patientId:${patientId}`,
-        adding: {
-          state: null,
-          field: null
-        }
-      });
-      this.context.selectedPatient = resData.data.addPatientMedication;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false })
-    });
-}
-deleteMedication = (args) => {
-  console.log('...deleting medication...');
-  this.context.setUserAlert('...deleting medication...')
-  this.setState({isLoading: true});
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
-
-  let requestBody = {
-    query: `
-      mutation {deletePatientMedication(
-        activityId:"${activityId}",
-        patientId:"${patientId}",
-        patientInput:{
-          medicationType:"${args.type}",
-          medicationTitle:"${args.title}",
-          medicationDescription:"${args.description}",
-          medicationAttachments:"${args.attachments}"
-        })
-      {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
-    `};
-  fetch('http://localhost:8088/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      // console.log('...resData...',resData.data.deletePatientMedication);
-      let responseAlert = '...medication delete success!...';
-      let error = null;
-      if (resData.data.deletePatientMedication.error) {
-        error = resData.data.deletePatientMedication.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      this.setState({
-        isLoading: false,
-        selectedPatient: resData.data.deletePatientMedication,
-        activityA: `deletePatientMedication?activityId:${activityId},patientId:${patientId}`,
-        adding: {
-          state: null,
-          field: null
-        }
-      });
-      this.context.selectedPatient = resData.data.deletePatientMedication;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false })
-    });
-}
-
-startAddAttachment = (args) => {
-  console.log('...start add attachment...');
-  this.setState({
-    addAttachmentForm: true,
-    addAttachmentArgs: args
-  })
-}
-cancelAddAttachment = () => {
-  this.setState({
-    addAttendanceForm: false
-  })
-}
-addAttachment = (event) => {
-  event.preventDefault();
-  console.log('...adding attachment...');
-  this.context.setUserAlert('...adding attachment...');
-  this.setState({
-    isLoading: true,
-    addAttachmentForm: false
-  })
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
-  let args = this.state.addAttachmentArgs;
-  let field = args.field;
-
-  let allergyTitle;
-  let allergyType;
-  let allergyDescription;
-  let allergyAttachment;
-  let medicationTitle;
-  let medicationType;
-  let medicationDescription;
-  let medicationAttachment;
-
-  if (field === 'allergy') {
-    allergyTitle = args.data.title;
-    allergyType = args.data.type;
-    allergyDescription = args.data.description;
-    allergyAttachment = event.target.attachment.value;
-  }
-  if (field === 'medication') {
-    medicationTitle = args.data.title;
-    medicationType = args.data.type;
-    medicationDescription = args.data.description;
-    medicationAttachment = event.target.attachment.value;
-  }
-
-  let requestBody;
-  if (field === 'allergy') {
-    requestBody = {
-      query: `
-        mutation {addPatientAllergyAttachment(
-          activityId:"${activityId}",
-          patientId:"${patientId}",
-          patientInput:{
-            allergyType:"${allergyType}",
-            allergyTitle:"${allergyTitle}",
-            allergyDescription:"${allergyDescription}",
-            allergyAttachment:"${allergyAttachment}"
-          })
-          {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
-      `};
-  }
-  if (field === 'medication') {
-    requestBody = {
-      query: `
-        mutation {addPatientMedicationAttachment(
-          activityId:"${activityId}",
-          patientId:"${patientId}",
-          patientInput:{
-            medicationType:"${medicationType}",
-            medicationTitle:"${medicationTitle}",
-            medicationDescription:"${medicationDescription}",
-            medicationAttachment:"${medicationAttachment}"
-          })
-          {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
-      `};
-  }
-
-  fetch('http://localhost:8088/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      if (field === 'allergy') {
-        // console.log('...resData...',resData.data.addPatientAllergyAttachment);
-      }
-      if (field === 'medication') {
-        // console.log('...resData...',resData.data.addPatientMedicationAttachment);
-      }
-
-      let responseAlert = '...add attachment success!...';
-      let error = null;
-
-      if (field === 'allergy') {
-        if (resData.data.addPatientAllergyAttachment.error) {
-          error = resData.data.addPatientAllergyAttachment.error;
-          responseAlert = error;
-        }
-      }
-      if (field === 'medication') {
-        if (resData.data.addPatientMedicationAttachment.error) {
-          error = resData.data.addPatientMedicationAttachment.error;
-          responseAlert = error;
-        }
-      }
-
-      this.context.setUserAlert(responseAlert)
-
-      if (field === 'allergy') {
-        this.setState({
-          isLoading: false,
-          selectedPatient: resData.data.addPatientAllergyAttachment,
-          activityA: `addPatientAllergyAttachmentRegex?activityId:${activityId},patientId:${patientId}`
-        });
-      }
-      if (field === 'medication') {
-        this.setState({
-          isLoading: false,
-          selectedPatient: resData.data.addPatientMedicationAttachment,
-          activityA: `addPatientMedicationAttachment?activityId:${activityId},patientId:${patientId}`
-        });
-      }
-
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false })
-    });
-
-}
-deleteAttachment = (args) => {
-  console.log('...deleting attachment...', args);
-  let field = args.field;
-}
-
-submitAddImageForm = (event) => {
-  event.preventDefault();
-  console.log('...adding image...');
-  this.context.setUserAlert('...adding image...')
-  this.setState({isLoading: true});
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
-  const name = event.target.name.value;
-  const type = event.target.type.value;
-  const path = event.target.path.value;
-
-  let requestBody = {
-    query: `
-      mutation {addPatientImage(
-        activityId:"${activityId}",
-        patientId:"${patientId}",
-        patientInput:{
-          imageName:"${name}",
-          imageType:"${type}",
-          imagePath:"${path}"
-        })
-      {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
-    `};
-  fetch('http://localhost:8088/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      // console.log('...resData...',resData.data.addPatientImage);
-      let responseAlert = '...image add success!...';
-      let error = null;
-      if (resData.data.addPatientImage.error) {
-        error = resData.data.addPatientImage.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      this.setState({
-        isLoading: false,
-        selectedPatient: resData.data.addPatientImage,
-        activityA: `addPatientImage?activityId:${activityId},patientId:${patientId}`,
-        adding: {
-          state: null,
-          field: null
-        }
-      });
-      this.context.selectedPatient = resData.data.addPatientImage;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false })
-    });
-}
-deleteImage = (args) => {
-  console.log('...deleting image...');
-  this.context.setUserAlert('...deleting image...')
-  this.setState({isLoading: true});
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
-
-  let requestBody = {
-    query: `
-    mutation {deletePatientImage(
-      activityId:"${activityId}",
-      patientId:"${patientId}",
-      patientInput:{
-        imageName:"${args.name}",
-        imageType:"${args.type}",
-        imagePath:"${args.path}"
-      })
-    {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
-    `};
-  fetch('http://localhost:8088/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      // console.log('...resData...',resData.data.deletePatientImage);
-      let responseAlert = '...image delete success!...';
-      let error = null;
-      if (resData.data.deletePatientImage.error) {
-        error = resData.data.deletePatientImage.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      this.setState({
-        isLoading: false,
-        selectedPatient: resData.data.deletePatientImage,
-        activityA: `deletePatientImage?activityId:${activityId},patientId:${patientId}`
-      });
-      this.context.selectedPatient = resData.data.deletePatientImage;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false })
-    });
-}
-
-submitAddFileForm = (event) => {
-  event.preventDefault();
-  console.log('...adding file...');
-  this.context.setUserAlert('...adding file...')
-  this.setState({isLoading: true});
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
-  const name = event.target.name.value;
-  const type = event.target.type.value;
-  const path = event.target.path.value;
-
-  let requestBody = {
-    query: `
-      mutation {addPatientFile(
-        activityId:"${activityId}",
-        patientId:"${patientId}",
-        patientInput:{
-          fileName:"${name}",
-          fileType:"${type}",
-          filePath:"${path}"
-        })
-      {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
-    `};
-  fetch('http://localhost:8088/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      // console.log('...resData...',resData.data.addPatientFile);
-      let responseAlert = '...file add success!...';
-      let error = null;
-      if (resData.data.addPatientFile.error) {
-        error = resData.data.addPatientFile.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      this.setState({
-        isLoading: false,
-        selectedPatient: resData.data.addPatientFile,
-        activityA: `addPatientFile?activityId:${activityId},patientId:${patientId}`,
-        adding: {
-          state: null,
-          field: null
-        }
-      });
-      this.context.selectedPatient = resData.data.addPatientFile;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false })
-    });
-}
-deleteFile = (args) => {
-  console.log('...deleting file...');
-  this.context.setUserAlert('...deleting file...')
-  this.setState({isLoading: true});
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
-
-  let requestBody = {
-    query: `
-    mutation {deletePatientFile(
-      activityId:"${activityId}",
-      patientId:"${patientId}",
-      patientInput:{
-        fileName:"${args.name}",
-        fileType:"${args.type}",
-        filePath:"${args.path}"
-      })
-    {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
-    `};
-  fetch('http://localhost:8088/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      // console.log('...resData...',resData.data.deletePatientFile);
-      let responseAlert = '...file delete success!...';
-      let error = null;
-      if (resData.data.deletePatientFile.error) {
-        error = resData.data.deletePatientFile.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      this.setState({
-        isLoading: false,
-        selectedPatient: resData.data.deletePatientFile,
-        activityA: `deletePatientFile?activityId:${activityId},patientId:${patientId}`
-      });
-      this.context.selectedPatient = resData.data.deletePatientFile;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false })
-    });
-}
+};
 
 submitAddNoteForm = (event) => {
   event.preventDefault();
@@ -1160,18 +206,18 @@ submitAddNoteForm = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
+  const appointmentId = this.props.appointment._id;
   const notes = event.target.notes.value;
 
   let requestBody = {
     query: `
-      mutation {addPatientNotes(
+      mutation {addAppointmentNotes(
         activityId:"${activityId}",
-        patientId:"${patientId}",
-        patientInput:{
-          notes:"${notes}",
+        appointmentId:"${appointmentId}",
+        appointmentInput:{
+          notes:"${notes}"
         })
-      {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
+        {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
   fetch('http://localhost:8088/graphql', {
       method: 'POST',
@@ -1188,24 +234,25 @@ submitAddNoteForm = (event) => {
       return res.json();
     })
     .then(resData => {
-      // console.log('...resData...',resData.data.addPatientNotes);
+      // console.log('...resData...',resData.data.addAppointmentNotes);
       let responseAlert = '...notes add success!...';
       let error = null;
-      if (resData.data.addPatientNotes.error) {
-        error = resData.data.addPatientNotes.error;
+      if (resData.data.addAppointmentNotes.error) {
+        error = resData.data.addAppointmentNotes.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updateAppointment(resData.data.addAppointmentNotes)
       this.setState({
         isLoading: false,
-        selectedPatient: resData.data.addPatientNotes,
-        activityA: `addPatientNotes?activityId:${activityId},patientId:${patientId}`,
+        selectedAppointment: resData.data.addAppointmentNotes,
+        activityA: `addAppointmentNotes?activityId:${activityId},appointmentId:${appointmentId}`,
         adding: {
           state: null,
           field: null
         }
       });
-      this.context.selectedPatient = resData.data.addPatientNotes;
+      this.context.selectedAppointment = resData.data.addAppointmentNotes;
       this.logUserActivity({activityId: activityId,token: token});
     })
     .catch(err => {
@@ -1215,23 +262,25 @@ submitAddNoteForm = (event) => {
     });
 }
 deleteNote = (args) => {
-  console.log('...deleting note...');
-  this.context.setUserAlert('...deleting note...')
+
+  console.log('...deleting notes...');
+  this.context.setUserAlert('...deleting notes...')
   this.setState({isLoading: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
+  const appointmentId = this.props.appointment._id;
+  const note = args;
 
   let requestBody = {
     query: `
-      mutation {deletePatientNote(
+      mutation {deleteAppointmentNote(
         activityId:"${activityId}",
-        patientId:"${patientId}",
-        patientInput:{
-          note:"${args}"
+        appointmentId:"${appointmentId}",
+        appointmentInput:{
+          note:"${note}"
         })
-        {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
+        {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
   fetch('http://localhost:8088/graphql', {
       method: 'POST',
@@ -1248,20 +297,25 @@ deleteNote = (args) => {
       return res.json();
     })
     .then(resData => {
-      // console.log('...resData...',resData.data.deletePatientNote);
+      // console.log('...resData...',resData.data.deleteAppointmentNote);
       let responseAlert = '...note delete success!...';
       let error = null;
-      if (resData.data.deletePatientNote.error) {
-        error = resData.data.deletePatientNote.error;
+      if (resData.data.deleteAppointmentNote.error) {
+        error = resData.data.deleteAppointmentNote.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updateAppointment(resData.data.deleteAppointmentNote)
       this.setState({
         isLoading: false,
-        selectedPatient: resData.data.deletePatientNote,
-        activityA: `deletePatientNote?activityId:${activityId},patientId:${patientId}`
+        selectedAppointment: resData.data.deleteAppointmentNote,
+        activityA: `deleteAppointmentNote?activityId:${activityId},appointmentId:${appointmentId}`,
+        adding: {
+          state: null,
+          field: null
+        }
       });
-      this.context.selectedPatient = resData.data.deletePatientNote;
+      this.context.selectedAppointment = resData.data.deleteAppointmentNote;
       this.logUserActivity({activityId: activityId,token: token});
     })
     .catch(err => {
@@ -1278,18 +332,18 @@ submitAddTagForm = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
+  const appointmentId = this.props.appointment._id;
   const tags = event.target.tags.value;
 
   let requestBody = {
     query: `
-      mutation {addPatientTags(
+      mutation {addAppointmentTags(
         activityId:"${activityId}",
-        patientId:"${patientId}",
-        patientInput:{
-          tags:"${tags}",
+        appointmentId:"${appointmentId}",
+        appointmentInput:{
+          tags:"${tags}"
         })
-      {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
+        {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
   fetch('http://localhost:8088/graphql', {
       method: 'POST',
@@ -1306,24 +360,25 @@ submitAddTagForm = (event) => {
       return res.json();
     })
     .then(resData => {
-      // console.log('...resData...',resData.data.addPatientTags);
+      // console.log('...resData...',resData.data.addAppointmentTags);
       let responseAlert = '...tags add success!...';
       let error = null;
-      if (resData.data.addPatientTags.error) {
-        error = resData.data.addPatientTags.error;
+      if (resData.data.addAppointmentTags.error) {
+        error = resData.data.addAppointmentTags.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updateAppointment(resData.data.addAppointmentTags)
       this.setState({
         isLoading: false,
-        selectedPatient: resData.data.addPatientTags,
-        activityA: `addPatientTags?activityId:${activityId},patientId:${patientId}`,
+        selectedAppointment: resData.data.addAppointmentTags,
+        activityA: `addAppointmentTags?activityId:${activityId},appointmentId:${appointmentId}`,
         adding: {
           state: null,
           field: null
         }
       });
-      this.context.selectedPatient = resData.data.addPatientTags;
+      this.context.selectedAppointment = resData.data.addAppointmentTags;
       this.logUserActivity({activityId: activityId,token: token});
     })
     .catch(err => {
@@ -1333,23 +388,25 @@ submitAddTagForm = (event) => {
     });
 }
 deleteTag = (args) => {
-  console.log('...deleting tag...');
-  this.context.setUserAlert('...deleting tag...')
+
+  console.log('...deleting tags...');
+  this.context.setUserAlert('...deleting tags...')
   this.setState({isLoading: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
+  const appointmentId = this.props.appointment._id;
+  const tag = args;
 
   let requestBody = {
     query: `
-      mutation {deletePatientTag(
+      mutation {deleteAppointmentTag(
         activityId:"${activityId}",
-        patientId:"${patientId}",
-        patientInput:{
-          tag:"${args}"
+        appointmentId:"${appointmentId}",
+        appointmentInput:{
+          tag:"${tag}"
         })
-        {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
+        {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
   fetch('http://localhost:8088/graphql', {
       method: 'POST',
@@ -1366,20 +423,25 @@ deleteTag = (args) => {
       return res.json();
     })
     .then(resData => {
-      // console.log('...resData...',resData.data.deletePatientTag);
+      // console.log('...resData...',resData.data.deleteAppointmentTag);
       let responseAlert = '...tag delete success!...';
       let error = null;
-      if (resData.data.deletePatientTag.error) {
-        error = resData.data.deletePatientTag.error;
+      if (resData.data.deleteAppointmentTag.error) {
+        error = resData.data.deleteAppointmentTag.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updateAppointment(resData.data.deleteAppointmentTag)
       this.setState({
         isLoading: false,
-        selectedPatient: resData.data.deletePatientTag,
-        activityA: `deletePatientNote?activityId:${activityId},patientId:${patientId}`
+        selectedAppointment: resData.data.deleteAppointmentTag,
+        activityA: `deleteAppointmentTag?activityId:${activityId},appointmentId:${appointmentId}`,
+        adding: {
+          state: null,
+          field: null
+        }
       });
-      this.context.selectedPatient = resData.data.deletePatientTag;
+      this.context.selectedAppointment = resData.data.deleteAppointmentTag;
       this.logUserActivity({activityId: activityId,token: token});
     })
     .catch(err => {
@@ -1387,6 +449,67 @@ deleteTag = (args) => {
       this.context.setUserAlert(err);
       this.setState({isLoading: false })
     });
+}
+
+submitAddUserForm = (event) => {
+  event.preventDefault();
+  console.log('...adding consultant...');
+  this.context.setUserAlert('...adding consultant...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const consultantId = event.target.user.value;
+  const appointmentId = this.props.appointment._id;
+
+  let requestBody = {
+    query: `
+      mutation {addAppointmentConsultant(
+        activityId:"${activityId}",
+        appointmentId:"${appointmentId}",
+        consultantId:"${consultantId}"
+      )
+      {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
+    `};
+  fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.addAppointmentConsultant);
+      let responseAlert = '...add consultant success!...';
+      let error = null;
+      if (resData.data.addAppointmentConsultant.error) {
+        error = resData.data.addAppointmentConsultant.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updateAppointment(resData.data.addAppointmentConsultant)
+      this.setState({
+        isLoading: false,
+        activityA: `addAppointmentConsultant?activityId:${activityId},appointmentId:${appointmentId},consultantId:${consultantId}`,
+      });
+      this.logUserActivity({activityId: activityId,token: token});
+      this.cancelAdd();
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+}
+startUpdatePatient = () => {
+  console.log('show update patient select list');
 }
 
 submitUpdateSingleFieldForm = (event) => {
@@ -1397,19 +520,19 @@ submitUpdateSingleFieldForm = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
+  const appointmentId = this.props.appointment._id;
   const field = event.target.field.value;
   const query = event.target.query.value;
 
   let requestBody = {
     query: `
-    mutation {updatePatientSingleField(
-      activityId:"${activityId}",
-      patientId:"${patientId}",
-      field:"${field}",
-      query:"${query}"
-    )
-    {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
+      mutation {updateAppointmentSingleField(
+        activityId:"${activityId}",
+        appointmentId:"${appointmentId}",
+        field:"${field}",
+        query:"${query}"
+      )
+      {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
   fetch('http://localhost:8088/graphql', {
       method: 'POST',
@@ -1426,24 +549,25 @@ submitUpdateSingleFieldForm = (event) => {
       return res.json();
     })
     .then(resData => {
-      // console.log('...resData...',resData.data.updatePatientSingleField);
+      // console.log('...resData...',resData.data.updateAppointmentSingleField);
       let responseAlert = '...field update success!...';
       let error = null;
-      if (resData.data.updatePatientSingleField.error) {
-        error = resData.data.updatePatientSingleField.error;
+      if (resData.data.updateAppointmentSingleField.error) {
+        error = resData.data.updateAppointmentSingleField.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updateAppointment(resData.data.updateAppointmentSingleField)
       this.setState({
         isLoading: false,
-        selectedPatient: resData.data.updatePatientSingleField,
-        activityA: `updatePatientSingleField?activityId:${activityId},patientId:${patientId}`,
+        selectedPatient: resData.data.updateAppointmentSingleField,
+        activityA: `updateAppointmentSingleField?activityId:${activityId},appointmentId:${appointmentId}`,
         updateSingleField: {
           state: null,
           field: null
         }
       });
-      this.context.selectedPatient = resData.data.updatePatientSingleField;
+      this.context.selectedPatient = resData.data.updateAppointmentSingleField;
       this.logUserActivity({activityId: activityId,token: token});
     })
     .catch(err => {
@@ -1542,11 +666,11 @@ render() {
 
         </Col>
         <Col md={10} className="detailPageContainerCol">
-          {!this.props.patient && (
+          {!this.props.appointment && (
             <h3>...</h3>
           )}
-          {this.props.patient && (
-            <h3>{this.props.patient.username}</h3>
+          {this.props.appointment && (
+            <h3>{this.props.appointment.title}</h3>
           )}
         </Col>
       </Row>
@@ -1562,83 +686,20 @@ render() {
                   <Nav.Link eventKey="2" onClick={this.menuSelect.bind(this, 'admin')}>Admin</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="3" onClick={this.menuSelect.bind(this, 'address')}>Addresses</Nav.Link>
+                  <Nav.Link eventKey="3" onClick={this.menuSelect.bind(this, 'consultant')}>Consultants</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="4" onClick={this.menuSelect.bind(this, 'nextOfKin')}>Next Of Kin</Nav.Link>
+                  <Nav.Link eventKey="4" onClick={this.menuSelect.bind(this, 'note')}>Notes</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="5" onClick={this.menuSelect.bind(this, 'allergy')}>Allergies</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="6" onClick={this.menuSelect.bind(this, 'medication')}>Medication</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="7" onClick={this.menuSelect.bind(this, 'image')}>Images</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="8" onClick={this.menuSelect.bind(this, 'file')}>Files</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="9" onClick={this.menuSelect.bind(this, 'appointment')}>Appointments</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="10" onClick={this.menuSelect.bind(this, 'visit')}>Visits</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="11" onClick={this.menuSelect.bind(this, 'note')}>Notes</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="12" onClick={this.menuSelect.bind(this, 'tag')}>Tag</Nav.Link>
+                  <Nav.Link eventKey="5" onClick={this.menuSelect.bind(this, 'tag')}>Tags</Nav.Link>
                 </Nav.Item>
               </Nav>
             )}
             {this.state.sideCol === 'filter' && (
               <Col>
-                {this.state.menuSelect === 'address' && (
-                  <FilterAddressForm
-                    onCancel={this.toggleSideCol}
-                    onConfirm={this.submitFilterForm}
-                  />
-                )}
-                {this.state.menuSelect === 'nextOfKin' && (
-                  <FilterNextOfKinForm
-                    onCancel={this.toggleSideCol}
-                    onConfirm={this.submitFilterForm}
-                  />
-                )}
-                {this.state.menuSelect === 'allergy' && (
-                  <FilterAllergyForm
-                    onCancel={this.toggleSideCol}
-                    onConfirm={this.submitFilterForm}
-                  />
-                )}
-                {this.state.menuSelect === 'medication' && (
-                  <FilterMedicationForm
-                    onCancel={this.toggleSideCol}
-                    onConfirm={this.submitFilterForm}
-                  />
-                )}
-                {this.state.menuSelect === 'image' && (
-                  <FilterImageForm
-                    onCancel={this.toggleSideCol}
-                    onConfirm={this.submitFilterForm}
-                  />
-                )}
-                {this.state.menuSelect === 'file' && (
-                  <FilterFileForm
-                    onCancel={this.toggleSideCol}
-                    onConfirm={this.submitFilterForm}
-                  />
-                )}
-                {this.state.menuSelect === 'appointment' && (
-                  <FilterAppointmentForm
-                    onCancel={this.toggleSideCol}
-                    onConfirm={this.submitFilterForm}
-                  />
-                )}
-                {this.state.menuSelect === 'visit' && (
-                  <FilterVisitForm
+                {this.state.menuSelect === 'consultant' && (
+                  <FilterUserForm
                     onCancel={this.toggleSideCol}
                     onConfirm={this.submitFilterForm}
                   />
@@ -1660,7 +721,7 @@ render() {
             )}
           </Col>
 
-          {this.props.patient && (
+          {this.props.appointment && (
             <Col md={10} className="detailPageContainerCol specialCol2">
               {this.state.updateSingleField.state === true && (
                 <UpdatePatientSingleFieldForm
@@ -1671,283 +732,111 @@ render() {
               )}
                 <Tab.Content>
                   <Tab.Pane eventKey="1">
-                    Patient Basic:
+                    Appointment Basic:
                     <ListGroup className="profileBasicListGroup">
                       <ListGroup.Item>
                         <p className="listGroupText">Title:</p>
-                        <p className="listGroupText bold">{this.props.patient.title}</p>
+                        <p className="listGroupText bold">{this.props.appointment.title}</p>
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
-                        <p className="listGroupText">Name:</p>
-                        <p className="listGroupText bold">{this.props.patient.name}</p>
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'name')}>Edit</Button>
-                        <p className="listGroupText">Username:</p>
-                        <p className="listGroupText bold">{this.props.patient.username}</p>
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'username')}>Edit</Button>
                       </ListGroup.Item>
                       <ListGroup.Item>
-                        <p className="listGroupText">DOB:</p>
-                        <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,8)).add(1,'days').format('YYYY-MM-DD')}</p>
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
-                        <p className="listGroupText">Age:</p>
-                        <p className="listGroupText bold">{this.props.patient.age}</p>
-                        <p className="listGroupText">Gender:</p>
-                        <p className="listGroupText bold">{this.props.patient.gender}</p>
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'gender')}>Edit</Button>
+                        <p className="listGroupText">Type:</p>
+                        <p className="listGroupText bold">{this.props.appointment.type}</p>
+                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'type')}>Edit</Button>
+                        <p className="listGroupText">subType:</p>
+                        <p className="listGroupText bold">{this.props.appointment.subType}</p>
+                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'subType')}>Edit</Button>
                       </ListGroup.Item>
                       <ListGroup.Item>
-                        <p className="listGroupText">Email:</p>
-                        <p className="listGroupText bold">{this.props.patient.contact.email}</p>
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.email')}>Edit</Button>
-                        <p className="listGroupText">Phone:</p>
-                        <p className="listGroupText bold">{this.props.patient.contact.phone}</p>
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone')}>Edit</Button>
-                        <p className="listGroupText">Phone 2:</p>
-                        <p className="listGroupText bold">{this.props.patient.contact.phone2}</p>
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone2')}>Edit</Button>
-                      </ListGroup.Item>
-                      <ListGroup.Item>
-                        <p className="listGroupText">Role:</p>
-                        <p className="listGroupText bold">{this.props.patient.role}</p>
-                        <p className="listGroupText">Registration:</p>
-                        <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
-                        <p className="listGroupText bold">{this.props.patient.registration.number}</p>
-                        <p className="listGroupText">Expiry Date:</p>
-                        <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
-                      </ListGroup.Item>
-                      <ListGroup.Item>
-                        <p className="listGroupText">Referral:</p>
                         <p className="listGroupText">Date:</p>
-                        <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
-                        <p className="listGroupText">Reason:</p>
-                        <p className="listGroupText bold">{this.props.patient.referral.reason}</p>
-                        <p className="listGroupText">Referral Physician:</p>
-                        <p className="listGroupText bold">{this.props.patient.referral.physician.name}</p>
-                        <p className="listGroupText bold">{this.props.patient.referral.physician.email}</p>
-                        <p className="listGroupText bold">{this.props.patient.referral.physician.phone}</p>
-                        <p className="listGroupText">Attending Physician:</p>
-                        <p className="listGroupText bold">{this.props.patient.attendingPhysician}</p>
+                        <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,8)).add(1,'days').format('YYYY-MM-DD')}</p>
+                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'date')}>Edit</Button>
+                        <p className="listGroupText">Time:</p>
+                        <p className="listGroupText bold">{this.props.appointment.time}</p>
+                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'time')}>Edit</Button>
                       </ListGroup.Item>
                       <ListGroup.Item>
-                        <p className="listGroupText">Occupation:</p>
-                        <p className="listGroupText bold">{this.props.patient.occupation.role}</p>
-                        <p className="listGroupText">Employer:</p>
-                        <p className="listGroupText bold">{this.props.patient.occupation.employer.name}</p>
-                        <p className="listGroupText">Contact:</p>
-                        <p className="listGroupText bold">{this.props.patient.occupation.employer.phone}</p>
-                        <p className="listGroupText bold">{this.props.patient.occupation.employer.email}</p>
-                        <p className="listGroupText bold">{this.props.patient.occupation.employer.address}</p>
+                        <p className="listGroupText">Location:</p>
+                        <p className="listGroupText bold">{this.props.appointment.location}</p>
+                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'location')}>Edit</Button>
                       </ListGroup.Item>
                       <ListGroup.Item>
-                        <p className="listGroupText">Insurance:</p>
-                        <p className="listGroupText bold">{this.props.patient.insurance.company}</p>
-                        <p className="listGroupText bold">{this.props.patient.insurance.policyNumber}</p>
-                        <p className="listGroupText bold">{this.props.patient.insurance.description}</p>
-                        <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
-                        <p className="listGroupText">Subscriber:</p>
-                        <p className="listGroupText bold">{this.props.patient.insurance.subscriber.company}</p>
-                        <p className="listGroupText bold">{this.props.patient.insurance.subscriber.description}</p>
+                        <p className="listGroupText">Description:</p>
+                        <p className="listGroupText bold">{this.props.appointment.description}</p>
+                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'description')}>Edit</Button>
                       </ListGroup.Item>
+                      <ListGroup.Item>
+                        <p className="listGroupText">Important:</p>
+                        <p className="listGroupText bold">{this.props.appointment.important.toString()}</p>
+                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'important')}>Edit</Button>
+                        <p className="listGroupText">In Progress:</p>
+                        <p className="listGroupText bold">{this.props.appointment.inProgress.toString()}</p>
+                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'inProgress')}>Edit</Button>
+                        <p className="listGroupText">Attended:</p>
+                        <p className="listGroupText bold">{this.props.appointment.attended.toString()}</p>
+                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'attended')}>Edit</Button>
+                      </ListGroup.Item>
+                      <ListGroup.Item>
+                        <p className="listGroupText">Patient:</p>
+                      </ListGroup.Item>
+                      <ListGroup.Item>
+                        <p className="listGroupText">Name:</p>
+                        <p className="listGroupText bold">{this.props.appointment.patient.title}</p>
+                        <p className="listGroupText bold">{this.props.appointment.patient.name}</p>
+                      </ListGroup.Item>
+                      <ListGroup.Item>
+                      <p className="listGroupText">Id:</p>
+                      <p className="listGroupText bold">{this.props.appointment.patient._id}</p>
+                      </ListGroup.Item>
+                      {this.props.appointment.visit && (
+                        <ListGroup.Item>
+                          <p className="listGroupText">Visit:</p>
+                          <p className="listGroupText bold">{this.props.appointment.visit._id}</p>
+                        </ListGroup.Item>
+                      )}
                     </ListGroup>
                   </Tab.Pane>
                   <Tab.Pane eventKey="2">
-                    Patient Admin
+                    Appointment Admin
                     <ListGroup className="profileBasicListGroup">
                       <ListGroup.Item>
                         <p className="listGroupText">Id:</p>
-                        <p className="listGroupText bold">{this.props.patient._id}</p>
+                        <p className="listGroupText bold">{this.props.appointment._id}</p>
                       </ListGroup.Item>
                       <ListGroup.Item>
-                        <p className="listGroupText">LoggedIn:</p>
-                        <p className="listGroupText bold">{this.props.patient.loggedIn.toString()}</p>
-                      </ListGroup.Item>
-                      <ListGroup.Item>
-                        <p className="listGroupText">ClientConnected:</p>
-                        <p className="listGroupText bold">{this.props.patient.clientConnected.toString()}</p>
-                      </ListGroup.Item>
-                      <ListGroup.Item>
-                        <p className="listGroupText">Verified:</p>
-                        <p className="listGroupText bold">{this.props.patient.verification.verified.toString()}</p>
-                        <p className="listGroupText">Type:</p>
-                        <p className="listGroupText bold">{this.props.patient.verification.type}</p>
-                        <p className="listGroupText">Code:</p>
-                        <p className="listGroupText bold">{this.props.patient.verification.code}</p>
+                        <p className="listGroupText">Creator:</p>
+                        <p className="listGroupText bold">{this.props.appointment.creator._id}</p>
                       </ListGroup.Item>
                     </ListGroup>
                   </Tab.Pane>
                   <Tab.Pane eventKey="3">
                     <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">User Address List:</p>
+                      <p className="displayPaneTitle">Appointment Consultant List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
                       {this.context.role === 'Admin' && (
-                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
+                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'consultant')}>Add</Button>
                       )}
                     </Row>
                     {this.state.adding.state === true &&
-                      this.state.adding.field === 'address' && (
-                        <AddAddressForm
-                          onConfirm={this.submitAddAddressForm}
+                      this.state.adding.field === 'consultant' &&
+                      this.state.users && (
+                        <AddUserForm
+                          onConfirm={this.submitAddUserForm}
                           onCancel={this.cancelAdd}
+                          filter={this.state.filter}
+                          users={this.state.users}
                         />
                     )}
-                    <PatientAddressList
+                    <UserList
                       filter={this.state.filter}
-                      addresses={this.props.patient.addresses}
                       authId={this.context.activityId}
-                      onDelete={this.deleteAddress}
-                      canDelete={this.state.canDelete}
-                      makePrimary={this.setAddressPrimary}
+                      users={this.props.appointment.consultants}
+                      appointmentPage={true}
                     />
                   </Tab.Pane>
                   <Tab.Pane eventKey="4">
                     <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Patient Next of Kin List:</p>
-                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
-                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'nextOfKin')}>Add</Button>
-                      )}
-                    </Row>
-                    {this.state.adding.state === true &&
-                      this.state.adding.field === 'nextOfKin' && (
-                        <AddNextOfKinForm
-                          onConfirm={this.submitAddNextOfKinForm}
-                          onCancel={this.cancelAdd}
-                        />
-                    )}
-                    <PatientNextOfKinList
-                      filter={this.state.filter}
-                      nextOfKin={this.props.patient.nextOfKin}
-                      authId={this.context.activityId}
-                      canDelete={this.state.canDelete}
-                      onDelete={this.deleteNextOfKin}
-                    />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="5">
-                    <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Patient Allergies List:</p>
-                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
-                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'allergy')}>Add</Button>
-                      )}
-                    </Row>
-                    {this.state.adding.state === true &&
-                      this.state.adding.field === 'allergy' && (
-                        <AddAllergyForm
-                          onConfirm={this.submitAddAllergyForm}
-                          onCancel={this.cancelAdd}
-                        />
-                    )}
-                    {this.state.addAttachmentForm === true && (
-                      <AddAttachmentForm
-                        onCancel={this.cancelAddAttachment}
-                        onConfirm={this.addAttachment}
-                      />
-                    )}
-                    <PatientAllergyList
-                      filter={this.state.filter}
-                      allergies={this.props.patient.allergies}
-                      authId={this.context.activityId}
-                      canDelete={this.state.canDelete}
-                      onDelete={this.deleteAllergy}
-                      onAddAttachment={this.startAddAttachment}
-                    />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="6">
-                    <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Patient Medication List:</p>
-                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
-                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'medication')}>Add</Button>
-                      )}
-                    </Row>
-                    {this.state.adding.state === true &&
-                      this.state.adding.field === 'medication' && (
-                        <AddMedicationForm
-                          onConfirm={this.submitAddMedicationForm}
-                          onCancel={this.cancelAdd}
-                        />
-                    )}
-                    {this.state.addAttachmentForm === true && (
-                      <AddAttachmentForm
-                        onCancel={this.cancelAddAttachment}
-                        onConfirm={this.addAttachment}
-                      />
-                    )}
-                    <PatientMedicationList
-                      filter={this.state.filter}
-                      medication={this.props.patient.medication}
-                      authId={this.context.activityId}
-                      canDelete={this.state.canDelete}
-                      onDelete={this.deleteMedication}
-                      onAddAttachment={this.startAddAttachment}
-                    />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="7">
-                    <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Patient Image List:</p>
-                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
-                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
-                      )}
-                    </Row>
-                    {this.state.adding.state === true &&
-                      this.state.adding.field === 'image' && (
-                        <AddImageForm
-                          onConfirm={this.submitAddImageForm}
-                          onCancel={this.cancelAdd}
-                        />
-                    )}
-                    <PatientImageList
-                      filter={this.state.filter}
-                      images={this.props.patient.images}
-                      authId={this.context.activityId}
-                      canDelete={this.state.canDelete}
-                      onDelete={this.deleteImage}
-                    />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="8">
-                    <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Patient File List:</p>
-                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
-                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
-                      )}
-                    </Row>
-                    {this.state.adding.state === true &&
-                      this.state.adding.field === 'file' && (
-                        <AddFileForm
-                          onConfirm={this.submitAddFileForm}
-                          onCancel={this.cancelAdd}
-                        />
-                    )}
-                    <PatientFileList
-                      filter={this.state.filter}
-                      files={this.props.patient.files}
-                      authId={this.context.activityId}
-                      canDelete={this.state.canDelete}
-                      onDelete={this.deleteFile}
-                    />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="9">
-                    <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Patient Appointment List:</p>
-                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                    </Row>
-                    <UserAppointmentList
-                      filter={this.state.filter}
-                      appointments={this.props.patient.appointments}
-                      authId={this.context.activityId}
-                    />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="10">
-                    <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Patient Visit List:</p>
-                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                    </Row>
-                    <h3>Patient Visit List</h3>
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="11">
-                    <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Patient Notes:</p>
+                      <p className="displayPaneTitle">Appointment Note List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
                       {this.context.role === 'Admin' && (
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
@@ -1960,17 +849,17 @@ render() {
                           onCancel={this.cancelAdd}
                         />
                     )}
-                    <PatientNoteList
+                    <AppointmentNoteList
                       filter={this.state.filter}
-                      notes={this.props.patient.notes}
+                      notes={this.props.appointment.notes}
                       authId={this.context.activityId}
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteNote}
                     />
                   </Tab.Pane>
-                  <Tab.Pane eventKey="12">
+                  <Tab.Pane eventKey="5">
                     <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Patient Tags:</p>
+                      <p className="displayPaneTitle">Appointment Tag List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
                       {this.context.role === 'Admin' && (
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'tag')}>Add</Button>
@@ -1983,14 +872,15 @@ render() {
                           onCancel={this.cancelAdd}
                         />
                     )}
-                    <PatientTagList
+                    <AppointmentTagList
                       filter={this.state.filter}
-                      tags={this.props.patient.tags}
+                      tags={this.props.appointment.tags}
                       authId={this.context.activityId}
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteTag}
                     />
                   </Tab.Pane>
+
                 </Tab.Content>
 
             </Col>

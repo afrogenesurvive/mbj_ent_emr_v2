@@ -63,6 +63,9 @@ const PatientItem = (props) => {
               {props.appointmentPage !== true && (
                 <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.patient)}>Details</Button>
               )}
+              {props.canDelete && (
+                <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.patient)}>Delete</Button>
+              )}
             </Row>
           )}
         </Card.Body>

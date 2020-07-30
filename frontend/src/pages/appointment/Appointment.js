@@ -19,7 +19,7 @@ import CreateAppointmentForm from '../../components/forms/create/CreateAppointme
 import AppointmentList from '../../components/lists/appointment/AppointmentList';
 import PatientList from '../../components/lists/patient/PatientList';
 // import SearchAppointmentList from '../../components/lists/appointment/SearchAppointmentList';
-// import AppointmentDetail from '../../components/details/AppointmentDetail';
+import AppointmentDetail from '../../components/details/AppointmentDetail';
 
 import FilterAppointmentForm from '../../components/forms/filter/FilterAppointmentForm';
 import AppointmentSearchForm from '../../components/forms/search/AppointmentSearchForm';
@@ -39,6 +39,7 @@ class AppointmentPage extends Component {
     activityUser: null,
     users: null,
     patients: null,
+    canDelete: false,
     appointments: null,
     searchAppointments: null,
     isLoading: false,
@@ -67,6 +68,9 @@ componentDidMount () {
   console.log('...all appointments component mounted...');
   if (sessionStorage.getItem('logInfo')) {
     const seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
+    if (seshStore.role === 'Admin') {
+      this.setState({canDelete:true})
+    }
     this.getAllAppointments(seshStore);
     this.getAllPatients(seshStore);
   }
@@ -88,7 +92,7 @@ getAllAppointments (args) {
       query {getAllAppointments(
         activityId:"${activityId}"
       )
-      {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,reminders{_id},creator{_id}}}
+      {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
   fetch('http://localhost:8088/graphql', {
       method: 'POST',
@@ -502,6 +506,18 @@ selectPatient = (args) => {
     selectedPatient: args
   })
 }
+updateAppointment = (args) => {
+  console.log('...updating selected appointment...');
+  this.setState({
+    selectedAppointment: args
+  })
+}
+
+deleteAppointment = (args) => {
+  console.log('...deleteing appointment...',args);
+  this.context.setUserAlert('...deleteing appointment...')
+}
+
 
 render() {
 
@@ -571,6 +587,7 @@ render() {
                       authId={this.context.activityId}
                       canDelete={this.state.canDelete}
                       showDetails={this.showDetails}
+                      onDelete={this.deleteAppointment}
                     />
                 </Tab.Pane>
                 <Tab.Pane eventKey="2">
@@ -596,7 +613,10 @@ render() {
                 <Tab.Pane eventKey="3">
                 {this.state.showDetails === true &&
                   this.state.selectedAppointment && (
-                  <h3>Appointment Detail: {this.state.selectedAppointment._id}</h3>
+                  <AppointmentDetail
+                    appointment={this.state.selectedAppointment}
+                    updateAppointment={this.updateAppointment}
+                  />
                 )}
                 </Tab.Pane>
                 <Tab.Pane eventKey="4">

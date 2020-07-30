@@ -73,6 +73,7 @@ const PatientList = props => {
         key={count}
         patient={patient}
         canDelete={props.canDelete}
+        onDelete={props.onDelete}
         showDetails={props.showDetails}
         appointmentPage={props.appointmentPage}
         onSelect={props.onSelect}
