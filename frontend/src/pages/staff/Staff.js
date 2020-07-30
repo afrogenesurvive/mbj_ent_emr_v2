@@ -341,6 +341,13 @@ cancelAdd = () => {
   })
 }
 
+updateUser = (args) => {
+  // console.log('...updating user...');
+  this.setState({
+    selectedUser: args
+  })
+}
+
 render() {
 
   return (
@@ -433,6 +440,7 @@ render() {
                   this.state.selectedUser && (
                   <UserDetail
                     user={this.state.selectedUser}
+                    updateUser={this.updateUser}
                   />
                 )}
                 </Tab.Pane>

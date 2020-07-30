@@ -148,7 +148,7 @@ submitAddAddressForm = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const userId = this.state.selectedUser._id;
+  const userId = this.props.user._id;
   const number = event.target.number.value;
   const street = event.target.street.value;
   const town = event.target.town.value;
@@ -196,6 +196,7 @@ submitAddAddressForm = (event) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updateUser(resData.data.addUserAddress)
       this.setState({
         isLoading: false,
         selectedUser: resData.data.addUserAddress,
@@ -221,7 +222,7 @@ deleteAddress = (args) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const userId = this.state.selectedUser._id;
+  const userId = this.props.user._id;
 
   let requestBody = {
     query: `
@@ -263,6 +264,7 @@ deleteAddress = (args) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updateUser(resData.data.deleteUserAddress)
       this.setState({
         isLoading: false,
         selectedUser: resData.data.deleteUserAddress,
@@ -284,7 +286,7 @@ setAddressPrimary = (args) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const userId = this.state.selectedUser._id;
+  const userId = this.props.user._id;
 
   let requestBody = {
     query: `
@@ -325,6 +327,7 @@ setAddressPrimary = (args) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updateUser(resData.data.setUserAddressPrimary)
       this.setState({
         isLoading: false,
         selectedUser: resData.data.setUserAddressPrimary,
@@ -347,7 +350,7 @@ submitAddAttendanceForm = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const userId = this.state.selectedUser._id;
+  const userId = this.props.user._id;
   const attendanceDate = event.target.date.value;
   const attendanceStatus = event.target.status.value;
   const attendanceDescription = event.target.description.value;
@@ -387,6 +390,7 @@ submitAddAttendanceForm = (event) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updateUser(resData.data.addUserAttendance)
       this.setState({
         isLoading: false,
         selectedUser: resData.data.addUserAttendance,
@@ -412,7 +416,7 @@ deleteAttendance = (args) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const userId = this.state.selectedUser._id;
+  const userId = this.props.user._id;
 
   let requestBody = {
     query: `
@@ -448,6 +452,7 @@ deleteAttendance = (args) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updateUser(resData.data.deleteUserAttendance)
       this.setState({
         isLoading: false,
         selectedUser: resData.data.deleteUserAttendance,
@@ -470,7 +475,7 @@ submitAddLeaveForm = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const userId = this.state.selectedUser._id;
+  const userId = this.props.user._id;
   const startDate = event.target.startDate.value;
   const endDate = event.target.endDate.value;
   const type = event.target.type.value;
@@ -511,6 +516,7 @@ submitAddLeaveForm = (event) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updateUser(resData.data.addUserLeave)
       this.setState({
         isLoading: false,
         selectedUser: resData.data.addUserLeave,
@@ -536,7 +542,7 @@ deleteLeave = (args) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const userId = this.state.selectedUser._id;
+  const userId = this.props.user._id;
 
   let requestBody = {
     query: `
@@ -574,6 +580,7 @@ deleteLeave = (args) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updateUser(resData.data.deleteUserLeave)
       this.setState({
         isLoading: false,
         selectedUser: resData.data.deleteUserLeave,
@@ -596,7 +603,7 @@ submitAddImageForm = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const userId = this.state.selectedUser._id;
+  const userId = this.props.user._id;
   const imageName = event.target.name.value;
   const imageType = event.target.type.value;
   const imagePath = event.target.path.value;
@@ -636,6 +643,7 @@ submitAddImageForm = (event) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updateUser(resData.data.addUserImage)
       this.setState({
         isLoading: false,
         selectedUser: resData.data.addUserImage,
@@ -661,7 +669,7 @@ deleteImage = (args) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const userId = this.state.selectedUser._id;
+  const userId = this.props.user._id;
 
   let requestBody = {
     query: `
@@ -698,6 +706,7 @@ deleteImage = (args) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updateUser(resData.data.deleteUserImage)
       this.setState({
         isLoading: false,
         selectedUser: resData.data.deleteUserImage,
@@ -720,7 +729,7 @@ submitAddFileForm = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const userId = this.state.selectedUser._id;
+  const userId = this.props.user._id;
   const fileName = event.target.name.value;
   const fileType = event.target.type.value;
   const filePath = event.target.path.value;
@@ -760,6 +769,7 @@ submitAddFileForm = (event) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updateUser(resData.data.addUserFile)
       this.setState({
         isLoading: false,
         selectedUser: resData.data.addUserFile,
@@ -785,7 +795,7 @@ deleteFile = (args) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const userId = this.state.selectedUser._id;
+  const userId = this.props.user._id;
 
   let requestBody = {
     query: `
@@ -822,6 +832,7 @@ deleteFile = (args) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updateUser(resData.data.deleteUserFile)
       this.setState({
         isLoading: false,
         selectedUser: resData.data.deleteUserFile,
@@ -844,7 +855,7 @@ submitAddNoteForm = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const userId = this.state.selectedUser._id;
+  const userId = this.props.user._id;
   const note = event.target.note.value;
 
   let requestBody = {
@@ -879,6 +890,7 @@ submitAddNoteForm = (event) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updateUser(resData.data.addUserNotes)
       this.setState({
         isLoading: false,
         selectedUser: resData.data.addUserNotes,
@@ -904,7 +916,7 @@ deleteNote = (args) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const userId = this.state.selectedUser._id;
+  const userId = this.props.user._id;
   let requestBody = {
     query: `
         mutation {deleteUserNote(
@@ -938,6 +950,7 @@ deleteNote = (args) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updateUser(resData.data.deleteUserNote)
       this.setState({
         isLoading: false,
         selectedUser: resData.data.deleteUserNote,
@@ -961,7 +974,7 @@ submitUpdateSingleFieldForm = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const userId = this.state.selectedUser._id;
+  const userId = this.props.user._id;
   const field = event.target.field.value;
   const query = event.target.query.value;
 
@@ -998,6 +1011,7 @@ submitUpdateSingleFieldForm = (event) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updateUser(resData.data.updateUserSingleField)
       this.setState({
         isLoading: false,
         selectedUser: resData.data.updateUserSingleField,
@@ -1108,13 +1122,15 @@ render() {
         </Col>
         <Col md={10} className="detailPageContainerCol">
           {
-            !this.state.selectedUser && (
+            !this.props.user && (
               <h3>...</h3>
             )
           }
           {
-            this.state.selectedUser && (
-              <h3>{this.state.selectedUser.username}</h3>
+            this.props.user && (
+              <Row>
+                <h3>{this.props.user.username}</h3>
+              </Row>
             )
           }
         </Col>
@@ -1202,9 +1218,8 @@ render() {
             )}
           </Col>
 
-          {this.state.selectedUser && (
+          {this.props.user && (
             <Col md={10} className="detailPageContainerCol specialCol2">
-              <h3> xxx </h3>
               {this.state.updateSingleField.state === true && (
                 <UpdateUserSingleFieldForm
                   field={this.state.updateSingleField.field}
@@ -1218,42 +1233,42 @@ render() {
                   <ListGroup className="profileBasicListGroup">
                     <ListGroup.Item>
                       <p className="listGroupText">Title:</p>
-                      <p className="listGroupText bold">{this.state.selectedUser.title}</p>
+                      <p className="listGroupText bold">{this.props.user.title}</p>
                       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
                       <p className="listGroupText">Name:</p>
-                      <p className="listGroupText bold">{this.state.selectedUser.name}</p>
+                      <p className="listGroupText bold">{this.props.user.name}</p>
                       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'name')}>Edit</Button>
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <p className="listGroupText">Username:</p>
-                      <p className="listGroupText bold">{this.state.selectedUser.username}</p>
+                      <p className="listGroupText bold">{this.props.user.username}</p>
                       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'username')}>Edit</Button>
                       <p className="listGroupText">Role:</p>
-                      <p className="listGroupText bold">{this.state.selectedUser.role}</p>
+                      <p className="listGroupText bold">{this.props.user.role}</p>
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <p className="listGroupText">Reg No:</p>
-                      <p className="listGroupText bold">{this.state.selectedUser.registrationNumber}</p>
+                      <p className="listGroupText bold">{this.props.user.registrationNumber}</p>
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <p className="listGroupText">DOB:</p>
-                      <p className="listGroupText bold">{moment.unix(this.state.selectedUser.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                      <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
                       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
                       <p className="listGroupText">Age:</p>
-                      <p className="listGroupText bold">{this.state.selectedUser.age}</p>
+                      <p className="listGroupText bold">{this.props.user.age}</p>
                       <p className="listGroupText">Gender:</p>
-                      <p className="listGroupText bold">{this.state.selectedUser.gender}</p>
+                      <p className="listGroupText bold">{this.props.user.gender}</p>
                       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'gender')}>Edit</Button>
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <p className="listGroupText">Email:</p>
-                      <p className="listGroupText bold">{this.state.selectedUser.contact.email}</p>
+                      <p className="listGroupText bold">{this.props.user.contact.email}</p>
                       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.email')}>Edit</Button>
                       <p className="listGroupText">Phone:</p>
-                      <p className="listGroupText bold">{this.state.selectedUser.contact.phone}</p>
+                      <p className="listGroupText bold">{this.props.user.contact.phone}</p>
                       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone')}>Edit</Button>
                       <p className="listGroupText">Phone 2:</p>
-                      <p className="listGroupText bold">{this.state.selectedUser.contact.phone2}</p>
+                      <p className="listGroupText bold">{this.props.user.contact.phone2}</p>
                       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone2')}>Edit</Button>
                     </ListGroup.Item>
                     <ListGroup.Item>
@@ -1267,23 +1282,23 @@ render() {
                   <ListGroup className="profileBasicListGroup">
                     <ListGroup.Item>
                       <p className="listGroupText">Id:</p>
-                      <p className="listGroupText bold">{this.state.selectedUser._id}</p>
+                      <p className="listGroupText bold">{this.props.user._id}</p>
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <p className="listGroupText">LoggedIn:</p>
-                      <p className="listGroupText bold">{this.state.selectedUser.loggedIn.toString()}</p>
+                      <p className="listGroupText bold">{this.props.user.loggedIn.toString()}</p>
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <p className="listGroupText">ClientConnected:</p>
-                      <p className="listGroupText bold">{this.state.selectedUser.clientConnected.toString()}</p>
+                      <p className="listGroupText bold">{this.props.user.clientConnected.toString()}</p>
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <p className="listGroupText">Verified:</p>
-                      <p className="listGroupText bold">{this.state.selectedUser.verification.verified.toString()}</p>
+                      <p className="listGroupText bold">{this.props.user.verification.verified.toString()}</p>
                       <p className="listGroupText">Type:</p>
-                      <p className="listGroupText bold">{this.state.selectedUser.verification.type}</p>
+                      <p className="listGroupText bold">{this.props.user.verification.type}</p>
                       <p className="listGroupText">Code:</p>
-                      <p className="listGroupText bold">{this.state.selectedUser.verification.code}</p>
+                      <p className="listGroupText bold">{this.props.user.verification.code}</p>
                     </ListGroup.Item>
                   </ListGroup>
                 </Tab.Pane>
@@ -1304,7 +1319,7 @@ render() {
                   )}
                   <UserAddressList
                     filter={this.state.filter}
-                    addresses={this.state.selectedUser.addresses}
+                    addresses={this.props.user.addresses}
                     authId={this.context.activityId}
                     onDelete={this.deleteAddress}
                     canDelete={this.state.canDelete}
@@ -1328,7 +1343,7 @@ render() {
                   )}
                   <UserAttendanceList
                     filter={this.state.filter}
-                    attendance={this.state.selectedUser.attendance}
+                    attendance={this.props.user.attendance}
                     authId={this.context.activityId}
                     canDelete={this.state.canDelete}
                     onDelete={this.deleteAttendance}
@@ -1351,7 +1366,7 @@ render() {
                   )}
                   <UserLeaveList
                     filter={this.state.filter}
-                    leave={this.state.selectedUser.leave}
+                    leave={this.props.user.leave}
                     authId={this.context.activityId}
                     canDelete={this.state.canDelete}
                     onDelete={this.deleteLeave}
@@ -1374,7 +1389,7 @@ render() {
                   )}
                   <UserImageList
                     filter={this.state.filter}
-                    images={this.state.selectedUser.images}
+                    images={this.props.user.images}
                     authId={this.context.activityId}
                     showListDetails={this.showListDetails}
                     canDelete={this.state.canDelete}
@@ -1398,7 +1413,7 @@ render() {
                   )}
                   <UserFileList
                     filter={this.state.filter}
-                    files={this.state.selectedUser.files}
+                    files={this.props.user.files}
                     authId={this.context.activityId}
                     canDelete={this.state.canDelete}
                     onDelete={this.deleteFile}
@@ -1411,7 +1426,7 @@ render() {
                   </Row>
                   <UserAppointmentList
                     filter={this.state.filter}
-                    appointments={this.state.selectedUser.appointments}
+                    appointments={this.props.user.appointments}
                     authId={this.context.activityId}
                   />
                 </Tab.Pane>
@@ -1432,7 +1447,7 @@ render() {
                   )}
                   <UserNoteList
                     filter={this.state.filter}
-                    notes={this.state.selectedUser.notes}
+                    notes={this.props.user.notes}
                     authId={this.context.activityId}
                     canDelete={this.state.canDelete}
                     onDelete={this.deleteNote}

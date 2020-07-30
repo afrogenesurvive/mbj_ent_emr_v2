@@ -503,6 +503,13 @@ cancelAdd = () => {
   })
 }
 
+updatePatient = (args) => {
+  console.log('...updating patient...');
+  this.setState({
+    selectedPatient: args
+  })
+}
+
 render() {
 
   return (
@@ -598,6 +605,7 @@ render() {
                   this.state.selectedPatient && (
                   <PatientDetail
                     patient={this.state.selectedPatient}
+                    updatePatient={this.updatePatient}
                   />
                 )}
                 </Tab.Pane>

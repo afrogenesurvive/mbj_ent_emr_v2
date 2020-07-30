@@ -161,7 +161,7 @@ submitAddAddressForm = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.state.selectedPatient._id;
+  const patientId = this.props.patient._id;
   const number = event.target.number.value;
   const street = event.target.street.value;
   const town = event.target.town.value;
@@ -209,6 +209,7 @@ submitAddAddressForm = (event) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.addPatientAddress)
       this.setState({
         isLoading: false,
         selectedPatient: resData.data.addPatientAddress,
@@ -234,7 +235,7 @@ deleteAddress = (args) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.state.selectedPatient._id;
+  const patientId = this.props.patient._id;
 
   let requestBody = {
     query: `
@@ -276,6 +277,7 @@ deleteAddress = (args) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.deletePatientAddress)
       this.setState({
         isLoading: false,
         selectedPatient: resData.data.deletePatientAddress,
@@ -297,7 +299,7 @@ setAddressPrimary = (args) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.state.selectedPatient._id;
+  const patientId = this.props.patient._id;
 
   let requestBody = {
     query: `
@@ -338,6 +340,7 @@ setAddressPrimary = (args) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.setPatientAddressPrimary)
       this.setState({
         isLoading: false,
         selectedPatient: resData.data.setPatientAddressPrimary,
@@ -361,7 +364,7 @@ submitAddNextOfKinForm = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.state.selectedPatient._id;
+  const patientId = this.props.patient._id;
   const name = event.target.name.value;
   const relation = event.target.relation.value;
   const email = event.target.email.value;
@@ -405,6 +408,7 @@ submitAddNextOfKinForm = (event) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.addPatientNextOfKin)
       this.setState({
         isLoading: false,
         selectedPatient: resData.data.addPatientNextOfKin,
@@ -430,7 +434,7 @@ deleteNextOfKin = (args) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.state.selectedPatient._id;
+  const patientId = this.props.patient._id;
 
   let requestBody = {
     query: `
@@ -469,6 +473,7 @@ deleteNextOfKin = (args) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.deletePatientNextOfKin)
       this.setState({
         isLoading: false,
         selectedPatient: resData.data.deletePatientNextOfKin,
@@ -496,7 +501,7 @@ submitAddAllergyForm = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.state.selectedPatient._id;
+  const patientId = this.props.patient._id;
   const title = event.target.title.value;
   const type = event.target.type.value;
   const description = event.target.description.value;
@@ -538,6 +543,7 @@ submitAddAllergyForm = (event) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.addPatientAllergy)
       this.setState({
         isLoading: false,
         selectedPatient: resData.data.addPatientAllergy,
@@ -563,7 +569,7 @@ deleteAllergy = (args) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.state.selectedPatient._id;
+  const patientId = this.props.patient._id;
 
   let requestBody = {
     query: `
@@ -601,6 +607,7 @@ deleteAllergy = (args) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.deletePatientAllergy)
       this.setState({
         isLoading: false,
         selectedPatient: resData.data.deletePatientAllergy,
@@ -627,7 +634,7 @@ submitAddMedicationForm = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.state.selectedPatient._id;
+  const patientId = this.props.patient._id;
   const title = event.target.title.value;
   const type = event.target.type.value;
   const description = event.target.description.value;
@@ -669,6 +676,7 @@ submitAddMedicationForm = (event) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.addPatientMedication)
       this.setState({
         isLoading: false,
         selectedPatient: resData.data.addPatientMedication,
@@ -694,7 +702,7 @@ deleteMedication = (args) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.state.selectedPatient._id;
+  const patientId = this.props.patient._id;
 
   let requestBody = {
     query: `
@@ -732,6 +740,7 @@ deleteMedication = (args) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.deletePatientMedication)
       this.setState({
         isLoading: false,
         selectedPatient: resData.data.deletePatientMedication,
@@ -774,7 +783,7 @@ addAttachment = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.state.selectedPatient._id;
+  const patientId = this.props.patient._id;
   let args = this.state.addAttachmentArgs;
   let field = args.field;
 
@@ -873,6 +882,7 @@ addAttachment = (event) => {
       this.context.setUserAlert(responseAlert)
 
       if (field === 'allergy') {
+        this.props.updatePatient(resData.data.addPatientAllergyAttachment)
         this.setState({
           isLoading: false,
           selectedPatient: resData.data.addPatientAllergyAttachment,
@@ -880,6 +890,7 @@ addAttachment = (event) => {
         });
       }
       if (field === 'medication') {
+        this.props.updatePatient(resData.data.addPatientMedicationAttachment)
         this.setState({
           isLoading: false,
           selectedPatient: resData.data.addPatientMedicationAttachment,
@@ -909,7 +920,7 @@ submitAddImageForm = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.state.selectedPatient._id;
+  const patientId = this.props.patient._id;
   const name = event.target.name.value;
   const type = event.target.type.value;
   const path = event.target.path.value;
@@ -949,6 +960,7 @@ submitAddImageForm = (event) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.addPatientImage)
       this.setState({
         isLoading: false,
         selectedPatient: resData.data.addPatientImage,
@@ -974,7 +986,7 @@ deleteImage = (args) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.state.selectedPatient._id;
+  const patientId = this.props.patient._id;
 
   let requestBody = {
     query: `
@@ -1011,6 +1023,7 @@ deleteImage = (args) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.deletePatientImage)
       this.setState({
         isLoading: false,
         selectedPatient: resData.data.deletePatientImage,
@@ -1034,7 +1047,7 @@ submitAddFileForm = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.state.selectedPatient._id;
+  const patientId = this.props.patient._id;
   const name = event.target.name.value;
   const type = event.target.type.value;
   const path = event.target.path.value;
@@ -1074,6 +1087,7 @@ submitAddFileForm = (event) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.addPatientFile)
       this.setState({
         isLoading: false,
         selectedPatient: resData.data.addPatientFile,
@@ -1099,7 +1113,7 @@ deleteFile = (args) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.state.selectedPatient._id;
+  const patientId = this.props.patient._id;
 
   let requestBody = {
     query: `
@@ -1136,6 +1150,7 @@ deleteFile = (args) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.deletePatientFile)
       this.setState({
         isLoading: false,
         selectedPatient: resData.data.deletePatientFile,
@@ -1159,7 +1174,7 @@ submitAddNoteForm = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.state.selectedPatient._id;
+  const patientId = this.props.patient._id;
   const notes = event.target.notes.value;
 
   let requestBody = {
@@ -1195,6 +1210,7 @@ submitAddNoteForm = (event) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.addPatientNotes)
       this.setState({
         isLoading: false,
         selectedPatient: resData.data.addPatientNotes,
@@ -1220,7 +1236,7 @@ deleteNote = (args) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.state.selectedPatient._id;
+  const patientId = this.props.patient._id;
 
   let requestBody = {
     query: `
@@ -1255,6 +1271,7 @@ deleteNote = (args) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.deletePatientNote)
       this.setState({
         isLoading: false,
         selectedPatient: resData.data.deletePatientNote,
@@ -1277,7 +1294,7 @@ submitAddTagForm = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.state.selectedPatient._id;
+  const patientId = this.props.patient._id;
   const tags = event.target.tags.value;
 
   let requestBody = {
@@ -1313,6 +1330,7 @@ submitAddTagForm = (event) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.addPatientTags)
       this.setState({
         isLoading: false,
         selectedPatient: resData.data.addPatientTags,
@@ -1338,7 +1356,7 @@ deleteTag = (args) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.state.selectedPatient._id;
+  const patientId = this.props.patient._id;
 
   let requestBody = {
     query: `
@@ -1373,10 +1391,11 @@ deleteTag = (args) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.deletePatientTag)
       this.setState({
         isLoading: false,
         selectedPatient: resData.data.deletePatientTag,
-        activityA: `deletePatientNote?activityId:${activityId},patientId:${patientId}`
+        activityA: `deletePatienTag?activityId:${activityId},patientId:${patientId}`
       });
       this.context.selectedPatient = resData.data.deletePatientTag;
       this.logUserActivity({activityId: activityId,token: token});
@@ -1396,7 +1415,7 @@ submitUpdateSingleFieldForm = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.state.selectedPatient._id;
+  const patientId = this.props.patient._id;
   const field = event.target.field.value;
   const query = event.target.query.value;
 
@@ -1433,6 +1452,7 @@ submitUpdateSingleFieldForm = (event) => {
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.updatePatientSingleField)
       this.setState({
         isLoading: false,
         selectedPatient: resData.data.updatePatientSingleField,
@@ -1541,11 +1561,14 @@ render() {
 
         </Col>
         <Col md={10} className="detailPageContainerCol">
-          {!this.state.selectedPatient && (
+          {!this.props.patient && (
             <h3>...</h3>
           )}
-          {this.state.selectedPatient && (
-            <h3>{this.state.selectedPatient.username}</h3>
+          {this.props.patient && (
+            <Row>
+              <h3>{this.props.patient.username}</h3>
+            </Row>
+
           )}
         </Col>
       </Row>
@@ -1659,9 +1682,8 @@ render() {
             )}
           </Col>
 
-          {this.state.selectedPatient && (
+          {this.props.patient && (
             <Col md={10} className="detailPageContainerCol specialCol2">
-              <h3> xxx </h3>
               {this.state.updateSingleField.state === true && (
                 <UpdatePatientSingleFieldForm
                   field={this.state.updateSingleField.field}
@@ -1675,77 +1697,77 @@ render() {
                     <ListGroup className="profileBasicListGroup">
                       <ListGroup.Item>
                         <p className="listGroupText">Title:</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.title}</p>
+                        <p className="listGroupText bold">{this.props.patient.title}</p>
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
                         <p className="listGroupText">Name:</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.name}</p>
+                        <p className="listGroupText bold">{this.props.patient.name}</p>
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'name')}>Edit</Button>
                         <p className="listGroupText">Username:</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.username}</p>
+                        <p className="listGroupText bold">{this.props.patient.username}</p>
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'username')}>Edit</Button>
                       </ListGroup.Item>
                       <ListGroup.Item>
                         <p className="listGroupText">DOB:</p>
-                        <p className="listGroupText bold">{moment.unix(this.state.selectedPatient.dob.substr(0,8)).add(1,'days').format('YYYY-MM-DD')}</p>
+                        <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,8)).add(1,'days').format('YYYY-MM-DD')}</p>
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
                         <p className="listGroupText">Age:</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.age}</p>
+                        <p className="listGroupText bold">{this.props.patient.age}</p>
                         <p className="listGroupText">Gender:</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.gender}</p>
+                        <p className="listGroupText bold">{this.props.patient.gender}</p>
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'gender')}>Edit</Button>
                       </ListGroup.Item>
                       <ListGroup.Item>
                         <p className="listGroupText">Email:</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.contact.email}</p>
+                        <p className="listGroupText bold">{this.props.patient.contact.email}</p>
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.email')}>Edit</Button>
                         <p className="listGroupText">Phone:</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.contact.phone}</p>
+                        <p className="listGroupText bold">{this.props.patient.contact.phone}</p>
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone')}>Edit</Button>
                         <p className="listGroupText">Phone 2:</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.contact.phone2}</p>
+                        <p className="listGroupText bold">{this.props.patient.contact.phone2}</p>
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone2')}>Edit</Button>
                       </ListGroup.Item>
                       <ListGroup.Item>
                         <p className="listGroupText">Role:</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.role}</p>
+                        <p className="listGroupText bold">{this.props.patient.role}</p>
                         <p className="listGroupText">Registration:</p>
-                        <p className="listGroupText bold">{moment.unix(this.state.selectedPatient.registration.date.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.registration.number}</p>
+                        <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                        <p className="listGroupText bold">{this.props.patient.registration.number}</p>
                         <p className="listGroupText">Expiry Date:</p>
-                        <p className="listGroupText bold">{moment.unix(this.state.selectedPatient.expiryDate.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                        <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
                       </ListGroup.Item>
                       <ListGroup.Item>
                         <p className="listGroupText">Referral:</p>
                         <p className="listGroupText">Date:</p>
-                        <p className="listGroupText bold">{moment.unix(this.state.selectedPatient.referral.date.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                        <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
                         <p className="listGroupText">Reason:</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.referral.reason}</p>
+                        <p className="listGroupText bold">{this.props.patient.referral.reason}</p>
                         <p className="listGroupText">Referral Physician:</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.referral.physician.name}</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.referral.physician.email}</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.referral.physician.phone}</p>
+                        <p className="listGroupText bold">{this.props.patient.referral.physician.name}</p>
+                        <p className="listGroupText bold">{this.props.patient.referral.physician.email}</p>
+                        <p className="listGroupText bold">{this.props.patient.referral.physician.phone}</p>
                         <p className="listGroupText">Attending Physician:</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.attendingPhysician}</p>
+                        <p className="listGroupText bold">{this.props.patient.attendingPhysician}</p>
                       </ListGroup.Item>
                       <ListGroup.Item>
                         <p className="listGroupText">Occupation:</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.occupation.role}</p>
+                        <p className="listGroupText bold">{this.props.patient.occupation.role}</p>
                         <p className="listGroupText">Employer:</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.occupation.employer.name}</p>
+                        <p className="listGroupText bold">{this.props.patient.occupation.employer.name}</p>
                         <p className="listGroupText">Contact:</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.occupation.employer.phone}</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.occupation.employer.email}</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.occupation.employer.address}</p>
+                        <p className="listGroupText bold">{this.props.patient.occupation.employer.phone}</p>
+                        <p className="listGroupText bold">{this.props.patient.occupation.employer.email}</p>
+                        <p className="listGroupText bold">{this.props.patient.occupation.employer.address}</p>
                       </ListGroup.Item>
                       <ListGroup.Item>
                         <p className="listGroupText">Insurance:</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.insurance.company}</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.insurance.policyNumber}</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.insurance.description}</p>
-                        <p className="listGroupText bold">{moment.unix(this.state.selectedPatient.insurance.expiryDate.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                        <p className="listGroupText bold">{this.props.patient.insurance.company}</p>
+                        <p className="listGroupText bold">{this.props.patient.insurance.policyNumber}</p>
+                        <p className="listGroupText bold">{this.props.patient.insurance.description}</p>
+                        <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
                         <p className="listGroupText">Subscriber:</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.insurance.subscriber.company}</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.insurance.subscriber.description}</p>
+                        <p className="listGroupText bold">{this.props.patient.insurance.subscriber.company}</p>
+                        <p className="listGroupText bold">{this.props.patient.insurance.subscriber.description}</p>
                       </ListGroup.Item>
                     </ListGroup>
                   </Tab.Pane>
@@ -1754,23 +1776,23 @@ render() {
                     <ListGroup className="profileBasicListGroup">
                       <ListGroup.Item>
                         <p className="listGroupText">Id:</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient._id}</p>
+                        <p className="listGroupText bold">{this.props.patient._id}</p>
                       </ListGroup.Item>
                       <ListGroup.Item>
                         <p className="listGroupText">LoggedIn:</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.loggedIn.toString()}</p>
+                        <p className="listGroupText bold">{this.props.patient.loggedIn.toString()}</p>
                       </ListGroup.Item>
                       <ListGroup.Item>
                         <p className="listGroupText">ClientConnected:</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.clientConnected.toString()}</p>
+                        <p className="listGroupText bold">{this.props.patient.clientConnected.toString()}</p>
                       </ListGroup.Item>
                       <ListGroup.Item>
                         <p className="listGroupText">Verified:</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.verification.verified.toString()}</p>
+                        <p className="listGroupText bold">{this.props.patient.verification.verified.toString()}</p>
                         <p className="listGroupText">Type:</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.verification.type}</p>
+                        <p className="listGroupText bold">{this.props.patient.verification.type}</p>
                         <p className="listGroupText">Code:</p>
-                        <p className="listGroupText bold">{this.state.selectedPatient.verification.code}</p>
+                        <p className="listGroupText bold">{this.props.patient.verification.code}</p>
                       </ListGroup.Item>
                     </ListGroup>
                   </Tab.Pane>
@@ -1791,7 +1813,7 @@ render() {
                     )}
                     <PatientAddressList
                       filter={this.state.filter}
-                      addresses={this.state.selectedPatient.addresses}
+                      addresses={this.props.patient.addresses}
                       authId={this.context.activityId}
                       onDelete={this.deleteAddress}
                       canDelete={this.state.canDelete}
@@ -1815,7 +1837,7 @@ render() {
                     )}
                     <PatientNextOfKinList
                       filter={this.state.filter}
-                      nextOfKin={this.state.selectedPatient.nextOfKin}
+                      nextOfKin={this.props.patient.nextOfKin}
                       authId={this.context.activityId}
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteNextOfKin}
@@ -1844,7 +1866,7 @@ render() {
                     )}
                     <PatientAllergyList
                       filter={this.state.filter}
-                      allergies={this.state.selectedPatient.allergies}
+                      allergies={this.props.patient.allergies}
                       authId={this.context.activityId}
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteAllergy}
@@ -1874,7 +1896,7 @@ render() {
                     )}
                     <PatientMedicationList
                       filter={this.state.filter}
-                      medication={this.state.selectedPatient.medication}
+                      medication={this.props.patient.medication}
                       authId={this.context.activityId}
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteMedication}
@@ -1898,7 +1920,7 @@ render() {
                     )}
                     <PatientImageList
                       filter={this.state.filter}
-                      images={this.state.selectedPatient.images}
+                      images={this.props.patient.images}
                       authId={this.context.activityId}
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteImage}
@@ -1921,7 +1943,7 @@ render() {
                     )}
                     <PatientFileList
                       filter={this.state.filter}
-                      files={this.state.selectedPatient.files}
+                      files={this.props.patient.files}
                       authId={this.context.activityId}
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteFile}
@@ -1934,7 +1956,7 @@ render() {
                     </Row>
                     <UserAppointmentList
                       filter={this.state.filter}
-                      appointments={this.state.selectedPatient.appointments}
+                      appointments={this.props.patient.appointments}
                       authId={this.context.activityId}
                     />
                   </Tab.Pane>
@@ -1962,7 +1984,7 @@ render() {
                     )}
                     <PatientNoteList
                       filter={this.state.filter}
-                      notes={this.state.selectedPatient.notes}
+                      notes={this.props.patient.notes}
                       authId={this.context.activityId}
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteNote}
@@ -1985,7 +2007,7 @@ render() {
                     )}
                     <PatientTagList
                       filter={this.state.filter}
-                      tags={this.state.selectedPatient.tags}
+                      tags={this.props.patient.tags}
                       authId={this.context.activityId}
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteTag}
