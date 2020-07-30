@@ -47,6 +47,7 @@ import AddFileForm from '../forms/add/AddFileForm';
 import AddNextOfKinForm from '../forms/add/AddNextOfKinForm';
 import AddAllergyForm from '../forms/add/AddAllergyForm';
 import AddMedicationForm from '../forms/add/AddMedicationForm';
+import AddAttachmentForm from '../forms/add/AddAttachmentForm';
 import loadingGif from '../../assets/loading.gif';
 import { faBath } from '@fortawesome/free-solid-svg-icons';
 import './details.css';
@@ -81,6 +82,8 @@ class PatientDetail extends Component {
     },
     selectedUser: null,
     selectedPatient: this.props.patient,
+    addAttachmentForm: false,
+    addAttachmentArgs: null,
   };
   static contextType = AuthContext;
 
@@ -748,8 +751,153 @@ deleteMedication = (args) => {
     });
 }
 
-addAttachment = (args) => {
-  console.log('...adding attachment...', args);
+startAddAttachment = (args) => {
+  console.log('...start add attachment...');
+  this.setState({
+    addAttachmentForm: true,
+    addAttachmentArgs: args
+  })
+}
+cancelAddAttachment = () => {
+  this.setState({
+    addAttendanceForm: false
+  })
+}
+addAttachment = (event) => {
+  event.preventDefault();
+  console.log('...adding attachment...');
+  this.context.setUserAlert('...adding attachment...');
+  this.setState({
+    isLoading: true,
+    addAttachmentForm: false
+  })
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.state.selectedPatient._id;
+  let args = this.state.addAttachmentArgs;
+  let field = args.field;
+
+  let allergyTitle;
+  let allergyType;
+  let allergyDescription;
+  let allergyAttachment;
+  let medicationTitle;
+  let medicationType;
+  let medicationDescription;
+  let medicationAttachment;
+
+  if (field === 'allergy') {
+    allergyTitle = args.data.title;
+    allergyType = args.data.type;
+    allergyDescription = args.data.description;
+    allergyAttachment = event.target.attachment.value;
+  }
+  if (field === 'medication') {
+    medicationTitle = args.data.title;
+    medicationType = args.data.type;
+    medicationDescription = args.data.description;
+    medicationAttachment = event.target.attachment.value;
+  }
+
+  let requestBody;
+  if (field === 'allergy') {
+    requestBody = {
+      query: `
+        mutation {addPatientAllergyAttachment(
+          activityId:"${activityId}",
+          patientId:"${patientId}",
+          patientInput:{
+            allergyType:"${allergyType}",
+            allergyTitle:"${allergyTitle}",
+            allergyDescription:"${allergyDescription}",
+            allergyAttachment:"${allergyAttachment}"
+          })
+          {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
+      `};
+  }
+  if (field === 'medication') {
+    requestBody = {
+      query: `
+        mutation {addPatientMedicationAttachment(
+          activityId:"${activityId}",
+          patientId:"${patientId}",
+          patientInput:{
+            medicationType:"${medicationType}",
+            medicationTitle:"${medicationTitle}",
+            medicationDescription:"${medicationDescription}",
+            medicationAttachment:"${medicationAttachment}"
+          })
+          {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
+      `};
+  }
+
+  fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      if (field === 'allergy') {
+        // console.log('...resData...',resData.data.addPatientAllergyAttachment);
+      }
+      if (field === 'medication') {
+        // console.log('...resData...',resData.data.addPatientMedicationAttachment);
+      }
+
+      let responseAlert = '...add attachment success!...';
+      let error = null;
+
+      if (field === 'allergy') {
+        if (resData.data.addPatientAllergyAttachment.error) {
+          error = resData.data.addPatientAllergyAttachment.error;
+          responseAlert = error;
+        }
+      }
+      if (field === 'medication') {
+        if (resData.data.addPatientMedicationAttachment.error) {
+          error = resData.data.addPatientMedicationAttachment.error;
+          responseAlert = error;
+        }
+      }
+
+      this.context.setUserAlert(responseAlert)
+
+      if (field === 'allergy') {
+        this.setState({
+          isLoading: false,
+          selectedPatient: resData.data.addPatientAllergyAttachment,
+          activityA: `addPatientAllergyAttachmentRegex?activityId:${activityId},patientId:${patientId}`
+        });
+      }
+      if (field === 'medication') {
+        this.setState({
+          isLoading: false,
+          selectedPatient: resData.data.addPatientMedicationAttachment,
+          activityA: `addPatientMedicationAttachment?activityId:${activityId},patientId:${patientId}`
+        });
+      }
+
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+
+}
+deleteAttachment = (args) => {
+  console.log('...deleting attachment...', args);
   let field = args.field;
 }
 
@@ -1688,13 +1836,19 @@ render() {
                           onCancel={this.cancelAdd}
                         />
                     )}
+                    {this.state.addAttachmentForm === true && (
+                      <AddAttachmentForm
+                        onCancel={this.cancelAddAttachment}
+                        onConfirm={this.addAttachment}
+                      />
+                    )}
                     <PatientAllergyList
                       filter={this.state.filter}
                       allergies={this.state.selectedPatient.allergies}
                       authId={this.context.activityId}
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteAllergy}
-                      onAddAttachment={this.addAttachment}
+                      onAddAttachment={this.startAddAttachment}
                     />
                   </Tab.Pane>
                   <Tab.Pane eventKey="6">
@@ -1712,13 +1866,19 @@ render() {
                           onCancel={this.cancelAdd}
                         />
                     )}
+                    {this.state.addAttachmentForm === true && (
+                      <AddAttachmentForm
+                        onCancel={this.cancelAddAttachment}
+                        onConfirm={this.addAttachment}
+                      />
+                    )}
                     <PatientMedicationList
                       filter={this.state.filter}
                       medication={this.state.selectedPatient.medication}
                       authId={this.context.activityId}
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteMedication}
-                      onAddAttachment={this.addAttachment}
+                      onAddAttachment={this.startAddAttachment}
                     />
                   </Tab.Pane>
                   <Tab.Pane eventKey="7">

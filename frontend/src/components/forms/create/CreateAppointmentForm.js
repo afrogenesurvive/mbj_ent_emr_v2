@@ -13,7 +13,7 @@ return (
     <h1>Create Appointment Form</h1>
 
     <Form.Row>
-      <Form.Group as={Col} controlId="title">
+      <Form.Group as={Col} controlId="patientId">
         <Form.Label>Patient: {props.patient.username}</Form.Label>
         <Form.Control type="text" value={props.patient._id}/>
       </Form.Group>

@@ -698,7 +698,7 @@ module.exports = {
     }
   },
   addPatientAllergyAttachment: async (args, req) => {
-    console.log("Resolver: addPatientAllergies...");
+    console.log("Resolver: addPatientAllergy Attachment...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
@@ -734,7 +734,7 @@ module.exports = {
     }
   },
   deletePatientAllergyAttachment: async (args, req) => {
-    console.log("Resolver: deletePatientAllergies...");
+    console.log("Resolver: deletePatientAllergyAttachment...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
@@ -754,6 +754,84 @@ module.exports = {
           'allergies.description': allergy.description,
         },
         {$pull: {'allergies.$.attachments': oldAttachment}},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('visits')
+      .populate('reminders');
+      return {
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addPatientMedicationAttachment: async (args, req) => {
+    console.log("Resolver: addPatientMedicationAttachment...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const medication = {
+        type: args.patientInput.medicationType,
+        title: args.patientInput.medicationTitle,
+        description: args.patientInput.medicationDescription,
+      };
+      const newAttachment = args.patientInput.medicationAttachment;
+      const x = await Patient.find({
+        _id:args.patientId,
+        'medication.type': medication.type,
+        'medication.title': medication.title,
+        'medication.description': medication.description
+      })
+
+      const patient = await Patient.findOneAndUpdate(
+        {
+          _id:args.patientId,
+          'medication.type': medication.type,
+          'medication.title': medication.title,
+          'medication.description': medication.description,
+        },
+        {$addToSet: {'medication.$.attachments': newAttachment}},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('visits')
+      .populate('reminders');
+      return {
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deletePatientMedicationAttachment: async (args, req) => {
+    console.log("Resolver: deletePatientMedicationAttachment...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const medication = {
+        type: args.patientInput.medicationType,
+        title: args.patientInput.medicationTitle,
+        description: args.patientInput.medicationDescription,
+      };
+      const oldAttachment = args.patientInput.medicationAttachment;
+
+      const patient = await Patient.findOneAndUpdate(
+        {
+          _id:args.patientId,
+          'medication.type': medication.type,
+          'medication.title': medication.title,
+          'medication.description': medication.description,
+        },
+        {$pull: {'medication.$.attachments': oldAttachment}},
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')

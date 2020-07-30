@@ -480,7 +480,6 @@ submitFilterForm = (event) => {
 }
 
 showDetails = (args) => {
-  console.log('bar',args.visits);
   this.setState({
     showDetails: true,
     selectedPatient: args

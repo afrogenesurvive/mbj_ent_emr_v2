@@ -338,7 +338,8 @@ onStartCreateNewAppointment = () => {
 }
 cancelCreateNewAppointment = () => {
   this.setState({
-    creatingAppointment: false
+    creatingAppointment: false,
+    selectedPatient: null
   })
 }
 submitCreateNewAppointmentForm = (event) => {
@@ -349,6 +350,7 @@ submitCreateNewAppointmentForm = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
+  const patientId = this.state.selectedPatient._id;
 
   const title = event.target.title.value;
   const type = event.target.type.value;
@@ -366,21 +368,29 @@ submitCreateNewAppointmentForm = (event) => {
   //   return;
   // }
 
+  if (date < moment().format('YYYY-MM-DD')) {
+    console.log('...ummm no! Please pick a date today or in the future...');
+    this.context.setUserAlert('...ummm no! Please pick a date today or in the future...')
+    this.setState({isLoading:false})
+    return
+  }
+
   let requestBody = {
     query: `
       mutation {createAppointment(
-        activityId:"5f09f4944bc80aab344f0fe3",
-        patientId:"5f0cad37a728b3e757c3c5e4",
+        activityId:"${activityId}",
+        patientId:"${patientId}",
         appointmentInput:{
-          title:"appt_014",
-          type:"type r",
-          subType:"707",
-          date:"2020-07-25",
-          time:"13:30",
-          location:"office",
-          description:"desc",
-          important:false
-        }){_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,reminders{_id},creator{_id}}}
+          title:"${title}",
+          type:"${type}",
+          subType:"${subType}",
+          date:"${date}",
+          time:"${time}",
+          location:"${location}",
+          description:"${description}",
+          important:${important}
+        })
+        {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,reminders{_id},creator{_id}}}
     `};
   fetch('http://localhost:8088/graphql', {
       method: 'POST',
@@ -586,7 +596,7 @@ render() {
                 <Tab.Pane eventKey="3">
                 {this.state.showDetails === true &&
                   this.state.selectedAppointment && (
-                  <h3>Appointment Detail: {this.state.selectedAppointment.title}</h3>
+                  <h3>Appointment Detail: {this.state.selectedAppointment._id}</h3>
                 )}
                 </Tab.Pane>
                 <Tab.Pane eventKey="4">
@@ -594,7 +604,8 @@ render() {
                   <Button variant="outline-secondary" className="filterFormBtn" onClick={this.onStartCreateNewAppointment}>Create New</Button>
                 )}
                 {this.state.creatingAppointment === true &&
-                  this.state.patients && (
+                  this.state.patients &&
+                  !this.state.selectedPatient && (
                   <Row>
                     <PatientList
                       filter={this.state.filter}
@@ -617,7 +628,7 @@ render() {
                 )}
                 {this.state.newAppointment && (
                   <Row>
-                    <h3>Review New Appointment</h3>
+                    <h3>Review New Appointment {this.state.newAppointment._id}</h3>
                   </Row>
                 )}
                 </Tab.Pane>

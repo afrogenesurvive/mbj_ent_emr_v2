@@ -58,10 +58,10 @@ const PatientItem = (props) => {
                 gender: <span className="bold">{props.patient.gender}</span>
               </Card.Text>
               {props.appointmentPage === true && (
-                <Button variant="outline-primary" onClick={props.onSelect.bind(this, props.patient)}>Details</Button>
+                <Button variant="outline-primary" onClick={props.onSelect.bind(this, props.patient)}>Select</Button>
               )}
               {props.appointmentPage !== true && (
-                <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.patient)}>Select</Button>
+                <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.patient)}>Details</Button>
               )}
             </Row>
           )}
