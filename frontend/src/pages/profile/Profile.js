@@ -136,7 +136,6 @@ getThisUser (args) {
           canDelete: true
         })
       }
-      console.log('foo',moment.unix(this.state.activityUser.dob.substr(0,9)).format('YYYY-MM-DD'));
       this.logUserActivity(args);
     })
     .catch(err => {

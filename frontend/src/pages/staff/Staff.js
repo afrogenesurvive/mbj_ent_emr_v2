@@ -65,6 +65,13 @@ componentDidMount () {
       this.setState({canDelete:true})
     }
     this.getAllUsers(seshStore);
+
+    if (this.props.location.state) {
+      if (this.props.location.state.user) {
+        console.log('go link',this.props.location.state.user);
+        // function to get user by id the set showdetail, selecteduser states
+      }
+    }
   }
 }
 componentWillUnmount() {
@@ -355,51 +362,55 @@ updateUser = (args) => {
 deleteUser = (args) => {
   console.log('...deleteing user...',args);
   this.context.setUserAlert('...deleteing user...')
-  // this.setState({isLoading: true});
-  //
-  // const token = this.context.token;
-  // const activityId = this.context.activityId;
-  //
-  // let requestBody = {
-  //   query: `
-  //     query {getAllUsers(
-  //       activityId:"${activityId}" )
-  //       {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
-  //   `};
-  // fetch('http://localhost:8088/graphql', {
-  //     method: 'POST',
-  //     body: JSON.stringify(requestBody),
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       Authorization: 'Bearer ' + token
-  //     }
-  //   })
-  //   .then(res => {
-  //     if (res.status !== 200 && res.status !== 201) {
-  //       throw new Error('Failed!');
-  //     }
-  //     return res.json();
-  //   })
-  //   .then(resData => {
-  //     // console.log('...resData...',resData.data.getAllUsers);
-  //     let responseAlert = '...delete user success!...';
-  //     let error = null;
-  //     if (resData.data.getAllUsers.error) {
-  //       error = resData.data.getAllUsers.error;
-  //       responseAlert = error;
-  //     }
-  //     this.context.setUserAlert(responseAlert)
-  //     this.setState({
-  //       isLoading: false,
-  //       activityA: `getAllUsers?activityId:${activityId},userId:${userId}`
-  //     });
-  //     this.logUserActivity({activityId: activityId,token: token});
-  //   })
-  //   .catch(err => {
-  //     console.log(err);
-  //     this.context.setUserAlert(err);
-  //     this.setState({isLoading: false })
-  //   });
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const userId = args._id;
+
+  let requestBody = {
+    query: `
+      mutation {deleteUserById(
+        activityId:"${activityId}",
+        userId:"${userId}"
+      )
+      {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+    `};
+  fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.deleteUserById);
+      let responseAlert = '...delete user success!...';
+      let error = null;
+      if (resData.data.deleteUserById.error) {
+        error = resData.data.deleteUserById.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.setState({
+        isLoading: false,
+        activityA: `deleteUserById?activityId:${activityId},userId:${userId}`
+      });
+      this.logUserActivity({activityId: activityId,token: token});
+      this.getAllUsers({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
 }
 
 render() {

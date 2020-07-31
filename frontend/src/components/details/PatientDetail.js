@@ -1708,7 +1708,7 @@ render() {
                       </ListGroup.Item>
                       <ListGroup.Item>
                         <p className="listGroupText">DOB:</p>
-                        <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,8)).add(1,'days').format('YYYY-MM-DD')}</p>
+                        <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
                         <p className="listGroupText">Age:</p>
                         <p className="listGroupText bold">{this.props.patient.age}</p>

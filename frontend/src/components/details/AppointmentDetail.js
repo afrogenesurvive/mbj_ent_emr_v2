@@ -749,7 +749,7 @@ render() {
                       </ListGroup.Item>
                       <ListGroup.Item>
                         <p className="listGroupText">Date:</p>
-                        <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,8)).add(1,'days').format('YYYY-MM-DD')}</p>
+                        <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'date')}>Edit</Button>
                         <p className="listGroupText">Time:</p>
                         <p className="listGroupText bold">{this.props.appointment.time}</p>

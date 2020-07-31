@@ -4,6 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
+import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import { NavLink } from 'react-router-dom';
@@ -23,6 +24,11 @@ import AppointmentDetail from '../../components/details/AppointmentDetail';
 
 import FilterAppointmentForm from '../../components/forms/filter/FilterAppointmentForm';
 import AppointmentSearchForm from '../../components/forms/search/AppointmentSearchForm';
+
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+// import bootstrapPlugin from '@fullcalendar/bootstrap';
+import '../../calendar.scss'
 
 import loadingGif from '../../assets/loading.gif';
 import { faBath } from '@fortawesome/free-solid-svg-icons';
@@ -61,11 +67,13 @@ class AppointmentPage extends Component {
     selectedAppointment: null,
     creatingAppointment: false,
     newAppointment: null,
+    calendarAppointments: null,
   };
   static contextType = AuthContext;
 
 componentDidMount () {
   console.log('...all appointments component mounted...');
+
   if (sessionStorage.getItem('logInfo')) {
     const seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
     if (seshStore.role === 'Admin') {
@@ -73,6 +81,15 @@ componentDidMount () {
     }
     this.getAllAppointments(seshStore);
     this.getAllPatients(seshStore);
+
+
+    if (this.props.location.state) {
+      if (this.props.location.state.appointment) {
+        console.log('go link',this.props.location.state.appointment);
+        // function to get appt by id the set showdetail, selectedappt states
+      }
+    }
+
   }
 }
 componentWillUnmount() {
@@ -109,7 +126,7 @@ getAllAppointments (args) {
       return res.json();
     })
     .then(resData => {
-      console.log('...resData...',resData.data.getAllAppointments);
+      // console.log('...resData...',resData.data.getAllAppointments);
       let responseAlert = '...all appointments retrieval success!...';
       let error = null;
       if (resData.data.getAllAppointments.error) {
@@ -123,6 +140,7 @@ getAllAppointments (args) {
         activityA: `getAllAppointments?activityId:${activityId}`
       });
       this.logUserActivity({activityId: activityId,token: token});
+      this.parseForCalendar(resData.data.getAllAppointments)
     })
     .catch(err => {
       console.log(err);
@@ -516,6 +534,78 @@ updateAppointment = (args) => {
 deleteAppointment = (args) => {
   console.log('...deleteing appointment...',args);
   this.context.setUserAlert('...deleteing appointment...')
+
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const appointmentId = args._id;
+
+  let requestBody = {
+    query: `
+      mutation {deleteAppointmentById(
+        activityId:"${activityId}",
+        appointmentId:"${appointmentId}"
+      )
+      {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
+    `};
+  fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.deleteAppointmentById);
+      let responseAlert = '...delete appointment success!...';
+      let error = null;
+      if (resData.data.deleteAppointmentById.error) {
+        error = resData.data.deleteAppointmentById.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.setState({
+        isLoading: false,
+        activityA: `deleteAppointmentById?activityId:${activityId},appointmentId:${appointmentId}`
+      });
+      this.logUserActivity({activityId: activityId,token: token});
+      this.getAllAppointments({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+}
+
+
+parseForCalendar = (args) => {
+  console.log('...parsing appointments for calendar...');
+  let calendarAppointments = args.map(x => ({
+      title: x.title,
+      date: moment.unix(x.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      props: {
+        title: x.title,
+        type: x.type,
+        date: x.date
+      }
+    }))
+    this.setState({
+      calendarAppointments: calendarAppointments
+    })
+
+}
+
+viewCalendarEvent = (args) => {
+  console.log('...viewing calendar appointment...',args);
 }
 
 
@@ -578,6 +668,9 @@ render() {
             <Col md={10} className="staffPageContainerCol specialCol2">
               <Tab.Content>
                 <Tab.Pane eventKey="1">
+
+                <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+                  <Tab eventKey="1" title="list">
                   <Row className="displayPaneHeadRow">
                     <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
                   </Row>
@@ -589,6 +682,19 @@ render() {
                       showDetails={this.showDetails}
                       onDelete={this.deleteAppointment}
                     />
+                  </Tab>
+                  <Tab eventKey="2" title="calendar">
+                    <h3>Calendar</h3>
+                    <FullCalendar
+                      defaultView="dayGridMonth"
+                      plugins={[dayGridPlugin]}
+                      events={this.state.calendarAppointments}
+                      eventClick={this.viewCalendarEvent}
+                    />
+                  </Tab>
+                </Tabs>
+
+
                 </Tab.Pane>
                 <Tab.Pane eventKey="2">
                 <Col className="userSearchCol">

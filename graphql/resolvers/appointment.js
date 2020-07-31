@@ -490,7 +490,7 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-        const patient = await Appointment.findByIdAndRemove({_id:args.patientId});
+        const appointment = await Appointment.findByIdAndRemove({_id:args.appointmentId});
         return {
           ...appointment._doc,
           _id: appointment.id,

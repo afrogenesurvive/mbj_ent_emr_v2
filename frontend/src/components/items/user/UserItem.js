@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {Link} from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
@@ -65,6 +66,15 @@ const UserItem = (props) => {
               )}
               {props.canDelete && (
                 <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.user)}>Delete</Button>
+              )}
+              {props.appointmentPage && (
+                <Link
+                  to={{
+                    pathname: "/staff",
+                    state: {user: props.user._id}
+                  }}
+                >Go!
+                </Link>
               )}
             </Row>
           )}

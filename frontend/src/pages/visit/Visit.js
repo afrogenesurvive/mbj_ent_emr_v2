@@ -4,6 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
+import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import { NavLink } from 'react-router-dom';
@@ -15,19 +16,25 @@ import AuthContext from '../../context/auth-context';
 import AlertBox from '../../components/alertBox/AlertBox';
 import LoadingOverlay from '../../components/overlay/LoadingOverlay';
 
-import CreatePatientForm from '../../components/forms/create/CreatePatientForm';
+import CreateAppointmentForm from '../../components/forms/create/CreateAppointmentForm';
+import AppointmentList from '../../components/lists/appointment/AppointmentList';
 import PatientList from '../../components/lists/patient/PatientList';
-import SearchPatientList from '../../components/lists/patient/SearchPatientList';
-import PatientDetail from '../../components/details/PatientDetail';
+// import SearchAppointmentList from '../../components/lists/appointment/SearchAppointmentList';
+import AppointmentDetail from '../../components/details/AppointmentDetail';
 
-import FilterPatientForm from '../../components/forms/filter/FilterPatientForm';
-import PatientSearchForm from '../../components/forms/search/PatientSearchForm';
+import FilterAppointmentForm from '../../components/forms/filter/FilterAppointmentForm';
+import AppointmentSearchForm from '../../components/forms/search/AppointmentSearchForm';
+
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+// import bootstrapPlugin from '@fullcalendar/bootstrap';
+import '../../calendar.scss'
 
 import loadingGif from '../../assets/loading.gif';
 import { faBath } from '@fortawesome/free-solid-svg-icons';
-import './patient.css';
+import './visit.css';
 
-class PatientPage extends Component {
+class AppointmentPage extends Component {
   state = {
     activityA: null,
     role: null,
@@ -38,11 +45,12 @@ class PatientPage extends Component {
     activityUser: null,
     users: null,
     patients: null,
-    searchPatients: null,
+    canDelete: false,
+    appointments: null,
+    searchAppointments: null,
     isLoading: false,
     seshStore: null,
     profileLoaded: false,
-    canDelete: false,
     sideCol: 'menu',
     filter: {
       field: null,
@@ -56,25 +64,90 @@ class PatientPage extends Component {
     },
     showDetails: false,
     selectedUser: null,
-    selectedPatient: null,
-    creatingPatient: false,
-    newPatient: null,
+    selectedAppointment: null,
+    creatingAppointment: false,
+    newAppointment: null,
+    calendarAppointments: null,
   };
   static contextType = AuthContext;
 
 componentDidMount () {
-  console.log('...all patients component mounted...');
+  console.log('...all appointments component mounted...');
+
   if (sessionStorage.getItem('logInfo')) {
     const seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
     if (seshStore.role === 'Admin') {
       this.setState({canDelete:true})
     }
+    this.getAllAppointments(seshStore);
     this.getAllPatients(seshStore);
+
+
+    if (this.props.location.state) {
+      if (this.props.location.state.appointment) {
+        console.log('baz',this.props.location.state.appointment);
+        // call function to get appt by id then set showdetails + selectedappt states
+      }
+    }
+
   }
 }
 componentWillUnmount() {
 
 }
+
+getAllAppointments (args) {
+  console.log('...retrieving all appointments...');
+  this.context.setUserAlert('...retrieving all appointments...')
+  this.setState({isLoading: true});
+
+  const token = args.token;
+  const activityId = args.activityId;
+
+  let requestBody = {
+    query: `
+      query {getAllAppointments(
+        activityId:"${activityId}"
+      )
+      {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
+    `};
+  fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.getAllAppointments);
+      let responseAlert = '...all appointments retrieval success!...';
+      let error = null;
+      if (resData.data.getAllAppointments.error) {
+        error = resData.data.getAllAppointments.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.setState({
+        isLoading: false,
+        appointments: resData.data.getAllAppointments,
+        activityA: `getAllAppointments?activityId:${activityId}`
+      });
+      this.logUserActivity({activityId: activityId,token: token});
+      this.parseForCalendar(resData.data.getAllAppointments)
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+};
 
 getAllPatients (args) {
   console.log('...retrieving all patients...');
@@ -83,7 +156,6 @@ getAllPatients (args) {
 
   const token = args.token;
   const activityId = args.activityId;
-  const userId = activityId;
 
   let requestBody = {
     query: `
@@ -118,7 +190,7 @@ getAllPatients (args) {
       this.setState({
         isLoading: false,
         patients: resData.data.getAllPatients,
-        activityA: `getAllPatients?activityId:${activityId},userId:${userId}`
+        activityA: `getAllPatients?activityId:${activityId}`
       });
       this.logUserActivity({activityId: activityId,token: token});
     })
@@ -128,6 +200,7 @@ getAllPatients (args) {
       this.setState({isLoading: false })
     });
 };
+
 logUserActivity(args) {
   console.log('...logUserActivity...');
   const activityId = args.activityId;
@@ -170,11 +243,11 @@ logUserActivity(args) {
     });
 };
 
-searchPatients = (event) => {
+searchAppointments = (event) => {
   event.preventDefault();
-  console.log('...searching patients...');
-  this.context.setUserAlert('...searching patients...')
-  // this.setState({isLoading: true});
+  console.log('...searching appointments...');
+  this.context.setUserAlert('...searching appointments...')
+  this.setState({isLoading: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -182,19 +255,11 @@ searchPatients = (event) => {
   const field = event.target.field.value;
   const query = event.target.query.value;
   let regex = true;
-  if (field === 'active' ||
-      field === 'age' ||
-      field === 'dob' ||
-      field === 'addresses.number' ||
-      field === 'addresses.primary' ||
-      field === 'loggedIn' ||
-      field === 'clientConnected' ||
-      field === 'verification.verified' ||
-      field === 'registration.date' ||
-      field === 'expiryDate' ||
-      field === 'referral.date' ||
-      field === 'insurance.expiryDate' ||
-      field === 'insurance.expiryDate'
+  if (field === 'date' ||
+      field === 'inProgress' ||
+      field === 'attended' ||
+      field === 'important' ||
+      field === 'important'
     ) {
       regex = false;
   }
@@ -204,23 +269,23 @@ searchPatients = (event) => {
   if (regex === true) {
     requestBody = {
       query: `
-        query {getPatientsByFieldRegex(
+        query {getAppointmentsByFieldRegex(
           activityId:"${activityId}",
           field:"${field}",
           query:"${query}"
         )
-        {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
+        {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,reminders{_id},creator{_id}}}
       `};
   }
   if (regex === false) {
     requestBody = {
       query: `
-        query {getPatientsByField(
-          activityId:"${activityId}",
-          field:"${field}",
-          query:"${query}"
-        )
-        {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
+      query {getAppointmentsByField(
+        activityId:"${activityId}",
+        field:"${field}",
+        query:"${query}"
+      )
+      {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,reminders{_id},creator{_id}}}
       `};
   }
   fetch('http://localhost:8088/graphql', {
@@ -239,24 +304,24 @@ searchPatients = (event) => {
     })
     .then(resData => {
       if (regex === true) {
-        // console.log('...resData...',resData.data.getPatientsByFieldRegex);
+        console.log('...resData...',resData.data.getAppointmentsByFieldRegex);
       }
       if (regex === false) {
-        // console.log('...resData...',resData.data.getPatientsByField);
+        console.log('...resData...',resData.data.getAppointmentsByField);
       }
 
-      let responseAlert = '...patient search success!...';
+      let responseAlert = '...appointment search success!...';
       let error = null;
 
       if (regex === true) {
-        if (resData.data.getPatientsByFieldRegex.error) {
-          error = resData.data.getPatientsByFieldRegex.error;
+        if (resData.data.getAppointmentsByFieldRegex.error) {
+          error = resData.data.getAppointmentsByFieldRegex.error;
           responseAlert = error;
         }
       }
       if (regex === false) {
-        if (resData.data.getPatientsByField.error) {
-          error = resData.data.getPatientsByField.error;
+        if (resData.data.getAppointmentsByField.error) {
+          error = resData.data.getAppointmentsByField.error;
           responseAlert = error;
         }
       }
@@ -266,15 +331,15 @@ searchPatients = (event) => {
       if (regex === true) {
         this.setState({
           isLoading: false,
-          searchPatients: resData.data.getPatientsByFieldRegex,
-          activityA: `getPatientsByFieldRegex?activityId:${activityId},userId:${userId}`
+          searchAppointments: resData.data.getAppointmentsByFieldRegex,
+          activityA: `getAppointmentsByFieldRegex?activityId:${activityId},userId:${userId}`
         });
       }
       if (regex === false) {
         this.setState({
           isLoading: false,
-          searchPatients: resData.data.getPatientsByField,
-          activityA: `getPatientsByField?activityId:${activityId},userId:${userId}`
+          searchAppointments: resData.data.getAppointmentsByField,
+          activityA: `getAppointmentsByField?activityId:${activityId},userId:${userId}`
         });
       }
 
@@ -288,119 +353,66 @@ searchPatients = (event) => {
 
 }
 
-onStartCreateNewPatient = () => {
+onStartCreateNewAppointment = () => {
   this.setState({
-    creatingPatient: true
+    creatingAppointment: true
   })
 }
-cancelCreateNewPatient = () => {
+cancelCreateNewAppointment = () => {
   this.setState({
-    creatingPatient: false
+    creatingAppointment: false,
+    selectedPatient: null
   })
 }
-submitCreateNewPatientForm = (event) => {
+submitCreateNewAppointmentForm = (event) => {
   event.preventDefault();
-  console.log('...creating new patient...');
-  this.context.setUserAlert('...creating new patient...')
+  console.log('...creating new appointment...');
+  this.context.setUserAlert('...creating new appointment...')
   this.setState({isLoading: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
+  const patientId = this.state.selectedPatient._id;
 
-  const active = event.target.active.value;
   const title = event.target.title.value;
-  const name = event.target.name.value;
-  const username = event.target.username.value;
-  const dob = event.target.dob.value;
-  const role = event.target.role.value;
-  const gender = event.target.gender.value;
-  const contactEmail = event.target.contactEmail.value;
-  const contactPhone = event.target.contactPhone.value;
-  const contactPhone2 = event.target.contactPhone2.value;
-  const addressNumber = event.target.addressNumber.value;
-  const addressStreet = event.target.addressStreet.value;
-  const addressTown = event.target.addressTown.value;
-  const addressCity = event.target.addressCity.value;
-  const addressParish = event.target.addressParish.value;
-  const addressCountry = event.target.addressCountry.value;
-  const addressPostalCode = event.target.addressPostalCode.value;
-  const referralDate = event.target.referralDate.value;
-  const referralReason = event.target.referralReason.value;
-  const referralPhysicianName = event.target.referralPhysicianName.value;
-  const referralPhysicianPhone = event.target.referralPhysicianPhone.value;
-  const referralPhysicianEmail = event.target.referralPhysicianEmail.value;
-  const referralPhysicianAddress = event.target.referralPhysicianAddress.value;
-  const attendingPhysician = event.target.attendingPhysician.value;
-  const occupationRole = event.target.occupationRole.value;
-  const occupationEmployerName = event.target.occupationEmployerName.value;
-  const occupationEmployerEmail = event.target.occupationEmployerEmail.value;
-  const occupationEmployerPhone = event.target.occupationEmployerPhone.value;
-  const occupationEmployerAddress = event.target.occupationEmployerAddress.value;
-  const insuranceCompany = event.target.insuranceCompany.value;
-  const insurancePolicyNumber = event.target.insurancePolicyNumber.value;
-  const insuranceDescription = event.target.insuranceDescription.value;
-  const insuranceExpiryDate = event.target.insuranceExpiryDate.value;
-  const insuranceSubscriberCompany = event.target.insuranceSubscriberCompany.value;
-  const insuranceSubscriberDescription = event.target.insuranceSubscriberDescription.value;
+  const type = event.target.type.value;
+  const subType = event.target.subType.value;
+  const date = event.target.date.value;
+  const time = event.target.time.value;
+  const location = event.target.location.value;
+  const description = event.target.description.value;
+  const important = event.target.important.value;
 
-  if (
-      active.trim().length === 0 ||
-      title.trim().length === 0 ||
-      name.trim().length === 0 ||
-      username.trim().length === 0 ||
-      dob.trim().length === 0 ||
-      role.trim().length === 0 ||
-      gender.trim().length === 0 ||
-      contactEmail.trim().length === 0 ||
-      contactPhone.trim().length === 0 ||
-      contactPhone2.trim().length === 0
-    ) {
-    this.context.setUserAlert("...blank fields!!!...")
-    return;
+  // if (
+  //     active.trim().length === 0 ||
+  //   ) {
+  //   this.context.setUserAlert("...blank fields!!!...")
+  //   return;
+  // }
+
+  if (date < moment().format('YYYY-MM-DD')) {
+    console.log('...ummm no! Please pick a date today or in the future...');
+    this.context.setUserAlert('...ummm no! Please pick a date today or in the future...')
+    this.setState({isLoading:false})
+    return
   }
-
 
   let requestBody = {
     query: `
-      mutation {createPatient(
+      mutation {createAppointment(
         activityId:"${activityId}",
-        patientInput:{
-          active:${active},
-          username:"${username}",
-          dob:"${dob}",
+        patientId:"${patientId}",
+        appointmentInput:{
           title:"${title}",
-          name:"${name}",
-          role:"${role}",
-          gender:"${gender}",
-          contactEmail:"${contactEmail}",
-          contactPhone:"${contactPhone}",
-          contactPhone2:"${contactPhone2}",
-          addressNumber:${addressNumber},
-          addressStreet:"${addressStreet}",
-          addressTown:"${addressTown}",
-          addressCity:"${addressCity}",
-          addressParish:"${addressParish}",
-          addressCountry:"${addressCountry}",
-          addressPostalCode:"${addressPostalCode}",
-          referralDate:"${referralDate}",
-          referralReason:"${referralReason}",
-          referralPhysicianName:"${referralPhysicianName}",
-          referralPhysicianEmail:"${referralPhysicianEmail}",
-          referralPhysicianPhone:"${referralPhysicianPhone}",
-          attendingPhysician:"${attendingPhysician}",
-          occupationRole:"${occupationRole}",
-          occupationEmployerName:"${occupationEmployerName}",
-          occupationEmployerPhone:"${occupationEmployerPhone}",
-          occupationEmployerEmail:"${occupationEmployerEmail}",
-          occupationEmployerAddress:"${occupationEmployerAddress}",
-          insuranceCompany:"${insuranceCompany}",
-          insurancePolicyNumber:"${insurancePolicyNumber}",
-          insuranceDescription:"${insuranceDescription}",
-          insuranceExpiryDate:"${insuranceExpiryDate}",
-          insuranceSubscriberCompany:"${insuranceSubscriberCompany}",
-          insuranceSubscriberDescription:"${insuranceSubscriberDescription}"
+          type:"${type}",
+          subType:"${subType}",
+          date:"${date}",
+          time:"${time}",
+          location:"${location}",
+          description:"${description}",
+          important:${important}
         })
-        {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
+        {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,reminders{_id},creator{_id}}}
     `};
   fetch('http://localhost:8088/graphql', {
       method: 'POST',
@@ -417,24 +429,24 @@ submitCreateNewPatientForm = (event) => {
       return res.json();
     })
     .then(resData => {
-      // console.log('...resData...',resData.data.createPatient);
-      let responseAlert = '...create patient success!...';
+      console.log('...resData...',resData.data.createAppointment);
+      let responseAlert = '...create appointment success!...';
       let error = null;
-      if (resData.data.createPatient.error) {
-        error = resData.data.createPatient.error;
+      if (resData.data.createAppointment.error) {
+        error = resData.data.createAppointment.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
       this.setState({
         isLoading: false,
-        creatingPatient: false,
-        selectedPatient: resData.data.createPatient,
-        // newPatient: resData.data.createPatient,
-        activityA: `createPatient?activityId:${activityId},patientId:${resData.data.createPatient._id}`
+        creatingAppointment: false,
+        selectedAppointment: resData.data.createAppointment,
+        newAppointment: resData.data.createAppointment,
+        activityA: `createAppointment?activityId:${activityId},appointmentId:${resData.data.createAppointment._id}`
       });
       this.logUserActivity({activityId: activityId,token: token});
       const seshStore = JSON.parse(sessionStorage.getItem('logInfo'))
-      this.getAllPatients(seshStore);
+      this.getAllAppointments(seshStore);
     })
     .catch(err => {
       console.log(err);
@@ -484,11 +496,12 @@ submitFilterForm = (event) => {
 }
 
 showDetails = (args) => {
+  console.log('bar',args.visits);
   this.setState({
     showDetails: true,
-    selectedPatient: args
+    selectedAppointment: args
   })
-  this.context.selectedPatient = args;
+  this.context.selectedAppointment = args;
 }
 startAdd = (args) => {
   this.setState({
@@ -506,30 +519,35 @@ cancelAdd = () => {
     }
   })
 }
-
-updatePatient = (args) => {
-  console.log('...updating selected patient...');
+selectPatient = (args) => {
   this.setState({
     selectedPatient: args
   })
 }
+updateAppointment = (args) => {
+  console.log('...updating selected appointment...');
+  this.setState({
+    selectedAppointment: args
+  })
+}
 
-deletePatient = (args) => {
-  console.log('...deleteing patient...',args);
-  this.context.setUserAlert('...deleteing patient...')
+deleteAppointment = (args) => {
+  console.log('...deleteing appointment...',args);
+  this.context.setUserAlert('...deleteing appointment...')
+
   this.setState({isLoading: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = args._id;
+  const appointmentId = args._id;
 
   let requestBody = {
     query: `
-      mutation {deletePatientById(
+      mutation {deleteAppointmentById(
         activityId:"${activityId}",
-        patientId:"${patientId}"
+        appointmentId:"${appointmentId}"
       )
-      {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
+      {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
   fetch('http://localhost:8088/graphql', {
       method: 'POST',
@@ -546,20 +564,20 @@ deletePatient = (args) => {
       return res.json();
     })
     .then(resData => {
-      // console.log('...resData...',resData.data.deletePatientById);
-      let responseAlert = '...delete patient success!...';
+      // console.log('...resData...',resData.data.deleteAppointmentById);
+      let responseAlert = '...delete appointment success!...';
       let error = null;
-      if (resData.data.deletePatientById.error) {
-        error = resData.data.deletePatientById.error;
+      if (resData.data.deleteAppointmentById.error) {
+        error = resData.data.deleteAppointmentById.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
       this.setState({
         isLoading: false,
-        activityA: `deletePatientById?activityId:${activityId},patientId:${patientId}`
+        activityA: `deleteAppointmentById?activityId:${activityId},appointmentId:${appointmentId}`
       });
       this.logUserActivity({activityId: activityId,token: token});
-      this.getAllPatients({activityId: activityId,token: token});
+      this.getAllAppointments({activityId: activityId,token: token});
     })
     .catch(err => {
       console.log(err);
@@ -567,6 +585,29 @@ deletePatient = (args) => {
       this.setState({isLoading: false })
     });
 }
+
+
+parseForCalendar = (args) => {
+  console.log('...parsing appointments for calendar...');
+  let calendarAppointments = args.map(x => ({
+      title: x.title,
+      date: moment.unix(x.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      props: {
+        title: x.title,
+        type: x.type,
+        date: x.date
+      }
+    }))
+    this.setState({
+      calendarAppointments: calendarAppointments
+    })
+
+}
+
+viewCalendarEvent = (args) => {
+  console.log('...viewing calendar appointment...',args);
+}
+
 
 render() {
 
@@ -582,7 +623,7 @@ render() {
     <Container className="staffPageContainer">
       <Row className="staffPageContainerRow headRow">
         <Col md={9} className="staffPageContainerCol">
-          <h1>Patient List</h1>
+          <h1>Appointment List</h1>
         </Col>
         <Col md={3} className="staffPageContainerCol">
           {this.state.isLoading ? (
@@ -615,7 +656,7 @@ render() {
             )}
             {this.state.sideCol === 'filter' && (
               <Col>
-                <FilterPatientForm
+                <FilterAppointmentForm
                   onCancel={this.toggleSideCol}
                   onConfirm={this.submitFilterForm}
                 />
@@ -623,35 +664,51 @@ render() {
             )}
           </Col>
 
-          {this.state.patients && (
+          {this.state.appointments && (
             <Col md={10} className="staffPageContainerCol specialCol2">
               <Tab.Content>
                 <Tab.Pane eventKey="1">
+
+                <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+                  <Tab eventKey="1" title="list">
                   <Row className="displayPaneHeadRow">
                     <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
                   </Row>
-                    <PatientList
+                    <AppointmentList
                       filter={this.state.filter}
-                      patients={this.state.patients}
+                      appointments={this.state.appointments}
                       authId={this.context.activityId}
                       canDelete={this.state.canDelete}
                       showDetails={this.showDetails}
-                      onDelete={this.deletePatient}
+                      onDelete={this.deleteAppointment}
                     />
+                  </Tab>
+                  <Tab eventKey="2" title="calendar">
+                    <h3>Calendar</h3>
+                    <FullCalendar
+                      defaultView="dayGridMonth"
+                      plugins={[dayGridPlugin]}
+                      events={this.state.calendarAppointments}
+                      eventClick={this.viewCalendarEvent}
+                    />
+                  </Tab>
+                </Tabs>
+
+
                 </Tab.Pane>
                 <Tab.Pane eventKey="2">
                 <Col className="userSearchCol">
-                  <h3>Search Patient</h3>
+                  <h3>Search Appointment</h3>
                   <Row className="userSearchRow">
-                    <PatientSearchForm
-                      onConfirm={this.searchPatients}
+                    <AppointmentSearchForm
+                      onConfirm={this.searchAppointments}
                     />
                   </Row>
                   <Row className="userSearchRow results">
-                    {this.state.searchPatients && (
-                      <SearchPatientList
+                    {this.state.searchAppointments && (
+                      <AppointmentList
                         filter={this.state.filter}
-                        patients={this.state.searchPatients}
+                        appointments={this.state.searchAppointments}
                         authId={this.context.activityId}
                         showDetails={this.showDetails}
                       />
@@ -661,27 +718,43 @@ render() {
                 </Tab.Pane>
                 <Tab.Pane eventKey="3">
                 {this.state.showDetails === true &&
-                  this.state.selectedPatient && (
-                  <PatientDetail
-                    patient={this.state.selectedPatient}
-                    updatePatient={this.updatePatient}
+                  this.state.selectedAppointment && (
+                  <AppointmentDetail
+                    appointment={this.state.selectedAppointment}
+                    updateAppointment={this.updateAppointment}
                   />
                 )}
                 </Tab.Pane>
                 <Tab.Pane eventKey="4">
-                {this.state.creatingPatient === false && (
-                  <Button variant="outline-secondary" className="filterFormBtn" onClick={this.onStartCreateNewPatient}>Create New</Button>
+                {this.state.creatingAppointment === false && (
+                  <Button variant="outline-secondary" className="filterFormBtn" onClick={this.onStartCreateNewAppointment}>Create New</Button>
                 )}
-                {this.state.creatingPatient === true && (
-                  <CreatePatientForm
-                    onConfirm={this.submitCreateNewPatientForm}
-                    onCancel={this.cancelCreateNewPatient}
-                  />
-                )}
-                {this.state.newPatient && (
+                {this.state.creatingAppointment === true &&
+                  this.state.patients &&
+                  !this.state.selectedPatient && (
                   <Row>
-                    <h3>Review New Patient</h3>
-                    {this.state.newPatient.username}
+                    <PatientList
+                      filter={this.state.filter}
+                      patients={this.state.patients}
+                      authId={this.context.activityId}
+                      onSelect={this.selectPatient}
+                      appointmentPage={true}
+                    />
+                  </Row>
+                )}
+                {this.state.creatingAppointment === true &&
+                  this.state.selectedPatient && (
+                  <Row>
+                    <CreateAppointmentForm
+                      onConfirm={this.submitCreateNewAppointmentForm}
+                      onCancel={this.cancelCreateNewAppointment}
+                      patient={this.state.selectedPatient}
+                    />
+                  </Row>
+                )}
+                {this.state.newAppointment && (
+                  <Row>
+                    <h3>Review New Appointment {this.state.newAppointment._id}</h3>
                   </Row>
                 )}
                 </Tab.Pane>
@@ -699,4 +772,4 @@ render() {
 
 }
 
-export default PatientPage;
+export default AppointmentPage;

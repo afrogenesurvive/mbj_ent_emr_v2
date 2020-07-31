@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {Link} from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
@@ -31,7 +32,7 @@ const AppointmentItem = (props) => {
             Type: <span className="bold">{props.appointment.type}</span>
           </Card.Text>
           <Card.Text className="cardText">
-            Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,8)).add(1,'days').format('YYYY-MM-DD')}</span>
+            Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
           </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           {state === true && (
@@ -63,6 +64,13 @@ const AppointmentItem = (props) => {
               <Card.Text className="cardText">
                 important: <span className="bold">{props.appointment.important.toString()}</span>
               </Card.Text>
+              <Link
+                to={{
+                  pathname: "/appointments",
+                  state: {appointment: props.appointment._id}
+                }}
+              >Go!
+              </Link>
             </Row>
           )}
         </Card.Body>
