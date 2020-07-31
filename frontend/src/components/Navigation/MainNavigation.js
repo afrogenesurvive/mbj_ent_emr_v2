@@ -13,12 +13,9 @@ const mainNavigation = props => (
         <header className="main-navigation">
           <div className="main-navigation__logo">
             <h1>MBJ ENT EMR V2.0.1</h1>
-
           </div>
           <nav className="main-navigation__items">
-
             <ul>
-
               {!context.token && (
                 <React.Fragment>
                 <li>
@@ -34,7 +31,6 @@ const mainNavigation = props => (
               )}
               {context.token && (
                 <React.Fragment>
-
                   <li>
                     <NavLink to="/home">Home</NavLink>
                   </li>
@@ -49,6 +45,9 @@ const mainNavigation = props => (
                   </li>
                   <li>
                     <NavLink to="/appointments">Appointments</NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/visits">Visits</NavLink>
                   </li>
                   <li>
                     <button onClick={context.logout}>Logout</button>

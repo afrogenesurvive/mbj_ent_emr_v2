@@ -439,6 +439,7 @@ submitCreateNewAppointmentForm = (event) => {
       this.context.setUserAlert(responseAlert)
       this.setState({
         isLoading: false,
+        showDetails: true,
         creatingAppointment: false,
         selectedAppointment: resData.data.createAppointment,
         newAppointment: resData.data.createAppointment,
@@ -496,7 +497,7 @@ submitFilterForm = (event) => {
 }
 
 showDetails = (args) => {
-  console.log('bar',args.visits);
+  // console.log('bar',args.visits);
   this.setState({
     showDetails: true,
     selectedAppointment: args
@@ -586,16 +587,20 @@ deleteAppointment = (args) => {
     });
 }
 
-
 parseForCalendar = (args) => {
   console.log('...parsing appointments for calendar...');
   let calendarAppointments = args.map(x => ({
       title: x.title,
       date: moment.unix(x.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
       props: {
+        date: x.date,
         title: x.title,
         type: x.type,
-        date: x.date
+        subType: x.subType,
+        time: x.time,
+        location: x.location,
+        description: x.description,
+        important: x.important,
       }
     }))
     this.setState({
@@ -703,6 +708,11 @@ render() {
                     <AppointmentSearchForm
                       onConfirm={this.searchAppointments}
                     />
+                  </Row>
+                  <Row>
+                    {this.state.searchAppointments && (
+                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                    )}
                   </Row>
                   <Row className="userSearchRow results">
                     {this.state.searchAppointments && (

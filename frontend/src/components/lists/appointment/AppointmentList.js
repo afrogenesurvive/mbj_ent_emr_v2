@@ -71,6 +71,8 @@ const AppointmentList = props => {
         canDelete={props.canDelete}
         onDelete={props.onDelete}
         showDetails={props.showDetails}
+        visitPage={props.visitPage}
+        onSelect={props.onSelect}
       />
     );
   });

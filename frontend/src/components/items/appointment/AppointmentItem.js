@@ -63,7 +63,12 @@ const AppointmentItem = (props) => {
               <Card.Text className="cardText">
                 important: <span className="bold">{props.appointment.important.toString()}</span>
               </Card.Text>
-              <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.appointment)}>Details</Button>
+              {props.visitPage !== true && (
+                <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.appointment)}>Details</Button>
+              )}
+              {props.visitPage === true && (
+                <Button variant="outline-primary" onClick={props.onSelect.bind(this, props.appointment)}>Select</Button>
+              )}
               {props.canDelete && (
                 <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.appointment)}>Delete</Button>
               )}

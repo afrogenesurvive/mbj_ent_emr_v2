@@ -7,7 +7,7 @@ import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
 
 import './PatientItem.css';
 
-const TagItem = props => (
+const VisitItem = props => (
   <li key={props.key} className="">
     <Card>
       <Card.Body className="cardBody">
@@ -22,4 +22,4 @@ const TagItem = props => (
   </li>
 );
 
-export default TagItem;
+export default VisitItem;

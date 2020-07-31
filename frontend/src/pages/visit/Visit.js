@@ -16,14 +16,15 @@ import AuthContext from '../../context/auth-context';
 import AlertBox from '../../components/alertBox/AlertBox';
 import LoadingOverlay from '../../components/overlay/LoadingOverlay';
 
-import CreateAppointmentForm from '../../components/forms/create/CreateAppointmentForm';
-import AppointmentList from '../../components/lists/appointment/AppointmentList';
+import CreateVisitForm from '../../components/forms/create/CreateVisitForm';
+import VisitList from '../../components/lists/visit/VisitList';
 import PatientList from '../../components/lists/patient/PatientList';
+import AppointmentList from '../../components/lists/appointment/AppointmentList';
 // import SearchAppointmentList from '../../components/lists/appointment/SearchAppointmentList';
 import AppointmentDetail from '../../components/details/AppointmentDetail';
 
-import FilterAppointmentForm from '../../components/forms/filter/FilterAppointmentForm';
-import AppointmentSearchForm from '../../components/forms/search/AppointmentSearchForm';
+import FilterVisitForm from '../../components/forms/filter/FilterVisitForm';
+import VisitSearchForm from '../../components/forms/search/VisitSearchForm';
 
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -34,7 +35,7 @@ import loadingGif from '../../assets/loading.gif';
 import { faBath } from '@fortawesome/free-solid-svg-icons';
 import './visit.css';
 
-class AppointmentPage extends Component {
+class VisitPage extends Component {
   state = {
     activityA: null,
     role: null,
@@ -45,9 +46,10 @@ class AppointmentPage extends Component {
     activityUser: null,
     users: null,
     patients: null,
-    canDelete: false,
     appointments: null,
-    searchAppointments: null,
+    canDelete: false,
+    visits: null,
+    searchVisits: null,
     isLoading: false,
     seshStore: null,
     profileLoaded: false,
@@ -64,37 +66,84 @@ class AppointmentPage extends Component {
     },
     showDetails: false,
     selectedUser: null,
+    selectedPatient: null,
     selectedAppointment: null,
-    creatingAppointment: false,
-    newAppointment: null,
-    calendarAppointments: null,
+    selectedVisit: null,
+    creatingVisit: false,
+    newVisit: null,
+    calendarVisits: null,
   };
   static contextType = AuthContext;
 
 componentDidMount () {
-  console.log('...all appointments component mounted...');
+  console.log('...all visits component mounted...');
 
   if (sessionStorage.getItem('logInfo')) {
     const seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
     if (seshStore.role === 'Admin') {
       this.setState({canDelete:true})
     }
+    this.getAllVisits(seshStore);
     this.getAllAppointments(seshStore);
-    this.getAllPatients(seshStore);
-
-
-    if (this.props.location.state) {
-      if (this.props.location.state.appointment) {
-        console.log('baz',this.props.location.state.appointment);
-        // call function to get appt by id then set showdetails + selectedappt states
-      }
-    }
-
+    // this.getAllPatients(seshStore);
   }
 }
 componentWillUnmount() {
 
 }
+
+getAllVisits (args) {
+  console.log('...retrieving all visits...');
+  this.context.setUserAlert('...retrieving all visits...')
+  this.setState({isLoading: true});
+
+  const token = args.token;
+  const activityId = args.activityId;
+
+  let requestBody = {
+    query: `
+      query {getAllVisits(
+        activityId:"${activityId}"
+      )
+      {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
+    `};
+  fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.getAllVisits);
+      let responseAlert = '...all visits retrieval success!...';
+      let error = null;
+      if (resData.data.getAllVisits.error) {
+        error = resData.data.getAllVisits.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.setState({
+        isLoading: false,
+        visits: resData.data.getAllVisits,
+        activityA: `getAllVisits?activityId:${activityId}`
+      });
+      this.logUserActivity({activityId: activityId,token: token});
+      this.parseForCalendar(resData.data.getAllVisits)
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+};
 
 getAllAppointments (args) {
   console.log('...retrieving all appointments...');
@@ -140,7 +189,6 @@ getAllAppointments (args) {
         activityA: `getAllAppointments?activityId:${activityId}`
       });
       this.logUserActivity({activityId: activityId,token: token});
-      this.parseForCalendar(resData.data.getAllAppointments)
     })
     .catch(err => {
       console.log(err);
@@ -243,10 +291,10 @@ logUserActivity(args) {
     });
 };
 
-searchAppointments = (event) => {
+searchVisits = (event) => {
   event.preventDefault();
-  console.log('...searching appointments...');
-  this.context.setUserAlert('...searching appointments...')
+  console.log('...searching visits...');
+  this.context.setUserAlert('...searching visits...')
   this.setState({isLoading: true});
 
   const token = this.context.token;
@@ -255,12 +303,7 @@ searchAppointments = (event) => {
   const field = event.target.field.value;
   const query = event.target.query.value;
   let regex = true;
-  if (field === 'date' ||
-      field === 'inProgress' ||
-      field === 'attended' ||
-      field === 'important' ||
-      field === 'important'
-    ) {
+  if (field === 'date') {
       regex = false;
   }
   // console.log('regex',regex);
@@ -269,23 +312,23 @@ searchAppointments = (event) => {
   if (regex === true) {
     requestBody = {
       query: `
-        query {getAppointmentsByFieldRegex(
-          activityId:"${activityId}",
-          field:"${field}",
-          query:"${query}"
-        )
-        {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,reminders{_id},creator{_id}}}
+      query {getVisitsByFieldRegex(
+        activityId:"${activityId}",
+        field:"${field}",
+        query:"${query}"
+      )
+      {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
       `};
   }
   if (regex === false) {
     requestBody = {
       query: `
-      query {getAppointmentsByField(
-        activityId:"${activityId}",
-        field:"${field}",
-        query:"${query}"
-      )
-      {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,reminders{_id},creator{_id}}}
+        query {getVisitsByField(
+          activityId:"${activityId}",
+          field:"${field}",
+          query:"${query}"
+        )
+        {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
       `};
   }
   fetch('http://localhost:8088/graphql', {
@@ -304,24 +347,24 @@ searchAppointments = (event) => {
     })
     .then(resData => {
       if (regex === true) {
-        console.log('...resData...',resData.data.getAppointmentsByFieldRegex);
+        // console.log('...resData...',resData.data.getVisitsByFieldRegex);
       }
       if (regex === false) {
-        console.log('...resData...',resData.data.getAppointmentsByField);
+        // console.log('...resData...',resData.data.getVisitsByField);
       }
 
-      let responseAlert = '...appointment search success!...';
+      let responseAlert = '...visit search success!...';
       let error = null;
 
       if (regex === true) {
-        if (resData.data.getAppointmentsByFieldRegex.error) {
-          error = resData.data.getAppointmentsByFieldRegex.error;
+        if (resData.data.getVisitsByFieldRegex.error) {
+          error = resData.data.getVisitsByFieldRegex.error;
           responseAlert = error;
         }
       }
       if (regex === false) {
-        if (resData.data.getAppointmentsByField.error) {
-          error = resData.data.getAppointmentsByField.error;
+        if (resData.data.getVisitsByField.error) {
+          error = resData.data.getVisitsByField.error;
           responseAlert = error;
         }
       }
@@ -331,15 +374,15 @@ searchAppointments = (event) => {
       if (regex === true) {
         this.setState({
           isLoading: false,
-          searchAppointments: resData.data.getAppointmentsByFieldRegex,
-          activityA: `getAppointmentsByFieldRegex?activityId:${activityId},userId:${userId}`
+          searchVisits: resData.data.getVisitsByFieldRegex,
+          activityA: `getVisitsByFieldRegex?activityId:${activityId}`
         });
       }
       if (regex === false) {
         this.setState({
           isLoading: false,
-          searchAppointments: resData.data.getAppointmentsByField,
-          activityA: `getAppointmentsByField?activityId:${activityId},userId:${userId}`
+          searchVisits: resData.data.getVisitsByField,
+          activityA: `getVisitsByField?activityId:${activityId}`
         });
       }
 
@@ -353,35 +396,30 @@ searchAppointments = (event) => {
 
 }
 
-onStartCreateNewAppointment = () => {
+onStartCreateNewVisit = () => {
   this.setState({
-    creatingAppointment: true
+    creatingVisit: true
   })
 }
-cancelCreateNewAppointment = () => {
+cancelCreateNewVisit = () => {
   this.setState({
-    creatingAppointment: false,
-    selectedPatient: null
+    creatingVisit: false,
+    selectedAppointment: null
   })
 }
-submitCreateNewAppointmentForm = (event) => {
+submitCreateNewVisitForm = (event) => {
   event.preventDefault();
-  console.log('...creating new appointment...');
-  this.context.setUserAlert('...creating new appointment...')
+  console.log('...creating new visit...');
+  this.context.setUserAlert('...creating new visit...')
   this.setState({isLoading: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.state.selectedPatient._id;
+  const appointmentId = this.state.selectedAppointment._id;
 
   const title = event.target.title.value;
   const type = event.target.type.value;
   const subType = event.target.subType.value;
-  const date = event.target.date.value;
-  const time = event.target.time.value;
-  const location = event.target.location.value;
-  const description = event.target.description.value;
-  const important = event.target.important.value;
 
   // if (
   //     active.trim().length === 0 ||
@@ -390,29 +428,31 @@ submitCreateNewAppointmentForm = (event) => {
   //   return;
   // }
 
-  if (date < moment().format('YYYY-MM-DD')) {
-    console.log('...ummm no! Please pick a date today or in the future...');
-    this.context.setUserAlert('...ummm no! Please pick a date today or in the future...')
-    this.setState({isLoading:false})
+  const tooEarly = moment().format('YYYY-MM-DD') < moment.unix(this.state.selectedAppointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD');
+  const tooLate = moment().format('YYYY-MM-DD') > moment.unix(this.state.selectedAppointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD');
+
+  if (tooEarly === true) {
+    console.log('...appointment for this visit is in the future...please wait or create a new appointment...');
+    this.context.setUserAlert('...appointment for this visit is in the future...please wait or create a new appointment...')
+    return
+  }
+  if (tooLate === true) {
+    console.log('...appointment for this visit has already gone... please create a new appointment...');
+    this.context.setUserAlert('...appointment for this visit has already gone... please create a new appointment...')
     return
   }
 
   let requestBody = {
     query: `
-      mutation {createAppointment(
+      mutation {createVisit(
         activityId:"${activityId}",
-        patientId:"${patientId}",
-        appointmentInput:{
+        appointmentId:"${appointmentId}",
+        visitInput:{
           title:"${title}",
           type:"${type}",
-          subType:"${subType}",
-          date:"${date}",
-          time:"${time}",
-          location:"${location}",
-          description:"${description}",
-          important:${important}
+          subType:"${subType}"
         })
-        {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,reminders{_id},creator{_id}}}
+        {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
     `};
   fetch('http://localhost:8088/graphql', {
       method: 'POST',
@@ -429,24 +469,25 @@ submitCreateNewAppointmentForm = (event) => {
       return res.json();
     })
     .then(resData => {
-      console.log('...resData...',resData.data.createAppointment);
-      let responseAlert = '...create appointment success!...';
+      console.log('...resData...',resData.data.createVisit);
+      let responseAlert = '...create visit success!...';
       let error = null;
-      if (resData.data.createAppointment.error) {
-        error = resData.data.createAppointment.error;
+      if (resData.data.createVisit.error) {
+        error = resData.data.createVisit.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
       this.setState({
         isLoading: false,
-        creatingAppointment: false,
-        selectedAppointment: resData.data.createAppointment,
-        newAppointment: resData.data.createAppointment,
-        activityA: `createAppointment?activityId:${activityId},appointmentId:${resData.data.createAppointment._id}`
+        showDetails: true,
+        creatingVisit: false,
+        selectedVisit: resData.data.createVisit,
+        newVisit: resData.data.createVisit,
+        activityA: `createAppointment?activityId:${activityId},visitId:${resData.data.createVisit._id}`
       });
       this.logUserActivity({activityId: activityId,token: token});
       const seshStore = JSON.parse(sessionStorage.getItem('logInfo'))
-      this.getAllAppointments(seshStore);
+      this.getAllVisits(seshStore);
     })
     .catch(err => {
       console.log(err);
@@ -495,13 +536,18 @@ submitFilterForm = (event) => {
 
 }
 
-showDetails = (args) => {
-  console.log('bar',args.visits);
+selectAppointment = (args) => {
   this.setState({
-    showDetails: true,
     selectedAppointment: args
   })
-  this.context.selectedAppointment = args;
+}
+
+showDetails = (args) => {
+  this.setState({
+    showDetails: true,
+    selectedVisit: args
+  })
+  this.context.selectedVisit = args;
 }
 startAdd = (args) => {
   this.setState({
@@ -519,15 +565,10 @@ cancelAdd = () => {
     }
   })
 }
-selectPatient = (args) => {
+updateVisit = (args) => {
+  console.log('...updating selected visit...');
   this.setState({
-    selectedPatient: args
-  })
-}
-updateAppointment = (args) => {
-  console.log('...updating selected appointment...');
-  this.setState({
-    selectedAppointment: args
+    selectedVisit: args
   })
 }
 
@@ -586,20 +627,21 @@ deleteAppointment = (args) => {
     });
 }
 
-
 parseForCalendar = (args) => {
-  console.log('...parsing appointments for calendar...');
-  let calendarAppointments = args.map(x => ({
+  console.log('...parsing visits for calendar...');
+  let calendarVisits = args.map(x => ({
       title: x.title,
       date: moment.unix(x.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
       props: {
         title: x.title,
         type: x.type,
-        date: x.date
+        date: x.date,
+        time: x.time,
+        subType: x.subType,
       }
     }))
     this.setState({
-      calendarAppointments: calendarAppointments
+      calendarVisits: calendarVisits
     })
 
 }
@@ -623,7 +665,7 @@ render() {
     <Container className="staffPageContainer">
       <Row className="staffPageContainerRow headRow">
         <Col md={9} className="staffPageContainerCol">
-          <h1>Appointment List</h1>
+          <h1>Visit List</h1>
         </Col>
         <Col md={3} className="staffPageContainerCol">
           {this.state.isLoading ? (
@@ -656,7 +698,7 @@ render() {
             )}
             {this.state.sideCol === 'filter' && (
               <Col>
-                <FilterAppointmentForm
+                <FilterVisitForm
                   onCancel={this.toggleSideCol}
                   onConfirm={this.submitFilterForm}
                 />
@@ -664,7 +706,7 @@ render() {
             )}
           </Col>
 
-          {this.state.appointments && (
+          {this.state.visits && (
             <Col md={10} className="staffPageContainerCol specialCol2">
               <Tab.Content>
                 <Tab.Pane eventKey="1">
@@ -674,9 +716,9 @@ render() {
                   <Row className="displayPaneHeadRow">
                     <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
                   </Row>
-                    <AppointmentList
+                    <VisitList
                       filter={this.state.filter}
-                      appointments={this.state.appointments}
+                      visits={this.state.visits}
                       authId={this.context.activityId}
                       canDelete={this.state.canDelete}
                       showDetails={this.showDetails}
@@ -688,7 +730,7 @@ render() {
                     <FullCalendar
                       defaultView="dayGridMonth"
                       plugins={[dayGridPlugin]}
-                      events={this.state.calendarAppointments}
+                      events={this.state.calendarVisits}
                       eventClick={this.viewCalendarEvent}
                     />
                   </Tab>
@@ -698,17 +740,22 @@ render() {
                 </Tab.Pane>
                 <Tab.Pane eventKey="2">
                 <Col className="userSearchCol">
-                  <h3>Search Appointment</h3>
+                  <h3>Search Visit</h3>
                   <Row className="userSearchRow">
-                    <AppointmentSearchForm
-                      onConfirm={this.searchAppointments}
+                    <VisitSearchForm
+                      onConfirm={this.searchVisits}
                     />
                   </Row>
+                  <Row>
+                    {this.state.searchVisits && (
+                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                    )}
+                  </Row>
                   <Row className="userSearchRow results">
-                    {this.state.searchAppointments && (
-                      <AppointmentList
+                    {this.state.searchVisits && (
+                      <VisitList
                         filter={this.state.filter}
-                        appointments={this.state.searchAppointments}
+                        visits={this.state.searchVisits}
                         authId={this.context.activityId}
                         showDetails={this.showDetails}
                       />
@@ -718,43 +765,44 @@ render() {
                 </Tab.Pane>
                 <Tab.Pane eventKey="3">
                 {this.state.showDetails === true &&
-                  this.state.selectedAppointment && (
-                  <AppointmentDetail
-                    appointment={this.state.selectedAppointment}
-                    updateAppointment={this.updateAppointment}
-                  />
+                  this.state.selectedVisit && (
+                  <h3>visit detail: {this.state.selectedVisit.title}</h3>
+                  // <VisitDetail
+                  //   appointment={this.state.selectedVisit}
+                  //   updateVisit={this.updateVisit}
+                  // />
                 )}
                 </Tab.Pane>
                 <Tab.Pane eventKey="4">
-                {this.state.creatingAppointment === false && (
-                  <Button variant="outline-secondary" className="filterFormBtn" onClick={this.onStartCreateNewAppointment}>Create New</Button>
+                {this.state.creatingVisit === false && (
+                  <Button variant="outline-secondary" className="filterFormBtn" onClick={this.onStartCreateNewVisit}>Create New</Button>
                 )}
-                {this.state.creatingAppointment === true &&
-                  this.state.patients &&
-                  !this.state.selectedPatient && (
+                {this.state.creatingVisit === true &&
+                  this.state.appointments &&
+                  !this.state.selectedAppointment && (
                   <Row>
-                    <PatientList
+                    <AppointmentList
                       filter={this.state.filter}
-                      patients={this.state.patients}
+                      appointments={this.state.appointments}
                       authId={this.context.activityId}
-                      onSelect={this.selectPatient}
-                      appointmentPage={true}
+                      onSelect={this.selectAppointment}
+                      visitPage={true}
                     />
                   </Row>
                 )}
-                {this.state.creatingAppointment === true &&
-                  this.state.selectedPatient && (
+                {this.state.creatingVisit === true &&
+                  this.state.selectedAppointment && (
                   <Row>
-                    <CreateAppointmentForm
-                      onConfirm={this.submitCreateNewAppointmentForm}
-                      onCancel={this.cancelCreateNewAppointment}
-                      patient={this.state.selectedPatient}
+                    <CreateVisitForm
+                      onConfirm={this.submitCreateNewVisitForm}
+                      onCancel={this.cancelCreateNewVisit}
+                      appointment={this.state.selectedAppointment}
                     />
                   </Row>
                 )}
-                {this.state.newAppointment && (
+                {this.state.newVisit && (
                   <Row>
-                    <h3>Review New Appointment {this.state.newAppointment._id}</h3>
+                    <h3>Review New Visit {this.state.newVisit._id}</h3>
                   </Row>
                 )}
                 </Tab.Pane>
@@ -772,4 +820,4 @@ render() {
 
 }
 
-export default AppointmentPage;
+export default VisitPage;

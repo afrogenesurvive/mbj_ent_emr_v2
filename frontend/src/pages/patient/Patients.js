@@ -70,6 +70,14 @@ componentDidMount () {
       this.setState({canDelete:true})
     }
     this.getAllPatients(seshStore);
+
+    if (this.props.location.state) {
+      if (this.props.location.state.patient) {
+        console.log('go link',this.props.location.state.patient);
+        // function to get patient by id the set showdetail, selectedpatient states
+      }
+    }
+
   }
 }
 componentWillUnmount() {
@@ -427,9 +435,10 @@ submitCreateNewPatientForm = (event) => {
       this.context.setUserAlert(responseAlert)
       this.setState({
         isLoading: false,
+        showDetails: true,
         creatingPatient: false,
         selectedPatient: resData.data.createPatient,
-        // newPatient: resData.data.createPatient,
+        newPatient: resData.data.createPatient,
         activityA: `createPatient?activityId:${activityId},patientId:${resData.data.createPatient._id}`
       });
       this.logUserActivity({activityId: activityId,token: token});
@@ -646,6 +655,11 @@ render() {
                     <PatientSearchForm
                       onConfirm={this.searchPatients}
                     />
+                  </Row>
+                  <Row>
+                    {this.state.searchPatients && (
+                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                    )}
                   </Row>
                   <Row className="userSearchRow results">
                     {this.state.searchPatients && (

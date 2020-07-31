@@ -489,6 +489,11 @@ render() {
                       onConfirm={this.searchUsers}
                     />
                   </Row>
+                  <Row>
+                    {this.state.searchUsers && (
+                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                    )}
+                  </Row>
                   <Row className="userSearchRow results">
                     {this.state.searchUsers && (
                       <SearchUserList
