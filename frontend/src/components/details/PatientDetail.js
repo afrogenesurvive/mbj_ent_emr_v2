@@ -769,7 +769,7 @@ startAddAttachment = (args) => {
 }
 cancelAddAttachment = () => {
   this.setState({
-    addAttendanceForm: false
+    addAttachmentForm: false
   })
 }
 addAttachment = (event) => {

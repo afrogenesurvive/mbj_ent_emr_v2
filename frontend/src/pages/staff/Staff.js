@@ -69,7 +69,9 @@ componentDidMount () {
     if (this.props.location.state) {
       if (this.props.location.state.user) {
         console.log('go link',this.props.location.state.user);
-        // function to get user by id the set showdetail, selecteduser states
+        // set goLink state
+        // from get all users, when retrived if go link state is true then call function below
+        // function to filter getAllUsers result for matching id then set showdetail, selecteduser states
       }
     }
   }
@@ -109,6 +111,7 @@ getAllUsers (args) {
     })
     .then(resData => {
       // console.log('...resData...',resData.data.getAllUsers);
+      console.log('...all users retrieval success!...');
       let responseAlert = '...all users retrieval success!...';
       let error = null;
       if (resData.data.getAllUsers.error) {

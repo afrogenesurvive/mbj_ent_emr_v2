@@ -61,13 +61,23 @@ const UserItem = (props) => {
               <Card.Text className="cardText">
                 loggedIn: <span className="bold">{props.user.loggedIn === true && (<FontAwesomeIcon icon={faBatteryThreeQuarters} className="listIcon"/>)} {props.user.loggedIn === false && (<FontAwesomeIcon icon={faBatteryEmpty} className="listIcon"/>)}</span>
               </Card.Text>
-              {!props.appointmentPage && (
+              {!props.appointmentPage &&
+                !props.visitPage && (
                 <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.user)}>Details</Button>
               )}
               {props.canDelete && (
                 <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.user)}>Delete</Button>
               )}
               {props.appointmentPage && (
+                <Link
+                  to={{
+                    pathname: "/staff",
+                    state: {user: props.user._id}
+                  }}
+                >Go!
+                </Link>
+              )}
+              {props.visitPage && (
                 <Link
                   to={{
                     pathname: "/staff",

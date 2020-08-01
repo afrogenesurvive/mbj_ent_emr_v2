@@ -24,18 +24,40 @@ import PatientImageList from '../lists/patient/PatientImageList'
 import PatientFileList from '../lists/patient/PatientFileList'
 import UserAppointmentList from '../lists/user/UserAppointmentList'
 import AppointmentNoteList from '../lists/appointment/AppointmentNoteList'
-import AppointmentTagList from '../lists/appointment/AppointmentTagList'
+import VisitComplaintList from '../lists/visit/VisitComplaintList'
+import VisitSurveyList from '../lists/visit/VisitSurveyList'
+import VisitSystematicInquiryList from '../lists/visit/VisitSystematicInquiryList'
+import VisitVitalsList from '../lists/visit/VisitVitalsList'
+import VisitExaminationList from '../lists/visit/VisitExaminationList'
+import VisitInvestigationList from '../lists/visit/VisitInvestigationList'
+import VisitDiagnosisList from '../lists/visit/VisitDiagnosisList'
+import VisitTreatmentList from '../lists/visit/VisitTreatmentList'
+import VisitBillingList from '../lists/visit/VisitBillingList'
+import VisitImageList from '../lists/visit/VisitImageList'
+import VisitFileList from '../lists/visit/VisitFileList'
 import UserList from '../lists/user/UserList'
 
 
 import FilterAppointmentForm from '../forms/filter/FilterAppointmentForm';
-import FilterNoteForm from '../forms/filter/FilterNoteForm';
-import FilterTagForm from '../forms/filter/FilterTagForm';
+import FilterComplaintForm from '../forms/filter/FilterComplaintForm';
+import FilterSurveyForm from '../forms/filter/FilterSurveyForm';
+import FilterSystematicInquiryForm from '../forms/filter/FilterSystematicInquiryForm';
+import FilterDiagnosisForm from '../forms/filter/FilterDiagnosisForm';
+import FilterVitalsForm from '../forms/filter/FilterVitalsForm';
+import FilterExaminationForm from '../forms/filter/FilterExaminationForm';
+import FilterInvestigationForm from '../forms/filter/FilterInvestigationForm';
+import FilterTreatmentForm from '../forms/filter/FilterTreatmentForm';
+import FilterBillingForm from '../forms/filter/FilterBillingForm';
+import FilterImageForm from '../forms/filter/FilterImageForm';
+import FilterFileForm from '../forms/filter/FilterFileForm';
 import FilterUserForm from '../forms/filter/FilterUserForm';
 
 import UpdatePatientSingleFieldForm from '../forms/add/UpdatePatientSingleFieldForm';
 
 import AddUserForm from '../forms/add/AddUserForm';
+import AddAttachmentForm from '../forms/add/AddAttachmentForm';
+import AddImageForm from '../forms/add/AddImageForm';
+import AddFileForm from '../forms/add/AddFileForm';
 import AddNoteForm from '../forms/add/AddNoteForm';
 import AddTagForm from '../forms/add/AddTagForm';
 import loadingGif from '../../assets/loading.gif';
@@ -97,7 +119,7 @@ componentDidMount () {
       canDelete: true
     })
   }
-  // this.getAllUsers(seshStore);
+  this.getAllUsers(seshStore);
 }
 componentWillUnmount() {
 
@@ -323,131 +345,39 @@ deleteNote = (args) => {
       this.setState({isLoading: false })
     });
 }
-submitAddTagForm = (event) => {
-  event.preventDefault();
-  console.log('...adding tags...');
-  this.context.setUserAlert('...adding tags...')
-  this.setState({isLoading: true});
 
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const appointmentId = this.props.appointment._id;
-  const tags = event.target.tags.value;
-
-  let requestBody = {
-    query: `
-      mutation {addAppointmentTags(
-        activityId:"${activityId}",
-        appointmentId:"${appointmentId}",
-        appointmentInput:{
-          tags:"${tags}"
-        })
-        {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
-    `};
-  fetch('http://localhost:8088/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      // console.log('...resData...',resData.data.addAppointmentTags);
-      let responseAlert = '...tags add success!...';
-      let error = null;
-      if (resData.data.addAppointmentTags.error) {
-        error = resData.data.addAppointmentTags.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      this.props.updateAppointment(resData.data.addAppointmentTags)
-      this.setState({
-        isLoading: false,
-        selectedAppointment: resData.data.addAppointmentTags,
-        activityA: `addAppointmentTags?activityId:${activityId},appointmentId:${appointmentId}`,
-        adding: {
-          state: null,
-          field: null
-        }
-      });
-      this.context.selectedAppointment = resData.data.addAppointmentTags;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false })
-    });
+deleteComplaint = () => {
+  console.log('...deleting complaint...');
 }
-deleteTag = (args) => {
-
-  console.log('...deleting tags...');
-  this.context.setUserAlert('...deleting tags...')
-  this.setState({isLoading: true});
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const appointmentId = this.props.appointment._id;
-  const tag = args;
-
-  let requestBody = {
-    query: `
-      mutation {deleteAppointmentTag(
-        activityId:"${activityId}",
-        appointmentId:"${appointmentId}",
-        appointmentInput:{
-          tag:"${tag}"
-        })
-        {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
-    `};
-  fetch('http://localhost:8088/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      // console.log('...resData...',resData.data.deleteAppointmentTag);
-      let responseAlert = '...tag delete success!...';
-      let error = null;
-      if (resData.data.deleteAppointmentTag.error) {
-        error = resData.data.deleteAppointmentTag.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      this.props.updateAppointment(resData.data.deleteAppointmentTag)
-      this.setState({
-        isLoading: false,
-        selectedAppointment: resData.data.deleteAppointmentTag,
-        activityA: `deleteAppointmentTag?activityId:${activityId},appointmentId:${appointmentId}`,
-        adding: {
-          state: null,
-          field: null
-        }
-      });
-      this.context.selectedAppointment = resData.data.deleteAppointmentTag;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false })
-    });
+deleteSurvey = () => {
+  console.log('...deleting survey...');
+}
+deleteSystematicInquiry = () => {
+  console.log('...deleting systematicInquiry...');
+}
+deleteVitals = () => {
+  console.log('...deleting Vitals...');
+}
+deleteExamination = () => {
+  console.log('...deleting Examination...');
+}
+deleteInvestigation = () => {
+  console.log('...deleting Investigation...');
+}
+deleteDiagnosis = () => {
+  console.log('...deleting Diagnosis...');
+}
+deleteTreatment = () => {
+  console.log('...deleting Treatment...');
+}
+deleteBilling = () => {
+  console.log('...deleting Billing...');
+}
+deleteImage = () => {
+  console.log('...deleting Image...');
+}
+deleteFile = () => {
+  console.log('...deleting File...');
 }
 
 submitAddUserForm = (event) => {
@@ -506,6 +436,158 @@ submitAddUserForm = (event) => {
       this.context.setUserAlert(err);
       this.setState({isLoading: false })
     });
+}
+
+startAddAttachment = (args) => {
+  console.log('...start add attachment...');
+  this.setState({
+    addAttachmentForm: true,
+    addAttachmentArgs: args
+  })
+}
+cancelAddAttachment = () => {
+  this.setState({
+    addAttachmentForm: false
+  })
+}
+addAttachment = (event) => {
+  event.preventDefault();
+  console.log('...adding attachment...');
+  this.context.setUserAlert('...adding attachment...');
+  this.setState({
+    isLoading: true,
+    addAttachmentForm: false
+  })
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+  let args = this.state.addAttachmentArgs;
+  let field = args.field;
+
+  let allergyTitle;
+  let allergyType;
+  let allergyDescription;
+  let allergyAttachment;
+  let medicationTitle;
+  let medicationType;
+  let medicationDescription;
+  let medicationAttachment;
+
+  if (field === 'allergy') {
+    allergyTitle = args.data.title;
+    allergyType = args.data.type;
+    allergyDescription = args.data.description;
+    allergyAttachment = event.target.attachment.value;
+  }
+  if (field === 'medication') {
+    medicationTitle = args.data.title;
+    medicationType = args.data.type;
+    medicationDescription = args.data.description;
+    medicationAttachment = event.target.attachment.value;
+  }
+
+  let requestBody;
+  if (field === 'allergy') {
+    requestBody = {
+      query: `
+        mutation {addPatientAllergyAttachment(
+          activityId:"${activityId}",
+          patientId:"${patientId}",
+          patientInput:{
+            allergyType:"${allergyType}",
+            allergyTitle:"${allergyTitle}",
+            allergyDescription:"${allergyDescription}",
+            allergyAttachment:"${allergyAttachment}"
+          })
+          {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
+      `};
+  }
+  if (field === 'medication') {
+    requestBody = {
+      query: `
+        mutation {addPatientMedicationAttachment(
+          activityId:"${activityId}",
+          patientId:"${patientId}",
+          patientInput:{
+            medicationType:"${medicationType}",
+            medicationTitle:"${medicationTitle}",
+            medicationDescription:"${medicationDescription}",
+            medicationAttachment:"${medicationAttachment}"
+          })
+          {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
+      `};
+  }
+
+  fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      if (field === 'allergy') {
+        // console.log('...resData...',resData.data.addPatientAllergyAttachment);
+      }
+      if (field === 'medication') {
+        // console.log('...resData...',resData.data.addPatientMedicationAttachment);
+      }
+
+      let responseAlert = '...add attachment success!...';
+      let error = null;
+
+      if (field === 'allergy') {
+        if (resData.data.addPatientAllergyAttachment.error) {
+          error = resData.data.addPatientAllergyAttachment.error;
+          responseAlert = error;
+        }
+      }
+      if (field === 'medication') {
+        if (resData.data.addPatientMedicationAttachment.error) {
+          error = resData.data.addPatientMedicationAttachment.error;
+          responseAlert = error;
+        }
+      }
+
+      this.context.setUserAlert(responseAlert)
+
+      if (field === 'allergy') {
+        this.props.updatePatient(resData.data.addPatientAllergyAttachment)
+        this.setState({
+          isLoading: false,
+          selectedPatient: resData.data.addPatientAllergyAttachment,
+          activityA: `addPatientAllergyAttachmentRegex?activityId:${activityId},patientId:${patientId}`
+        });
+      }
+      if (field === 'medication') {
+        this.props.updatePatient(resData.data.addPatientMedicationAttachment)
+        this.setState({
+          isLoading: false,
+          selectedPatient: resData.data.addPatientMedicationAttachment,
+          activityA: `addPatientMedicationAttachment?activityId:${activityId},patientId:${patientId}`
+        });
+      }
+
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+
+}
+deleteAttachment = (args) => {
+  console.log('...deleting attachment...', args);
+  let field = args.field;
 }
 
 submitUpdateSingleFieldForm = (event) => {
@@ -730,40 +812,73 @@ render() {
                   />
                 )}
                 {this.state.menuSelect === 'complaint' && (
-                  <h3>Filter complaint form</h3>
+                  <FilterComplaintForm
+                    onCancel={this.toggleSideCol}
+                    onConfirm={this.submitFilterForm}
+                  />
                 )}
                 {this.state.menuSelect === 'survey' && (
-                  <h3>Filter survey form</h3>
+                  <FilterSurveyForm
+                    onCancel={this.toggleSideCol}
+                    onConfirm={this.submitFilterForm}
+                  />
                 )}
                 {this.state.menuSelect === 'systematicInquiry' && (
-                  <h3>Filter systematicInquiry form</h3>
+                  <FilterSystematicInquiryForm
+                    onCancel={this.toggleSideCol}
+                    onConfirm={this.submitFilterForm}
+                  />
                 )}
                 {this.state.menuSelect === 'vitals' && (
-                  <h3>Filter vitals form</h3>
+                  <FilterVitalsForm
+                    onCancel={this.toggleSideCol}
+                    onConfirm={this.submitFilterForm}
+                  />
                 )}
                 {this.state.menuSelect === 'examination' && (
-                  <h3>Filter examination form</h3>
+                  <FilterExaminationForm
+                    onCancel={this.toggleSideCol}
+                    onConfirm={this.submitFilterForm}
+                  />
                 )}
                 {this.state.menuSelect === 'investigation' && (
-                  <h3>Filter investigation form</h3>
+                  <FilterInvestigationForm
+                    onCancel={this.toggleSideCol}
+                    onConfirm={this.submitFilterForm}
+                  />
                 )}
                 {this.state.menuSelect === 'diagnosis' && (
-                  <h3>Filter diagnosis form</h3>
+                  <FilterDiagnosisForm
+                    onCancel={this.toggleSideCol}
+                    onConfirm={this.submitFilterForm}
+                  />
                 )}
                 {this.state.menuSelect === 'treatment' && (
-                  <h3>Filter treatment form</h3>
+                  <FilterTreatmentForm
+                    onCancel={this.toggleSideCol}
+                    onConfirm={this.submitFilterForm}
+                  />
                 )}
                 {this.state.menuSelect === 'billing' && (
-                  <h3>Filter billing form</h3>
+                  <FilterBillingForm
+                    onCancel={this.toggleSideCol}
+                    onConfirm={this.submitFilterForm}
+                  />
                 )}
                 {this.state.menuSelect === 'vigilance' && (
                   <h3>Filter vigilance form</h3>
                 )}
                 {this.state.menuSelect === 'image' && (
-                  <h3>Filter image form</h3>
+                  <FilterImageForm
+                    onCancel={this.toggleSideCol}
+                    onConfirm={this.submitFilterForm}
+                  />
                 )}
                 {this.state.menuSelect === 'file' && (
-                  <h3>Filter file form</h3>
+                  <FilterFileForm
+                    onCancel={this.toggleSideCol}
+                    onConfirm={this.submitFilterForm}
+                  />
                 )}
               </Col>
             )}
@@ -861,7 +976,12 @@ render() {
                       this.state.users && (
                         <h3>Add user form</h3>
                     )}
-                    <h3>Visit Consultant List</h3>
+                    <UserList
+                      filter={this.state.filter}
+                      authId={this.context.activityId}
+                      users={this.props.visit.consultants}
+                      visitPage={true}
+                    />
                   </Tab.Pane>
                   <Tab.Pane eventKey="4">
                     <Row className="displayPaneHeadRow">
@@ -875,7 +995,20 @@ render() {
                       this.state.adding.field === 'complaint' && (
                         <h3>Add complaint form</h3>
                     )}
-                    <h3>Visit Complaint List</h3>
+                    {this.state.addAttachmentForm === true && (
+                      <AddAttachmentForm
+                        onCancel={this.cancelAddAttachment}
+                        onConfirm={this.addAttachment}
+                      />
+                    )}
+                    <VisitComplaintList
+                      filter={this.state.filter}
+                      complaints={this.props.visit.complaints}
+                      authId={this.context.activityId}
+                      canDelete={this.state.canDelete}
+                      onDelete={this.deleteComplaint}
+                      onAddAttachment={this.startAddAttachment}
+                    />
                   </Tab.Pane>
                   <Tab.Pane eventKey="5">
                     <Row className="displayPaneHeadRow">
@@ -889,7 +1022,20 @@ render() {
                       this.state.adding.field === 'survey' && (
                         <h3>Add survey form</h3>
                     )}
-                    <h3>Visit Survey List</h3>
+                    {this.state.addAttachmentForm === true && (
+                      <AddAttachmentForm
+                        onCancel={this.cancelAddAttachment}
+                        onConfirm={this.addAttachment}
+                      />
+                    )}
+                    <VisitSurveyList
+                      filter={this.state.filter}
+                      surveys={this.props.visit.surveys}
+                      authId={this.context.activityId}
+                      canDelete={this.state.canDelete}
+                      onDelete={this.deleteSurvey}
+                      onAddAttachment={this.startAddAttachment}
+                    />
                   </Tab.Pane>
                   <Tab.Pane eventKey="6">
                     <Row className="displayPaneHeadRow">
@@ -903,7 +1049,20 @@ render() {
                       this.state.adding.field === 'systematicInquiry' && (
                         <h3>Add systematicInquiry form</h3>
                     )}
-                    <h3>Visit SystematicInquiry List</h3>
+                    {this.state.addAttachmentForm === true && (
+                      <AddAttachmentForm
+                        onCancel={this.cancelAddAttachment}
+                        onConfirm={this.addAttachment}
+                      />
+                    )}
+                    <VisitSystematicInquiryList
+                      filter={this.state.filter}
+                      systematicInquiry={this.props.visit.systematicInquiry}
+                      authId={this.context.activityId}
+                      canDelete={this.state.canDelete}
+                      onDelete={this.deleteSystematicInquiry}
+                      onAddAttachment={this.startAddAttachment}
+                    />
                   </Tab.Pane>
                   <Tab.Pane eventKey="7">
                     <Row className="displayPaneHeadRow">
@@ -917,7 +1076,13 @@ render() {
                       this.state.adding.field === 'vitals' && (
                         <h3>Add vitals form</h3>
                     )}
-                    <h3>Visit Vitals List</h3>
+                    <VisitVitalsList
+                      filter={this.state.filter}
+                      vitals={this.props.visit.vitals}
+                      authId={this.context.activityId}
+                      canDelete={this.state.canDelete}
+                      onDelete={this.deleteVitals}
+                    />
                   </Tab.Pane>
                   <Tab.Pane eventKey="8">
                     <Row className="displayPaneHeadRow">
@@ -931,7 +1096,20 @@ render() {
                       this.state.adding.field === 'examination' && (
                         <h3>Add Examination form</h3>
                     )}
-                    <h3>Visit Examination List</h3>
+                    {this.state.addAttachmentForm === true && (
+                      <AddAttachmentForm
+                        onCancel={this.cancelAddAttachment}
+                        onConfirm={this.addAttachment}
+                      />
+                    )}
+                    <VisitExaminationList
+                      filter={this.state.filter}
+                      examination={this.props.visit.examination}
+                      authId={this.context.activityId}
+                      canDelete={this.state.canDelete}
+                      onDelete={this.deleteExamination}
+                      onAddAttachment={this.startAddAttachment}
+                    />
                   </Tab.Pane>
                   <Tab.Pane eventKey="9">
                     <Row className="displayPaneHeadRow">
@@ -945,7 +1123,20 @@ render() {
                       this.state.adding.field === 'investigation' && (
                         <h3>Add Investigation form</h3>
                     )}
-                    <h3>Visit Investigation List</h3>
+                    {this.state.addAttachmentForm === true && (
+                      <AddAttachmentForm
+                        onCancel={this.cancelAddAttachment}
+                        onConfirm={this.addAttachment}
+                      />
+                    )}
+                    <VisitInvestigationList
+                      filter={this.state.filter}
+                      investigation={this.props.visit.investigation}
+                      authId={this.context.activityId}
+                      canDelete={this.state.canDelete}
+                      onDelete={this.deleteInvestigation}
+                      onAddAttachment={this.startAddAttachment}
+                    />
                   </Tab.Pane>
                   <Tab.Pane eventKey="10">
                     <Row className="displayPaneHeadRow">
@@ -959,7 +1150,20 @@ render() {
                       this.state.adding.field === 'diagnosis' && (
                         <h3>Add Diagnosis form</h3>
                     )}
-                    <h3>Visit Diagnosis List</h3>
+                    {this.state.addAttachmentForm === true && (
+                      <AddAttachmentForm
+                        onCancel={this.cancelAddAttachment}
+                        onConfirm={this.addAttachment}
+                      />
+                    )}
+                    <VisitDiagnosisList
+                      filter={this.state.filter}
+                      diagnosis={this.props.visit.diagnosis}
+                      authId={this.context.activityId}
+                      canDelete={this.state.canDelete}
+                      onDelete={this.deleteDiagnosis}
+                      onAddAttachment={this.startAddAttachment}
+                    />
                   </Tab.Pane>
                   <Tab.Pane eventKey="11">
                     <Row className="displayPaneHeadRow">
@@ -973,7 +1177,20 @@ render() {
                       this.state.adding.field === 'treatment' && (
                         <h3>Add Treatment form</h3>
                     )}
-                    <h3>Visit Treatment List</h3>
+                    {this.state.addAttachmentForm === true && (
+                      <AddAttachmentForm
+                        onCancel={this.cancelAddAttachment}
+                        onConfirm={this.addAttachment}
+                      />
+                    )}
+                    <VisitTreatmentList
+                      filter={this.state.filter}
+                      treatment={this.props.visit.treatment}
+                      authId={this.context.activityId}
+                      canDelete={this.state.canDelete}
+                      onDelete={this.deleteTreatment}
+                      onAddAttachment={this.startAddAttachment}
+                    />
                   </Tab.Pane>
                   <Tab.Pane eventKey="12">
                     <Row className="displayPaneHeadRow">
@@ -987,7 +1204,20 @@ render() {
                       this.state.adding.field === 'billing' && (
                         <h3>Add Billing form</h3>
                     )}
-                    <h3>Visit Billing List</h3>
+                    {this.state.addAttachmentForm === true && (
+                      <AddAttachmentForm
+                        onCancel={this.cancelAddAttachment}
+                        onConfirm={this.addAttachment}
+                      />
+                    )}
+                    <VisitBillingList
+                      filter={this.state.filter}
+                      billing={this.props.visit.billing}
+                      authId={this.context.activityId}
+                      canDelete={this.state.canDelete}
+                      onDelete={this.deleteBilling}
+                      onAddAttachment={this.startAddAttachment}
+                    />
                   </Tab.Pane>
                   <Tab.Pane eventKey="13">
                     <Row className="displayPaneHeadRow">
@@ -1003,7 +1233,7 @@ render() {
                     )}
                     <h3>Visit Vigilance List</h3>
                   </Tab.Pane>
-                  <Tab.Pane eventKey="13">
+                  <Tab.Pane eventKey="14">
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Visit Image List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -1015,9 +1245,15 @@ render() {
                       this.state.adding.field === 'image' && (
                         <h3>Add Image form</h3>
                     )}
-                    <h3>Visit Image List</h3>
+                    <VisitImageList
+                      filter={this.state.filter}
+                      images={this.props.visit.images}
+                      authId={this.context.activityId}
+                      canDelete={this.state.canDelete}
+                      onDelete={this.deleteImage}
+                    />
                   </Tab.Pane>
-                  <Tab.Pane eventKey="13">
+                  <Tab.Pane eventKey="15">
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Visit File List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -1029,7 +1265,13 @@ render() {
                       this.state.adding.field === 'file' && (
                         <h3>Add File form</h3>
                     )}
-                    <h3>Visit File List</h3>
+                    <VisitFileList
+                      filter={this.state.filter}
+                      files={this.props.visit.files}
+                      authId={this.context.activityId}
+                      canDelete={this.state.canDelete}
+                      onDelete={this.deleteFile}
+                    />
                   </Tab.Pane>
 
                 </Tab.Content>

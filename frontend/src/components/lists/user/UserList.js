@@ -72,6 +72,7 @@ const UserList = props => {
         onDelete={props.onDelete}
         showDetails={props.showDetails}
         appointmentPage={props.appointmentPage}
+        visitPage={props.visitPage}
         selectUser={props.selectUser}
       />
     );
