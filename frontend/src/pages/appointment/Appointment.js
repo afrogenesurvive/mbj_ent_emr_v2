@@ -500,7 +500,8 @@ showDetails = (args) => {
   // console.log('bar',args.visits);
   this.setState({
     showDetails: true,
-    selectedAppointment: args
+    selectedAppointment: args,
+    overlay: false
   })
   this.context.selectedAppointment = args;
 }
@@ -593,6 +594,7 @@ parseForCalendar = (args) => {
       title: x.title,
       date: moment.unix(x.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
       props: {
+        _id: x._id,
         date: x.date,
         title: x.title,
         type: x.type,
@@ -610,7 +612,17 @@ parseForCalendar = (args) => {
 }
 
 viewCalendarEvent = (args) => {
-  console.log('...viewing calendar appointment...',args);
+  console.log('...viewing calendar appointment...',args.event.extendedProps.props);
+  const appointment = this.state.appointments.filter(x => x._id === args.event.extendedProps.props._id)[0];
+  this.setState({
+    overlay: true,
+    overlayStatus: {type: 'calendarAppointment', data: appointment}
+  })
+}
+toggleOverlay = () => {
+  this.setState({
+    overlay: false
+  })
 }
 
 
@@ -622,6 +634,8 @@ render() {
     {this.state.overlay === true && (
       <LoadingOverlay
         status={this.state.overlayStatus}
+        selectCalendarDetails={this.showDetails}
+        toggleOverlay={this.toggleOverlay}
       />
     )}
 

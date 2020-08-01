@@ -507,9 +507,6 @@ submitAddUserForm = (event) => {
       this.setState({isLoading: false })
     });
 }
-startUpdatePatient = () => {
-  console.log('show update patient select list');
-}
 
 submitUpdateSingleFieldForm = (event) => {
   event.preventDefault();
@@ -519,19 +516,19 @@ submitUpdateSingleFieldForm = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const appointmentId = this.props.appointment._id;
+  const visitId = this.props.visit._id;
   const field = event.target.field.value;
   const query = event.target.query.value;
 
   let requestBody = {
     query: `
-      mutation {updateAppointmentSingleField(
+      mutation {updateVisitSingleField(
         activityId:"${activityId}",
-        appointmentId:"${appointmentId}",
+        visitId:"${visitId}",
         field:"${field}",
         query:"${query}"
       )
-      {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
+      {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
     `};
   fetch('http://localhost:8088/graphql', {
       method: 'POST',
@@ -548,25 +545,25 @@ submitUpdateSingleFieldForm = (event) => {
       return res.json();
     })
     .then(resData => {
-      // console.log('...resData...',resData.data.updateAppointmentSingleField);
+      // console.log('...resData...',resData.data.updateVisitSingleField);
       let responseAlert = '...field update success!...';
       let error = null;
-      if (resData.data.updateAppointmentSingleField.error) {
-        error = resData.data.updateAppointmentSingleField.error;
+      if (resData.data.updateVisitSingleField.error) {
+        error = resData.data.updateVisitSingleField.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
-      this.props.updateAppointment(resData.data.updateAppointmentSingleField)
+      this.props.updateVisit(resData.data.updateVisitSingleField)
       this.setState({
         isLoading: false,
-        selectedPatient: resData.data.updateAppointmentSingleField,
-        activityA: `updateAppointmentSingleField?activityId:${activityId},appointmentId:${appointmentId}`,
+        selectedVisit: resData.data.updateVisitSingleField,
+        activityA: `updateVisitSingleField?activityId:${activityId},visitId:${visitId}`,
         updateSingleField: {
           state: null,
           field: null
         }
       });
-      this.context.selectedPatient = resData.data.updateAppointmentSingleField;
+      this.context.selectedVisit = resData.data.updateVisitSingleField;
       this.logUserActivity({activityId: activityId,token: token});
     })
     .catch(err => {
@@ -659,7 +656,6 @@ render() {
     )}
 
     <Container className="detailPageContainer">
-
       <Row className="detailPageContainerRow mainRow">
         <Col md={2} className="detailPageContainerCol">
 
@@ -733,20 +729,43 @@ render() {
                     onConfirm={this.submitFilterForm}
                   />
                 )}
-                {this.state.menuSelect === 'note' && (
-                  <FilterNoteForm
-                    onCancel={this.toggleSideCol}
-                    onConfirm={this.submitFilterForm}
-                  />
+                {this.state.menuSelect === 'complaint' && (
+                  <h3>Filter complaint form</h3>
                 )}
-                {this.state.menuSelect === 'tag' && (
-                  <FilterTagForm
-                    onCancel={this.toggleSideCol}
-                    onConfirm={this.submitFilterForm}
-                  />
+                {this.state.menuSelect === 'survey' && (
+                  <h3>Filter survey form</h3>
+                )}
+                {this.state.menuSelect === 'systematicInquiry' && (
+                  <h3>Filter systematicInquiry form</h3>
+                )}
+                {this.state.menuSelect === 'vitals' && (
+                  <h3>Filter vitals form</h3>
+                )}
+                {this.state.menuSelect === 'examination' && (
+                  <h3>Filter examination form</h3>
+                )}
+                {this.state.menuSelect === 'investigation' && (
+                  <h3>Filter investigation form</h3>
+                )}
+                {this.state.menuSelect === 'diagnosis' && (
+                  <h3>Filter diagnosis form</h3>
+                )}
+                {this.state.menuSelect === 'treatment' && (
+                  <h3>Filter treatment form</h3>
+                )}
+                {this.state.menuSelect === 'billing' && (
+                  <h3>Filter billing form</h3>
+                )}
+                {this.state.menuSelect === 'vigilance' && (
+                  <h3>Filter vigilance form</h3>
+                )}
+                {this.state.menuSelect === 'image' && (
+                  <h3>Filter image form</h3>
+                )}
+                {this.state.menuSelect === 'file' && (
+                  <h3>Filter file form</h3>
                 )}
               </Col>
-
             )}
           </Col>
 
@@ -783,19 +802,234 @@ render() {
                         <p className="listGroupText bold">{this.props.visit.time}</p>
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'time')}>Edit</Button>
                       </ListGroup.Item>
+                      <ListGroup.Item>
+                        <p className="listGroupText">Patient:</p>
+                      </ListGroup.Item>
+                      <ListGroup.Item>
+                        <p className="listGroupText">Name:</p>
+                        <p className="listGroupText bold">{this.props.visit.patient.title}</p>
+                        <p className="listGroupText bold">{this.props.visit.patient.name}</p>
+                        <Link
+                          to={{
+                            pathname: "/patients",
+                            state: {patient: this.props.visit.patient._id}
+                          }}
+                        >Go!</Link>
+                      </ListGroup.Item>
+                      <ListGroup.Item>
+                      <p className="listGroupText">Id:</p>
+                      <p className="listGroupText bold">{this.props.visit.patient._id}</p>
+                      </ListGroup.Item>
+                      <ListGroup.Item>
+                        <p className="listGroupText">Appointment:</p>
+                      </ListGroup.Item>
+                      <ListGroup.Item>
+                        <p className="listGroupText">Title:</p>
+                        <p className="listGroupText bold">{this.props.visit.appointment.title}</p>
+                        <Link
+                          to={{
+                            pathname: "/appointments",
+                            state: {appointment: this.props.visit.appointment._id}
+                          }}
+                        >Go!</Link>
+                      </ListGroup.Item>
+                      <ListGroup.Item>
+                      <p className="listGroupText">Id:</p>
+                      <p className="listGroupText bold">{this.props.visit.appointment._id}</p>
+                      </ListGroup.Item>
                     </ListGroup>
                   </Tab.Pane>
                   <Tab.Pane eventKey="2">
-
+                    Visit Admin
+                    <ListGroup className="profileBasicListGroup">
+                      <ListGroup.Item>
+                        <p className="listGroupText">Id:</p>
+                        <p className="listGroupText bold">{this.props.visit._id}</p>
+                      </ListGroup.Item>
+                    </ListGroup>
                   </Tab.Pane>
                   <Tab.Pane eventKey="3">
-
+                    <Row className="displayPaneHeadRow">
+                      <p className="displayPaneTitle">Visit Consultant List:</p>
+                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                      {this.context.role === 'Admin' && (
+                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'consultant')}>Add</Button>
+                      )}
+                    </Row>
+                    {this.state.adding.state === true &&
+                      this.state.adding.field === 'consultant' &&
+                      this.state.users && (
+                        <h3>Add user form</h3>
+                    )}
+                    <h3>Visit Consultant List</h3>
                   </Tab.Pane>
                   <Tab.Pane eventKey="4">
-
+                    <Row className="displayPaneHeadRow">
+                      <p className="displayPaneTitle">Visit Complaint List:</p>
+                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                      {this.context.role === 'Admin' && (
+                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'complaint')}>Add</Button>
+                      )}
+                    </Row>
+                    {this.state.adding.state === true &&
+                      this.state.adding.field === 'complaint' && (
+                        <h3>Add complaint form</h3>
+                    )}
+                    <h3>Visit Complaint List</h3>
                   </Tab.Pane>
                   <Tab.Pane eventKey="5">
-
+                    <Row className="displayPaneHeadRow">
+                      <p className="displayPaneTitle">Visit Survey List:</p>
+                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                      {this.context.role === 'Admin' && (
+                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'survey')}>Add</Button>
+                      )}
+                    </Row>
+                    {this.state.adding.state === true &&
+                      this.state.adding.field === 'survey' && (
+                        <h3>Add survey form</h3>
+                    )}
+                    <h3>Visit Survey List</h3>
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="6">
+                    <Row className="displayPaneHeadRow">
+                      <p className="displayPaneTitle">Visit SystematicInquiry List:</p>
+                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                      {this.context.role === 'Admin' && (
+                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'systematicInquiry')}>Add</Button>
+                      )}
+                    </Row>
+                    {this.state.adding.state === true &&
+                      this.state.adding.field === 'systematicInquiry' && (
+                        <h3>Add systematicInquiry form</h3>
+                    )}
+                    <h3>Visit SystematicInquiry List</h3>
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="7">
+                    <Row className="displayPaneHeadRow">
+                      <p className="displayPaneTitle">Visit Vitals List:</p>
+                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                      {this.context.role === 'Admin' && (
+                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'vitals')}>Add</Button>
+                      )}
+                    </Row>
+                    {this.state.adding.state === true &&
+                      this.state.adding.field === 'vitals' && (
+                        <h3>Add vitals form</h3>
+                    )}
+                    <h3>Visit Vitals List</h3>
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="8">
+                    <Row className="displayPaneHeadRow">
+                      <p className="displayPaneTitle">Visit Examination List:</p>
+                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                      {this.context.role === 'Admin' && (
+                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'examination')}>Add</Button>
+                      )}
+                    </Row>
+                    {this.state.adding.state === true &&
+                      this.state.adding.field === 'examination' && (
+                        <h3>Add Examination form</h3>
+                    )}
+                    <h3>Visit Examination List</h3>
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="9">
+                    <Row className="displayPaneHeadRow">
+                      <p className="displayPaneTitle">Visit Investigation List:</p>
+                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                      {this.context.role === 'Admin' && (
+                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'investigation')}>Add</Button>
+                      )}
+                    </Row>
+                    {this.state.adding.state === true &&
+                      this.state.adding.field === 'investigation' && (
+                        <h3>Add Investigation form</h3>
+                    )}
+                    <h3>Visit Investigation List</h3>
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="10">
+                    <Row className="displayPaneHeadRow">
+                      <p className="displayPaneTitle">Visit Diagnosis List:</p>
+                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                      {this.context.role === 'Admin' && (
+                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'diagnosis')}>Add</Button>
+                      )}
+                    </Row>
+                    {this.state.adding.state === true &&
+                      this.state.adding.field === 'diagnosis' && (
+                        <h3>Add Diagnosis form</h3>
+                    )}
+                    <h3>Visit Diagnosis List</h3>
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="11">
+                    <Row className="displayPaneHeadRow">
+                      <p className="displayPaneTitle">Visit Treatment List:</p>
+                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                      {this.context.role === 'Admin' && (
+                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'treatment')}>Add</Button>
+                      )}
+                    </Row>
+                    {this.state.adding.state === true &&
+                      this.state.adding.field === 'treatment' && (
+                        <h3>Add Treatment form</h3>
+                    )}
+                    <h3>Visit Treatment List</h3>
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="12">
+                    <Row className="displayPaneHeadRow">
+                      <p className="displayPaneTitle">Visit Billing List:</p>
+                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                      {this.context.role === 'Admin' && (
+                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'billing')}>Add</Button>
+                      )}
+                    </Row>
+                    {this.state.adding.state === true &&
+                      this.state.adding.field === 'billing' && (
+                        <h3>Add Billing form</h3>
+                    )}
+                    <h3>Visit Billing List</h3>
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="13">
+                    <Row className="displayPaneHeadRow">
+                      <p className="displayPaneTitle">Visit Vigilance List:</p>
+                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                      {this.context.role === 'Admin' && (
+                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'vigilance')}>Add</Button>
+                      )}
+                    </Row>
+                    {this.state.adding.state === true &&
+                      this.state.adding.field === 'vigilance' && (
+                        <h3>Add Vigilance form</h3>
+                    )}
+                    <h3>Visit Vigilance List</h3>
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="13">
+                    <Row className="displayPaneHeadRow">
+                      <p className="displayPaneTitle">Visit Image List:</p>
+                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                      {this.context.role === 'Admin' && (
+                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
+                      )}
+                    </Row>
+                    {this.state.adding.state === true &&
+                      this.state.adding.field === 'image' && (
+                        <h3>Add Image form</h3>
+                    )}
+                    <h3>Visit Image List</h3>
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="13">
+                    <Row className="displayPaneHeadRow">
+                      <p className="displayPaneTitle">Visit File List:</p>
+                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                      {this.context.role === 'Admin' && (
+                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
+                      )}
+                    </Row>
+                    {this.state.adding.state === true &&
+                      this.state.adding.field === 'file' && (
+                        <h3>Add File form</h3>
+                    )}
+                    <h3>Visit File List</h3>
                   </Tab.Pane>
 
                 </Tab.Content>

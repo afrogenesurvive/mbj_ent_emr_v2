@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
 import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
+import moment from 'moment';
 
 import './visitItem.css';
 
@@ -26,7 +27,7 @@ const VisitItem = props => {
       <Card>
         <Card.Body className="cardBody">
           <Card.Text className="cardText">
-            Date: <span className="bold">{props.visit.date}</span>
+            Date: <span className="bold">{moment.unix(props.visit.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
           </Card.Text>
           <Card.Text className="cardText">
             Time: <span className="bold">{props.visit.time}</span>
@@ -47,7 +48,10 @@ const VisitItem = props => {
                 subType: <span className="bold">{props.visit.subType}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Patient: <span className="bold">{props.visit.patient._id}</span>
+                Patient:
+              </Card.Text>
+              <Card.Text className="cardText">
+                Id: <span className="bold">{props.visit.patient._id}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Name: <span className="bold">{props.visit.patient.name}</span>

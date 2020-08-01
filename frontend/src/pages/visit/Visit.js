@@ -21,7 +21,7 @@ import VisitList from '../../components/lists/visit/VisitList';
 import PatientList from '../../components/lists/patient/PatientList';
 import AppointmentList from '../../components/lists/appointment/AppointmentList';
 // import SearchAppointmentList from '../../components/lists/appointment/SearchAppointmentList';
-import AppointmentDetail from '../../components/details/AppointmentDetail';
+import VisitDetail from '../../components/details/VisitDetail';
 
 import FilterVisitForm from '../../components/forms/filter/FilterVisitForm';
 import VisitSearchForm from '../../components/forms/search/VisitSearchForm';
@@ -545,7 +545,8 @@ selectAppointment = (args) => {
 showDetails = (args) => {
   this.setState({
     showDetails: true,
-    selectedVisit: args
+    selectedVisit: args,
+    overlay: false
   })
   this.context.selectedVisit = args;
 }
@@ -633,9 +634,10 @@ parseForCalendar = (args) => {
       title: x.title,
       date: moment.unix(x.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
       props: {
+        _id: x._id,
         title: x.title,
         type: x.type,
-        date: x.date,
+        date: moment.unix(x.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
         time: x.time,
         subType: x.subType,
       }
@@ -643,11 +645,20 @@ parseForCalendar = (args) => {
     this.setState({
       calendarVisits: calendarVisits
     })
-
 }
 
 viewCalendarEvent = (args) => {
-  console.log('...viewing calendar appointment...',args);
+  console.log('...viewing calendar visit...');
+  const visit = this.state.visits.filter(x => x._id === args.event.extendedProps.props._id)[0];
+  this.setState({
+    overlay: true,
+    overlayStatus: {type: 'calendarVisit', data: visit}
+  })
+}
+toggleOverlay = () => {
+  this.setState({
+    overlay: false
+  })
 }
 
 
@@ -659,6 +670,8 @@ render() {
     {this.state.overlay === true && (
       <LoadingOverlay
         status={this.state.overlayStatus}
+        selectCalendarDetails={this.showDetails}
+        toggleOverlay={this.toggleOverlay}
       />
     )}
 
@@ -766,11 +779,10 @@ render() {
                 <Tab.Pane eventKey="3">
                 {this.state.showDetails === true &&
                   this.state.selectedVisit && (
-                  <h3>visit detail: {this.state.selectedVisit.title}</h3>
-                  // <VisitDetail
-                  //   appointment={this.state.selectedVisit}
-                  //   updateVisit={this.updateVisit}
-                  // />
+                    <VisitDetail
+                      visit={this.state.selectedVisit}
+                      updateVisit={this.updateVisit}
+                    />
                 )}
                 </Tab.Pane>
                 <Tab.Pane eventKey="4">
