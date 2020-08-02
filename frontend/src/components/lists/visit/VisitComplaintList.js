@@ -47,6 +47,7 @@ const VisitComplaintList = props => {
         canDelete={props.canDelete}
         onDelete={props.onDelete}
         onAddAttachment={props.onAddAttachment}
+        deleteAttachment={props.deleteAttachment}
       />
     );
   });

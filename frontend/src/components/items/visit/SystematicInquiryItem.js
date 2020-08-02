@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
 import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
+import PatientAttachmentList from '../../lists/patient/PatientAttachmentList';
 
 import './visitItem.css';
 
@@ -32,9 +33,13 @@ const SystematicInquiryItem = props => {
               <Card.Text className="cardText">
                 Description: <span className="bold">{props.systematicInquiry.description}</span>
               </Card.Text>
-              <Card.Text className="cardText">
-                attachments: <span className="bold">{props.systematicInquiry.attachments.toString()}</span>
-              </Card.Text>
+              <PatientAttachmentList
+                item={props.systematicInquiry}
+                attachments={props.systematicInquiry.attachments}
+                canDelete={props.canDelete}
+                onDelete={props.deleteAttachment}
+                type="systematicInquiry"
+              />
               <Button variant="outline-primary" onClick={props.onAddAttachment.bind(this, {field: 'systematicInquiry',data:props.systematicInquiry})}>Add Attachment</Button>
               {props.canDelete === true && (
                 <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.systematicInquiry)}>Delete</Button>

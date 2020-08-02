@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
 import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
+import PatientAttachmentList from '../../lists/patient/PatientAttachmentList';
 
 import './visitItem.css';
 
@@ -50,9 +51,13 @@ const BillingItem = props => {
               <Card.Text className="cardText">
                 Paid: <span className="bold">{props.billing.paid.toString()}</span>
               </Card.Text>
-              <Card.Text className="cardText">
-                attachments: <span className="bold">{props.billing.attachments.toString()}</span>
-              </Card.Text>
+              <PatientAttachmentList
+                item={props.billing}
+                attachments={props.billing.attachments}
+                canDelete={props.canDelete}
+                onDelete={props.deleteAttachment}
+                type="billing"
+              />
               <Button variant="outline-primary" onClick={props.onAddAttachment.bind(this, {field: 'billing',data:props.billing})}>Add Attachment</Button>
               {props.canDelete === true && (
                 <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.billing)}>Delete</Button>

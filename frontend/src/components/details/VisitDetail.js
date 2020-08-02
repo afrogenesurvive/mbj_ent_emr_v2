@@ -69,6 +69,7 @@ import AddInvestigationForm from '../forms/add/AddInvestigationForm';
 import AddDiagnosisForm from '../forms/add/AddDiagnosisForm';
 import AddTreatmentForm from '../forms/add/AddTreatmentForm';
 import AddBillingForm from '../forms/add/AddBillingForm';
+import AddVigilanceForm from '../forms/add/AddVigilanceForm';
 import loadingGif from '../../assets/loading.gif';
 import { faBath } from '@fortawesome/free-solid-svg-icons';
 import './details.css';
@@ -1851,79 +1852,79 @@ submitAddVigilanceForm = (event) => {
   let requestBody = {
     query: `
     mutation {addVisitVigilance(
-      activityId:\"5f09f4944bc80aab344f0fe3\",
-      visitId:\"5f0fc060e75436155a2255bd\",
+      activityId:"${activityId}",
+      visitId:"${visitId}",
       visitInput:{
-        vigilanceChronicIllnessDiabetesMedication:false,
-        vigilanceChronicIllnessDiabetesTesting:false,
-        vigilanceChronicIllnessDiabetesComment:\"toast\",
-        vigilanceChronicIllnessHbpMedication:false,
-        vigilanceChronicIllnessHbpTesting:false,
-        vigilanceChronicIllnessHbpComment:\"xxds\",
-        vigilanceChronicIllnessDyslipidemiaMedication:false,
-        vigilanceChronicIllnessDyslipidemiaTesting:false,
-        vigilanceChronicIllnessDyslipidemiaComment:\"z\",
-        vigilanceChronicIllnessCadMedication:false,
-        vigilanceChronicIllnessCadTesting:false,
-        vigilanceChronicIllnessCadComment:\"a\",
-        vigilanceLifestyleWeightMedication:false,
-        vigilanceLifestyleWeightTesting:false,
-        vigilanceLifestyleWeightComment:\"b\",
-        vigilanceLifestyleDietMedication:false,
-        vigilanceLifestyleDietTesting:false,
-        vigilanceLifestyleDietComment:\"c\",
-        vigilanceLifestyleSmokingMedication:false,
-        vigilanceLifestyleSmokingTesting:false,
-        vigilanceLifestyleSmokingComment:\"1\",
-        vigilanceLifestyleSubstanceAbuseMedication:false,
-        vigilanceLifestyleSubstanceAbuseTesting:false,
-        vigilanceLifestyleSubstanceAbuseComment:\"2\",
-        vigilanceLifestyleExerciseMedication:false,
-        vigilanceLifestyleExerciseTesting:false,
-        vigilanceLifestyleExerciseComment:\"3\",
-        vigilanceLifestyleAllergiesMedication:false,
-        vigilanceLifestyleAllergiesTesting:false,
-        vigilanceLifestyleAllergiesComment:\"aa\",
-        vigilanceLifestyleAsthmaMedication:false,
-        vigilanceLifestyleAsthmaTesting:false,
-        vigilanceLifestyleAsthmaComment:\"ab\",
-        vigilanceScreeningBreastMedication:false,
-        vigilanceScreeningBreastTesting:false,
-        vigilanceScreeningBreastComment:\"ac\",
-        vigilanceScreeningProstateMedication:false,
-        vigilanceScreeningProstateTesting:false,
-        vigilanceScreeningProstateComment:\"1a\",
-        vigilanceScreeningCervixMedication:false,
-        vigilanceScreeningCervixTesting:false,
-        vigilanceScreeningCervixComment:\"1b\",
-        vigilanceScreeningColonMedication:false,
-        vigilanceScreeningColonTesting:false,
-        vigilanceScreeningColonComment:\"1c\",
-        vigilanceScreeningDentalMedication:false,
-        vigilanceScreeningDentalTesting:false,
-        vigilanceScreeningDentalComment:\"derp\",
-        vigilanceVaccinesInfluenzaMedication:false,
-        vigilanceVaccinesInfluenzaTesting:false,
-        vigilanceVaccinesInfluenzaComment:\"herp\",
-        vigilanceVaccinesVaricellaMedication:false,
-        vigilanceVaccinesVaricellaTesting:false,
-        vigilanceVaccinesVaricellaComment:\"twerp\",
-        vigilanceVaccinesHpvMedication:false,
-        vigilanceVaccinesHpvTesting:false,
-        vigilanceVaccinesHpvComment:\"boob\",
-        vigilanceVaccinesMmrMedication:false,
-        vigilanceVaccinesMmrTesting:false,
-        vigilanceVaccinesMmrComment:\"scoob\",
-        vigilanceVaccinesTetanusMedication:false,
-        vigilanceVaccinesTetanusTesting:false,
-        vigilanceVaccinesTetanusComment:\"rude\",
-        vigilanceVaccinesPneumovaxMedication:false,
-        vigilanceVaccinesPneumovaxTesting:false,
-        vigilanceVaccinesPneumovaxComment:\"x\",
-        vigilanceVaccinesOtherName:\"x\",
-        vigilanceVaccinesOtherMedication:false,
-        vigilanceVaccinesOtherTesting:false,
-        vigilanceVaccinesOtherComment:\"x\"
+        vigilanceChronicIllnessDiabetesMedication:${event.target.vigilanceChronicIllnessDiabetesMedication.checked},
+        vigilanceChronicIllnessDiabetesTesting:${event.target.vigilanceChronicIllnessDiabetesTesting.checked},
+        vigilanceChronicIllnessDiabetesComment:"${event.target.vigilanceChronicIllnessDiabetesComment.value}",
+        vigilanceChronicIllnessHbpMedication:${event.target.vigilanceChronicIllnessHbpMedication.checked},
+        vigilanceChronicIllnessHbpTesting:${event.target.vigilanceChronicIllnessHbpTesting.checked},
+        vigilanceChronicIllnessHbpComment:"${event.target.vigilanceChronicIllnessHbpComment.value}",
+        vigilanceChronicIllnessDyslipidemiaMedication:${event.target.vigilanceChronicIllnessDyslipidemiaMedication.checked},
+        vigilanceChronicIllnessDyslipidemiaTesting:${event.target.vigilanceChronicIllnessDyslipidemiaTesting.checked},
+        vigilanceChronicIllnessDyslipidemiaComment:"${event.target.vigilanceChronicIllnessDyslipidemiaComment.value}",
+        vigilanceChronicIllnessCadMedication:${event.target.vigilanceChronicIllnessCadMedication.checked},
+        vigilanceChronicIllnessCadTesting:${event.target.vigilanceChronicIllnessCadTesting.checked},
+        vigilanceChronicIllnessCadComment:"${event.target.vigilanceChronicIllnessCadComment.value}",
+        vigilanceLifestyleWeightMedication:${event.target.vigilanceLifestyleWeightMedication.checked},
+        vigilanceLifestyleWeightTesting:${event.target.vigilanceLifestyleWeightTesting.checked},
+        vigilanceLifestyleWeightComment:"${event.target.vigilanceLifestyleWeightComment.value}",
+        vigilanceLifestyleDietMedication:${event.target.vigilanceLifestyleDietMedication.checked},
+        vigilanceLifestyleDietTesting:${event.target.vigilanceLifestyleDietTesting.checked},
+        vigilanceLifestyleDietComment:"${event.target.vigilanceLifestyleDietComment.value}",
+        vigilanceLifestyleSmokingMedication:${event.target.vigilanceLifestyleSmokingMedication.checked},
+        vigilanceLifestyleSmokingTesting:${event.target.vigilanceLifestyleSmokingTesting.checked},
+        vigilanceLifestyleSmokingComment:"${event.target.vigilanceLifestyleSmokingComment.value}",
+        vigilanceLifestyleSubstanceAbuseMedication:${event.target.vigilanceLifestyleSubstanceAbuseMedication.checked},
+        vigilanceLifestyleSubstanceAbuseTesting:${event.target.vigilanceLifestyleSubstanceAbuseTesting.checked},
+        vigilanceLifestyleSubstanceAbuseComment:"${event.target.vigilanceLifestyleSubstanceAbuseComment.value}",
+        vigilanceLifestyleExerciseMedication:${event.target.vigilanceLifestyleExerciseMedication.checked},
+        vigilanceLifestyleExerciseTesting:${event.target.vigilanceLifestyleExerciseTesting.checked},
+        vigilanceLifestyleExerciseComment:"${event.target.vigilanceLifestyleExerciseComment.value}",
+        vigilanceLifestyleAllergiesMedication:${event.target.vigilanceLifestyleAllergiesMedication.checked},
+        vigilanceLifestyleAllergiesTesting:${event.target.vigilanceLifestyleAllergiesTesting.checked},
+        vigilanceLifestyleAllergiesComment:"${event.target.vigilanceLifestyleAllergiesComment.value}",
+        vigilanceLifestyleAsthmaMedication:${event.target.vigilanceLifestyleAsthmaMedication.checked},
+        vigilanceLifestyleAsthmaTesting:${event.target.vigilanceLifestyleAsthmaTesting.checked},
+        vigilanceLifestyleAsthmaComment:"${event.target.vigilanceLifestyleAsthmaComment.value}",
+        vigilanceScreeningBreastMedication:${event.target.vigilanceScreeningBreastMedication.checked},
+        vigilanceScreeningBreastTesting:${event.target.vigilanceScreeningBreastTesting.checked},
+        vigilanceScreeningBreastComment:"${event.target.vigilanceScreeningBreastComment.value}",
+        vigilanceScreeningProstateMedication:${event.target.vigilanceScreeningProstateMedication.checked},
+        vigilanceScreeningProstateTesting:${event.target.vigilanceScreeningProstateTesting.checked},
+        vigilanceScreeningProstateComment:"${event.target.vigilanceScreeningProstateComment.value}",
+        vigilanceScreeningCervixMedication:${event.target.vigilanceScreeningCervixMedication.checked},
+        vigilanceScreeningCervixTesting:${event.target.vigilanceScreeningCervixTesting.checked},
+        vigilanceScreeningCervixComment:"${event.target.vigilanceScreeningCervixComment.value}",
+        vigilanceScreeningColonMedication:${event.target.vigilanceScreeningColonMedication.checked},
+        vigilanceScreeningColonTesting:${event.target.vigilanceScreeningColonTesting.checked},
+        vigilanceScreeningColonComment:"${event.target.vigilanceScreeningColonComment.value}",
+        vigilanceScreeningDentalMedication:${event.target.vigilanceScreeningDentalMedication.checked},
+        vigilanceScreeningDentalTesting:${event.target.vigilanceScreeningDentalTesting.checked},
+        vigilanceScreeningDentalComment:"${event.target.vigilanceScreeningDentalComment.value}",
+        vigilanceVaccinesInfluenzaMedication:${event.target.vigilanceVaccinesInfluenzaMedication.checked},
+        vigilanceVaccinesInfluenzaTesting:${event.target.vigilanceVaccinesInfluenzaTesting.checked},
+        vigilanceVaccinesInfluenzaComment:"${event.target.vigilanceVaccinesInfluenzaComment.value}",
+        vigilanceVaccinesVaricellaMedication:${event.target.vigilanceVaccinesVaricellaMedication.checked},
+        vigilanceVaccinesVaricellaTesting:${event.target.vigilanceVaccinesVaricellaTesting.checked},
+        vigilanceVaccinesVaricellaComment:"${event.target.vigilanceVaccinesVaricellaComment.value}",
+        vigilanceVaccinesHpvMedication:${event.target.vigilanceVaccinesHpvMedication.checked},
+        vigilanceVaccinesHpvTesting:${event.target.vigilanceVaccinesHpvTesting.checked},
+        vigilanceVaccinesHpvComment:"${event.target.vigilanceVaccinesHpvComment.value}",
+        vigilanceVaccinesMmrMedication:${event.target.vigilanceVaccinesMmrMedication.checked},
+        vigilanceVaccinesMmrTesting:${event.target.vigilanceVaccinesMmrTesting.checked},
+        vigilanceVaccinesMmrComment:"${event.target.vigilanceVaccinesMmrComment.value}",
+        vigilanceVaccinesTetanusMedication:${event.target.vigilanceVaccinesTetanusMedication.checked},
+        vigilanceVaccinesTetanusTesting:${event.target.vigilanceVaccinesTetanusTesting.checked},
+        vigilanceVaccinesTetanusComment:"${event.target.vigilanceVaccinesTetanusComment.value}",
+        vigilanceVaccinesPneumovaxMedication:${event.target.vigilanceVaccinesPneumovaxMedication.checked},
+        vigilanceVaccinesPneumovaxTesting:${event.target.vigilanceVaccinesPneumovaxTesting.checked},
+        vigilanceVaccinesPneumovaxComment:"${event.target.vigilanceVaccinesPneumovaxComment.value}",
+        vigilanceVaccinesOtherName:"${event.target.vigilanceVaccinesOtherName.value}",
+        vigilanceVaccinesOtherMedication:${event.target.vigilanceVaccinesOtherMedication.checked},
+        vigilanceVaccinesOtherTesting:${event.target.vigilanceVaccinesOtherTesting.checked},
+        vigilanceVaccinesOtherComment:"${event.target.vigilanceVaccinesOtherComment.value}"
       })
     {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
     `};
@@ -1971,7 +1972,7 @@ submitAddVigilanceForm = (event) => {
 }
 deleteVigilance = (args) => {
 
-  console.log('...deleting Vigilance...',args);
+  console.log('...deleting Vigilance...');
   this.context.setUserAlert('...deleting Vigilance...')
   this.setState({isLoading: true});
 
@@ -1982,79 +1983,79 @@ deleteVigilance = (args) => {
   let requestBody = {
     query: `
         mutation {deleteVisitVigilance(
-          activityId:\"5f09f4944bc80aab344f0fe3\",
-          visitId:\"5f0fc060e75436155a2255bd\",
+          activityId:"${activityId}",
+          visitId:"${visitId}",
           visitInput:{
-            vigilanceChronicIllnessDiabetesMedication:false,
-            vigilanceChronicIllnessDiabetesTesting:false,
-            vigilanceChronicIllnessDiabetesComment:\"toast\",
-            vigilanceChronicIllnessHbpMedication:false,
-            vigilanceChronicIllnessHbpTesting:false,
-            vigilanceChronicIllnessHbpComment:\"xxds\",
-            vigilanceChronicIllnessDyslipidemiaMedication:false,
-            vigilanceChronicIllnessDyslipidemiaTesting:false,
-            vigilanceChronicIllnessDyslipidemiaComment:\"z\",
-            vigilanceChronicIllnessCadMedication:false,
-            vigilanceChronicIllnessCadTesting:false,
-            vigilanceChronicIllnessCadComment:\"a\",
-            vigilanceLifestyleWeightMedication:false,
-            vigilanceLifestyleWeightTesting:false,
-            vigilanceLifestyleWeightComment:\"b\",
-            vigilanceLifestyleDietMedication:false,
-            vigilanceLifestyleDietTesting:false,
-            vigilanceLifestyleDietComment:\"c\",
-            vigilanceLifestyleSmokingMedication:false,
-            vigilanceLifestyleSmokingTesting:false,
-            vigilanceLifestyleSmokingComment:\"1\",
-            vigilanceLifestyleSubstanceAbuseMedication:false,
-            vigilanceLifestyleSubstanceAbuseTesting:false,
-            vigilanceLifestyleSubstanceAbuseComment:\"2\",
-            vigilanceLifestyleExerciseMedication:false,
-            vigilanceLifestyleExerciseTesting:false,
-            vigilanceLifestyleExerciseComment:\"3\",
-            vigilanceLifestyleAllergiesMedication:false,
-            vigilanceLifestyleAllergiesTesting:false,
-            vigilanceLifestyleAllergiesComment:\"aa\",
-            vigilanceLifestyleAsthmaMedication:false,
-            vigilanceLifestyleAsthmaTesting:false,
-            vigilanceLifestyleAsthmaComment:\"ab\",
-            vigilanceScreeningBreastMedication:false,
-            vigilanceScreeningBreastTesting:false,
-            vigilanceScreeningBreastComment:\"ac\",
-            vigilanceScreeningProstateMedication:false,
-            vigilanceScreeningProstateTesting:false,
-            vigilanceScreeningProstateComment:\"1a\",
-            vigilanceScreeningCervixMedication:false,
-            vigilanceScreeningCervixTesting:false,
-            vigilanceScreeningCervixComment:\"1b\",
-            vigilanceScreeningColonMedication:false,
-            vigilanceScreeningColonTesting:false,
-            vigilanceScreeningColonComment:\"1c\",
-            vigilanceScreeningDentalMedication:false,
-            vigilanceScreeningDentalTesting:false,
-            vigilanceScreeningDentalComment:\"derp\",
-            vigilanceVaccinesInfluenzaMedication:false,
-            vigilanceVaccinesInfluenzaTesting:false,
-            vigilanceVaccinesInfluenzaComment:\"herp\",
-            vigilanceVaccinesVaricellaMedication:false,
-            vigilanceVaccinesVaricellaTesting:false,
-            vigilanceVaccinesVaricellaComment:\"twerp\",
-            vigilanceVaccinesHpvMedication:false,
-            vigilanceVaccinesHpvTesting:false,
-            vigilanceVaccinesHpvComment:\"boob\",
-            vigilanceVaccinesMmrMedication:false,
-            vigilanceVaccinesMmrTesting:false,
-            vigilanceVaccinesMmrComment:\"scoob\",
-            vigilanceVaccinesTetanusMedication:false,
-            vigilanceVaccinesTetanusTesting:false,
-            vigilanceVaccinesTetanusComment:\"rude\",
-            vigilanceVaccinesPneumovaxMedication:false,
-            vigilanceVaccinesPneumovaxTesting:false,
-            vigilanceVaccinesPneumovaxComment:\"x\",
-            vigilanceVaccinesOtherName:\"x\",
-            vigilanceVaccinesOtherMedication:false,
-            vigilanceVaccinesOtherTesting:false,
-            vigilanceVaccinesOtherComment:\"x\"
+            vigilanceChronicIllnessDiabetesMedication:${args.chronicIllness.diabetes.medication},
+            vigilanceChronicIllnessDiabetesTesting:${args.chronicIllness.diabetes.testing},
+            vigilanceChronicIllnessDiabetesComment:"${args.chronicIllness.diabetes.comment}",
+            vigilanceChronicIllnessHbpMedication:${args.chronicIllness.hbp.medication},
+            vigilanceChronicIllnessHbpTesting:${args.chronicIllness.hbp.testing},
+            vigilanceChronicIllnessHbpComment:"${args.chronicIllness.hbp.comment}",
+            vigilanceChronicIllnessDyslipidemiaMedication:${args.chronicIllness.dyslipidemia.medication},
+            vigilanceChronicIllnessDyslipidemiaTesting:${args.chronicIllness.dyslipidemia.testing},
+            vigilanceChronicIllnessDyslipidemiaComment:"${args.chronicIllness.dyslipidemia.comment}",
+            vigilanceChronicIllnessCadMedication:${args.chronicIllness.cad.medication},
+            vigilanceChronicIllnessCadTesting:${args.chronicIllness.cad.testing},
+            vigilanceChronicIllnessCadComment:"${args.chronicIllness.cad.comment}",
+            vigilanceLifestyleWeightMedication:${args.lifestyle.weight.medication},
+            vigilanceLifestyleWeightTesting:${args.lifestyle.weight.testing},
+            vigilanceLifestyleWeightComment:"${args.lifestyle.weight.comment}",
+            vigilanceLifestyleDietMedication:${args.lifestyle.diet.medication},
+            vigilanceLifestyleDietTesting:${args.lifestyle.diet.testing},
+            vigilanceLifestyleDietComment:"${args.lifestyle.diet.comment}",
+            vigilanceLifestyleSmokingMedication:${args.lifestyle.smoking.medication},
+            vigilanceLifestyleSmokingTesting:${args.lifestyle.smoking.testing},
+            vigilanceLifestyleSmokingComment:"${args.lifestyle.smoking.comment}",
+            vigilanceLifestyleSubstanceAbuseMedication:${args.lifestyle.substanceAbuse.medication},
+            vigilanceLifestyleSubstanceAbuseTesting:${args.lifestyle.substanceAbuse.testing},
+            vigilanceLifestyleSubstanceAbuseComment:"${args.lifestyle.substanceAbuse.comment}",
+            vigilanceLifestyleExerciseMedication:${args.lifestyle.exercise.medication},
+            vigilanceLifestyleExerciseTesting:${args.lifestyle.exercise.testing},
+            vigilanceLifestyleExerciseComment:"${args.lifestyle.exercise.comment}",
+            vigilanceLifestyleAllergiesMedication:${args.lifestyle.allergies.medication},
+            vigilanceLifestyleAllergiesTesting:${args.lifestyle.allergies.testing},
+            vigilanceLifestyleAllergiesComment:"${args.lifestyle.allergies.comment}",
+            vigilanceLifestyleAsthmaMedication:${args.lifestyle.asthma.medication},
+            vigilanceLifestyleAsthmaTesting:${args.lifestyle.asthma.testing},
+            vigilanceLifestyleAsthmaComment:"${args.lifestyle.asthma.comment}",
+            vigilanceScreeningBreastMedication:${args.screening.breast.medication},
+            vigilanceScreeningBreastTesting:${args.screening.breast.testing},
+            vigilanceScreeningBreastComment:"${args.screening.breast.comment}",
+            vigilanceScreeningProstateMedication:${args.screening.prostate.medication},
+            vigilanceScreeningProstateTesting:${args.screening.prostate.testing},
+            vigilanceScreeningProstateComment:"${args.screening.prostate.comment}",
+            vigilanceScreeningCervixMedication:${args.screening.cervix.medication},
+            vigilanceScreeningCervixTesting:${args.screening.cervix.testing},
+            vigilanceScreeningCervixComment:"${args.screening.cervix.comment}",
+            vigilanceScreeningColonMedication:${args.screening.colon.medication},
+            vigilanceScreeningColonTesting:${args.screening.colon.testing},
+            vigilanceScreeningColonComment:"${args.screening.colon.comment}",
+            vigilanceScreeningDentalMedication:${args.screening.dental.medication},
+            vigilanceScreeningDentalTesting:${args.screening.dental.testing},
+            vigilanceScreeningDentalComment:"${args.screening.dental.comment}",
+            vigilanceVaccinesInfluenzaMedication:${args.vaccines.influenza.medication},
+            vigilanceVaccinesInfluenzaTesting:${args.vaccines.influenza.testing},
+            vigilanceVaccinesInfluenzaComment:"${args.vaccines.influenza.comment}",
+            vigilanceVaccinesVaricellaMedication:${args.vaccines.varicella.medication},
+            vigilanceVaccinesVaricellaTesting:${args.vaccines.varicella.testing},
+            vigilanceVaccinesVaricellaComment:"${args.vaccines.varicella.comment}",
+            vigilanceVaccinesHpvMedication:${args.vaccines.hpv.medication},
+            vigilanceVaccinesHpvTesting:${args.vaccines.hpv.testing},
+            vigilanceVaccinesHpvComment:"${args.vaccines.hpv.comment}",
+            vigilanceVaccinesMmrMedication:${args.vaccines.mmr.medication},
+            vigilanceVaccinesMmrTesting:${args.vaccines.mmr.testing},
+            vigilanceVaccinesMmrComment:"${args.vaccines.mmr.comment}",
+            vigilanceVaccinesTetanusMedication:${args.vaccines.tetanus.medication},
+            vigilanceVaccinesTetanusTesting:${args.vaccines.tetanus.testing},
+            vigilanceVaccinesTetanusComment:"${args.vaccines.tetanus.comment}",
+            vigilanceVaccinesPneumovaxMedication:${args.vaccines.pneumovax.medication},
+            vigilanceVaccinesPneumovaxTesting:${args.vaccines.pneumovax.testing},
+            vigilanceVaccinesPneumovaxComment:"${args.vaccines.pneumovax.comment}",
+            vigilanceVaccinesOtherName:"${args.vaccines.other.name}",
+            vigilanceVaccinesOtherMedication:${args.vaccines.other.medication},
+            vigilanceVaccinesOtherTesting:${args.vaccines.other.testing},
+            vigilanceVaccinesOtherComment:"${args.vaccines.other.comment}"
           })
         {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
     `};
@@ -2245,61 +2246,186 @@ addAttachment = (event) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
+  const visitId = this.props.visit._id;
   let args = this.state.addAttachmentArgs;
   let field = args.field;
 
-  let allergyTitle;
-  let allergyType;
-  let allergyDescription;
-  let allergyAttachment;
-  let medicationTitle;
-  let medicationType;
-  let medicationDescription;
-  let medicationAttachment;
-
-  if (field === 'allergy') {
-    allergyTitle = args.data.title;
-    allergyType = args.data.type;
-    allergyDescription = args.data.description;
-    allergyAttachment = event.target.attachment.value;
-  }
-  if (field === 'medication') {
-    medicationTitle = args.data.title;
-    medicationType = args.data.type;
-    medicationDescription = args.data.description;
-    medicationAttachment = event.target.attachment.value;
-  }
+// treatment,billing
 
   let requestBody;
-  if (field === 'allergy') {
+
+  if (field === 'complaint') {
+    let complaintTitle = args.data.title;
+    let complaintDescription = args.data.description;
+    let complaintAnamnesis = args.data.anamnesis;
+    let complaintAttachment = event.target.attachment.value;
+
     requestBody = {
       query: `
-        mutation {addPatientAllergyAttachment(
+        mutation {addVisitComplaintAttachment(
           activityId:"${activityId}",
-          patientId:"${patientId}",
-          patientInput:{
-            allergyType:"${allergyType}",
-            allergyTitle:"${allergyTitle}",
-            allergyDescription:"${allergyDescription}",
-            allergyAttachment:"${allergyAttachment}"
+          visitId:"${visitId}",
+          visitInput:{
+            complaintTitle:"${complaintTitle}",
+            complaintDescription:"${complaintDescription}",
+            complaintAnamnesis:"${complaintAnamnesis}",
+            complaintAttachment:"${complaintAttachment}"
           })
-          {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
+        {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
       `};
   }
-  if (field === 'medication') {
+  if (field === 'survey') {
+    let surveyTitle = args.data.title;
+    let surveyDescription = args.data.description;
+    let surveyAttachment = event.target.attachment.value;
+
     requestBody = {
       query: `
-        mutation {addPatientMedicationAttachment(
+        mutation {addVisitSurveyAttachment(
           activityId:"${activityId}",
-          patientId:"${patientId}",
-          patientInput:{
-            medicationType:"${medicationType}",
-            medicationTitle:"${medicationTitle}",
-            medicationDescription:"${medicationDescription}",
-            medicationAttachment:"${medicationAttachment}"
+          visitId:"${visitId}",
+          visitInput:{
+            surveyTitle:"${surveyTitle}",
+            surveyDescription:"${surveyDescription}",
+            surveyAttachment:"${surveyAttachment}"
           })
-          {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id},reminders{_id},activity{date,request}}}
+          {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
+      `};
+  }
+  if (field === 'systematicInquiry') {
+    let systematicInquiryTitle = args.data.title;
+    let systematicInquiryDescription = args.data.description;
+    let systematicInquiryAttachment = event.target.attachment.value;
+
+    requestBody = {
+      query: `
+        mutation {addVisitSysInquiryAttachment(
+          activityId:"${activityId}",
+          visitId:"${visitId}",
+          visitInput:{
+            systematicInquiryTitle:"${systematicInquiryTitle}",
+            systematicInquiryDescription:"${systematicInquiryDescription}",
+            systematicInquiryAttachment:"${systematicInquiryAttachment}"
+          })
+          {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
+      `};
+  }
+  if (field === 'examination') {
+    let examinationGeneral = args.data.general;
+    let examinationArea = args.data.area;
+    let examinationType = args.data.type;
+    let examinationMeasure = args.data.measure;
+    let examinationValue = args.data.value;
+    let examinationDescription = args.data.description;
+    let examinationFollowUp = args.data.followUp;
+    let examinationAttachment = event.target.attachment.value;
+
+    requestBody = {
+      query: `
+        mutation {addVisitExaminationAttachment(
+          activityId:"${activityId}",
+          visitId:"${visitId}",
+          visitInput:{
+            examinationGeneral:"${examinationGeneral}",
+            examinationArea:"${examinationArea}",
+            examinationType:"${examinationType}",
+            examinationMeasure:"${examinationMeasure}",
+            examinationValue:"${examinationValue}",
+            examinationDescription:"${examinationDescription}",
+            examinationFollowUp:${examinationFollowUp},
+            examinationAttachment:"${examinationAttachment}"
+          })
+          {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
+      `};
+  }
+  if (field === 'investigation') {
+    let investigationTitle = args.data.title;
+    let investigationType = args.data.type;
+    let investigationDescription = args.data.description;
+    let investigationAttachment = event.target.attachment.value;
+
+    requestBody = {
+      query: `
+        mutation {addVisitInvestigationAttachment(
+          activityId:"${activityId}",
+          visitId:"${visitId}",
+          visitInput:{
+            investigationTitle:"${investigationTitle}",
+            investigationType:"${investigationType}",
+            investigationDescription:"${investigationDescription}",
+            investigationAttachment:"${investigationAttachment}"
+          })
+          {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
+      `};
+  }
+  if (field === 'diagnosis') {
+    let diagnosisTitle = args.data.title;
+    let diagnosisType = args.data.type;
+    let diagnosisDescription = args.data.description;
+    let diagnosisAttachment = event.target.attachment.value;
+
+    requestBody = {
+      query: `
+        mutation {addVisitDiagnosisAttachment(
+          activityId:"${activityId}",
+          visitId:"${visitId}",
+          visitInput:{
+            diagnosisTitle:"${diagnosisTitle}",
+            diagnosisType:"${diagnosisType}",
+            diagnosisDescription:"${diagnosisDescription}",
+            diagnosisAttachment:"${diagnosisAttachment}"
+          })
+          {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
+      `};
+  }
+  if (field === 'treatment') {
+    let treatmentType = args.data.type;
+    let treatmentTitle = args.data.title;
+    let treatmentDescription = args.data.description;
+    let treatmentDose = args.data.dose;
+    let treatmentFrequency = args.data.frequency;
+    let treatmentAttachment = event.target.attachment.value;
+
+    requestBody = {
+      query: `
+        mutation {addVisitTreatmentAttachment(
+          activityId:"${activityId}",
+          visitId:"${visitId}",
+          visitInput:{
+            treatmentType:"${treatmentType}",
+            treatmentTitle:"${treatmentTitle}",
+            treatmentDescription:"${treatmentDescription}",
+            treatmentDose:"${treatmentDose}",
+            treatmentFrequency:"${treatmentFrequency}",
+            treatmentAttachment:"${treatmentAttachment}"
+        })
+        {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
+      `};
+  }
+  if (field === 'billing') {
+    let billingAmount = args.data.amount;
+    let billingPaid = args.data.paid;
+    let billingTitle = args.data.title;
+    let billingType = args.data.type;
+    let billingDescription = args.data.description;
+    let billingNotes = args.data.notes;
+    let billingAttachment = event.target.attachment.value;
+
+    requestBody = {
+      query: `
+        mutation {addVisitBillingAttachment(
+          activityId:"${activityId}",
+          visitId:"${visitId}",
+          visitInput:{
+            billingTitle:"${billingTitle}",
+            billingType:"${billingType}",
+            billingDescription:"${billingDescription}",
+            billingAmount:${billingAmount},
+            billingPaid:${billingPaid},
+            billingAttachment:"${billingAttachment}",
+            billingNotes:"${billingNotes}"
+          })
+          {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
       `};
   }
 
@@ -2318,45 +2444,147 @@ addAttachment = (event) => {
       return res.json();
     })
     .then(resData => {
-      if (field === 'allergy') {
-        // console.log('...resData...',resData.data.addPatientAllergyAttachment);
+      if (field === 'complaint') {
+        // console.log('...resData...',resData.data.addVisitComplaintAttachment);
       }
-      if (field === 'medication') {
-        // console.log('...resData...',resData.data.addPatientMedicationAttachment);
+      if (field === 'survey') {
+        // console.log('...resData...',resData.data.addVisitSurveyAttachment);
+      }
+      if (field === 'systematicInquiry') {
+        // console.log('...resData...',resData.data.addVisitSysInquiryAttachment);
+      }
+      if (field === 'examination') {
+        // console.log('...resData...',resData.data.addVisitExaminationAttachment);
+      }
+      if (field === 'investigation') {
+        // console.log('...resData...',resData.data.addVisitInvestigationAttachment);
+      }
+      if (field === 'diagnosis') {
+        // console.log('...resData...',resData.data.addVisitDiagnosisAttachment);
+      }
+      if (field === 'treatment') {
+        // console.log('...resData...',resData.data.addVisitTreatmentAttachment);
+      }
+      if (field === 'billing') {
+        // console.log('...resData...',resData.data.addVisitBillingAttachment);
       }
 
       let responseAlert = '...add attachment success!...';
       let error = null;
 
-      if (field === 'allergy') {
-        if (resData.data.addPatientAllergyAttachment.error) {
-          error = resData.data.addPatientAllergyAttachment.error;
+      if (field === 'complaint') {
+        if (resData.data.addVisitComplaintAttachment.error) {
+          error = resData.data.addVisitComplaintAttachment.error;
           responseAlert = error;
         }
       }
-      if (field === 'medication') {
-        if (resData.data.addPatientMedicationAttachment.error) {
-          error = resData.data.addPatientMedicationAttachment.error;
+      if (field === 'survey') {
+        if (resData.data.addVisitSurveyAttachment.error) {
+          error = resData.data.addVisitSurveyAttachment.error;
+          responseAlert = error;
+        }
+      }
+      if (field === 'systematicInquiry') {
+        if (resData.data.addVisitSysInquiryAttachment.error) {
+          error = resData.data.addVisitSysInquiryAttachment.error;
+          responseAlert = error;
+        }
+      }
+      if (field === 'examination') {
+        if (resData.data.addVisitExaminationAttachment.error) {
+          error = resData.data.addVisitExaminationAttachment.error;
+          responseAlert = error;
+        }
+      }
+      if (field === 'investigation') {
+        if (resData.data.addVisitInvestigationAttachment.error) {
+          error = resData.data.addVisitInvestigationAttachment.error;
+          responseAlert = error;
+        }
+      }
+      if (field === 'diagnosis') {
+        if (resData.data.addVisitDiagnosisAttachment.error) {
+          error = resData.data.addVisitDiagnosisAttachment.error;
+          responseAlert = error;
+        }
+      }
+      if (field === 'treatment') {
+        if (resData.data.addVisitTreatmentAttachment.error) {
+          error = resData.data.addVisitTreatmentAttachment.error;
+          responseAlert = error;
+        }
+      }
+      if (field === 'billing') {
+        if (resData.data.addVisitBillingAttachment.error) {
+          error = resData.data.addVisitBillingAttachment.error;
           responseAlert = error;
         }
       }
 
       this.context.setUserAlert(responseAlert)
 
-      if (field === 'allergy') {
-        this.props.updatePatient(resData.data.addPatientAllergyAttachment)
+      if (field === 'complaint') {
+        this.props.updateVisit(resData.data.addVisitComplaintAttachment)
         this.setState({
           isLoading: false,
-          selectedPatient: resData.data.addPatientAllergyAttachment,
-          activityA: `addPatientAllergyAttachmentRegex?activityId:${activityId},patientId:${patientId}`
+          selectedVisit: resData.data.addVisitComplaintAttachment,
+          activityA: `addVisitComplaintAttachment?activityId:${activityId},visitId:${visitId}`
         });
       }
-      if (field === 'medication') {
-        this.props.updatePatient(resData.data.addPatientMedicationAttachment)
+      if (field === 'survey') {
+        this.props.updateVisit(resData.data.addVisitSurveyAttachment)
         this.setState({
           isLoading: false,
-          selectedPatient: resData.data.addPatientMedicationAttachment,
-          activityA: `addPatientMedicationAttachment?activityId:${activityId},patientId:${patientId}`
+          selectedVisit: resData.data.addVisitSurveyAttachment,
+          activityA: `addVisitSurveyAttachment?activityId:${activityId},visitId:${visitId}`
+        });
+      }
+      if (field === 'systematicInquiry') {
+        this.props.updateVisit(resData.data.addVisitSysInquiryAttachment)
+        this.setState({
+          isLoading: false,
+          selectedVisit: resData.data.addVisitSysInquiryAttachment,
+          activityA: `addVisitSysInquiryAttachment?activityId:${activityId},visitId:${visitId}`
+        });
+      }
+      if (field === 'examination') {
+        this.props.updateVisit(resData.data.addVisitExaminationAttachment)
+        this.setState({
+          isLoading: false,
+          selectedVisit: resData.data.addVisitExaminationAttachment,
+          activityA: `addVisitExaminationAttachment?activityId:${activityId},visitId:${visitId}`
+        });
+      }
+      if (field === 'investigation') {
+        this.props.updateVisit(resData.data.addVisitInvestigationAttachment)
+        this.setState({
+          isLoading: false,
+          selectedVisit: resData.data.addVisitInvestigationAttachment,
+          activityA: `addVisitInvestigationAttachment?activityId:${activityId},visitId:${visitId}`
+        });
+      }
+      if (field === 'diagnosis') {
+        this.props.updateVisit(resData.data.addVisitDiagnosisAttachment)
+        this.setState({
+          isLoading: false,
+          selectedVisit: resData.data.addVisitDiagnosisAttachment,
+          activityA: `addVisitDiagnosisAttachment?activityId:${activityId},visitId:${visitId}`
+        });
+      }
+      if (field === 'treatment') {
+        this.props.updateVisit(resData.data.addVisitTreatmentAttachment)
+        this.setState({
+          isLoading: false,
+          selectedVisit: resData.data.addVisitTreatmentAttachment,
+          activityA: `addVisitTreatmentAttachment?activityId:${activityId},visitId:${visitId}`
+        });
+      }
+      if (field === 'billing') {
+        this.props.updateVisit(resData.data.addVisitBillingAttachment)
+        this.setState({
+          isLoading: false,
+          selectedVisit: resData.data.addVisitBillingAttachment,
+          activityA: `addVisitBillingAttachment?activityId:${activityId},visitId:${visitId}`
         });
       }
 
@@ -2371,7 +2599,7 @@ addAttachment = (event) => {
 }
 deleteAttachment = (args) => {
   console.log('...deleting attachment...', args);
-  let field = args.field;
+
 }
 
 submitUpdateSingleFieldForm = (event) => {
@@ -2802,6 +3030,7 @@ render() {
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteComplaint}
                       onAddAttachment={this.startAddAttachment}
+                      deleteAttachment={this.deleteAttachment}
                     />
                   </Tab.Pane>
                   <Tab.Pane eventKey="5">
@@ -2832,6 +3061,7 @@ render() {
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteSurvey}
                       onAddAttachment={this.startAddAttachment}
+                      deleteAttachment={this.deleteAttachment}
                     />
                   </Tab.Pane>
                   <Tab.Pane eventKey="6">
@@ -2862,6 +3092,7 @@ render() {
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteSystematicInquiry}
                       onAddAttachment={this.startAddAttachment}
+                      deleteAttachment={this.deleteAttachment}
                     />
                   </Tab.Pane>
                   <Tab.Pane eventKey="7">
@@ -2915,6 +3146,7 @@ render() {
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteExamination}
                       onAddAttachment={this.startAddAttachment}
+                      deleteAttachment={this.deleteAttachment}
                     />
                   </Tab.Pane>
                   <Tab.Pane eventKey="9">
@@ -2945,6 +3177,7 @@ render() {
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteInvestigation}
                       onAddAttachment={this.startAddAttachment}
+                      deleteAttachment={this.deleteAttachment}
                     />
                   </Tab.Pane>
                   <Tab.Pane eventKey="10">
@@ -2975,6 +3208,7 @@ render() {
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteDiagnosis}
                       onAddAttachment={this.startAddAttachment}
+                      deleteAttachment={this.deleteAttachment}
                     />
                   </Tab.Pane>
                   <Tab.Pane eventKey="11">
@@ -3005,6 +3239,7 @@ render() {
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteTreatment}
                       onAddAttachment={this.startAddAttachment}
+                      deleteAttachment={this.deleteAttachment}
                     />
                   </Tab.Pane>
                   <Tab.Pane eventKey="12">
@@ -3035,6 +3270,7 @@ render() {
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteBilling}
                       onAddAttachment={this.startAddAttachment}
+                      deleteAttachment={this.deleteAttachment}
                     />
                   </Tab.Pane>
                   <Tab.Pane eventKey="13">
@@ -3047,7 +3283,10 @@ render() {
                     </Row>
                     {this.state.adding.state === true &&
                       this.state.adding.field === 'vigilance' && (
-                        <h3>Add Vigilance form</h3>
+                        <AddVigilanceForm
+                          onConfirm={this.submitAddVigilanceForm}
+                          onCancel={this.cancelAdd}
+                        />
                     )}
                     <VisitVigilanceList
                       filter={this.state.filter}

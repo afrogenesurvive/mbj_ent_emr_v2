@@ -357,6 +357,7 @@ module.exports = {
           anamnesis: args.visitInput.complaintAnamnesis
         }
         const newAttachment = args.visitInput.complaintAttachment;
+        console.log('foo',complaint);
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId,
             'complaints.title': complaint.title,
@@ -1581,9 +1582,9 @@ module.exports = {
               comment: args.visitInput.vigilanceChronicIllnessHbpComment
             },
             dyslipidemia: {
-              medication: args.visitInput.vigilanceChronicIllnessHbpDyslipidemiaMedication,
-              testing: args.visitInput.vigilanceChronicIllnessHbpDyslipidemiaTesting,
-              comment: args.visitInput.vigilanceChronicIllnessHbpDyslipidemiaComment
+              medication: args.visitInput.vigilanceChronicIllnessDyslipidemiaMedication,
+              testing: args.visitInput.vigilanceChronicIllnessDyslipidemiaTesting,
+              comment: args.visitInput.vigilanceChronicIllnessDyslipidemiaComment
             },
             cad: {
               medication: args.visitInput.vigilanceChronicIllnessCadMedication,
@@ -1731,9 +1732,9 @@ module.exports = {
               comment: args.visitInput.vigilanceChronicIllnessHbpComment
             },
             dyslipidemia: {
-              medication: args.visitInput.vigilanceChronicIllnessHbpDyslipidemiaMedication,
-              testing: args.visitInput.vigilanceChronicIllnessHbpDyslipidemiaTesting,
-              comment: args.visitInput.vigilanceChronicIllnessHbpDyslipidemiaComment
+              medication: args.visitInput.vigilanceChronicIllnessDyslipidemiaMedication,
+              testing: args.visitInput.vigilanceChronicIllnessDyslipidemiaTesting,
+              comment: args.visitInput.vigilanceChronicIllnessDyslipidemiaComment
             },
             cad: {
               medication: args.visitInput.vigilanceChronicIllnessCadMedication,
@@ -1843,7 +1844,8 @@ module.exports = {
               comment: args.visitInput.vigilanceVaccinesOtherComment
             }
           }
-        }
+        };
+
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$pull: {vigilance: vigilance}},

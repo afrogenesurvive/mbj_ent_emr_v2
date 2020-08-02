@@ -40,6 +40,7 @@ const PatientMedicationList = props => {
         onDelete={props.onDelete}
         canDelete={props.canDelete}
         onAddAttachment={props.onAddAttachment}
+        deleteAttachment={props.deleteAttachment}
       />
     );
   });

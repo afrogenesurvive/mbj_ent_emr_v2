@@ -909,7 +909,7 @@ addAttachment = (event) => {
 }
 deleteAttachment = (args) => {
   console.log('...deleting attachment...', args);
-  let field = args.field;
+
 }
 
 submitAddImageForm = (event) => {
@@ -1871,6 +1871,7 @@ render() {
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteAllergy}
                       onAddAttachment={this.startAddAttachment}
+                      deleteAttachment={this.deleteAttachment}
                     />
                   </Tab.Pane>
                   <Tab.Pane eventKey="6">
@@ -1901,6 +1902,7 @@ render() {
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteMedication}
                       onAddAttachment={this.startAddAttachment}
+                      deleteAttachment={this.deleteAttachment}
                     />
                   </Tab.Pane>
                   <Tab.Pane eventKey="7">

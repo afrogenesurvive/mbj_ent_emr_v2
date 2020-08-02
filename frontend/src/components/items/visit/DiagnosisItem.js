@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
 import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
+import PatientAttachmentList from '../../lists/patient/PatientAttachmentList';
 
 import './visitItem.css';
 
@@ -41,9 +42,13 @@ const DiagnosisItem = props => {
               <Card.Text className="cardText">
                 Description: <span className="bold">{props.diagnosis.description}</span>
               </Card.Text>
-              <Card.Text className="cardText">
-                attachments: <span className="bold">{props.diagnosis.attachments.toString()}</span>
-              </Card.Text>
+              <PatientAttachmentList
+                item={props.diagnosis}
+                attachments={props.diagnosis.attachments}
+                canDelete={props.canDelete}
+                onDelete={props.deleteAttachment}
+                type="diagnosis"
+              />
               <Button variant="outline-primary" onClick={props.onAddAttachment.bind(this, {field: 'diagnosis',data:props.diagnosis})}>Add Attachment</Button>
               {props.canDelete === true && (
                 <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.diagnosis)}>Delete</Button>

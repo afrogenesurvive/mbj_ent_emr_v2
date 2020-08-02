@@ -95,7 +95,7 @@ class AppointmentDetail extends Component {
 
 componentDidMount () {
   console.log('...appointment details component mounted...');
-  console.log(moment.unix(this.props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')+'T'+this.props.appointment.time+':00-05:00');
+  // console.log(moment.unix(this.props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')+'T'+this.props.appointment.time+':00-05:00');
   let seshStore;
   if (sessionStorage.getItem('logInfo')) {
     seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
