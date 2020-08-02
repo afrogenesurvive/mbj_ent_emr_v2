@@ -2250,8 +2250,6 @@ addAttachment = (event) => {
   let args = this.state.addAttachmentArgs;
   let field = args.field;
 
-// treatment,billing
-
   let requestBody;
 
   if (field === 'complaint') {
@@ -2598,7 +2596,372 @@ addAttachment = (event) => {
 
 }
 deleteAttachment = (args) => {
-  console.log('...deleting attachment...', args);
+  console.log('...deleting attachment...', args.type);
+  this.context.setUserAlert('...adding attachment...');
+  // this.setState({isLoading: true})
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const visitId = this.props.visit._id;
+
+  const field = args.type;
+  const attachment = args.attachment;
+  const item = args.item;
+
+  let requestBody;
+
+  // complaint
+  // survey
+  // systematicInquiry
+  // examination
+  // investigation
+  // diagnosis
+  // treatment
+  // billing
+
+  if (field === 'complaint') {
+    let complaintTitle = item.title;
+    let complaintDescription = item.description;
+    let complaintAnamnesis = item.anamnesis;
+    let complaintAttachment = attachment;
+
+    requestBody = {
+      query: `
+        mutation {deleteVisitComplaintAttachment(
+          activityId:"${activityId}",
+          visitId:"${visitId}",
+          visitInput:{
+            complaintTitle:"${complaintTitle}",
+            complaintDescription:"${complaintDescription}",
+            complaintAnamnesis:"${complaintAnamnesis}",
+            complaintAttachment:"${complaintAttachment}"
+          })
+          {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
+      `};
+  }
+  if (field === 'survey') {
+    let surveyTitle = item.title;
+    let surveyDescription = item.description;
+    let surveyAttachment = attachment;
+
+    requestBody = {
+      query: `
+        mutation {deleteVisitSurveyAttachment(
+          activityId:"${activityId}",
+          visitId:"${visitId}",
+          visitInput:{
+            surveyTitle:"${surveyTitle}",
+            surveyDescription:"${surveyDescription}",
+            surveyAttachment:"${surveyAttachment}"
+          })
+          {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
+      `};
+  }
+  if (field === 'systematicInquiry') {
+    let systematicInquiryTitle = item.title;
+    let systematicInquiryDescription = item.description;
+    let systematicInquiryAttachment = attachment;
+
+    requestBody = {
+      query: `
+        mutation {deleteVisitSysInquiryAttachment(
+          activityId:"${activityId}",
+          visitId:"${visitId}",
+          visitInput:{
+            systematicInquiryTitle:"${systematicInquiryTitle}",
+            systematicInquiryDescription:"${systematicInquiryDescription}",
+            systematicInquiryAttachment:"${systematicInquiryAttachment}"
+          })
+          {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
+      `};
+  }
+  if (field === 'examination') {
+    let examinationGeneral = item.general;
+    let examinationArea = item.area;
+    let examinationType = item.type;
+    let examinationMeasure = item.measure;
+    let examinationValue = item.value;
+    let examinationDescription = item.description;
+    let examinationFollowUp = item.followUp;
+    let examinationAttachment = attachment;
+
+    requestBody = {
+      query: `
+        mutation {deleteVisitExaminationAttachment(
+          activityId:"${activityId}",
+          visitId:"${visitId}",
+          visitInput:{
+            examinationGeneral:"${examinationGeneral}",
+            examinationArea:"${examinationArea}",
+            examinationType:"${examinationType}",
+            examinationMeasure:"${examinationMeasure}",
+            examinationValue:"${examinationValue}",
+            examinationDescription:"${examinationDescription}",
+            examinationFollowUp:${examinationFollowUp},
+            examinationAttachment:"${examinationAttachment}"
+          })
+          {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
+      `};
+  }
+  if (field === 'investigation') {
+    let investigationTitle = item.title;
+    let investigationType = item.type;
+    let investigationDescription = item.description;
+    let investigationAttachment = attachment;
+
+    requestBody = {
+      query: `
+        mutation {deleteVisitInvestigationAttachment(
+          activityId:"${activityId}",
+          visitId:"${visitId}",
+          visitInput:{
+            investigationTitle:"${investigationTitle}",
+            investigationType:"${investigationType}",
+            investigationDescription:"${investigationDescription}",
+            investigationAttachment:"${investigationAttachment}"
+          })
+          {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
+      `};
+  }
+  if (field === 'diagnosis') {
+    let diagnosisTitle = item.title;
+    let diagnosisType = item.type;
+    let diagnosisDescription = item.description;
+    let diagnosisAttachment = attachment;
+
+    requestBody = {
+      query: `
+        mutation {deleteVisitDiagnosisAttachment(
+          activityId:"${activityId}",
+          visitId:"${visitId}",
+          visitInput:{
+            diagnosisTitle:"${diagnosisTitle}",
+            diagnosisType:"${diagnosisType}",
+            diagnosisDescription:"${diagnosisDescription}",
+            diagnosisAttachment:"${diagnosisAttachment}"
+          })
+          {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
+      `};
+  }
+  if (field === 'treatment') {
+
+    let treatmentType = item.type;
+    let treatmentTitle = item.title;
+    let treatmentDescription = item.description;
+    let treatmentDose = item.dose;
+    let treatmentFrequency = item.frequency;
+    let treatmentAttachment = attachment;
+
+    requestBody = {
+      query: `
+        mutation {deleteVisitTreatmentAttachment(
+          activityId:"${activityId}",
+          visitId:"${visitId}",
+          visitInput:{
+            treatmentType:"${treatmentType}",
+            treatmentTitle:"${treatmentTitle}",
+            treatmentDescription:"${treatmentDescription}",
+            treatmentDose:"${treatmentDose}",
+            treatmentFrequency:"${treatmentFrequency}",
+            treatmentAttachment:"${treatmentAttachment}"
+          })
+          {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
+      `};
+  }
+  if (field === 'billing') {
+
+    let billingTitle = item.title;
+    let billingType = item.type;
+    let billingDescription = item.description;
+    let billingAmount = item.amount;
+    let billingPaid = item.paid;
+    let billingAttachment = attachment;
+    let billingNotes = item.notes;
+
+    requestBody = {
+      query: `
+        mutation {deleteVisitBillingAttachment(
+          activityId:"${activityId}",
+          visitId:"${visitId}",
+          visitInput:{
+            billingTitle:"${billingTitle}",
+            billingType:"${billingType}",
+            billingDescription:"${billingDescription}",
+            billingAmount:${billingAmount},
+            billingPaid:${billingPaid},
+            billingAttachment:"${billingAttachment}",
+            billingNotes:"${billingNotes}"
+          })
+          {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
+      `};
+  }
+
+  fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      if (field === 'complaint') {
+        // console.log('...resData...',resData.data.deleteVisitComplaintAttachment);
+      }
+      if (field === 'survey') {
+        // console.log('...resData...',resData.data.deleteVisitSurveyAttachment);
+      }
+      if (field === 'systematicInquiry') {
+        // console.log('...resData...',resData.data.deleteVisitSysInquiryAttachment);
+      }
+      if (field === 'examination') {
+        // console.log('...resData...',resData.data.deleteVisitExaminationAttachment);
+      }
+      if (field === 'investigation') {
+        // console.log('...resData...',resData.data.deleteVisitInvestigationAttachment);
+      }
+      if (field === 'diagnosis') {
+        // console.log('...resData...',resData.data.deleteVisitDiagnosisAttachment);
+      }
+      if (field === 'treatment') {
+        // console.log('...resData...',resData.data.deleteVisitTreatmentAttachment);
+      }
+      if (field === 'billing') {
+        // console.log('...resData...',resData.data.deleteVisitBillingAttachment);
+      }
+
+      let responseAlert = '...delete attachment success!...';
+      let error = null;
+
+      if (field === 'complaint') {
+        if (resData.data.deleteVisitComplaintAttachment.error) {
+          error = resData.data.deleteVisitComplaintAttachment.error;
+          responseAlert = error;
+        }
+      }
+      if (field === 'survey') {
+        if (resData.data.deleteVisitSurveyAttachment.error) {
+          error = resData.data.deleteVisitSurveyAttachment.error;
+          responseAlert = error;
+        }
+      }
+      if (field === 'systematicInquiry') {
+        if (resData.data.deleteVisitSysInquiryAttachment.error) {
+          error = resData.data.deleteVisitSysInquiryAttachment.error;
+          responseAlert = error;
+        }
+      }
+      if (field === 'examination') {
+        if (resData.data.deleteVisitExaminationAttachment.error) {
+          error = resData.data.deleteVisitExaminationAttachment.error;
+          responseAlert = error;
+        }
+      }
+      if (field === 'investigation') {
+        if (resData.data.deleteVisitInvestigationAttachment.error) {
+          error = resData.data.deleteVisitInvestigationAttachment.error;
+          responseAlert = error;
+        }
+      }
+      if (field === 'diagnosis') {
+        if (resData.data.deleteVisitDiagnosisAttachment.error) {
+          error = resData.data.deleteVisitDiagnosisAttachment.error;
+          responseAlert = error;
+        }
+      }
+      if (field === 'treatment') {
+        if (resData.data.deleteVisitTreatmentAttachment.error) {
+          error = resData.data.deleteVisitTreatmentAttachment.error;
+          responseAlert = error;
+        }
+      }
+      if (field === 'billing') {
+        if (resData.data.deleteVisitBillingAttachment.error) {
+          error = resData.data.deleteVisitBillingAttachment.error;
+          responseAlert = error;
+        }
+      }
+
+      this.context.setUserAlert(responseAlert)
+
+      if (field === 'complaint') {
+        this.props.updateVisit(resData.data.deleteVisitComplaintAttachment)
+        this.setState({
+          isLoading: false,
+          selectedVisit: resData.data.deleteVisitComplaintAttachment,
+          activityA: `deleteVisitComplaintAttachment?activityId:${activityId},visitId:${visitId}`
+        });
+      }
+      if (field === 'survey') {
+        this.props.updateVisit(resData.data.deleteVisitSurveyAttachment)
+        this.setState({
+          isLoading: false,
+          selectedVisit: resData.data.deleteVisitSurveyAttachment,
+          activityA: `deleteVisitSurveyAttachment?activityId:${activityId},visitId:${visitId}`
+        });
+      }
+      if (field === 'systematicInquiry') {
+        this.props.updateVisit(resData.data.deleteVisitSysInquiryAttachment)
+        this.setState({
+          isLoading: false,
+          selectedVisit: resData.data.deleteVisitSysInquiryAttachment,
+          activityA: `deleteVisitSysInquiryAttachment?activityId:${activityId},visitId:${visitId}`
+        });
+      }
+      if (field === 'examination') {
+        this.props.updateVisit(resData.data.deleteVisitExaminationAttachment)
+        this.setState({
+          isLoading: false,
+          selectedVisit: resData.data.deleteVisitExaminationAttachment,
+          activityA: `deleteVisitExaminationAttachment?activityId:${activityId},visitId:${visitId}`
+        });
+      }
+      if (field === 'investigation') {
+        this.props.updateVisit(resData.data.deleteVisitInvestigationAttachment)
+        this.setState({
+          isLoading: false,
+          selectedVisit: resData.data.deleteVisitInvestigationAttachment,
+          activityA: `deleteVisitInvestigationAttachment?activityId:${activityId},visitId:${visitId}`
+        });
+      }
+      if (field === 'diagnosis') {
+        this.props.updateVisit(resData.data.deleteVisitDiagnosisAttachment)
+        this.setState({
+          isLoading: false,
+          selectedVisit: resData.data.deleteVisitDiagnosisAttachment,
+          activityA: `deleteVisitDiagnosisAttachment?activityId:${activityId},visitId:${visitId}`
+        });
+      }
+      if (field === 'treatment') {
+        this.props.updateVisit(resData.data.deleteVisitTreatmentAttachment)
+        this.setState({
+          isLoading: false,
+          selectedVisit: resData.data.deleteVisitTreatmentAttachment,
+          activityA: `deleteVisitTreatmentAttachment?activityId:${activityId},visitId:${visitId}`
+        });
+      }
+      if (field === 'billing') {
+        this.props.updateVisit(resData.data.deleteVisitBillingAttachment)
+        this.setState({
+          isLoading: false,
+          selectedVisit: resData.data.deleteVisitBillingAttachment,
+          activityA: `deleteVisitBillingAttachment?activityId:${activityId},visitId:${visitId}`
+        });
+      }
+
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
 
 }
 
