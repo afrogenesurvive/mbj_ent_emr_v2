@@ -45,7 +45,7 @@ const ExaminationItem = props => {
                 description: <span className="bold">{props.examination.description}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                followUp: <span className="bold">{props.examination.followUp,toString()}</span>
+                followUp: <span className="bold">{props.examination.followUp.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 attachments: <span className="bold">{props.examination.attachments.toString()}</span>

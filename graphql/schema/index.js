@@ -511,9 +511,9 @@ module.exports = buildSchema(`
     vigilanceChronicIllnessHbpMedication: Boolean
     vigilanceChronicIllnessHbpTesting: Boolean
     vigilanceChronicIllnessHbpComment: String
-    vigilanceChronicIllnessHbpDyslipidemiaMedication: Boolean
-    vigilanceChronicIllnessHbpDyslipidemiaTesting: Boolean
-    vigilanceChronicIllnessHbpDyslipidemiaComment: String
+    vigilanceChronicIllnessDyslipidemiaMedication: Boolean
+    vigilanceChronicIllnessDyslipidemiaTesting: Boolean
+    vigilanceChronicIllnessDyslipidemiaComment: String
     vigilanceChronicIllnessCadMedication: Boolean
     vigilanceChronicIllnessCadTesting: Boolean
     vigilanceChronicIllnessCadComment: String

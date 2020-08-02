@@ -206,7 +206,10 @@ module.exports = {
           {_id:args.visitId},
           {patient: patient},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -232,7 +235,15 @@ module.exports = {
           {_id:args.visitId},
           {$addToSet: {consultants: consultant}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        const updateConsultant = await User.findOneAndUpdate(
+          {_id:args.consultantId},
+          {$addToSet: {visits: visit}},
+          {new: true, useFindAndModify: false}
+        )
         return {
           ...visit._doc,
           _id: visit.id,
@@ -254,7 +265,15 @@ module.exports = {
           {_id:args.visitId},
           {$pull: {consultants: consultant._id}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        const updateConsultant = await User.findOneAndUpdate(
+          {_id:args.consultantId},
+          {$pull: {visits: visit._id}},
+          {new: true, useFindAndModify: false}
+        )
         return {
           ...visit._doc,
           _id: visit.id,
@@ -281,7 +300,10 @@ module.exports = {
           {_id:args.visitId},
           {$addToSet: {complaints: complaint}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -309,7 +331,10 @@ module.exports = {
           {_id:args.visitId},
           {$pull: {complaints: complaint}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -340,7 +365,10 @@ module.exports = {
           },
           {$addToSet: {'complaints.$.attachments': newAttachment}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -371,7 +399,10 @@ module.exports = {
           },
           {$pull: {'complaints.$.attachments': attachment}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -397,7 +428,10 @@ module.exports = {
           {_id:args.visitId},
           {$addToSet: {surveys: survey}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -424,7 +458,10 @@ module.exports = {
           {_id:args.visitId},
           {$pull: {surveys: survey}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -453,7 +490,10 @@ module.exports = {
           },
           {$addToSet: {'surveys.$.attachments': newAttachment}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -482,7 +522,10 @@ module.exports = {
           },
           {$pull: {'surveys.$.attachments': oldAttachment}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -508,7 +551,10 @@ module.exports = {
           {_id:args.visitId},
           {$addToSet: {systematicInquiry: systematicInquiry}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -535,7 +581,10 @@ module.exports = {
           {_id:args.visitId},
           {$pull: {systematicInquiry: systematicInquiry}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -564,7 +613,10 @@ module.exports = {
           },
           {$addToSet: {'systematicInquiry.$.attachments': newAttachment}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -593,7 +645,10 @@ module.exports = {
           },
           {$pull: {'systematicInquiry.$.attachments': oldAttachment}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -631,7 +686,10 @@ module.exports = {
           {_id:args.visitId},
           {$addToSet: {vitals: vitals}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -669,7 +727,10 @@ module.exports = {
           {_id:args.visitId},
           {$pull: {vitals: vitals}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -696,11 +757,15 @@ module.exports = {
           followUp: args.visitInput.examinationFollowUp,
           attachments: [args.visitInput.examinationAttachment]
         }
+
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$addToSet: {examination: examination}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -739,7 +804,10 @@ module.exports = {
           },
           {$addToSet: {'examination.$.attachments': newAttachment}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -778,7 +846,10 @@ module.exports = {
           },
           {$pull: {'examination.$.attachments': oldAttachment}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -795,6 +866,7 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
+
         const attachments = args.visitInput.examinationAttachments.split(',');
         const examination = {
           general: args.visitInput.examinationGeneral,
@@ -806,11 +878,15 @@ module.exports = {
           followUp: args.visitInput.examinationFollowUp,
           attachments: attachments
         }
+
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$pull: {examination: examination}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -837,7 +913,10 @@ module.exports = {
           {_id:args.visitId},
           {$addToSet: {investigation: investigation}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -868,7 +947,10 @@ module.exports = {
           },
           {$addToSet: {'investigation.$.attachments': newAttachment}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -899,7 +981,10 @@ module.exports = {
           },
           {$pull: {'investigation.$.attachments': oldAttachment}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -927,7 +1012,10 @@ module.exports = {
           {_id:args.visitId},
           {$pull: {investigation: investigation}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -954,7 +1042,10 @@ module.exports = {
           {_id:args.visitId},
           {$addToSet: {diagnosis: diagnosis}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -985,7 +1076,10 @@ module.exports = {
           },
           {$addToSet: {'diagnosis.$.attachments': newAttachment}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -1016,7 +1110,10 @@ module.exports = {
           },
           {$pull: {'diagnosis.$.attachments': oldAttachment}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -1033,6 +1130,7 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
+
         const attachments = args.visitInput.diagnosisAttachments.split(',');
         const diagnosis = {
           type: args.visitInput.diagnosisType,
@@ -1040,11 +1138,15 @@ module.exports = {
           description: args.visitInput.diagnosisDescription,
           attachments: attachments,
         }
+
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$pull: {diagnosis: diagnosis}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -1073,7 +1175,10 @@ module.exports = {
           {_id:args.visitId},
           {$addToSet: {treatment: treatment}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -1097,7 +1202,6 @@ module.exports = {
           dose: args.visitInput.treatmentDose,
           frequency: args.visitInput.treatmentFrequency,
         }
-        console.log('v',treatment);
         const newAttachment = args.visitInput.treatmentAttachment;
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId,
@@ -1109,7 +1213,10 @@ module.exports = {
           },
           {$addToSet: {'treatment.$.attachments': newAttachment}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -1144,7 +1251,10 @@ module.exports = {
           },
           {$pull: {'treatment.$.attachments': oldAttachment}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -1172,7 +1282,10 @@ module.exports = {
           {_id:args.visitId},
           {$pull: {treatment: treatment}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -1198,11 +1311,15 @@ module.exports = {
           attachments: [args.visitInput.billingAttachment],
           notes: args.visitInput.billingNotes
         }
+
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$addToSet: {billing: billing}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -1239,7 +1356,10 @@ module.exports = {
           },
           {$addToSet: {'billing.$.attachments': newAttachment}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -1276,7 +1396,10 @@ module.exports = {
           },
           {$pull: {'billing.$.attachments': oldAttachment}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -1294,6 +1417,7 @@ module.exports = {
     }
     try {
         const attachments = args.visitInput.billingAttachments.split(',');
+        console.log('foo',attachments);
         const billing = {
           title: args.visitInput.billingTitle,
           type: args.visitInput.billingType,
@@ -1303,11 +1427,15 @@ module.exports = {
           attachments: attachments,
           notes: args.visitInput.billingNotes
         }
+        console.log('foo',billing);
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$pull: {billing: billing}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -1333,7 +1461,10 @@ module.exports = {
           {_id:args.visitId},
           {$addToSet: {images: image}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -1359,7 +1490,10 @@ module.exports = {
           {_id:args.visitId},
           {$pull: {images: image}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -1385,7 +1519,10 @@ module.exports = {
           {_id:args.visitId},
           {$addToSet: {files: file}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -1411,7 +1548,10 @@ module.exports = {
           {_id:args.visitId},
           {$pull: {files: file}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -1558,7 +1698,10 @@ module.exports = {
           {_id:args.visitId},
           {$addToSet: {vigilance: vigilance}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,
@@ -1705,7 +1848,10 @@ module.exports = {
           {_id:args.visitId},
           {$pull: {vigilance: vigilance}},
           {new: true, useFindAndModify: false}
-        );
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
         return {
           ...visit._doc,
           _id: visit.id,

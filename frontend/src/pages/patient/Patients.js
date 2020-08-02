@@ -74,7 +74,9 @@ componentDidMount () {
     if (this.props.location.state) {
       if (this.props.location.state.patient) {
         console.log('go link',this.props.location.state.patient);
-        // function to get patient by id the set showdetail, selectedpatient states
+        // set goLink state
+        // from get all patients, when retrived if go link state is true then call function below
+        // function to filter getAllpatients result for matching id then set showdetail, selectedpatient states
       }
     }
 

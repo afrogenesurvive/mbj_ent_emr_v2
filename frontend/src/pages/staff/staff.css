@@ -3,7 +3,8 @@
   margin: 0 .5rem;
 }
 .staffPageContainer {
-  margin-top: 5rem;
+  /* margin-top: 5rem; */
+  margin: 5rem auto 0rem auto;
   border: 1px solid red;
   height: 87vh;
   /* overflow: hidden; */

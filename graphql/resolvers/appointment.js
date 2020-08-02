@@ -291,10 +291,31 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
+      const preAppointment = await Appointment.findById({
+        _id:args.appointmentId
+      })
+      .populate('patient');
+      const originalPatient = preAppointment.patient;
       const patient = await Patient.findById({_id: args.patientId})
       const appointment = await Appointment.findOneAndUpdate(
         {_id:args.appointmentId},
         {patient: patient},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('consultants')
+      .populate('visit')
+      .populate('creator')
+      .populate('patient');
+
+      const updateOldPatient = await Patient.findOneAndUpdate(
+        {_id:originalPatient._id},
+        {$pull: {appointments: appointment}},
+        {new: true, useFindAndModify: false}
+      )
+      console.log('foo',updateOldPatient);
+      const updateNewPatient = await Patient.findOneAndUpdate(
+        {_id:args.patientId},
+        {$addToSet: {appointments: appointment}},
         {new: true, useFindAndModify: false}
       )
       .populate('consultants')
@@ -318,7 +339,7 @@ module.exports = {
     }
     try {
       const consultant = await User.findById({_id: args.consultantId})
-      console.log(consultant);
+
       if (!consultant) {
         console.log('consultant not found! check the reference and try again...');
         throw new Error('consultant not found! check the reference and try again...')
@@ -340,6 +361,12 @@ module.exports = {
       .populate('visit')
       .populate('creator')
       .populate('patient');
+
+      const updateUser = await User.findOneAndUpdate(
+        {_id:args.consultantId},
+        {$addToSet: {appointments: appointment}},
+        {new: true, useFindAndModify: false}
+      )
       return {
         ...appointment._doc,
         _id: appointment.id,
@@ -366,6 +393,11 @@ module.exports = {
       .populate('visit')
       .populate('creator')
       .populate('patient');
+      const updateUser = await User.findOneAndUpdate(
+        {_id:args.consultantId},
+        {$pull: {appointments: appointment._id}},
+        {new: true, useFindAndModify: false}
+      )
       return {
         ...appointment._doc,
         _id: appointment.id,

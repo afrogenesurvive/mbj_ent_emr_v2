@@ -92,7 +92,11 @@ componentDidMount () {
       canDelete: true
     })
   }
+
 }
+// componentDidUpdate () {
+//   console.log('foo',this.props.user.appointments);
+// }
 componentWillUnmount() {
 
 }

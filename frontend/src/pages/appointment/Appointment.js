@@ -82,11 +82,12 @@ componentDidMount () {
     this.getAllAppointments(seshStore);
     this.getAllPatients(seshStore);
 
-
     if (this.props.location.state) {
       if (this.props.location.state.appointment) {
         console.log('go link',this.props.location.state.appointment);
-        // function to get appt by id the set showdetail, selectedappt states
+        // set goLink state
+        // from get all appointments, when retrived if go link state is true then call function below
+        // function to filter getAllappointments result for matching id then set showdetail, selectedappointment states
       }
     }
 

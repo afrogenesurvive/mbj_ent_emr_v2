@@ -2,12 +2,11 @@
   display: inline-block;
   margin: 0 .5rem;
 }
-.staffPageContainer {
+/* .staffPageContainer {
   margin-top: 5rem;
   border: 1px solid red;
   height: 87vh;
-  /* overflow: hidden; */
-}
+} */
 .staffPageContainerCol {
   border: 1px solid purple;
 

@@ -10,6 +10,7 @@ import Nav from 'react-bootstrap/Nav';
 import { NavLink } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
 import moment from 'moment';
+import AddToCalendar from 'react-add-to-calendar';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AuthContext from '../../context/auth-context';
@@ -77,6 +78,13 @@ class AppointmentDetail extends Component {
     addAttachmentArgs: null,
     showAddConsultantForm: false,
     users: null,
+    calEvent: {
+      title: this.props.appointment.title,
+      description: this.props.appointment.description,
+      location: this.props.appointment.location,
+      startTime: moment.unix(this.props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')+'T'+this.props.appointment.time+':00-05:00',
+      endTime: moment.unix(this.props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')+'T'+this.props.appointment.time+':00-05:00',
+    },
   };
   static contextType = AuthContext;
 
@@ -87,6 +95,7 @@ class AppointmentDetail extends Component {
 
 componentDidMount () {
   console.log('...appointment details component mounted...');
+  console.log(moment.unix(this.props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')+'T'+this.props.appointment.time+':00-05:00');
   let seshStore;
   if (sessionStorage.getItem('logInfo')) {
     seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
@@ -509,6 +518,62 @@ submitAddUserForm = (event) => {
       this.setState({isLoading: false })
     });
 }
+deleteConsultant = (args) => {
+  console.log('...deleting consultant...');
+  this.context.setUserAlert('...deleting consultant...')
+  this.setState({isLoading: true});
+  //
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const consultantId = args._id;
+  const appointmentId = this.props.appointment._id;
+
+  let requestBody = {
+    query: `
+      mutation {deleteAppointmentConsultant(
+        activityId:"${activityId}",
+        appointmentId:"${appointmentId}",
+        consultantId:"${consultantId}"
+      )
+      {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
+    `};
+  fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.deleteAppointmentConsultant);
+      let responseAlert = '...delete consultant success!...';
+      let error = null;
+      if (resData.data.deleteAppointmentConsultant.error) {
+        error = resData.data.deleteAppointmentConsultant.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updateAppointment(resData.data.deleteAppointmentConsultant)
+      this.setState({
+        isLoading: false,
+        activityA: `deleteAppointmentConsultant?activityId:${activityId},appointmentId:${appointmentId},consultantId:${consultantId}`,
+      });
+      this.logUserActivity({activityId: activityId,token: token});
+      this.cancelAdd();
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+}
 startUpdatePatient = () => {
   console.log('show update patient select list');
 }
@@ -801,6 +866,10 @@ render() {
                           <p className="listGroupText bold">{this.props.appointment.visit._id}</p>
                         </ListGroup.Item>
                       )}
+                      <ListGroup.Item>
+                        <p className="listGroupText">Export:</p>
+                        <AddToCalendar event={this.state.calEvent} />
+                      </ListGroup.Item>
                     </ListGroup>
                   </Tab.Pane>
                   <Tab.Pane eventKey="2">
@@ -839,6 +908,8 @@ render() {
                       authId={this.context.activityId}
                       users={this.props.appointment.consultants}
                       appointmentPage={true}
+                      canDelete={this.state.canDelete}
+                      onDelete={this.deleteConsultant}
                     />
                   </Tab.Pane>
                   <Tab.Pane eventKey="4">

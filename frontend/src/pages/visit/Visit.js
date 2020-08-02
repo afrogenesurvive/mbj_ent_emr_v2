@@ -86,6 +86,14 @@ componentDidMount () {
     this.getAllVisits(seshStore);
     this.getAllAppointments(seshStore);
     // this.getAllPatients(seshStore);
+    if (this.props.location.state) {
+      if (this.props.location.state.visit) {
+        console.log('go link',this.props.location.state.visit);
+        // set goLink state
+        // from get all visits, when retrived if go link state is true then call function below
+        // function to filter getAllvisits result for matching id then set showdetail, selectedvisit states
+      }
+    }
   }
 }
 componentWillUnmount() {

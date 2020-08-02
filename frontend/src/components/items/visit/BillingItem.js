@@ -45,6 +45,9 @@ const BillingItem = props => {
                 Notes: <span className="bold">{props.billing.notes}</span>
               </Card.Text>
               <Card.Text className="cardText">
+                Amount: <span className="bold">{props.billing.amount}</span>
+              </Card.Text>
+              <Card.Text className="cardText">
                 Paid: <span className="bold">{props.billing.paid.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
