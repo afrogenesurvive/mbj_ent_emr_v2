@@ -581,23 +581,23 @@ updateVisit = (args) => {
   })
 }
 
-deleteAppointment = (args) => {
-  console.log('...deleteing appointment...',args);
-  this.context.setUserAlert('...deleteing appointment...')
+deleteVisit = (args) => {
+  console.log('...deleteing visit...');
+  this.context.setUserAlert('...deleteing visit...')
 
   this.setState({isLoading: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const appointmentId = args._id;
+  const visitId = args._id;
 
   let requestBody = {
     query: `
-      mutation {deleteAppointmentById(
+      mutation {deleteVisitById(
         activityId:"${activityId}",
-        appointmentId:"${appointmentId}"
+        visitId:"${visitId}"
       )
-      {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
+      {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
     `};
   fetch('http://localhost:8088/graphql', {
       method: 'POST',
@@ -614,20 +614,20 @@ deleteAppointment = (args) => {
       return res.json();
     })
     .then(resData => {
-      // console.log('...resData...',resData.data.deleteAppointmentById);
-      let responseAlert = '...delete appointment success!...';
+      // console.log('...resData...',resData.data.deleteVisitById);
+      let responseAlert = '...delete visit success!...';
       let error = null;
-      if (resData.data.deleteAppointmentById.error) {
-        error = resData.data.deleteAppointmentById.error;
+      if (resData.data.deleteVisitById.error) {
+        error = resData.data.deleteVisitById.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
       this.setState({
         isLoading: false,
-        activityA: `deleteAppointmentById?activityId:${activityId},appointmentId:${appointmentId}`
+        activityA: `deleteVisitById?activityId:${activityId},visitId:${visitId}`
       });
       this.logUserActivity({activityId: activityId,token: token});
-      this.getAllAppointments({activityId: activityId,token: token});
+      this.getAllVisits({activityId: activityId,token: token});
     })
     .catch(err => {
       console.log(err);
@@ -743,7 +743,7 @@ render() {
                       authId={this.context.activityId}
                       canDelete={this.state.canDelete}
                       showDetails={this.showDetails}
-                      onDelete={this.deleteAppointment}
+                      onDelete={this.deleteVisit}
                     />
                   </Tab>
                   <Tab eventKey="2" title="calendar">

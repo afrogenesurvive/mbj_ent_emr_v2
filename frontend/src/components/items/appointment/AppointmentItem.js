@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
 import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 
 import './AppointmentItem.css';
@@ -20,6 +21,18 @@ const AppointmentItem = (props) => {
       setState(true);
     }
    }
+
+   const [deleteState, setDeleteState] = useState(false);
+   const handleDeleteStateChange = () => {
+     if (deleteState === true) {
+       setDeleteState(false);
+     }
+     if (deleteState === false) {
+       setDeleteState(true);
+     }
+    }
+
+
   return (
     <li key={props.key} className="">
       <Card>
@@ -34,6 +47,11 @@ const AppointmentItem = (props) => {
             Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
           </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+
+          {props.canDelete && (
+            <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
+          )}
+
           {state === true && (
             <Row>
               <Card.Text className="cardText">
@@ -69,6 +87,10 @@ const AppointmentItem = (props) => {
               {props.visitPage === true && (
                 <Button variant="outline-primary" onClick={props.onSelect.bind(this, props.appointment)}>Select</Button>
               )}
+            </Row>
+          )}
+          {deleteState === true && (
+            <Row>
               {props.canDelete && (
                 <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.appointment)}>Delete</Button>
               )}

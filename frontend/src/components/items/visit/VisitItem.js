@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
 import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 
 import './visitItem.css';
@@ -22,6 +24,16 @@ const VisitItem = props => {
     }
   }
 
+  const [deleteState, setDeleteState] = useState(false);
+  const handleDeleteStateChange = () => {
+    if (deleteState === true) {
+      setDeleteState(false);
+    }
+    if (deleteState === false) {
+      setDeleteState(true);
+    }
+   }
+
   return (
     <li key={props.key} className="">
       <Card>
@@ -36,6 +48,9 @@ const VisitItem = props => {
             Title: <span className="bold">{props.visit.title}</span>
           </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+          {props.canDelete && (
+            <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
+          )}
           {state === true && (
             <Row>
               <Card.Text className="cardText">
@@ -47,16 +62,40 @@ const VisitItem = props => {
               <Card.Text className="cardText">
                 subType: <span className="bold">{props.visit.subType}</span>
               </Card.Text>
-              <Card.Text className="cardText">
-                Patient:
-              </Card.Text>
-              <Card.Text className="cardText">
-                Id: <span className="bold">{props.visit.patient._id}</span>
-              </Card.Text>
-              <Card.Text className="cardText">
-                Name: <span className="bold">{props.visit.patient.name}</span>
-              </Card.Text>
-              <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.visit)}>Details</Button>
+
+              {!props.patientPage && (
+                <Card.Text className="cardText">
+                  Patient:
+                </Card.Text>
+              )}
+              {!props.patientPage && (
+                <Card.Text className="cardText">
+                  Id: <span className="bold">{props.visit.patient._id}</span>
+                </Card.Text>
+              )}
+              {!props.patientPage && (
+                <Card.Text className="cardText">
+                  Name: <span className="bold">{props.visit.patient.name}</span>
+                </Card.Text>
+              )}
+
+              {props.patientPage && (
+                <Link
+                  to={{
+                    pathname: "/visits",
+                    state: {visit: props.visit._id}
+                  }}
+                >Go!
+                </Link>
+              )}
+              {!props.patientPage && (
+                  <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.visit)}>Details</Button>
+              )}
+
+            </Row>
+          )}
+          {deleteState === true && (
+            <Row>
               {props.canDelete === true && (
                 <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.visit)}>Delete</Button>
               )}

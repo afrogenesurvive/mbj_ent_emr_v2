@@ -7,11 +7,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
 import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 
 import './UserItem.css';
 
 const UserItem = (props) => {
+
   const [state, setState] = useState(false);
   const handleStateChange = () => {
     if (state === true) {
@@ -21,6 +23,17 @@ const UserItem = (props) => {
       setState(true);
     }
    }
+
+  const [deleteState, setDeleteState] = useState(false);
+  const handleDeleteStateChange = () => {
+    if (deleteState === true) {
+      setDeleteState(false);
+    }
+    if (deleteState === false) {
+      setDeleteState(true);
+    }
+   }
+
   return (
     <li key={props.key} className="">
       <Card>
@@ -32,6 +45,10 @@ const UserItem = (props) => {
             role: <span className="bold">{props.user.role}</span>
           </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+          {props.canDelete && (
+            <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
+          )}
+
           {state === true && (
             <Row>
               <Card.Text className="cardText">
@@ -65,9 +82,7 @@ const UserItem = (props) => {
                 !props.visitPage && (
                 <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.user)}>Details</Button>
               )}
-              {props.canDelete && (
-                <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.user)}>Delete</Button>
-              )}
+
               {props.appointmentPage && (
                 <Link
                   to={{
@@ -90,6 +105,13 @@ const UserItem = (props) => {
           )}
           {props.selectUser && (
             <Button variant="outline-primary" onClick={props.selectUser.bind(this, props.user)}>Add</Button>
+          )}
+          {deleteState === true && (
+            <Row>
+              {props.canDelete && (
+                <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.user)}>Delete</Button>
+              )}
+            </Row>
           )}
         </Card.Body>
       </Card>

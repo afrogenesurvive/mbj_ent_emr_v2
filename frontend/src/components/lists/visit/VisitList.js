@@ -59,6 +59,7 @@ const VisitList = props => {
         canDelete={props.canDelete}
         onDelete={props.onDelete}
         showDetails={props.showDetails}
+        patientPage={props.patientPage}
       />
     );
   });

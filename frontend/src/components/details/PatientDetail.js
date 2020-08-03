@@ -24,6 +24,7 @@ import PatientFileList from '../lists/patient/PatientFileList'
 import UserAppointmentList from '../lists/user/UserAppointmentList'
 import PatientNoteList from '../lists/patient/PatientNoteList'
 import PatientTagList from '../lists/patient/PatientTagList'
+import VisitList from '../lists/visit/VisitList'
 
 import FilterAddressForm from '../forms/filter/FilterAddressForm';
 import FilterAllergyForm from '../forms/filter/FilterAllergyForm';
@@ -2088,7 +2089,12 @@ render() {
                       <p className="displayPaneTitle">Patient Visit List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
                     </Row>
-                    <h3>Patient Visit List</h3>
+                      <VisitList
+                        filter={this.state.filter}
+                        visits={this.props.patient.visits}
+                        authId={this.context.activityId}
+                        patientPage={true}
+                      />
                   </Tab.Pane>
                   <Tab.Pane eventKey="11">
                     <Row className="displayPaneHeadRow">
