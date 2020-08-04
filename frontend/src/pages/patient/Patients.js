@@ -59,6 +59,8 @@ class PatientPage extends Component {
     selectedPatient: null,
     creatingPatient: false,
     newPatient: null,
+    fromGoLink: null,
+    goLinkId: null,
   };
   static contextType = AuthContext;
 
@@ -69,17 +71,16 @@ componentDidMount () {
     if (seshStore.role === 'Admin') {
       this.setState({canDelete:true})
     }
-    this.getAllPatients(seshStore);
 
     if (this.props.location.state) {
       if (this.props.location.state.patient) {
-        console.log('go link',this.props.location.state.patient);
-        // set goLink state
-        // from get all patients, when retrived if go link state is true then call function below
-        // function to filter getAllpatients result for matching id then set showdetail, selectedpatient states
+        this.setState({
+          fromGoLink: true,
+          goLinkId: this.props.location.state.patient
+        })
       }
     }
-
+    this.getAllPatients(seshStore);
   }
 }
 componentWillUnmount() {
@@ -123,6 +124,14 @@ getAllPatients (args) {
       if (resData.data.getAllPatients.error) {
         error = resData.data.getAllPatients.error;
         responseAlert = error;
+      }
+      if (this.state.fromGoLink === true) {
+        let goLinkPatient = resData.data.getAllPatients.filter(x => x._id === this.state.goLinkId)[0];
+        this.setState({
+          showDetails: true,
+          selectedPatient: goLinkPatient
+        })
+        this.context.setUserAlert('...Check the details tab...')
       }
       this.context.setUserAlert(responseAlert)
       this.setState({

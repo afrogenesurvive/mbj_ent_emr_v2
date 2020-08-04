@@ -54,6 +54,8 @@ class StaffPage extends Component {
     showDetails: false,
     selectedUser: null,
     canDelete: false,
+    fromGoLink: null,
+    goLinkId: null,
   };
   static contextType = AuthContext;
 
@@ -64,16 +66,16 @@ componentDidMount () {
     if (seshStore.role === 'Admin') {
       this.setState({canDelete:true})
     }
-    this.getAllUsers(seshStore);
 
     if (this.props.location.state) {
       if (this.props.location.state.user) {
-        console.log('go link',this.props.location.state.user);
-        // set goLink state
-        // from get all users, when retrived if go link state is true then call function below
-        // function to filter getAllUsers result for matching id then set showdetail, selecteduser states
+        this.setState({
+          fromGoLink: true,
+          goLinkId: this.props.location.state.user
+        })
       }
     }
+    this.getAllUsers(seshStore);
   }
 }
 componentWillUnmount() {
@@ -117,6 +119,14 @@ getAllUsers (args) {
       if (resData.data.getAllUsers.error) {
         error = resData.data.getAllUsers.error;
         responseAlert = error;
+      }
+      if (this.state.fromGoLink === true) {
+        let goLinkUser = resData.data.getAllUsers.filter(x => x._id === this.state.goLinkId)[0];
+        this.setState({
+          showDetails: true,
+          selectedUser: goLinkUser
+        })
+        this.context.setUserAlert('...Check the details tab...')
       }
       this.context.setUserAlert(responseAlert)
       this.setState({

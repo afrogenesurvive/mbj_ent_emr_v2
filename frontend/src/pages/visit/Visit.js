@@ -72,6 +72,8 @@ class VisitPage extends Component {
     creatingVisit: false,
     newVisit: null,
     calendarVisits: null,
+    fromGoLink: null,
+    goLinkId: null,
   };
   static contextType = AuthContext;
 
@@ -83,17 +85,18 @@ componentDidMount () {
     if (seshStore.role === 'Admin') {
       this.setState({canDelete:true})
     }
+
+    if (this.props.location.state) {
+      if (this.props.location.state.visit) {
+        this.setState({
+          fromGoLink: true,
+          goLinkId: this.props.location.state.visit
+        })
+      }
+    }
     this.getAllVisits(seshStore);
     this.getAllAppointments(seshStore);
     // this.getAllPatients(seshStore);
-    if (this.props.location.state) {
-      if (this.props.location.state.visit) {
-        console.log('go link',this.props.location.state.visit);
-        // set goLink state
-        // from get all visits, when retrived if go link state is true then call function below
-        // function to filter getAllvisits result for matching id then set showdetail, selectedvisit states
-      }
-    }
   }
 }
 componentWillUnmount() {
@@ -136,6 +139,14 @@ getAllVisits (args) {
       if (resData.data.getAllVisits.error) {
         error = resData.data.getAllVisits.error;
         responseAlert = error;
+      }
+      if (this.state.fromGoLink === true) {
+        let goLinkVisit = resData.data.getAllVisits.filter(x => x._id === this.state.goLinkId)[0];
+        this.setState({
+          showDetails: true,
+          selectedVisit: goLinkVisit
+        })
+        this.context.setUserAlert('...Check the details tab...')
       }
       this.context.setUserAlert(responseAlert)
       this.setState({

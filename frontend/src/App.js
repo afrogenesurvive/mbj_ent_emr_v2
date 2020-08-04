@@ -87,9 +87,12 @@ class App extends Component {
     if (!this.sessionStorageAuth) {
       console.log('...noSessionStorageFound...');
     }
-    // this.socket.emit('unauthorizedClientConnect');
+    this.socket.emit('unauthorizedClientConnect');
     console.log("socket listening....");
-    this.userOnline();
+    // this.userOnline();
+    this.socket.on('test', function(data) {
+      console.log("testing...",data);
+    });
   }
 
   componentWillUnmount() {
@@ -164,7 +167,7 @@ class App extends Component {
 
   userOnline = () => {
     console.log('...domesticating socket client...');
-    // this.socket.emit('msg_subscribe', {user: this.context.activityId, room:'msg'+this.context.activityId});
+    this.socket.emit('msg_subscribe', {user: this.context.activityId, room:'msg'+this.context.activityId});
   }
 
 

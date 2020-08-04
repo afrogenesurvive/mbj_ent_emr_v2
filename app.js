@@ -108,6 +108,9 @@ io.on('connection', (socket) => {
       console.log("a wild client appeared...socket..",socket.id);
       // connectedClients.push({socket: socket.id, user: 'wild'});
       // console.log('connectedClients',connectedClients);
+
+      socket.emit("test", {msg: "hello world"})
+
     });
     socket.on('msg_subscribe', function(data) {
         console.log('a domestic client appeared...socket...'+socket.id+'...user...'+data.user);
@@ -116,6 +119,9 @@ io.on('connection', (socket) => {
         connectedClients.push({socket: socket.id, user: data.user})
         console.log('connectedClients',connectedClients);
         userOnline(data.user);
+
+        socket.emit("test", {msg: "hello logged in user"})
+
     });
     socket.on('send message', function(data) {
       console.log('sending room post', data.room);
