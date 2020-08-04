@@ -193,11 +193,11 @@ searchPatients = (event) => {
   event.preventDefault();
   console.log('...searching patients...');
   this.context.setUserAlert('...searching patients...')
-  // this.setState({isLoading: true});
+  this.setState({isLoading: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const userId = activityId;
+  const userId = this.context.activityId;
   const field = event.target.field.value;
   const query = event.target.query.value;
   let regex = true;

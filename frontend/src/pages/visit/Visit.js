@@ -25,6 +25,7 @@ import VisitDetail from '../../components/details/VisitDetail';
 
 import FilterVisitForm from '../../components/forms/filter/FilterVisitForm';
 import VisitSearchForm from '../../components/forms/search/VisitSearchForm';
+import AppointmentSearchForm from '../../components/forms/search/AppointmentSearchForm';
 
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -74,6 +75,7 @@ class VisitPage extends Component {
     calendarVisits: null,
     fromGoLink: null,
     goLinkId: null,
+    sublistSearch: false,
   };
   static contextType = AuthContext;
 
@@ -440,12 +442,13 @@ submitCreateNewVisitForm = (event) => {
   const type = event.target.type.value;
   const subType = event.target.subType.value;
 
-  // if (
-  //     active.trim().length === 0 ||
-  //   ) {
-  //   this.context.setUserAlert("...blank fields!!!...")
-  //   return;
-  // }
+  if (
+      title.trim().length === 0 ||
+      type.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank fields!!!...")
+    return;
+  }
 
   const tooEarly = moment().format('YYYY-MM-DD') < moment.unix(this.state.selectedAppointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD');
   const tooLate = moment().format('YYYY-MM-DD') > moment.unix(this.state.selectedAppointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD');
@@ -453,11 +456,13 @@ submitCreateNewVisitForm = (event) => {
   if (tooEarly === true) {
     console.log('...appointment for this visit is in the future...please wait or create a new appointment...');
     this.context.setUserAlert('...appointment for this visit is in the future...please wait or create a new appointment...')
+    this.setState({isLoading: false})
     return
   }
   if (tooLate === true) {
     console.log('...appointment for this visit has already gone... please create a new appointment...');
     this.context.setUserAlert('...appointment for this visit has already gone... please create a new appointment...')
+    this.setState({isLoading: false})
     return
   }
 
@@ -680,6 +685,126 @@ toggleOverlay = () => {
   })
 }
 
+startSublistSearch = () => {
+  this.setState({
+    sublistSearch: true
+  })
+}
+cancelSublistSearch = () => {
+  this.setState({
+    sublistSearch: false,
+  })
+  this.getAllAppointments({activityId: this.context.activityId,token: this.context.token});
+}
+submitSublistSearchForm = (event) => {
+  event.preventDefault();
+  console.log('...searching appointments...');
+  this.context.setUserAlert('...searching appointments...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const userId = activityId;
+  const field = event.target.field.value;
+  const query = event.target.query.value;
+  let regex = true;
+  if (field === 'date' ||
+      field === 'inProgress' ||
+      field === 'attended' ||
+      field === 'important' ||
+      field === 'important'
+    ) {
+      regex = false;
+  }
+  // console.log('regex',regex);
+
+  let requestBody;
+  if (regex === true) {
+    requestBody = {
+      query: `
+        query {getAppointmentsByFieldRegex(
+          activityId:"${activityId}",
+          field:"${field}",
+          query:"${query}"
+        )
+        {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,reminders{_id},creator{_id}}}
+      `};
+  }
+  if (regex === false) {
+    requestBody = {
+      query: `
+      query {getAppointmentsByField(
+        activityId:"${activityId}",
+        field:"${field}",
+        query:"${query}"
+      )
+      {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,reminders{_id},creator{_id}}}
+      `};
+  }
+  fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      if (regex === true) {
+        // console.log('...resData...',resData.data.getAppointmentsByFieldRegex);
+      }
+      if (regex === false) {
+        // console.log('...resData...',resData.data.getAppointmentsByField);
+      }
+
+      let responseAlert = '...appointment search success!...';
+      let error = null;
+
+      if (regex === true) {
+        if (resData.data.getAppointmentsByFieldRegex.error) {
+          error = resData.data.getAppointmentsByFieldRegex.error;
+          responseAlert = error;
+        }
+      }
+      if (regex === false) {
+        if (resData.data.getAppointmentsByField.error) {
+          error = resData.data.getAppointmentsByField.error;
+          responseAlert = error;
+        }
+      }
+
+      this.context.setUserAlert(responseAlert)
+
+      if (regex === true) {
+        this.setState({
+          isLoading: false,
+          appointments: resData.data.getAppointmentsByFieldRegex,
+          activityA: `getAppointmentsByFieldRegex?activityId:${activityId},userId:${userId}`
+        });
+      }
+      if (regex === false) {
+        this.setState({
+          isLoading: false,
+          appointments: resData.data.getAppointmentsByField,
+          activityA: `getAppointmentsByField?activityId:${activityId},userId:${userId}`
+        });
+      }
+
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+}
+
 
 render() {
 
@@ -812,6 +937,13 @@ render() {
                   this.state.appointments &&
                   !this.state.selectedAppointment && (
                   <Row>
+                    <Button variant="outline-secondary" className="filterFormBtn" onClick={this.startSublistSearch}>Search</Button>
+                    {this.state.sublistSearch === true && (
+                      <AppointmentSearchForm
+                        onCancel={this.cancelSublistSearch}
+                        onConfirm={this.submitSublistSearchForm}
+                      />
+                    )}
                     <AppointmentList
                       filter={this.state.filter}
                       appointments={this.state.appointments}

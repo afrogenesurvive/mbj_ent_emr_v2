@@ -24,6 +24,7 @@ import AppointmentDetail from '../../components/details/AppointmentDetail';
 
 import FilterAppointmentForm from '../../components/forms/filter/FilterAppointmentForm';
 import AppointmentSearchForm from '../../components/forms/search/AppointmentSearchForm';
+import PatientSearchForm from '../../components/forms/search/PatientSearchForm';
 
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -64,12 +65,14 @@ class AppointmentPage extends Component {
     },
     showDetails: false,
     selectedUser: null,
+    selectedPatient: null,
     selectedAppointment: null,
     creatingAppointment: false,
     newAppointment: null,
     calendarAppointments: null,
     fromGoLink: null,
     goLinkId: null,
+    sublistSearch: false,
   };
   static contextType = AuthContext;
 
@@ -393,12 +396,15 @@ submitCreateNewAppointmentForm = (event) => {
   const description = event.target.description.value;
   const important = event.target.important.value;
 
-  // if (
-  //     active.trim().length === 0 ||
-  //   ) {
-  //   this.context.setUserAlert("...blank fields!!!...")
-  //   return;
-  // }
+  if (
+      title.trim().length === 0 ||
+      date.trim().length === 0 ||
+      time.trim().length === 0 ||
+      location.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank fields!!!...")
+    return;
+  }
 
   if (date < moment().format('YYYY-MM-DD')) {
     console.log('...ummm no! Please pick a date today or in the future...');
@@ -635,6 +641,134 @@ toggleOverlay = () => {
   })
 }
 
+startSublistSearch = () => {
+  this.setState({
+    sublistSearch: true
+  })
+}
+cancelSublistSearch = () => {
+  this.setState({
+    sublistSearch: false,
+  })
+  this.getAllPatients({activityId: this.context.activityId,token: this.context.token});
+}
+submitSublistSearchForm = (event) => {
+  event.preventDefault()
+  console.log('...searching patient sublist...');
+  this.context.setUserAlert('...searching patient sublist...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const userId = activityId;
+  const field = event.target.field.value;
+  const query = event.target.query.value;
+  let regex = true;
+  if (field === 'active' ||
+      field === 'age' ||
+      field === 'dob' ||
+      field === 'addresses.number' ||
+      field === 'addresses.primary' ||
+      field === 'loggedIn' ||
+      field === 'clientConnected' ||
+      field === 'verification.verified' ||
+      field === 'registration.date' ||
+      field === 'expiryDate' ||
+      field === 'referral.date' ||
+      field === 'insurance.expiryDate' ||
+      field === 'insurance.expiryDate'
+    ) {
+      regex = false;
+  }
+  // console.log('regex',regex);
+
+  let requestBody;
+  if (regex === true) {
+    requestBody = {
+      query: `
+        query {getPatientsByFieldRegex(
+          activityId:"${activityId}",
+          field:"${field}",
+          query:"${query}"
+        )
+        {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
+      `};
+  }
+  if (regex === false) {
+    requestBody = {
+      query: `
+        query {getPatientsByField(
+          activityId:"${activityId}",
+          field:"${field}",
+          query:"${query}"
+        )
+        {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
+      `};
+  }
+  fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      if (regex === true) {
+        // console.log('...resData...',resData.data.getPatientsByFieldRegex);
+      }
+      if (regex === false) {
+        // console.log('...resData...',resData.data.getPatientsByField);
+      }
+
+      let responseAlert = '...patient search success!...';
+      let error = null;
+
+      if (regex === true) {
+        if (resData.data.getPatientsByFieldRegex.error) {
+          error = resData.data.getPatientsByFieldRegex.error;
+          responseAlert = error;
+        }
+      }
+      if (regex === false) {
+        if (resData.data.getPatientsByField.error) {
+          error = resData.data.getPatientsByField.error;
+          responseAlert = error;
+        }
+      }
+
+      this.context.setUserAlert(responseAlert)
+
+      if (regex === true) {
+        this.setState({
+          isLoading: false,
+          patients: resData.data.getPatientsByFieldRegex,
+          activityA: `getPatientsByFieldRegex?activityId:${activityId},userId:${userId}`
+        });
+      }
+      if (regex === false) {
+        this.setState({
+          isLoading: false,
+          patients: resData.data.getPatientsByField,
+          activityA: `getPatientsByField?activityId:${activityId},userId:${userId}`
+        });
+      }
+
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+}
+
 
 render() {
 
@@ -767,6 +901,13 @@ render() {
                   this.state.patients &&
                   !this.state.selectedPatient && (
                   <Row>
+                    <Button variant="outline-secondary" className="filterFormBtn" onClick={this.startSublistSearch}>Search</Button>
+                    {this.state.sublistSearch === true && (
+                      <PatientSearchForm
+                        onCancel={this.cancelSublistSearch}
+                        onConfirm={this.submitSublistSearchForm}
+                      />
+                    )}
                     <PatientList
                       filter={this.state.filter}
                       patients={this.state.patients}
