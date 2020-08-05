@@ -31,19 +31,39 @@ const NextOfKinItem = props => {
           </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           {state === true && (
-            <Row>
+            <Row className="listItemHiddenRow">
+            <ul>
+              <li>
+              <Card.Text className="cardText">
+                Name: <span className="bold">{props.nextOfKin.name}</span>
+              </Card.Text>
+              </li>
+              <li>
+              <Card.Text className="cardText">
+                Relation: <span className="bold">{props.nextOfKin.relation}</span>
+              </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 Email: <span className="bold">{props.nextOfKin.contact.email}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 Phone: <span className="bold">{props.nextOfKin.contact.phone}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 Phone2: <span className="bold">{props.nextOfKin.contact.phone2}</span>
               </Card.Text>
+              </li>
               {props.canDelete === true && (
+                <li>
                 <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.nextOfKin)}>Delete</Button>
+                </li>
               )}
+            </ul>
             </Row>
           )}
         </Card.Body>

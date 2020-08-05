@@ -27,17 +27,29 @@ const MedicationItem = props => {
           <Card.Text className="cardText">
             Title: <span className="bold">{props.medication.title}</span>
           </Card.Text>
-          <Card.Text className="cardText">
-            Type: <span className="bold">{props.medication.type}</span>
-          </Card.Text>
+
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           {state === true && (
-            <Row>
+            <Row className="listItemHiddenRow">
+            <ul>
+              <li>
+              <Card.Text className="cardText">
+                Title: <span className="bold">{props.medication.title}</span>
+              </Card.Text>
+              </li>
+              <li>
+              <Card.Text className="cardText">
+                Type: <span className="bold">{props.medication.type}</span>
+              </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 Description: <span className="bold">{props.medication.description}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                attachments: <span className="bold">{props.medication.attachments.toString()}</span>
+                Attachments:
               </Card.Text>
               <PatientAttachmentList
                 item={props.medication}
@@ -46,10 +58,16 @@ const MedicationItem = props => {
                 onDelete={props.deleteAttachment}
                 type="medication"
               />
+              </li>
+              <li>
               <Button variant="outline-primary" onClick={props.onAddAttachment.bind(this, {field: 'medication',data:props.medication})}>Add Attachment</Button>
+              </li>
               {props.canDelete === true && (
+                <li>
                 <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.medication)}>Delete</Button>
+                </li>
               )}
+            </ul>
             </Row>
           )}
         </Card.Body>

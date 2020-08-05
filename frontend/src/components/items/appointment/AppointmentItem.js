@@ -53,40 +53,64 @@ const AppointmentItem = (props) => {
           )}
 
           {state === true && (
-            <Row>
+            <Row className="listItemHiddenRow">
+            <ul>
+              <li>
               <Card.Text className="cardText">
                 id: <span className="bold">{props.appointment._id}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 time: <span className="bold">{props.appointment.time}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 checkinTime: <span className="bold">{props.appointment.checkinTime}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 seenTime: <span className="bold">{props.appointment.seenTime}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 location: <span className="bold">{props.appointment.location}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 description: <span className="bold">{props.appointment.description}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 inProgress: <span className="bold">{props.appointment.inProgress.toString()}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 attended: <span className="bold">{props.appointment.attended.toString()}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 important: <span className="bold">{props.appointment.important.toString()}</span>
               </Card.Text>
+              </li>
               {props.visitPage !== true && (
+                <li>
                 <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.appointment)}>Details</Button>
+                </li>
               )}
               {props.visitPage === true && (
+                <li>
                 <Button variant="outline-primary" onClick={props.onSelect.bind(this, props.appointment)}>Select</Button>
+                </li>
               )}
+            </ul>
             </Row>
           )}
           {deleteState === true && (

@@ -52,34 +52,46 @@ const VisitItem = props => {
             <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
           )}
           {state === true && (
-            <Row>
+            <Row className="listItemHiddenRow">
+            <ul>
+              <li>
               <Card.Text className="cardText">
                 Id: <span className="bold">{props.visit._id}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 type: <span className="bold">{props.visit.type}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 subType: <span className="bold">{props.visit.subType}</span>
               </Card.Text>
-
+              </li>
               {!props.patientPage && (
+                <li>
                 <Card.Text className="cardText">
                   Patient:
                 </Card.Text>
+                </li>
               )}
               {!props.patientPage && (
+                <li>
                 <Card.Text className="cardText">
                   Id: <span className="bold">{props.visit.patient._id}</span>
                 </Card.Text>
+                </li>
               )}
               {!props.patientPage && (
+                <li>
                 <Card.Text className="cardText">
                   Name: <span className="bold">{props.visit.patient.name}</span>
                 </Card.Text>
+                </li>
               )}
-
               {props.patientPage && (
+                <li>
                 <Link
                   to={{
                     pathname: "/visits",
@@ -87,11 +99,14 @@ const VisitItem = props => {
                   }}
                 >Go!
                 </Link>
+                </li>
               )}
               {!props.patientPage && (
+                <li>
                   <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.visit)}>Details</Button>
+                </li>
               )}
-
+            </ul>
             </Row>
           )}
           {deleteState === true && (

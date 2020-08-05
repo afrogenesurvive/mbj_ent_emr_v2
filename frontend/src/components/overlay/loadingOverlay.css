@@ -22,8 +22,8 @@
 .loadingOverlay {
   position: fixed;
   top: 20rem;
-  left: 20rem;
-  width: 15rem;
+  left: 30vw;
+  width: 30rem;
   height: 15rem;
   background-color: white;
 }
@@ -34,6 +34,14 @@
 
 .attachmentViewerCloseButton {
   margin: 1rem;
+  padding: .5rem;
+}
+.overlayContainer {
+  text-align: center;
+}
+.overlayRow {
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .attachmentViewer > iframe {

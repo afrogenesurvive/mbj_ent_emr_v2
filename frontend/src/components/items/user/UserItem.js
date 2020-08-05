@@ -50,40 +50,61 @@ const UserItem = (props) => {
           )}
 
           {state === true && (
-            <Row>
+            <Row className="listItemHiddenRow">
+            <ul>
+              <li>
               <Card.Text className="cardText">
                 id: <span className="bold">{props.user._id}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 name: <span className="bold">{props.user.name}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 username: <span className="bold">{props.user.username}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 title: <span className="bold">{props.user.title}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 role: <span className="bold">{props.user.role}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 dob: <span className="bold">{moment.unix(props.user.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 age: <span className="bold">{props.user.age}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 gender: <span className="bold">{props.user.gender}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 loggedIn: <span className="bold">{props.user.loggedIn === true && (<FontAwesomeIcon icon={faBatteryThreeQuarters} className="listIcon"/>)} {props.user.loggedIn === false && (<FontAwesomeIcon icon={faBatteryEmpty} className="listIcon"/>)}</span>
               </Card.Text>
+              </li>
               {!props.appointmentPage &&
                 !props.visitPage && (
-                <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.user)}>Details</Button>
+                  <li>
+                  <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.user)}>Details</Button>
+                  </li>
               )}
-
               {props.appointmentPage && (
+                <li>
                 <Link
                   to={{
                     pathname: "/staff",
@@ -91,8 +112,10 @@ const UserItem = (props) => {
                   }}
                 >Go!
                 </Link>
+                </li>
               )}
               {props.visitPage && (
+                <li>
                 <Link
                   to={{
                     pathname: "/staff",
@@ -100,7 +123,9 @@ const UserItem = (props) => {
                   }}
                 >Go!
                 </Link>
+                </li>
               )}
+            </ul>
             </Row>
           )}
           {props.selectUser && (

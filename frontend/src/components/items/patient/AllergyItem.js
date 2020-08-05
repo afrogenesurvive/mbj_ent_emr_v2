@@ -27,14 +27,28 @@ const AllergyItem = props => {
           <Card.Text className="cardText">
             Title: <span className="bold">{props.allergy.title}</span>
           </Card.Text>
-          <Card.Text className="cardText">
-            Type: <span className="bold">{props.allergy.type}</span>
-          </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           {state === true && (
-            <Row>
+            <Row className="listItemHiddenRow">
+            <ul>
+              <li>
+              <Card.Text className="cardText">
+                Title: <span className="bold">{props.allergy.title}</span>
+              </Card.Text>
+              </li>
+              <li>
+              <Card.Text className="cardText">
+                Type: <span className="bold">{props.allergy.type}</span>
+              </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 Description: <span className="bold">{props.allergy.description}</span>
+              </Card.Text>
+              </li>
+              <li>
+              <Card.Text className="cardText">
+                attachments:
               </Card.Text>
               <PatientAttachmentList
                 item={props.allergy}
@@ -43,10 +57,19 @@ const AllergyItem = props => {
                 onDelete={props.deleteAttachment}
                 type="allergy"
               />
+              </li>
+              <li>
               <Button variant="outline-primary" onClick={props.onAddAttachment.bind(this, {field: 'allergy',data:props.allergy})}>Add Attachment</Button>
+              </li>
+              <li>
               {props.canDelete === true && (
+                <li>
                 <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.allergy)}>Delete</Button>
+                </li>
               )}
+              </li>
+
+            </ul>
             </Row>
           )}
         </Card.Body>

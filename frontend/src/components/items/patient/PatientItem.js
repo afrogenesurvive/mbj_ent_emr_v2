@@ -50,37 +50,59 @@ const PatientItem = (props) => {
           )}
 
           {state === true && (
-            <Row>
+            <Row className="listItemHiddenRow">
+            <ul>
+              <li>
               <Card.Text className="cardText">
                 id: <span className="bold">{props.patient._id}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 name: <span className="bold">{props.patient.name}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 username: <span className="bold">{props.patient.username}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 title: <span className="bold">{props.patient.title}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 role: <span className="bold">{props.patient.role}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 dob: <span className="bold">{moment.unix(props.patient.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 age: <span className="bold">{props.patient.age}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 gender: <span className="bold">{props.patient.gender}</span>
               </Card.Text>
+              </li>
               {props.appointmentPage === true && (
+                <li>
                 <Button variant="outline-primary" onClick={props.onSelect.bind(this, props.patient)}>Select</Button>
+                </li>
               )}
               {props.appointmentPage !== true && (
+                <li>
                 <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.patient)}>Details</Button>
+                </li>
               )}
+            </ul>
             </Row>
           )}
           {deleteState === true && (

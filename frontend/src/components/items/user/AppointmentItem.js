@@ -36,34 +36,54 @@ const AppointmentItem = (props) => {
           </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           {state === true && (
-            <Row>
+            <Row className="listItemHiddenRow">
+            <ul>
+              <li>
               <Card.Text className="cardText">
                 id: <span className="bold">{props.appointment._id}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 time: <span className="bold">{props.appointment.time}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 checkinTime: <span className="bold">{props.appointment.checkinTime}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 seenTime: <span className="bold">{props.appointment.seenTime}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 location: <span className="bold">{props.appointment.location}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 description: <span className="bold">{props.appointment.description}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 inProgress: <span className="bold">{props.appointment.inProgress.toString()}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 attended: <span className="bold">{props.appointment.attended.toString()}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 important: <span className="bold">{props.appointment.important.toString()}</span>
               </Card.Text>
+              </li>
+              <li>
               <Link
                 to={{
                   pathname: "/appointments",
@@ -71,6 +91,8 @@ const AppointmentItem = (props) => {
                 }}
               >Go!
               </Link>
+              </li>
+            </ul>
             </Row>
           )}
         </Card.Body>

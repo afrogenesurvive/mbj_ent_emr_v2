@@ -12,3 +12,9 @@
 .listIcon {
   margin: 0 1rem;
 }
+.listItemHiddenRow {
+  margin: 1rem 1rem;
+  max-height: 11rem;
+  overflow: scroll;
+  border: 1px dashed black;
+}

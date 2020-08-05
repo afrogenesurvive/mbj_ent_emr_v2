@@ -885,14 +885,13 @@ render() {
                   <Tab eventKey="2" title="calendar">
                     <h3>Calendar</h3>
                     <FullCalendar
-                      defaultView="dayGridMonth"
+                      intitialView="dayGridMonth"
                       plugins={[dayGridPlugin]}
                       events={this.state.calendarVisits}
                       eventClick={this.viewCalendarEvent}
                     />
                   </Tab>
                 </Tabs>
-
 
                 </Tab.Pane>
                 <Tab.Pane eventKey="2">

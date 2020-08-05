@@ -26,18 +26,32 @@ const FileItem = (props) => {
           <Card.Text className="cardText">
             Name: <span className="bold">{props.file.name}</span>
           </Card.Text>
-          <Card.Text className="cardText">
-            Type: <span className="bold">{props.file.type}</span>
-          </Card.Text>
-          <Card.Text className="cardText">
-            Link: <span className="bold">{props.file.path}</span>
-          </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           {state === true && (
-            <Row>
+            <Row className="listItemHiddenRow">
+            <ul>
+              <li>
+              <Card.Text className="cardText">
+                Name: <span className="bold">{props.file.name}</span>
+              </Card.Text>
+              </li>
+              <li>
+              <Card.Text className="cardText">
+                Type: <span className="bold">{props.file.type}</span>
+              </Card.Text>
+              </li>
+              <li>
+              <Card.Text className="cardText">
+                Link: <span className="bold">{props.file.path}</span>
+              </Card.Text>
+              </li>
               {props.canDelete === true && (
+                <li>
                 <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.file)}>Delete</Button>
+                </li>
               )}
+            </ul>
+
             </Row>
           )}
         </Card.Body>

@@ -31,7 +31,7 @@ const VitalsItem = props => {
           </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           {state === true && (
-            <Row>
+            <Row className="listItemHiddenRow">
               <Card.Text className="cardText">
                 Pulse Rate: <span className="bold">{props.vitals.pr}</span>
               </Card.Text>

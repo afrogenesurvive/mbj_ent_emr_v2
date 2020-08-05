@@ -25,23 +25,41 @@ const LeaveItem = props => {
       <Card>
         <Card.Body className="cardBody">
           <Card.Text className="cardText">
-            Type: <span className="bold">{props.leave.type}</span>
-          </Card.Text>
-          <Card.Text className="cardText">
             Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
-          </Card.Text>
-          <Card.Text className="cardText">
-            End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
-          </Card.Text>
-          <Card.Text className="cardText">
-            Description: <span className="bold">{props.leave.description}</span>
           </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           {state === true && (
-            <Row>
+            <Row className="listItemHiddenRow">
+            <ul>
+              <li>
+              <Card.Text className="cardText">
+                Type: <span className="bold">{props.leave.type}</span>
+              </Card.Text>
+              </li>
+              <li>
+              <Card.Text className="cardText">
+                Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
+              </Card.Text>
+              </li>
+              <li>
+              <Card.Text className="cardText">
+                End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
+              </Card.Text>
+              </li>
+              <li>
+              <Card.Text className="cardText">
+                Description: <span className="bold">{props.leave.description}</span>
+              </Card.Text>
+              </li>
+              <li>
               {props.canDelete === true && (
+                <li>
                 <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.leave)}>Delete</Button>
+                </li>
               )}
+              </li>
+
+            </ul>
             </Row>
           )}
         </Card.Body>
