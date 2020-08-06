@@ -74,7 +74,7 @@ const SearchUserList = props => {
     );
   });
 
-  return <ul className="searchUserList">{users}</ul>;
+  return <ul className="userList">{users}</ul>;
 };
 
 export default SearchUserList;

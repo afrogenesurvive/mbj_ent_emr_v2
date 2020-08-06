@@ -1148,7 +1148,7 @@ render() {
     <Container className="profilePageContainer">
       <Row className="profilePageContainerRow headRow">
         <Col md={9} className="profilePageContainerCol">
-          <h1> My Profile</h1>
+          <h1>Profile</h1>
         </Col>
         <Col md={3} className="profilePageContainerCol">
           {this.state.isLoading ? (
@@ -1167,17 +1167,14 @@ render() {
           {!this.state.activityUser && (
             <h3>...</h3>
           )}
-          {this.state.activityUser && (
-            <h3>{this.state.activityUser.username}</h3>
-          )}
         </Col>
       </Row>
       <Tab.Container id="left-tabs-example" defaultActiveKey="1">
         <Row className="profilePageContainerRow mainRow2">
-          <Col md={2} className="profilePageContainerCol specialCol1">
+          <Col md={3} className="profilePageContainerCol specialCol1">
 
           {this.state.sideCol === 'menu' && (
-            <Nav variant="pills" className="flex-column">
+            <Nav variant="pills" className="flex-column mainMenu">
               <Nav.Item>
                 <Nav.Link eventKey="1" onClick={this.menuSelect.bind(this, 'basic')}>Basic</Nav.Link>
               </Nav.Item>
@@ -1257,9 +1254,8 @@ render() {
           </Col>
 
           {this.state.activityUser && (
-            <Col md={10} className="profilePageContainerCol specialCol2">
+            <Col md={9} className="profilePageContainerCol specialCol2">
 
-              <h3> xxx </h3>
               {this.state.updateSingleField.state === true && (
                 <UpdateUserSingleFieldForm
                   field={this.state.updateSingleField.field}
@@ -1268,9 +1264,9 @@ render() {
                 />
               )}
 
-              <Tab.Content>
+              <Tab.Content className="tabContent" >
                 <Tab.Pane eventKey="1">
-                  User Basic:
+                  <p className="displayPaneTitle">Basic:</p>
                   <ListGroup className="profileBasicListGroup">
                     <ListGroup.Item>
                       <p className="listGroupText">Title:</p>
@@ -1318,7 +1314,7 @@ render() {
                   </ListGroup>
                 </Tab.Pane>
                 <Tab.Pane eventKey="2">
-                  User Admin
+                  <p className="displayPaneTitle">Admin:</p>
                   <ListGroup className="profileBasicListGroup">
                     <ListGroup.Item>
                       <p className="listGroupText">Id:</p>
@@ -1344,7 +1340,7 @@ render() {
                 </Tab.Pane>
                 <Tab.Pane eventKey="3">
                   <Row className="displayPaneHeadRow">
-                    <p className="displayPaneTitle">User Address List:</p>
+                    <p className="displayPaneTitle">Addresses:</p>
                     <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
                     <Button variant="outline-success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
                   </Row>
@@ -1366,7 +1362,7 @@ render() {
                 </Tab.Pane>
                 <Tab.Pane eventKey="4">
                   <Row className="displayPaneHeadRow">
-                    <p className="displayPaneTitle">User Attendance List:</p>
+                    <p className="displayPaneTitle">Attendance:</p>
                     <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
                     <Button variant="outline-success" onClick={this.startAdd.bind(this, 'attendance')}>Add</Button>
                   </Row>
@@ -1387,7 +1383,7 @@ render() {
                 </Tab.Pane>
                 <Tab.Pane eventKey="5">
                   <Row className="displayPaneHeadRow">
-                    <p className="displayPaneTitle">User Leave List:</p>
+                    <p className="displayPaneTitle">Leave:</p>
                     <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
                     <Button variant="outline-success" onClick={this.startAdd.bind(this, 'leave')}>Add</Button>
                   </Row>
@@ -1408,7 +1404,7 @@ render() {
                 </Tab.Pane>
                 <Tab.Pane eventKey="6">
                   <Row className="displayPaneHeadRow">
-                    <p className="displayPaneTitle">User Image List:</p>
+                    <p className="displayPaneTitle">Images:</p>
                     <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
                     <Button variant="outline-success" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
                   </Row>
@@ -1429,7 +1425,7 @@ render() {
                 </Tab.Pane>
                 <Tab.Pane eventKey="7">
                   <Row className="displayPaneHeadRow">
-                    <p className="displayPaneTitle">User File List:</p>
+                    <p className="displayPaneTitle">Files:</p>
                     <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
                     <Button variant="outline-success" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
                   </Row>
@@ -1450,7 +1446,7 @@ render() {
                 </Tab.Pane>
                 <Tab.Pane eventKey="8">
                   <Row className="displayPaneHeadRow">
-                    <p className="displayPaneTitle">User Appointment List:</p>
+                    <p className="displayPaneTitle">Appointments:</p>
                     <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
                   </Row>
                   <UserAppointmentList
@@ -1461,7 +1457,7 @@ render() {
                 </Tab.Pane>
                 <Tab.Pane eventKey="9">
                   <Row className="displayPaneHeadRow">
-                    <p className="displayPaneTitle">User Notes:</p>
+                    <p className="displayPaneTitle">Notes:</p>
                     <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
                     <Button variant="outline-success" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
                   </Row>

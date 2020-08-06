@@ -51,6 +51,12 @@ const PatientList = props => {
   if (filter.field === 'patient' && filter.key === 'gender' && filter.value === 'Descending') {
     propsPatients = patients2.sort((a, b) => (a.gender < b.gender) ? 1 : -1);
   }
+  if (filter.field === 'patient' && filter.key === 'registration.date' && filter.value === 'Ascending') {
+    propsPatients = patients2.sort((a, b) => (a.registration.date > b.registration.date) ? 1 : -1);
+  }
+  if (filter.field === 'patient' && filter.key === 'registration.date' && filter.value === 'Descending') {
+    propsPatients = patients2.sort((a, b) => (a.registration.date < b.registration.date) ? 1 : -1);
+  }
   if (filter.field === 'patient' && filter.key === 'loggedIn') {
     propsPatients = patients2.filter(x => x.loggedIn === filter.value);
   }

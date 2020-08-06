@@ -76,6 +76,7 @@ class VisitPage extends Component {
     fromGoLink: null,
     goLinkId: null,
     sublistSearch: false,
+    tabKey: 'list',
   };
   static contextType = AuthContext;
 
@@ -146,7 +147,8 @@ getAllVisits (args) {
         let goLinkVisit = resData.data.getAllVisits.filter(x => x._id === this.state.goLinkId)[0];
         this.setState({
           showDetails: true,
-          selectedVisit: goLinkVisit
+          selectedVisit: goLinkVisit,
+          tabKey: 'detail'
         })
         this.context.setUserAlert('...Check the details tab...')
       }
@@ -537,7 +539,10 @@ toggleSideCol = () => {
 
 }
 menuSelect = (args) => {
-  this.setState({menuSelect: args})
+  this.setState({
+    menuSelect: args,
+    tabKey: args
+  })
 }
 submitFilterForm = (event) => {
   event.preventDefault();
@@ -570,7 +575,8 @@ showDetails = (args) => {
   this.setState({
     showDetails: true,
     selectedVisit: args,
-    overlay: false
+    overlay: false,
+    tabKey: 'detail'
   })
   this.context.selectedVisit = args;
 }
@@ -805,6 +811,16 @@ submitSublistSearchForm = (event) => {
     });
 }
 
+resetFilter = () => {
+  this.setState({
+    filter: {
+      field: null,
+      key: null,
+      value: null
+    }
+  })
+}
+
 
 render() {
 
@@ -833,23 +849,23 @@ render() {
         </Col>
       </Row>
 
-      <Tab.Container id="left-tabs-example" defaultActiveKey="1">
+      <Tab.Container id="left-tabs-example" activeKey={this.state.tabKey}>
         <Row className="staffPageContainerRow mainRow2">
 
-          <Col md={2} className="staffPageContainerCol specialCol1">
+          <Col md={3} className="staffPageContainerCol specialCol1">
             {this.state.sideCol === 'menu' && (
               <Nav variant="pills" className="flex-column mainMenu">
                 <Nav.Item>
-                  <Nav.Link eventKey="1" onClick={this.menuSelect.bind(this, 'list')}>List</Nav.Link>
+                  <Nav.Link eventKey="list" onClick={this.menuSelect.bind(this, 'list')}>List</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="2" onClick={this.menuSelect.bind(this, 'search')}>Search</Nav.Link>
+                  <Nav.Link eventKey="search" onClick={this.menuSelect.bind(this, 'search')}>Search</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="3" onClick={this.menuSelect.bind(this, 'detail')}>Details</Nav.Link>
+                  <Nav.Link eventKey="detail" onClick={this.menuSelect.bind(this, 'detail')}>Details</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="4" onClick={this.menuSelect.bind(this, 'new')}>New</Nav.Link>
+                  <Nav.Link eventKey="new" onClick={this.menuSelect.bind(this, 'new')}>New</Nav.Link>
                 </Nav.Item>
               </Nav>
             )}
@@ -864,14 +880,15 @@ render() {
           </Col>
 
           {this.state.visits && (
-            <Col md={10} className="staffPageContainerCol specialCol2">
+            <Col md={9} className="staffPageContainerCol specialCol2">
               <Tab.Content>
-                <Tab.Pane eventKey="1">
+                <Tab.Pane eventKey="list">
 
                 <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
                   <Tab eventKey="1" title="list">
                   <Row className="displayPaneHeadRow">
                     <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                    <Button variant="outline-warning" onClick={this.resetFilter}>Reset</Button>
                   </Row>
                     <VisitList
                       filter={this.state.filter}
@@ -894,7 +911,7 @@ render() {
                 </Tabs>
 
                 </Tab.Pane>
-                <Tab.Pane eventKey="2">
+                <Tab.Pane eventKey="search">
                 <Col className="userSearchCol">
                   <h3>Search Visit</h3>
                   <Row className="userSearchRow">
@@ -904,7 +921,7 @@ render() {
                   </Row>
                   <Row>
                     {this.state.searchVisits && (
-                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                      <Button variant="outline-primary" onClick={this.toggleSideCol} className="centered_btn">Filter</Button>
                     )}
                   </Row>
                   <Row className="userSearchRow results">
@@ -919,7 +936,7 @@ render() {
                   </Row>
                 </Col>
                 </Tab.Pane>
-                <Tab.Pane eventKey="3">
+                <Tab.Pane eventKey="detail">
                 {this.state.showDetails === true &&
                   this.state.selectedVisit && (
                     <VisitDetail
@@ -928,7 +945,7 @@ render() {
                     />
                 )}
                 </Tab.Pane>
-                <Tab.Pane eventKey="4">
+                <Tab.Pane eventKey="new">
                 {this.state.creatingVisit === false && (
                   <Button variant="outline-secondary" className="filterFormBtn" onClick={this.onStartCreateNewVisit}>Create New</Button>
                 )}

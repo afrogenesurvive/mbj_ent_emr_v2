@@ -56,6 +56,7 @@ class StaffPage extends Component {
     canDelete: false,
     fromGoLink: null,
     goLinkId: null,
+    tabKey: 'list',
   };
   static contextType = AuthContext;
 
@@ -124,7 +125,8 @@ getAllUsers (args) {
         let goLinkUser = resData.data.getAllUsers.filter(x => x._id === this.state.goLinkId)[0];
         this.setState({
           showDetails: true,
-          selectedUser: goLinkUser
+          selectedUser: goLinkUser,
+          tabKey: 'detail'
         })
         this.context.setUserAlert('...Check the details tab...')
       }
@@ -317,7 +319,10 @@ toggleSideCol = () => {
 
 }
 menuSelect = (args) => {
-  this.setState({menuSelect: args})
+  this.setState({
+    menuSelect: args,
+    tabKey: args
+  })
 }
 submitFilterForm = (event) => {
   event.preventDefault();
@@ -344,7 +349,8 @@ showDetails = (args) => {
   // console.log('bar',args.contact);
   this.setState({
     showDetails: true,
-    selectedUser: args
+    selectedUser: args,
+    tabKey: 'detail'
   })
   this.context.selectedUser = args;
 }
@@ -426,6 +432,16 @@ deleteUser = (args) => {
     });
 }
 
+resetFilter = () => {
+  this.setState({
+    filter: {
+      field: null,
+      key: null,
+      value: null
+    }
+  })
+}
+
 render() {
 
   return (
@@ -451,20 +467,20 @@ render() {
         </Col>
       </Row>
 
-      <Tab.Container id="left-tabs-example" defaultActiveKey="1">
+      <Tab.Container id="left-tabs-example" activeKey={this.state.tabKey}>
         <Row className="staffPageContainerRow mainRow2">
 
-          <Col md={2} className="staffPageContainerCol specialCol1">
+          <Col md={3} className="staffPageContainerCol specialCol1">
             {this.state.sideCol === 'menu' && (
-              <Nav variant="pills" className="flex-column">
+              <Nav variant="pills" className="flex-column mainMenu">
                 <Nav.Item>
-                  <Nav.Link eventKey="1" onClick={this.menuSelect.bind(this, 'list')}>List</Nav.Link>
+                  <Nav.Link eventKey="list" onClick={this.menuSelect.bind(this, 'list')}>List</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="2" onClick={this.menuSelect.bind(this, 'search')}>Search</Nav.Link>
+                  <Nav.Link eventKey="search" onClick={this.menuSelect.bind(this, 'search')}>Search</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="3" onClick={this.menuSelect.bind(this, 'detail')}>Details</Nav.Link>
+                  <Nav.Link eventKey="detail" onClick={this.menuSelect.bind(this, 'detail')}>Details</Nav.Link>
                 </Nav.Item>
               </Nav>
             )}
@@ -479,11 +495,12 @@ render() {
           </Col>
 
           {this.state.users && (
-            <Col md={10} className="staffPageContainerCol specialCol2">
+            <Col md={9} className="staffPageContainerCol specialCol2">
               <Tab.Content>
-                <Tab.Pane eventKey="1">
+                <Tab.Pane eventKey="list">
                   <Row className="displayPaneHeadRow">
                     <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                    <Button variant="outline-warning" onClick={this.resetFilter}>Reset</Button>
                   </Row>
                   <UserList
                     filter={this.state.filter}
@@ -494,7 +511,7 @@ render() {
                     onDelete={this.deleteUser}
                   />
                 </Tab.Pane>
-                <Tab.Pane eventKey="2">
+                <Tab.Pane eventKey="search">
                 <Col className="userSearchCol">
                   <h3>Search Staff</h3>
                   <Row className="userSearchRow">
@@ -504,7 +521,7 @@ render() {
                   </Row>
                   <Row>
                     {this.state.searchUsers && (
-                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                      <Button variant="outline-primary" className="centered_btn" onClick={this.toggleSideCol}>Filter</Button>
                     )}
                   </Row>
                   <Row className="userSearchRow results">
@@ -519,7 +536,7 @@ render() {
                   </Row>
                 </Col>
                 </Tab.Pane>
-                <Tab.Pane eventKey="3">
+                <Tab.Pane eventKey="detail">
                 {this.state.showDetails === true &&
                   this.state.selectedUser && (
                   <UserDetail

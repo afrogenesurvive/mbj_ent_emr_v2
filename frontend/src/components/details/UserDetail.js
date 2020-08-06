@@ -1130,20 +1130,13 @@ render() {
               <h3>...</h3>
             )
           }
-          {
-            this.props.user && (
-              <Row>
-                <h3>{this.props.user.username}</h3>
-              </Row>
-            )
-          }
         </Col>
       </Row>
       <Tab.Container id="left-tabs-example" defaultActiveKey="1">
         <Row className="detailPageContainerRow mainRow2">
-          <Col md={2} className="detailPageContainerCol specialCol1">
+          <Col md={3} className="detailPageContainerCol specialCol1">
             {this.state.sideCol === 'menu' && (
-              <Nav variant="pills" className="flex-column">
+              <Nav variant="pills" className="flex-column subMenu">
                 <Nav.Item>
                   <Nav.Link eventKey="1" onClick={this.menuSelect.bind(this, 'basic')}>Basic</Nav.Link>
                 </Nav.Item>
@@ -1223,7 +1216,7 @@ render() {
           </Col>
 
           {this.props.user && (
-            <Col md={10} className="detailPageContainerCol specialCol2">
+            <Col md={9} className="detailPageContainerCol specialCol2">
               {this.state.updateSingleField.state === true && (
                 <UpdateUserSingleFieldForm
                   field={this.state.updateSingleField.field}
@@ -1231,7 +1224,7 @@ render() {
                   onCancel={this.cancelUpdateSingleField}
                 />
               )}
-              <Tab.Content>
+              <Tab.Content className="tabContent">
                 <Tab.Pane eventKey="1">
                   User Basic:
                   <ListGroup className="profileBasicListGroup">

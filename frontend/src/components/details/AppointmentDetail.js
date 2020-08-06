@@ -735,14 +735,11 @@ render() {
           {!this.props.appointment && (
             <h3>...</h3>
           )}
-          {this.props.appointment && (
-            <h3>{this.props.appointment.title}</h3>
-          )}
         </Col>
       </Row>
       <Tab.Container id="left-tabs-example" defaultActiveKey="1">
         <Row className="detailPageContainerRow mainRow2">
-          <Col md={2} className="detailPageContainerCol specialCol1">
+          <Col md={3} className="detailPageContainerCol specialCol1">
             {this.state.sideCol === 'menu' && (
               <Nav variant="pills" className="flex-column subMenu">
                 <Nav.Item>
@@ -788,7 +785,7 @@ render() {
           </Col>
 
           {this.props.appointment && (
-            <Col md={10} className="detailPageContainerCol specialCol2">
+            <Col md={9} className="detailPageContainerCol specialCol2">
               {this.state.updateSingleField.state === true && (
                 <UpdatePatientSingleFieldForm
                   field={this.state.updateSingleField.field}
