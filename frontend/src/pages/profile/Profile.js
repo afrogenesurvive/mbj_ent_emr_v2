@@ -1154,7 +1154,7 @@ render() {
           {this.state.isLoading ? (
             <Image src={loadingGif} className="loadingGif" fluid />
           ):(
-            <h4>x</h4>
+            <p>.</p>
           )}
         </Col>
       </Row>

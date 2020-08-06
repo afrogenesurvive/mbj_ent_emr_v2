@@ -62,6 +62,21 @@ const AppointmentItem = (props) => {
               </li>
               <li>
               <Card.Text className="cardText">
+                Title: <span className="bold">{props.appointment.title}</span>
+              </Card.Text>
+              </li>
+              <li>
+              <Card.Text className="cardText">
+                Type: <span className="bold">{props.appointment.type}</span>
+              </Card.Text>
+              </li>
+              <li>
+              <Card.Text className="cardText">
+                Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
+              </Card.Text>
+              </li>
+              <li>
+              <Card.Text className="cardText">
                 time: <span className="bold">{props.appointment.time}</span>
               </Card.Text>
               </li>

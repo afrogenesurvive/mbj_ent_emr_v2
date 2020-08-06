@@ -35,7 +35,7 @@ const UserItem = (props) => {
    }
 
   return (
-    <li key={props.key} className="">
+    <li key={props.key} className="userItemLi">
       <Card>
         <Card.Body className="cardBody">
           <Card.Text className="cardText">
@@ -132,7 +132,7 @@ const UserItem = (props) => {
             <Button variant="outline-primary" onClick={props.selectUser.bind(this, props.user)}>Add</Button>
           )}
           {deleteState === true && (
-            <Row>
+            <Row className="listItemHiddenRow">
               {props.canDelete && (
                 <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.user)}>Delete</Button>
               )}

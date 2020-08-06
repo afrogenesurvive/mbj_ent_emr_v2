@@ -744,7 +744,7 @@ render() {
         <Row className="detailPageContainerRow mainRow2">
           <Col md={2} className="detailPageContainerCol specialCol1">
             {this.state.sideCol === 'menu' && (
-              <Nav variant="pills" className="flex-column">
+              <Nav variant="pills" className="flex-column subMenu">
                 <Nav.Item>
                   <Nav.Link eventKey="1" onClick={this.menuSelect.bind(this, 'basic')}>Basic</Nav.Link>
                 </Nav.Item>
@@ -796,7 +796,7 @@ render() {
                   onCancel={this.cancelUpdateSingleField}
                 />
               )}
-                <Tab.Content>
+                <Tab.Content className="tabContent">
                   <Tab.Pane eventKey="1">
                     Appointment Basic:
                     <ListGroup className="profileBasicListGroup">

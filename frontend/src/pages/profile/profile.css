@@ -5,18 +5,18 @@
   /* overflow: hidden; */
 }
 .profilePageContainerCol {
-  border: 1px solid purple;
+  /* border: 1px solid purple; */
 }
 .headRow {
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
 }
 .mainRow {
-  border: 1px solid green;
+  /* border: 1px solid green; */
   text-align: center;
 
 }
 .mainRow2 {
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
   text-align: center;
   max-height: 89%;
   overflow: scroll;

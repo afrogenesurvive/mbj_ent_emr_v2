@@ -786,13 +786,13 @@ render() {
     <Container className="staffPageContainer">
       <Row className="staffPageContainerRow headRow">
         <Col md={9} className="staffPageContainerCol">
-          <h1>Appointment List</h1>
+          <h1 className="mainHeading">Appointment List</h1>
         </Col>
         <Col md={3} className="staffPageContainerCol">
           {this.state.isLoading ? (
             <Image src={loadingGif} className="loadingGif" fluid />
           ):(
-            <h4>x</h4>
+            <p>.</p>
           )}
         </Col>
       </Row>
@@ -800,9 +800,9 @@ render() {
       <Tab.Container id="left-tabs-example" defaultActiveKey="1">
         <Row className="staffPageContainerRow mainRow2">
 
-          <Col md={2} className="staffPageContainerCol specialCol1">
+          <Col md={3} className="staffPageContainerCol specialCol1">
             {this.state.sideCol === 'menu' && (
-              <Nav variant="pills" className="flex-column">
+              <Nav variant="pills" className="flex-column mainMenu">
                 <Nav.Item>
                   <Nav.Link eventKey="1" onClick={this.menuSelect.bind(this, 'list')}>List</Nav.Link>
                 </Nav.Item>
@@ -828,9 +828,9 @@ render() {
           </Col>
 
           {this.state.appointments && (
-            <Col md={10} className="staffPageContainerCol specialCol2">
-              <Tab.Content>
-                <Tab.Pane eventKey="1">
+            <Col md={9} className="staffPageContainerCol specialCol2">
+              <Tab.Content >
+                <Tab.Pane eventKey="1" className="mainList">
 
                 <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
                   <Tab eventKey="1" title="list">
@@ -846,7 +846,7 @@ render() {
                       onDelete={this.deleteAppointment}
                     />
                   </Tab>
-                  <Tab eventKey="2" title="calendar">
+                  <Tab eventKey="2" title="calendar" className="calendarTab">
                     <h3>Calendar</h3>
                     <FullCalendar
                       defaultView="dayGridMonth"
@@ -862,14 +862,14 @@ render() {
                 <Tab.Pane eventKey="2">
                 <Col className="userSearchCol">
                   <h3>Search Appointment</h3>
-                  <Row className="userSearchRow">
+                  <Row className="userSearchRow searchForm">
                     <AppointmentSearchForm
                       onConfirm={this.searchAppointments}
                     />
                   </Row>
                   <Row>
                     {this.state.searchAppointments && (
-                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                      <Button variant="outline-primary" className="centered_btn" onClick={this.toggleSideCol}>Filter</Button>
                     )}
                   </Row>
                   <Row className="userSearchRow results">
@@ -900,22 +900,29 @@ render() {
                 {this.state.creatingAppointment === true &&
                   this.state.patients &&
                   !this.state.selectedPatient && (
-                  <Row>
-                    <Button variant="outline-secondary" className="filterFormBtn" onClick={this.startSublistSearch}>Search</Button>
-                    {this.state.sublistSearch === true && (
-                      <PatientSearchForm
-                        onCancel={this.cancelSublistSearch}
-                        onConfirm={this.submitSublistSearchForm}
-                      />
-                    )}
-                    <PatientList
-                      filter={this.state.filter}
-                      patients={this.state.patients}
-                      authId={this.context.activityId}
-                      onSelect={this.selectPatient}
-                      appointmentPage={true}
-                    />
+                  <Col className="patientSubListCol">
+                  <Row className="patientSubListRow">
+                  <Button variant="outline-success" className="patientSublistSearchBtn" onClick={this.startSublistSearch}>Search</Button>
                   </Row>
+                  <Row className="patientSubListRow">
+                  {this.state.sublistSearch === true && (
+                    <PatientSearchForm
+                      onCancel={this.cancelSublistSearch}
+                      onConfirm={this.submitSublistSearchForm}
+                    />
+                  )}
+                  </Row>
+                  <Row className="patientSubListRow">
+                  <PatientList
+                    filter={this.state.filter}
+                    patients={this.state.patients}
+                    authId={this.context.activityId}
+                    onSelect={this.selectPatient}
+                    appointmentPage={true}
+                  />
+                  </Row>
+
+                  </Col>
                 )}
                 {this.state.creatingAppointment === true &&
                   this.state.selectedPatient && (

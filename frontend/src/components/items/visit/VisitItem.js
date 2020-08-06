@@ -110,7 +110,7 @@ const VisitItem = props => {
             </Row>
           )}
           {deleteState === true && (
-            <Row>
+            <Row className="listItemHiddenRow">
               {props.canDelete === true && (
                 <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.visit)}>Delete</Button>
               )}

@@ -8,12 +8,31 @@
   height: 87vh;
 } */
 .staffPageContainerCol {
-  border: 1px solid purple;
+  /* border: 1px solid purple; */
+  text-align: center;
 
 }
 .specialCol1 {
   padding-top: 2rem;
 }
 .specialCol2 {
-  padding: 0rem 1rem;
+  padding: 0rem 3rem;
+}
+.mainHeading {
+  text-decoration: underline;
+}
+.mainMenu {
+  background-image: linear-gradient(rgba(42,157,143, .6),rgba(233, 196, 106,.6));
+  box-shadow: 3px 7px 3px rgba(20,33,61,.4);
+  padding: 1rem;
+  border-radius: 15px;
+}
+.mainList {
+  /* background-image: linear-gradient(rgba(42,157,143, .6),rgba(233, 196, 106,.6)); */
+  box-shadow: 3px 7px 3px rgba(20,33,61,.4);
+  padding: 1rem;
+  border-radius: 15px;
+}
+.calendarTab {
+  background-color:   rgba(255,255,255,.9)
 }

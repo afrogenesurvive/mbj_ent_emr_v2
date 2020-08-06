@@ -1,3 +1,15 @@
 .detailPageContainerCol {
   padding: 0;
 }
+.subMenu {
+  background-image: linear-gradient(rgba(42,157,143, .6),rgba(233, 196, 106,.6));
+  box-shadow: 3px 7px 3px rgba(20,33,61,.4);
+  padding: .5rem;
+  border-radius: 15px;
+}
+.tabContent {
+    background-image: linear-gradient(rgba(42,157,143, .6),rgba(233, 196, 106,.6));
+    box-shadow: 3px 7px 3px rgba(20,33,61,.4);
+    padding: .5rem;
+    border-radius: 15px;
+}

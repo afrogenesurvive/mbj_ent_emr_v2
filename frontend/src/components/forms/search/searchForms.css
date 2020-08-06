@@ -9,6 +9,8 @@
 }
 .searchFormTopDiv {
   margin: 0 auto;
-  border: 1px solid black;
+  background-image: linear-gradient(rgba(42,157,143, .6),rgba(233, 196, 106,.6));
+  box-shadow: 3px 7px 3px rgba(20,33,61,.4);
   padding: 1rem;
+  border-radius: 15px;
 }

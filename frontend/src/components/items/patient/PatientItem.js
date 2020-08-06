@@ -106,7 +106,7 @@ const PatientItem = (props) => {
             </Row>
           )}
           {deleteState === true && (
-            <Row>
+            <Row className="listItemHiddenRow">
               {props.canDelete && (
                 <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.patient)}>Delete</Button>
               )}
