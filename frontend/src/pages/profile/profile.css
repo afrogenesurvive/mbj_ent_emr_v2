@@ -20,12 +20,13 @@
   text-align: center;
   max-height: 89%;
   overflow: scroll;
+  /* width: 107%; */
 }
 .specialCol1 {
   padding-top: 2rem;
 }
 .specialCol2 {
-  padding-top: 2rem;
+  /* padding-top: 2rem; */
 }
 .loadingGif {
   height: 3rem;

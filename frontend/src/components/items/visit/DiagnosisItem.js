@@ -32,7 +32,7 @@ const DiagnosisItem = props => {
           </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           {state === true && (
-            <Row>
+            <Row className="listItemHiddenRow">
               <Card.Text className="cardText">
                 Title: <span className="bold">{props.diagnosis.title}</span>
               </Card.Text>
@@ -41,6 +41,9 @@ const DiagnosisItem = props => {
               </Card.Text>
               <Card.Text className="cardText">
                 Description: <span className="bold">{props.diagnosis.description}</span>
+              </Card.Text>
+              <Card.Text className="cardText">
+                Attachments:
               </Card.Text>
               <PatientAttachmentList
                 item={props.diagnosis}

@@ -189,8 +189,8 @@ getAllUsers (args) {
       // console.log('...resData...',resData.data.getAllUsers);
       let responseAlert = '...all users retrieval success!...';
       let error = null;
-      if (resData.data.getAllUsers.error) {
-        error = resData.data.getAllUsers.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -247,8 +247,8 @@ submitAddNoteForm = (event) => {
       // console.log('...resData...',resData.data.addAppointmentNotes);
       let responseAlert = '...notes add success!...';
       let error = null;
-      if (resData.data.addAppointmentNotes.error) {
-        error = resData.data.addAppointmentNotes.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -310,8 +310,8 @@ deleteNote = (args) => {
       // console.log('...resData...',resData.data.deleteAppointmentNote);
       let responseAlert = '...note delete success!...';
       let error = null;
-      if (resData.data.deleteAppointmentNote.error) {
-        error = resData.data.deleteAppointmentNote.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -373,8 +373,8 @@ submitAddTagForm = (event) => {
       // console.log('...resData...',resData.data.addAppointmentTags);
       let responseAlert = '...tags add success!...';
       let error = null;
-      if (resData.data.addAppointmentTags.error) {
-        error = resData.data.addAppointmentTags.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -436,8 +436,8 @@ deleteTag = (args) => {
       // console.log('...resData...',resData.data.deleteAppointmentTag);
       let responseAlert = '...tag delete success!...';
       let error = null;
-      if (resData.data.deleteAppointmentTag.error) {
-        error = resData.data.deleteAppointmentTag.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -499,8 +499,8 @@ submitAddUserForm = (event) => {
       // console.log('...resData...',resData.data.addAppointmentConsultant);
       let responseAlert = '...add consultant success!...';
       let error = null;
-      if (resData.data.addAppointmentConsultant.error) {
-        error = resData.data.addAppointmentConsultant.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -555,8 +555,8 @@ deleteConsultant = (args) => {
       // console.log('...resData...',resData.data.deleteAppointmentConsultant);
       let responseAlert = '...delete consultant success!...';
       let error = null;
-      if (resData.data.deleteAppointmentConsultant.error) {
-        error = resData.data.deleteAppointmentConsultant.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -618,8 +618,8 @@ submitUpdateSingleFieldForm = (event) => {
       // console.log('...resData...',resData.data.updateAppointmentSingleField);
       let responseAlert = '...field update success!...';
       let error = null;
-      if (resData.data.updateAppointmentSingleField.error) {
-        error = resData.data.updateAppointmentSingleField.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)

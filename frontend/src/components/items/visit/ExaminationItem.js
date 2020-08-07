@@ -32,7 +32,13 @@ const ExaminationItem = props => {
           </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           {state === true && (
-            <Row>
+            <Row className="listItemHiddenRow">
+              <Card.Text className="cardText">
+                General: <span className="bold">{props.examination.general}</span>
+              </Card.Text>
+              <Card.Text className="cardText">
+                Area: <span className="bold">{props.examination.area}</span>
+              </Card.Text>
               <Card.Text className="cardText">
                 type: <span className="bold">{props.examination.type}</span>
               </Card.Text>
@@ -47,6 +53,9 @@ const ExaminationItem = props => {
               </Card.Text>
               <Card.Text className="cardText">
                 followUp: <span className="bold">{props.examination.followUp.toString()}</span>
+              </Card.Text>
+              <Card.Text className="cardText">
+                Attachments:
               </Card.Text>
               <PatientAttachmentList
                 item={props.examination}

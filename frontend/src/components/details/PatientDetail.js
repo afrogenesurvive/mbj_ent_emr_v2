@@ -4,11 +4,16 @@ import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
+import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import { NavLink } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
 import moment from 'moment';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+// import bootstrapPlugin from '@fullcalendar/bootstrap';
+import '../../calendar.scss'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AuthContext from '../../context/auth-context';
@@ -85,6 +90,8 @@ class PatientDetail extends Component {
     selectedPatient: this.props.patient,
     addAttachmentForm: false,
     addAttachmentArgs: null,
+    calendarAppointments: null,
+    calendarVisits: null,
   };
   static contextType = AuthContext;
 
@@ -106,6 +113,11 @@ componentDidMount () {
       canDelete: true
     })
   }
+  this.parseForCalendar({
+    appointments: this.props.patient.appointments,
+    visits: this.props.patient.visits,
+  })
+
 }
 componentWillUnmount() {
 
@@ -205,8 +217,8 @@ submitAddAddressForm = (event) => {
       // console.log('...resData...',resData.data.addPatientAddress);
       let responseAlert = '...address add success!...';
       let error = null;
-      if (resData.data.addPatientAddress.error) {
-        error = resData.data.addPatientAddress.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -273,8 +285,8 @@ deleteAddress = (args) => {
       // console.log('...resData...',resData.data.deletePatientAddress);
       let responseAlert = '...address delete success!...';
       let error = null;
-      if (resData.data.deletePatientAddress.error) {
-        error = resData.data.deletePatientAddress.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -336,8 +348,8 @@ setAddressPrimary = (args) => {
       // console.log('...resData...',resData.data.setPatientAddressPrimary);
       let responseAlert = '...address set primary success!...';
       let error = null;
-      if (resData.data.setPatientAddressPrimary.error) {
-        error = resData.data.setPatientAddressPrimary.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -404,8 +416,8 @@ submitAddNextOfKinForm = (event) => {
       // console.log('...resData...',resData.data.addPatientNextOfKin);
       let responseAlert = '...next of kin add success!...';
       let error = null;
-      if (resData.data.addPatientNextOfKin.error) {
-        error = resData.data.addPatientNextOfKin.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -469,8 +481,8 @@ deleteNextOfKin = (args) => {
       console.log('...resData...',resData.data.deletePatientNextOfKin);
       let responseAlert = '...next of kin delete success!...';
       let error = null;
-      if (resData.data.deletePatientNextOfKin.error) {
-        error = resData.data.deletePatientNextOfKin.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -539,8 +551,8 @@ submitAddAllergyForm = (event) => {
       // console.log('...resData...',resData.data.addPatientAllergy);
       let responseAlert = '...allergy add success!...';
       let error = null;
-      if (resData.data.addPatientAllergy.error) {
-        error = resData.data.addPatientAllergy.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -603,8 +615,8 @@ deleteAllergy = (args) => {
       // console.log('...resData...',resData.data.deletePatientAllergy);
       let responseAlert = '...allergy delete success!...';
       let error = null;
-      if (resData.data.deletePatientAllergy.error) {
-        error = resData.data.deletePatientAllergy.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -672,8 +684,8 @@ submitAddMedicationForm = (event) => {
       // console.log('...resData...',resData.data.addPatientMedication);
       let responseAlert = '...medication add success!...';
       let error = null;
-      if (resData.data.addPatientMedication.error) {
-        error = resData.data.addPatientMedication.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -736,8 +748,8 @@ deleteMedication = (args) => {
       // console.log('...resData...',resData.data.deletePatientMedication);
       let responseAlert = '...medication delete success!...';
       let error = null;
-      if (resData.data.deletePatientMedication.error) {
-        error = resData.data.deletePatientMedication.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -868,14 +880,14 @@ addAttachment = (event) => {
       let error = null;
 
       if (field === 'allergy') {
-        if (resData.data.addPatientAllergyAttachment.error) {
-          error = resData.data.addPatientAllergyAttachment.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
       if (field === 'medication') {
-        if (resData.data.addPatientMedicationAttachment.error) {
-          error = resData.data.addPatientMedicationAttachment.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
@@ -990,14 +1002,14 @@ deleteAttachment = (args) => {
       let error = null;
 
       if (field === 'allergy') {
-        if (resData.data.deletePatientAllergyAttachment.error) {
-          error = resData.data.deletePatientAllergyAttachment.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
       if (field === 'medication') {
-        if (resData.data.deletePatientMedicationAttachment.error) {
-          error = resData.data.deletePatientMedicationAttachment.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
@@ -1074,8 +1086,8 @@ submitAddImageForm = (event) => {
       // console.log('...resData...',resData.data.addPatientImage);
       let responseAlert = '...image add success!...';
       let error = null;
-      if (resData.data.addPatientImage.error) {
-        error = resData.data.addPatientImage.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1137,8 +1149,8 @@ deleteImage = (args) => {
       // console.log('...resData...',resData.data.deletePatientImage);
       let responseAlert = '...image delete success!...';
       let error = null;
-      if (resData.data.deletePatientImage.error) {
-        error = resData.data.deletePatientImage.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1201,8 +1213,8 @@ submitAddFileForm = (event) => {
       // console.log('...resData...',resData.data.addPatientFile);
       let responseAlert = '...file add success!...';
       let error = null;
-      if (resData.data.addPatientFile.error) {
-        error = resData.data.addPatientFile.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1264,8 +1276,8 @@ deleteFile = (args) => {
       // console.log('...resData...',resData.data.deletePatientFile);
       let responseAlert = '...file delete success!...';
       let error = null;
-      if (resData.data.deletePatientFile.error) {
-        error = resData.data.deletePatientFile.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1324,8 +1336,8 @@ submitAddNoteForm = (event) => {
       // console.log('...resData...',resData.data.addPatientNotes);
       let responseAlert = '...notes add success!...';
       let error = null;
-      if (resData.data.addPatientNotes.error) {
-        error = resData.data.addPatientNotes.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1385,8 +1397,8 @@ deleteNote = (args) => {
       // console.log('...resData...',resData.data.deletePatientNote);
       let responseAlert = '...note delete success!...';
       let error = null;
-      if (resData.data.deletePatientNote.error) {
-        error = resData.data.deletePatientNote.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1444,8 +1456,8 @@ submitAddTagForm = (event) => {
       // console.log('...resData...',resData.data.addPatientTags);
       let responseAlert = '...tags add success!...';
       let error = null;
-      if (resData.data.addPatientTags.error) {
-        error = resData.data.addPatientTags.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1505,8 +1517,8 @@ deleteTag = (args) => {
       // console.log('...resData...',resData.data.deletePatientTag);
       let responseAlert = '...tag delete success!...';
       let error = null;
-      if (resData.data.deletePatientTag.error) {
-        error = resData.data.deletePatientTag.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1566,8 +1578,8 @@ submitUpdateSingleFieldForm = (event) => {
       // console.log('...resData...',resData.data.updatePatientSingleField);
       let responseAlert = '...field update success!...';
       let error = null;
-      if (resData.data.updatePatientSingleField.error) {
-        error = resData.data.updatePatientSingleField.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1662,6 +1674,89 @@ cancelAdd = () => {
   })
 }
 
+parseForCalendar = (args) => {
+  console.log('...parsing patient dates for calendar...');
+
+  let calendarAppointments = args.appointments.map(x => ({
+      title: x.title,
+      date: moment.unix(x.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      props: {
+        _id: x._id,
+        date: x.date,
+        title: x.title,
+        type: x.type,
+        subType: x.subType,
+        time: x.time,
+        location: x.location,
+        description: x.description,
+        important: x.important,
+        field: 'appointments'
+      }
+    }))
+  let calendarVisits = args.visits.map(x => ({
+      title: x.title,
+      date: moment.unix(x.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      props: {
+        _id: x._id,
+        date: x.date,
+        title: x.title,
+        type: x.type,
+        subType: x.subType,
+        time: x.time,
+        field: 'visits'
+      }
+    }))
+    this.setState({
+      calendarAppointments: calendarAppointments,
+      calendarVisits: calendarVisits,
+    })
+}
+
+viewCalendarEvent = (args) => {
+
+  let input = args.event.extendedProps.props;
+  let data;
+
+  if (input.field === 'appointments') {
+    data = {
+      _id: input._id,
+      date: input.date,
+      title: input.title,
+      type: input.type,
+      subType: input.subType,
+      time: input.time,
+      location: input.location,
+      description: input.description,
+      important: input.important,
+    }
+    this.setState({
+      overlay: true,
+      overlayStatus: {type: 'calendarAppointment', data: data, goLink: true}
+    })
+  }
+  if (input.field === 'visits') {
+    data = {
+      _id: input._id,
+      date: input.date,
+      title: input.title,
+      type: input.type,
+      subType: input.subType,
+      time: input.time,
+    }
+    this.setState({
+      overlay: true,
+      overlayStatus: {type: 'calendarVisit', data: data, goLink: true}
+    })
+  }
+
+}
+
+toggleOverlay = () => {
+  this.setState({
+    overlay: false
+  })
+}
+
 render() {
 
   return (
@@ -1670,6 +1765,7 @@ render() {
     {this.state.overlay === true && (
       <LoadingOverlay
         status={this.state.overlayStatus}
+        toggleOverlay={this.toggleOverlay}
       />
     )}
 
@@ -2072,23 +2168,51 @@ render() {
                       <p className="displayPaneTitle">Patient Appointment List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
                     </Row>
-                    <UserAppointmentList
-                      filter={this.state.filter}
-                      appointments={this.props.patient.appointments}
-                      authId={this.context.activityId}
-                    />
+                    <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+                      <Tab eventKey="1" title="list">
+                      <UserAppointmentList
+                        filter={this.state.filter}
+                        appointments={this.props.patient.appointments}
+                        authId={this.context.activityId}
+                      />
+                      </Tab>
+                      <Tab eventKey="2" title="calendar" className="calendarTab">
+                        <h3>Calendar</h3>
+                        <FullCalendar
+                          defaultView="dayGridMonth"
+                          plugins={[dayGridPlugin]}
+                          events={this.state.calendarAppointments}
+                          eventClick={this.viewCalendarEvent}
+                        />
+                      </Tab>
+                    </Tabs>
+
                   </Tab.Pane>
                   <Tab.Pane eventKey="10">
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Patient Visit List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
                     </Row>
+                    <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+                      <Tab eventKey="1" title="list">
                       <VisitList
                         filter={this.state.filter}
                         visits={this.props.patient.visits}
                         authId={this.context.activityId}
                         patientPage={true}
                       />
+                      </Tab>
+                      <Tab eventKey="2" title="calendar" className="calendarTab">
+                        <h3>Calendar</h3>
+                        <FullCalendar
+                          defaultView="dayGridMonth"
+                          plugins={[dayGridPlugin]}
+                          events={this.state.calendarVisits}
+                          eventClick={this.viewCalendarEvent}
+                        />
+                      </Tab>
+                    </Tabs>
+
                   </Tab.Pane>
                   <Tab.Pane eventKey="11">
                     <Row className="displayPaneHeadRow">

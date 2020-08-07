@@ -122,8 +122,8 @@ getAllPatients (args) {
       // console.log('...resData...',resData.data.getAllPatients);
       let responseAlert = '...all patients retrieval success!...';
       let error = null;
-      if (resData.data.getAllPatients.error) {
-        error = resData.data.getAllPatients.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       if (this.state.fromGoLink === true) {
@@ -270,14 +270,14 @@ searchPatients = (event) => {
       let error = null;
 
       if (regex === true) {
-        if (resData.data.getPatientsByFieldRegex.error) {
-          error = resData.data.getPatientsByFieldRegex.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
       if (regex === false) {
-        if (resData.data.getPatientsByField.error) {
-          error = resData.data.getPatientsByField.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
@@ -441,8 +441,8 @@ submitCreateNewPatientForm = (event) => {
       // console.log('...resData...',resData.data.createPatient);
       let responseAlert = '...create patient success!...';
       let error = null;
-      if (resData.data.createPatient.error) {
-        error = resData.data.createPatient.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -576,8 +576,8 @@ deletePatient = (args) => {
       // console.log('...resData...',resData.data.deletePatientById);
       let responseAlert = '...delete patient success!...';
       let error = null;
-      if (resData.data.deletePatientById.error) {
-        error = resData.data.deletePatientById.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)

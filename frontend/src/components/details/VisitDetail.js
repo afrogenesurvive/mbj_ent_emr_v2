@@ -217,8 +217,8 @@ getAllUsers (args) {
       // console.log('...resData...',resData.data.getAllUsers);
       let responseAlert = '...all users retrieval success!...';
       let error = null;
-      if (resData.data.getAllUsers.error) {
-        error = resData.data.getAllUsers.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -281,8 +281,8 @@ submitAddComplaintForm = (event) => {
       // console.log('...resData...',resData.data.addVisitComplaint);
       let responseAlert = '...complaint add success!...';
       let error = null;
-      if (resData.data.addVisitComplaint.error) {
-        error = resData.data.addVisitComplaint.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -350,8 +350,8 @@ deleteComplaint = (args) => {
       // console.log('...resData...',resData.data.deleteVisitComplaint);
       let responseAlert = '...complaint delete success!...';
       let error = null;
-      if (resData.data.deleteVisitComplaint.error) {
-        error = resData.data.deleteVisitComplaint.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -419,8 +419,8 @@ submitAddSurveyForm = (event) => {
       // console.log('...resData...',resData.data.addVisitSurvey);
       let responseAlert = '...survey add success!...';
       let error = null;
-      if (resData.data.addVisitSurvey.error) {
-        error = resData.data.addVisitSurvey.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -486,8 +486,8 @@ deleteSurvey = (args) => {
       // console.log('...resData...',resData.data.deleteVisitSurvey);
       let responseAlert = '...survey delete success!...';
       let error = null;
-      if (resData.data.deleteVisitSurvey.error) {
-        error = resData.data.deleteVisitSurvey.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -555,8 +555,8 @@ submitAddSystematicInquiryForm = (event) => {
       // console.log('...resData...',resData.data.addVisitSysInquiry);
       let responseAlert = '...systematicInquiry add success!...';
       let error = null;
-      if (resData.data.addVisitSysInquiry.error) {
-        error = resData.data.addVisitSysInquiry.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -622,8 +622,8 @@ deleteSystematicInquiry = (args) => {
       // console.log('...resData...',resData.data.deleteVisitSysInquiry);
       let responseAlert = '...sys inquiry delete success!...';
       let error = null;
-      if (resData.data.deleteVisitSysInquiry.error) {
-        error = resData.data.deleteVisitSysInquiry.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -711,8 +711,8 @@ submitAddVitalsForm = (event) => {
       // console.log('...resData...',resData.data.addVisitVitals);
       let responseAlert = '...Vitals add success!...';
       let error = null;
-      if (resData.data.addVisitVitals.error) {
-        error = resData.data.addVisitVitals.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -799,8 +799,8 @@ deleteVitals = (args) => {
       // console.log('...resData...',resData.data.deleteVisitVitals);
       let responseAlert = '...vitals delete success!...';
       let error = null;
-      if (resData.data.deleteVisitVitals.error) {
-        error = resData.data.deleteVisitVitals.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -878,8 +878,8 @@ submitAddExaminationForm = (event) => {
       // console.log('...resData...',resData.data.addVisitExamination);
       let responseAlert = '...Examination add success!...';
       let error = null;
-      if (resData.data.addVisitExamination.error) {
-        error = resData.data.addVisitExamination.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -956,8 +956,8 @@ deleteExamination = (args) => {
       // console.log('...resData...',resData.data.deleteVisitExamination);
       let responseAlert = '...Examination delete success!...';
       let error = null;
-      if (resData.data.deleteVisitExamination.error) {
-        error = resData.data.deleteVisitExamination.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1027,8 +1027,8 @@ submitAddInvestigationForm = (event) => {
       // console.log('...resData...',resData.data.addVisitInvestigation);
       let responseAlert = '...Investigation add success!...';
       let error = null;
-      if (resData.data.addVisitInvestigation.error) {
-        error = resData.data.addVisitInvestigation.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1097,8 +1097,8 @@ deleteInvestigation = (args) => {
       // console.log('...resData...',resData.data.deleteVisitInvestigation);
       let responseAlert = '...Investigation delete success!...';
       let error = null;
-      if (resData.data.deleteVisitInvestigation.error) {
-        error = resData.data.deleteVisitInvestigation.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1168,8 +1168,8 @@ submitAddDiagnosisForm = (event) => {
       // console.log('...resData...',resData.data.addVisitDiagnosis);
       let responseAlert = '...Diagnosis add success!...';
       let error = null;
-      if (resData.data.addVisitDiagnosis.error) {
-        error = resData.data.addVisitDiagnosis.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1238,8 +1238,8 @@ deleteDiagnosis = (args) => {
       // console.log('...resData...',resData.data.deleteVisitDiagnosis);
       let responseAlert = '...Diagnosis delete success!...';
       let error = null;
-      if (resData.data.deleteVisitDiagnosis.error) {
-        error = resData.data.deleteVisitDiagnosis.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1313,8 +1313,8 @@ submitAddTreatmentForm = (event) => {
       // console.log('...resData...',resData.data.addVisitTreatment);
       let responseAlert = '...Treatment add success!...';
       let error = null;
-      if (resData.data.addVisitTreatment.error) {
-        error = resData.data.addVisitTreatment.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1387,8 +1387,8 @@ deleteTreatment = (args) => {
       // console.log('...resData...',resData.data.deleteVisitTreatment);
       let responseAlert = '...Treatment delete success!...';
       let error = null;
-      if (resData.data.deleteVisitTreatment.error) {
-        error = resData.data.deleteVisitTreatment.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1464,8 +1464,8 @@ submitAddBillingForm = (event) => {
       // console.log('...resData...',resData.data.addVisitBilling);
       let responseAlert = '...Billing add success!...';
       let error = null;
-      if (resData.data.addVisitBilling.error) {
-        error = resData.data.addVisitBilling.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1540,8 +1540,8 @@ deleteBilling = (args) => {
       // console.log('...resData...',resData.data.deleteVisitBilling);
       let responseAlert = '...Billing delete success!...';
       let error = null;
-      if (resData.data.deleteVisitBilling.error) {
-        error = resData.data.deleteVisitBilling.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1609,8 +1609,8 @@ submitAddImageForm = (event) => {
       // console.log('...resData...',resData.data.addVisitImage);
       let responseAlert = '...Image add success!...';
       let error = null;
-      if (resData.data.addVisitImage.error) {
-        error = resData.data.addVisitImage.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1677,8 +1677,8 @@ deleteImage = (args) => {
       // console.log('...resData...',resData.data.deleteVisitImage);
       let responseAlert = '...Image delete success!...';
       let error = null;
-      if (resData.data.deleteVisitImage.error) {
-        error = resData.data.deleteVisitImage.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1746,8 +1746,8 @@ submitAddFileForm = (event) => {
       // console.log('...resData...',resData.data.addVisitFile);
       let responseAlert = '...File add success!...';
       let error = null;
-      if (resData.data.addVisitFile.error) {
-        error = resData.data.addVisitFile.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1814,8 +1814,8 @@ deleteFile = (args) => {
       // console.log('...resData...',resData.data.deleteVisitFile);
       let responseAlert = '...File delete success!...';
       let error = null;
-      if (resData.data.deleteVisitFile.error) {
-        error = resData.data.deleteVisitFile.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1946,8 +1946,8 @@ submitAddVigilanceForm = (event) => {
       // console.log('...resData...',resData.data.addVisitVigilance);
       let responseAlert = '...Vigilance add success!...';
       let error = null;
-      if (resData.data.addVisitVigilance.error) {
-        error = resData.data.addVisitVigilance.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -2077,8 +2077,8 @@ deleteVigilance = (args) => {
       // console.log('...resData...',resData.data.deleteVisitVigilance);
       let responseAlert = '...Vigilance delete success!...';
       let error = null;
-      if (resData.data.deleteVisitVigilance.error) {
-        error = resData.data.deleteVisitVigilance.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -2147,8 +2147,8 @@ submitAddUserForm = (event) => {
       // console.log('...resData...',resData.data.addVisitConsultant);
       let responseAlert = '...add consultant success!...';
       let error = null;
-      if (resData.data.addVisitConsultant.error) {
-        error = resData.data.addVisitConsultant.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -2203,8 +2203,8 @@ deleteConsultant = (args) => {
       // console.log('...resData...',resData.data.deleteVisitConsultant);
       let responseAlert = '...delete consultant success!...';
       let error = null;
-      if (resData.data.deleteVisitConsultant.error) {
-        error = resData.data.deleteVisitConsultant.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -2471,50 +2471,50 @@ addAttachment = (event) => {
       let error = null;
 
       if (field === 'complaint') {
-        if (resData.data.addVisitComplaintAttachment.error) {
-          error = resData.data.addVisitComplaintAttachment.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
       if (field === 'survey') {
-        if (resData.data.addVisitSurveyAttachment.error) {
-          error = resData.data.addVisitSurveyAttachment.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
       if (field === 'systematicInquiry') {
-        if (resData.data.addVisitSysInquiryAttachment.error) {
-          error = resData.data.addVisitSysInquiryAttachment.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
       if (field === 'examination') {
-        if (resData.data.addVisitExaminationAttachment.error) {
-          error = resData.data.addVisitExaminationAttachment.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
       if (field === 'investigation') {
-        if (resData.data.addVisitInvestigationAttachment.error) {
-          error = resData.data.addVisitInvestigationAttachment.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
       if (field === 'diagnosis') {
-        if (resData.data.addVisitDiagnosisAttachment.error) {
-          error = resData.data.addVisitDiagnosisAttachment.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
       if (field === 'treatment') {
-        if (resData.data.addVisitTreatmentAttachment.error) {
-          error = resData.data.addVisitTreatmentAttachment.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
       if (field === 'billing') {
-        if (resData.data.addVisitBillingAttachment.error) {
-          error = resData.data.addVisitBillingAttachment.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
@@ -2840,50 +2840,50 @@ deleteAttachment = (args) => {
       let error = null;
 
       if (field === 'complaint') {
-        if (resData.data.deleteVisitComplaintAttachment.error) {
-          error = resData.data.deleteVisitComplaintAttachment.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
       if (field === 'survey') {
-        if (resData.data.deleteVisitSurveyAttachment.error) {
-          error = resData.data.deleteVisitSurveyAttachment.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
       if (field === 'systematicInquiry') {
-        if (resData.data.deleteVisitSysInquiryAttachment.error) {
-          error = resData.data.deleteVisitSysInquiryAttachment.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
       if (field === 'examination') {
-        if (resData.data.deleteVisitExaminationAttachment.error) {
-          error = resData.data.deleteVisitExaminationAttachment.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
       if (field === 'investigation') {
-        if (resData.data.deleteVisitInvestigationAttachment.error) {
-          error = resData.data.deleteVisitInvestigationAttachment.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
       if (field === 'diagnosis') {
-        if (resData.data.deleteVisitDiagnosisAttachment.error) {
-          error = resData.data.deleteVisitDiagnosisAttachment.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
       if (field === 'treatment') {
-        if (resData.data.deleteVisitTreatmentAttachment.error) {
-          error = resData.data.deleteVisitTreatmentAttachment.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
       if (field === 'billing') {
-        if (resData.data.deleteVisitBillingAttachment.error) {
-          error = resData.data.deleteVisitBillingAttachment.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
@@ -3005,8 +3005,8 @@ submitUpdateSingleFieldForm = (event) => {
       // console.log('...resData...',resData.data.updateVisitSingleField);
       let responseAlert = '...field update success!...';
       let error = null;
-      if (resData.data.updateVisitSingleField.error) {
-        error = resData.data.updateVisitSingleField.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)

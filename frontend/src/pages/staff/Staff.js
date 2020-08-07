@@ -117,8 +117,8 @@ getAllUsers (args) {
       console.log('...all users retrieval success!...');
       let responseAlert = '...all users retrieval success!...';
       let error = null;
-      if (resData.data.getAllUsers.error) {
-        error = resData.data.getAllUsers.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       if (this.state.fromGoLink === true) {
@@ -262,14 +262,14 @@ searchUsers = (event) => {
       let error = null;
 
       if (regex === true) {
-        if (resData.data.getUsersByFieldRegex.error) {
-          error = resData.data.getUsersByFieldRegex.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
       if (regex === false) {
-        if (resData.data.getUsersByField.error) {
-          error = resData.data.getUsersByField.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
@@ -413,8 +413,8 @@ deleteUser = (args) => {
       // console.log('...resData...',resData.data.deleteUserById);
       let responseAlert = '...delete user success!...';
       let error = null;
-      if (resData.data.deleteUserById.error) {
-        error = resData.data.deleteUserById.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)

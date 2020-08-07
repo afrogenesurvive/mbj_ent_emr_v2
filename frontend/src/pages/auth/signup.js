@@ -121,8 +121,8 @@ class SignUpPage extends Component {
       console.log('...resData...',resData.data.createUser);
       let responseAlert = '...Signup success!...';
       let error = null;
-      if (resData.data.createUser.error) {
-        error = resData.data.createUser.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       responseAlert = '...verificationCode: '+resData.data.createUser.verification.code+'';

@@ -139,8 +139,8 @@ getAllVisits (args) {
       // console.log('...resData...',resData.data.getAllVisits);
       let responseAlert = '...all visits retrieval success!...';
       let error = null;
-      if (resData.data.getAllVisits.error) {
-        error = resData.data.getAllVisits.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       if (this.state.fromGoLink === true) {
@@ -201,8 +201,8 @@ getAllAppointments (args) {
       // console.log('...resData...',resData.data.getAllAppointments);
       let responseAlert = '...all appointments retrieval success!...';
       let error = null;
-      if (resData.data.getAllAppointments.error) {
-        error = resData.data.getAllAppointments.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -253,8 +253,8 @@ getAllPatients (args) {
       // console.log('...resData...',resData.data.getAllPatients);
       let responseAlert = '...all patients retrieval success!...';
       let error = null;
-      if (resData.data.getAllPatients.error) {
-        error = resData.data.getAllPatients.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -380,14 +380,14 @@ searchVisits = (event) => {
       let error = null;
 
       if (regex === true) {
-        if (resData.data.getVisitsByFieldRegex.error) {
-          error = resData.data.getVisitsByFieldRegex.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
       if (regex === false) {
-        if (resData.data.getVisitsByField.error) {
-          error = resData.data.getVisitsByField.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
@@ -454,6 +454,10 @@ submitCreateNewVisitForm = (event) => {
 
   const tooEarly = moment().format('YYYY-MM-DD') < moment.unix(this.state.selectedAppointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD');
   const tooLate = moment().format('YYYY-MM-DD') > moment.unix(this.state.selectedAppointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD');
+  console.log('appt date:',moment.unix(this.state.selectedAppointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'))
+  console.log('today:',moment().format('YYYY-MM-DD'))
+  console.log('early:',tooEarly)
+  console.log('late:',tooLate)
 
   if (tooEarly === true) {
     console.log('...appointment for this visit is in the future...please wait or create a new appointment...');
@@ -498,8 +502,8 @@ submitCreateNewVisitForm = (event) => {
       console.log('...resData...',resData.data.createVisit);
       let responseAlert = '...create visit success!...';
       let error = null;
-      if (resData.data.createVisit.error) {
-        error = resData.data.createVisit.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -509,6 +513,7 @@ submitCreateNewVisitForm = (event) => {
         creatingVisit: false,
         selectedVisit: resData.data.createVisit,
         newVisit: resData.data.createVisit,
+        tabKey: 'detail',
         activityA: `createAppointment?activityId:${activityId},visitId:${resData.data.createVisit._id}`
       });
       this.logUserActivity({activityId: activityId,token: token});
@@ -639,8 +644,8 @@ deleteVisit = (args) => {
       // console.log('...resData...',resData.data.deleteVisitById);
       let responseAlert = '...delete visit success!...';
       let error = null;
-      if (resData.data.deleteVisitById.error) {
-        error = resData.data.deleteVisitById.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -773,14 +778,14 @@ submitSublistSearchForm = (event) => {
       let error = null;
 
       if (regex === true) {
-        if (resData.data.getAppointmentsByFieldRegex.error) {
-          error = resData.data.getAppointmentsByFieldRegex.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
       if (regex === false) {
-        if (resData.data.getAppointmentsByField.error) {
-          error = resData.data.getAppointmentsByField.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }

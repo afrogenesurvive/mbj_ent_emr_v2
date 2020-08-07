@@ -4,11 +4,16 @@ import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
+import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import { NavLink } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
 import moment from 'moment';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+// import bootstrapPlugin from '@fullcalendar/bootstrap';
+import '../../calendar.scss'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AuthContext from '../../context/auth-context';
@@ -70,6 +75,9 @@ class MyProfilePage extends Component {
       state: null,
       field: null
     },
+    calendarAttendance: null,
+    calendarLeave: null,
+    calendarAppointments: null,
   };
   static contextType = AuthContext;
 
@@ -78,6 +86,7 @@ componentDidMount () {
   if (sessionStorage.getItem('logInfo')) {
     const seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
     this.getThisUser(seshStore);
+
   }
 }
 componentWillUnmount() {
@@ -120,8 +129,8 @@ getThisUser (args) {
       // console.log('...resData...',resData.data.getUserById);
       let responseAlert = '...profile retrieval success!...';
       let error = null;
-      if (resData.data.getUserById.error) {
-        error = resData.data.getUserById.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -136,6 +145,11 @@ getThisUser (args) {
           canDelete: true
         })
       }
+      this.parseForCalendar({
+        attendance: resData.data.getUserById.attendance,
+        leave: resData.data.getUserById.leave,
+        appointments: resData.data.getUserById.appointments,
+      })
       this.logUserActivity(args);
     })
     .catch(err => {
@@ -237,8 +251,8 @@ submitAddAddressForm = (event) => {
       // console.log('...resData...',resData.data.addUserAddress);
       let responseAlert = '...address add success!...';
       let error = null;
-      if (resData.data.addUserAddress.error) {
-        error = resData.data.addUserAddress.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -304,8 +318,8 @@ deleteAddress = (args) => {
       // console.log('...resData...',resData.data.deleteUserAddress);
       let responseAlert = '...address delete success!...';
       let error = null;
-      if (resData.data.deleteUserAddress.error) {
-        error = resData.data.deleteUserAddress.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -366,8 +380,8 @@ setAddressPrimary = (args) => {
       // console.log('...resData...',resData.data.setUserAddressPrimary);
       let responseAlert = '...address set primary success!...';
       let error = null;
-      if (resData.data.setUserAddressPrimary.error) {
-        error = resData.data.setUserAddressPrimary.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -428,8 +442,8 @@ submitAddAttendanceForm = (event) => {
       // console.log('...resData...',resData.data.addUserAttendance);
       let responseAlert = '...attendance add success!...';
       let error = null;
-      if (resData.data.addUserAttendance.error) {
-        error = resData.data.addUserAttendance.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -442,6 +456,11 @@ submitAddAttendanceForm = (event) => {
           field: null
         }
       });
+      this.parseForCalendar({
+        attendance: resData.data.addUserAttendance.attendance,
+        leave: resData.data.addUserAttendance.leave,
+        appointments: resData.data.addUserAttendance.appointments,
+      })
       this.context.activityUser = resData.data.addUserAttendance;
       this.logUserActivity({activityId: activityId,token: token});
     })
@@ -489,8 +508,8 @@ deleteAttendance = (args) => {
       // console.log('...resData...',resData.data.deleteUserAttendance);
       let responseAlert = '...attendance delete success!...';
       let error = null;
-      if (resData.data.deleteUserAttendance.error) {
-        error = resData.data.deleteUserAttendance.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -499,6 +518,11 @@ deleteAttendance = (args) => {
         activityUser: resData.data.deleteUserAttendance,
         activityA: `deleteUserAttendance?activityId:${activityId},userId:${userId}`
       });
+      this.parseForCalendar({
+        attendance: resData.data.deleteUserAttendance.attendance,
+        leave: resData.data.deleteUserAttendance.leave,
+        appointments: resData.data.deleteUserAttendance.appointments,
+      })
       this.context.activityUser = resData.data.deleteUserAttendance;
       this.logUserActivity({activityId: activityId,token: token});
     })
@@ -552,8 +576,8 @@ submitAddLeaveForm = (event) => {
       // console.log('...resData...',resData.data.addUserLeave);
       let responseAlert = '...leave add success!...';
       let error = null;
-      if (resData.data.addUserLeave.error) {
-        error = resData.data.addUserLeave.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -566,6 +590,11 @@ submitAddLeaveForm = (event) => {
           field: null
         }
       });
+      this.parseForCalendar({
+        attendance: resData.data.addUserLeave.attendance,
+        leave: resData.data.addUserLeave.leave,
+        appointments: resData.data.addUserLeave.appointments,
+      })
       this.context.activityUser = resData.data.addUserLeave;
       this.logUserActivity({activityId: activityId,token: token});
     })
@@ -615,8 +644,8 @@ deleteLeave = (args) => {
       // console.log('...resData...',resData.data.deleteUserLeave);
       let responseAlert = '...leave delete success!...';
       let error = null;
-      if (resData.data.deleteUserLeave.error) {
-        error = resData.data.deleteUserLeave.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -625,6 +654,11 @@ deleteLeave = (args) => {
         activityUser: resData.data.deleteUserLeave,
         activityA: `deleteUserLeave?activityId:${activityId},userId:${userId}`
       });
+      this.parseForCalendar({
+        attendance: resData.data.addUserLeave.attendance,
+        leave: resData.data.addUserLeave.leave,
+        appointments: resData.data.addUseLeavce.appointments,
+      })
       this.context.activityUser = resData.data.deleteUserLeave;
       this.logUserActivity({activityId: activityId,token: token});
     })
@@ -677,8 +711,8 @@ submitAddImageForm = (event) => {
       // console.log('...resData...',resData.data.addUserImage);
       let responseAlert = '...image add success!...';
       let error = null;
-      if (resData.data.addUserImage.error) {
-        error = resData.data.addUserImage.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -739,8 +773,8 @@ deleteImage = (args) => {
       // console.log('...resData...',resData.data.deleteUserImage);
       let responseAlert = '...image delete success!...';
       let error = null;
-      if (resData.data.deleteUserImage.error) {
-        error = resData.data.deleteUserImage.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -801,8 +835,8 @@ submitAddFileForm = (event) => {
       // console.log('...resData...',resData.data.addUserFile);
       let responseAlert = '...file add success!...';
       let error = null;
-      if (resData.data.addUserFile.error) {
-        error = resData.data.addUserFile.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -863,8 +897,8 @@ deleteFile = (args) => {
       // console.log('...resData...',resData.data.deleteUserFile);
       let responseAlert = '...file delete success!...';
       let error = null;
-      if (resData.data.deleteUserFile.error) {
-        error = resData.data.deleteUserFile.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -920,8 +954,8 @@ submitAddNoteForm = (event) => {
       // console.log('...resData...',resData.data.addUserNotes);
       let responseAlert = '...notes add success!...';
       let error = null;
-      if (resData.data.addUserNotes.error) {
-        error = resData.data.addUserNotes.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -979,8 +1013,8 @@ deleteNote = (args) => {
       // console.log('...resData...',resData.data.deleteUserNote);
       let responseAlert = '...note delete success!...';
       let error = null;
-      if (resData.data.deleteUserNote.error) {
-        error = resData.data.deleteUserNote.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1039,8 +1073,8 @@ submitUpdateSingleFieldForm = (event) => {
       // console.log('...resData...',resData.data.updateUserSingleField);
       let responseAlert = '...field update success!...';
       let error = null;
-      if (resData.data.updateUserSingleField.error) {
-        error = resData.data.updateUserSingleField.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -1134,6 +1168,111 @@ cancelAdd = () => {
   })
 }
 
+parseForCalendar = (args) => {
+  console.log('...parsing profile dates for calendar...');
+  let calendarAttendance = args.attendance.map(x => ({
+      title: x.status,
+      date: moment.unix(x.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      props: {
+        date: x.date,
+        status: x.status,
+        description: x.description,
+        field: 'attendance'
+      }
+    }))
+  let calendarLeave = args.leave.map(x => ({
+      title: x.type,
+      date: moment.unix(x.startDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      end: moment.unix(x.endDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      props: {
+        date: x.date,
+        type: x.type,
+        startDate: x.startDate,
+        endDate: x.endDate,
+        description: x.description,
+        field: 'leave'
+      }
+    }))
+    this.setState({
+      calendarAttendance: calendarAttendance,
+      calendarLeave: calendarLeave
+    })
+  let calendarAppointments = args.appointments.map(x => ({
+      title: x.title,
+      date: moment.unix(x.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      props: {
+        _id: x._id,
+        date: x.date,
+        title: x.title,
+        type: x.type,
+        subType: x.subType,
+        time: x.time,
+        location: x.location,
+        description: x.description,
+        important: x.important,
+        field: 'appointments'
+      }
+    }))
+    this.setState({
+      calendarAttendance: calendarAttendance,
+      calendarLeave: calendarLeave,
+      calendarAppointments: calendarAppointments,
+    })
+}
+
+viewCalendarEvent = (args) => {
+
+  let input = args.event.extendedProps.props;
+  let data;
+  if (input.field === 'attendance') {
+    data = {
+      date: input.date,
+      status: input.status,
+      description: input.description,
+    }
+    this.setState({
+      overlay: true,
+      overlayStatus: {type: 'calendarAttendance', data: data}
+    })
+  }
+  if (input.field === 'leave') {
+    data = {
+      type: input.type,
+      startDate: input.startDate,
+      endDate: input.endDate,
+      description: input.description,
+    }
+    this.setState({
+      overlay: true,
+      overlayStatus: {type: 'calendarLeave', data: data}
+    })
+  }
+  if (input.field === 'appointments') {
+    data = {
+      _id: input._id,
+      date: input.date,
+      title: input.title,
+      type: input.type,
+      subType: input.subType,
+      time: input.time,
+      location: input.location,
+      description: input.description,
+      important: input.important,
+    }
+    this.setState({
+      overlay: true,
+      overlayStatus: {type: 'calendarAppointment', data: data, goLink: true}
+    })
+  }
+}
+
+toggleOverlay = () => {
+  this.setState({
+    overlay: false
+  })
+}
+
+
 render() {
 
   return (
@@ -1142,6 +1281,7 @@ render() {
     {this.state.overlay === true && (
       <LoadingOverlay
         status={this.state.overlayStatus}
+        toggleOverlay={this.toggleOverlay}
       />
     )}
 
@@ -1373,13 +1513,27 @@ render() {
                         onCancel={this.cancelAdd}
                       />
                   )}
-                  <UserAttendanceList
-                    filter={this.state.filter}
-                    attendance={this.state.activityUser.attendance}
-                    authId={this.state.activityUser._id}
-                    canDelete={this.state.canDelete}
-                    onDelete={this.deleteAttendance}
-                  />
+                  <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+                    <Tab eventKey="1" title="list">
+                    <UserAttendanceList
+                      filter={this.state.filter}
+                      attendance={this.state.activityUser.attendance}
+                      authId={this.state.activityUser._id}
+                      canDelete={this.state.canDelete}
+                      onDelete={this.deleteAttendance}
+                    />
+                    </Tab>
+                    <Tab eventKey="2" title="calendar" className="calendarTab">
+                      <h3>Calendar</h3>
+                      <FullCalendar
+                        defaultView="dayGridMonth"
+                        plugins={[dayGridPlugin]}
+                        events={this.state.calendarAttendance}
+                        eventClick={this.viewCalendarEvent}
+                      />
+                    </Tab>
+                  </Tabs>
+
                 </Tab.Pane>
                 <Tab.Pane eventKey="5">
                   <Row className="displayPaneHeadRow">
@@ -1394,13 +1548,26 @@ render() {
                         onCancel={this.cancelAdd}
                       />
                   )}
-                  <UserLeaveList
-                    filter={this.state.filter}
-                    leave={this.state.activityUser.leave}
-                    authId={this.state.activityUser._id}
-                    canDelete={this.state.canDelete}
-                    onDelete={this.deleteLeave}
-                  />
+                  <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+                    <Tab eventKey="1" title="list">
+                    <UserLeaveList
+                      filter={this.state.filter}
+                      leave={this.state.activityUser.leave}
+                      authId={this.state.activityUser._id}
+                      canDelete={this.state.canDelete}
+                      onDelete={this.deleteLeave}
+                    />
+                    </Tab>
+                    <Tab eventKey="2" title="calendar" className="calendarTab">
+                      <h3>Calendar</h3>
+                      <FullCalendar
+                        defaultView="dayGridMonth"
+                        plugins={[dayGridPlugin]}
+                        events={this.state.calendarLeave}
+                        eventClick={this.viewCalendarEvent}
+                      />
+                    </Tab>
+                  </Tabs>
                 </Tab.Pane>
                 <Tab.Pane eventKey="6">
                   <Row className="displayPaneHeadRow">
@@ -1449,11 +1616,25 @@ render() {
                     <p className="displayPaneTitle">Appointments:</p>
                     <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
                   </Row>
-                  <UserAppointmentList
-                    filter={this.state.filter}
-                    appointments={this.state.activityUser.appointments}
-                    authId={this.state.activityUser._id}
-                  />
+                  <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+                    <Tab eventKey="1" title="list">
+                    <UserAppointmentList
+                      filter={this.state.filter}
+                      appointments={this.state.activityUser.appointments}
+                      authId={this.state.activityUser._id}
+                    />
+                    </Tab>
+                    <Tab eventKey="2" title="calendar" className="calendarTab">
+                      <h3>Calendar</h3>
+                      <FullCalendar
+                        defaultView="dayGridMonth"
+                        plugins={[dayGridPlugin]}
+                        events={this.state.calendarAppointments}
+                        eventClick={this.viewCalendarEvent}
+                      />
+                    </Tab>
+                  </Tabs>
+
                 </Tab.Pane>
                 <Tab.Pane eventKey="9">
                   <Row className="displayPaneHeadRow">

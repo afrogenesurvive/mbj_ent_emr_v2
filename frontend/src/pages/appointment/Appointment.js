@@ -135,8 +135,8 @@ getAllAppointments (args) {
       // console.log('...resData...',resData.data.getAllAppointments);
       let responseAlert = '...all appointments retrieval success!...';
       let error = null;
-      if (resData.data.getAllAppointments.error) {
-        error = resData.data.getAllAppointments.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       if (this.state.fromGoLink === true) {
@@ -197,8 +197,8 @@ getAllPatients (args) {
       // console.log('...resData...',resData.data.getAllPatients);
       let responseAlert = '...all patients retrieval success!...';
       let error = null;
-      if (resData.data.getAllPatients.error) {
-        error = resData.data.getAllPatients.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -329,14 +329,14 @@ searchAppointments = (event) => {
       let error = null;
 
       if (regex === true) {
-        if (resData.data.getAppointmentsByFieldRegex.error) {
-          error = resData.data.getAppointmentsByFieldRegex.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
       if (regex === false) {
-        if (resData.data.getAppointmentsByField.error) {
-          error = resData.data.getAppointmentsByField.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
@@ -450,8 +450,8 @@ submitCreateNewAppointmentForm = (event) => {
       console.log('...resData...',resData.data.createAppointment);
       let responseAlert = '...create appointment success!...';
       let error = null;
-      if (resData.data.createAppointment.error) {
-        error = resData.data.createAppointment.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -461,6 +461,7 @@ submitCreateNewAppointmentForm = (event) => {
         creatingAppointment: false,
         selectedAppointment: resData.data.createAppointment,
         newAppointment: resData.data.createAppointment,
+        tabKey: 'detail',
         activityA: `createAppointment?activityId:${activityId},appointmentId:${resData.data.createAppointment._id}`
       });
       this.logUserActivity({activityId: activityId,token: token});
@@ -591,8 +592,8 @@ deleteAppointment = (args) => {
       // console.log('...resData...',resData.data.deleteAppointmentById);
       let responseAlert = '...delete appointment success!...';
       let error = null;
-      if (resData.data.deleteAppointmentById.error) {
-        error = resData.data.deleteAppointmentById.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
@@ -737,14 +738,14 @@ submitSublistSearchForm = (event) => {
       let error = null;
 
       if (regex === true) {
-        if (resData.data.getPatientsByFieldRegex.error) {
-          error = resData.data.getPatientsByFieldRegex.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }
       if (regex === false) {
-        if (resData.data.getPatientsByField.error) {
-          error = resData.data.getPatientsByField.error;
+        if (resData.data.error) {
+          error = resData.data.error;
           responseAlert = error;
         }
       }

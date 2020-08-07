@@ -28,7 +28,7 @@ const VigilanceItem = (props) => {
           </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           {state === true && (
-            <Row>
+            <Row className="listItemHiddenRow">
               <h3>chronicIllness:</h3>
               <p>Diabetes</p>
               <Card.Text className="cardText">

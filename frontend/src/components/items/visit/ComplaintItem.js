@@ -29,12 +29,18 @@ const ComplaintItem = props => {
           </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           {state === true && (
-            <Row>
+            <Row className="listItemHiddenRow">
+              <Card.Text className="cardText">
+                Title: <span className="bold">{props.complaint.title}</span>
+              </Card.Text>
               <Card.Text className="cardText">
                 Description: <span className="bold">{props.complaint.description}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Anamnesis: <span className="bold">{props.complaint.anamnesis}</span>
+              </Card.Text>
+              <Card.Text className="cardText">
+                Attachments:
               </Card.Text>
               <PatientAttachmentList
                 item={props.complaint}

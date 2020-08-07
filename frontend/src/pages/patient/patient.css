@@ -16,7 +16,8 @@
   padding-top: 2rem;
 }
 .specialCol2 {
-  padding: 0rem 3rem;
+  /* padding: 0rem 3rem; */
+  padding-left: 3rem;
 }
 .mainHeading {
   text-decoration: underline;
