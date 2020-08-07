@@ -68,8 +68,8 @@ class LoginPage extends Component {
       // console.log('...resData...',resData.data.login);
       let responseAlert = '...login success!...';
       let error = null;
-      if (resData.data.error) {
-        error = resData.data.error;
+      if (resData.data.login.error) {
+        error = resData.data.login.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)

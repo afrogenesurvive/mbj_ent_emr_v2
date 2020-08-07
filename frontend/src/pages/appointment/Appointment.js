@@ -319,10 +319,10 @@ searchAppointments = (event) => {
     })
     .then(resData => {
       if (regex === true) {
-        console.log('...resData...',resData.data.getAppointmentsByFieldRegex);
+        // console.log('...resData...',resData.data.getAppointmentsByFieldRegex);
       }
       if (regex === false) {
-        console.log('...resData...',resData.data.getAppointmentsByField);
+        // console.log('...resData...',resData.data.getAppointmentsByField);
       }
 
       let responseAlert = '...appointment search success!...';
@@ -407,6 +407,7 @@ submitCreateNewAppointmentForm = (event) => {
     this.context.setUserAlert("...blank fields!!!...")
     return;
   }
+  console.log('foo',date);
 
   if (date < moment().format('YYYY-MM-DD')) {
     console.log('...ummm no! Please pick a date today or in the future...');
@@ -447,7 +448,7 @@ submitCreateNewAppointmentForm = (event) => {
       return res.json();
     })
     .then(resData => {
-      console.log('...resData...',resData.data.createAppointment);
+      // console.log('...resData...',resData.data.createAppointment);
       let responseAlert = '...create appointment success!...';
       let error = null;
       if (resData.data.error) {

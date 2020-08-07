@@ -454,10 +454,6 @@ submitCreateNewVisitForm = (event) => {
 
   const tooEarly = moment().format('YYYY-MM-DD') < moment.unix(this.state.selectedAppointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD');
   const tooLate = moment().format('YYYY-MM-DD') > moment.unix(this.state.selectedAppointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD');
-  console.log('appt date:',moment.unix(this.state.selectedAppointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'))
-  console.log('today:',moment().format('YYYY-MM-DD'))
-  console.log('early:',tooEarly)
-  console.log('late:',tooLate)
 
   if (tooEarly === true) {
     console.log('...appointment for this visit is in the future...please wait or create a new appointment...');
