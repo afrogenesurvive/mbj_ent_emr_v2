@@ -3101,6 +3101,67 @@ cancelAdd = () => {
   })
 }
 
+completeVisit = () => {
+  console.log('...completing visit...');
+  this.context.setUserAlert('...completing visit...')
+  this.setState({isLoading: true})
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const visitId = this.props.visit._id;
+
+  let requestBody = {
+    query: `
+      mutation {completeVisitById(
+        activityId:"${activityId}",
+        visitId:"${visitId}"
+      )
+        {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
+    `};
+  fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.completeVisitById);
+      let responseAlert = '...visit completed!...';
+      let error = null;
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updateVisit(resData.data.completeVisitById)
+      this.setState({
+        isLoading: false,
+        selectedVisit: resData.data.completeVisitById,
+        activityA: `completeVisitById?activityId:${activityId},visitId:${visitId}`,
+        updateSingleField: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedVisit = resData.data.completeVisitById;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+
+}
+
 render() {
 
   return (
@@ -3339,7 +3400,7 @@ render() {
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Visit Consultant List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
+                      {this.context.role !== 'Staff' && (
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'consultant')}>Add</Button>
                       )}
                     </Row>
@@ -3366,7 +3427,7 @@ render() {
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Visit Complaint List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
+                      {this.context.role !== 'Staff' && (
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'complaint')}>Add</Button>
                       )}
                     </Row>
@@ -3397,7 +3458,7 @@ render() {
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Visit Survey List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
+                      {this.context.role !== 'Staff' && (
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'survey')}>Add</Button>
                       )}
                     </Row>
@@ -3428,7 +3489,7 @@ render() {
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Visit SystematicInquiry List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
+                      {this.context.role !== 'Staff' && (
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'systematicInquiry')}>Add</Button>
                       )}
                     </Row>
@@ -3459,7 +3520,7 @@ render() {
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Visit Vitals List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
+                      {this.context.role !== 'Staff' && (
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'vitals')}>Add</Button>
                       )}
                     </Row>
@@ -3482,7 +3543,7 @@ render() {
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Visit Examination List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
+                      {this.context.role !== 'Staff' && (
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'examination')}>Add</Button>
                       )}
                     </Row>
@@ -3513,7 +3574,7 @@ render() {
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Visit Investigation List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
+                      {this.context.role !== 'Staff' && (
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'investigation')}>Add</Button>
                       )}
                     </Row>
@@ -3544,7 +3605,7 @@ render() {
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Visit Diagnosis List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
+                      {this.context.role !== 'Staff' && (
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'diagnosis')}>Add</Button>
                       )}
                     </Row>
@@ -3575,7 +3636,7 @@ render() {
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Visit Treatment List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
+                      {this.context.role !== 'Staff' && (
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'treatment')}>Add</Button>
                       )}
                     </Row>
@@ -3606,9 +3667,10 @@ render() {
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Visit Billing List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
+
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'billing')}>Add</Button>
-                      )}
+                        <Button variant="outline-primary" size="sm" onClick={this.completeVisit}>Complete Visit</Button>
+
                     </Row>
                     {this.state.adding.state === true &&
                       this.state.adding.field === 'billing' && (
@@ -3637,7 +3699,7 @@ render() {
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Visit Vigilance List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
+                      {this.context.role !== 'Staff' && (
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'vigilance')}>Add</Button>
                       )}
                     </Row>
@@ -3660,7 +3722,7 @@ render() {
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Visit Image List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
+                      {this.context.role !== 'Staff' && (
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
                       )}
                     </Row>
@@ -3683,7 +3745,7 @@ render() {
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Visit File List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
+                      {this.context.role !== 'Staff' && (
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
                       )}
                     </Row>

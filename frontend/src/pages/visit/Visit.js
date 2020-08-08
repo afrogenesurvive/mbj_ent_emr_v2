@@ -872,9 +872,17 @@ render() {
                 <Nav.Item>
                   <Nav.Link eventKey="detail" onClick={this.menuSelect.bind(this, 'detail')}>Details</Nav.Link>
                 </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="new" onClick={this.menuSelect.bind(this, 'new')}>New</Nav.Link>
-                </Nav.Item>
+                {this.context.role === 'Nurse' && (
+                  <Nav.Item>
+                    <Nav.Link eventKey="new" onClick={this.menuSelect.bind(this, 'new')}>New</Nav.Link>
+                  </Nav.Item>
+                )}
+                {this.context.role === 'Doctor' && (
+                  <Nav.Item>
+                    <Nav.Link eventKey="new" onClick={this.menuSelect.bind(this, 'new')}>New</Nav.Link>
+                  </Nav.Item>
+                )}
+
               </Nav>
             )}
             {this.state.sideCol === 'filter' && (

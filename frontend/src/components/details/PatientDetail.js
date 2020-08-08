@@ -2012,9 +2012,9 @@ render() {
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">User Address List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
+
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
-                      )}
+
                     </Row>
                     {this.state.adding.state === true &&
                       this.state.adding.field === 'address' && (
@@ -2036,9 +2036,9 @@ render() {
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Patient Next of Kin List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
+
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'nextOfKin')}>Add</Button>
-                      )}
+
                     </Row>
                     {this.state.adding.state === true &&
                       this.state.adding.field === 'nextOfKin' && (
@@ -2059,9 +2059,9 @@ render() {
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Patient Allergies List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
+
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'allergy')}>Add</Button>
-                      )}
+
                     </Row>
                     {this.state.adding.state === true &&
                       this.state.adding.field === 'allergy' && (
@@ -2090,9 +2090,9 @@ render() {
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Patient Medication List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
+
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'medication')}>Add</Button>
-                      )}
+
                     </Row>
                     {this.state.adding.state === true &&
                       this.state.adding.field === 'medication' && (
@@ -2121,9 +2121,9 @@ render() {
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Patient Image List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
+
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
-                      )}
+
                     </Row>
                     {this.state.adding.state === true &&
                       this.state.adding.field === 'image' && (
@@ -2144,9 +2144,9 @@ render() {
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Patient File List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
+                      
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
-                      )}
+                      
                     </Row>
                     {this.state.adding.state === true &&
                       this.state.adding.field === 'file' && (
@@ -2241,9 +2241,9 @@ render() {
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Patient Tags:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
+
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'tag')}>Add</Button>
-                      )}
+
                     </Row>
                     {this.state.adding.state === true &&
                       this.state.adding.field === 'tag' && (

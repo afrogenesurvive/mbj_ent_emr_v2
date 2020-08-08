@@ -27,6 +27,8 @@ class SignUpPage extends Component {
     activityA: null,
     requestingPasswordReset: false,
     signupStatus: null,
+    invited: false,
+    inviteCodes: ['foo','bar','baz','bat'],
   };
   static contextType = AuthContext;
 
@@ -118,7 +120,7 @@ class SignUpPage extends Component {
       return res.json();
     })
     .then(resData => {
-      console.log('...resData...',resData.data.createUser);
+      // console.log('...resData...',resData.data.createUser);
       let responseAlert = '...Signup success!...';
       let error = null;
       if (resData.data.error) {
@@ -134,6 +136,25 @@ class SignUpPage extends Component {
     });
   };
 
+  submitInviteForm = (event) => {
+    event.preventDefault()
+    console.log('...checking inviteCode...');
+    this.context.setUserAlert('...checking inviteCode...')
+
+    const challenge = event.target.inviteCode.value;
+    const responses = this.state.inviteCodes;
+    if (responses.includes(challenge)) {
+      console.log('...code accecpted proceed to sign up...');
+      this.context.setUserAlert('...code accecpted proceed to sign up...')
+      this.setState({
+        invited: true
+      })
+    } else {
+      console.log('...no match! check you invite code and try again...');
+      this.context.setUserAlert('...no match! check you invite code and try again...')
+    }
+  }
+
 
   render() {
     return (
@@ -145,7 +166,25 @@ class SignUpPage extends Component {
         )}
         <Row className="authPageContainerRow">
           <Col className="authPageContainerCol">
-          {this.state.signupStatus !== 'success' && (
+          {this.state.invited !== true && (
+            <React.Fragment>
+            <Form onSubmit={this.submitInviteForm}>
+              <Form.Row>
+                <Form.Group as={Col} controlId="inviteCode">
+                  <Form.Label>inviteCode</Form.Label>
+                  <Form.Control type="text" placeholder="inviteCode"/>
+                </Form.Group>
+              </Form.Row>
+
+              <Form.Row className="formBtnRow">
+                <Button variant="outline-success" type="submit" className="addFormBtn">Submit</Button>
+              </Form.Row>
+            </Form>
+            </React.Fragment>
+          )}
+
+          {this.state.signupStatus !== 'success' &&
+          this.state.invited === true && (
             <SignupForm
               onConfirm={this.submitSignupForm}
             />
