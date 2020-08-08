@@ -1,14 +1,18 @@
 .alertBox {
   margin: .5rem auto;
-    width: 25rem;
+    width: 20rem;
     max-height: 5rem;
     position: fixed;
     z-index: 10000;
-    bottom: 0rem;
-    right: 1.5rem;
+    bottom: 1rem;
+    left: 1.5rem;
     overflow-x: scroll;
+    box-shadow: 3px 7px 3px rgba(20,33,61,.4)
 }
 
 .alertBoxText {
   color: black;
+}
+.alert {
+  margin: 0;
 }

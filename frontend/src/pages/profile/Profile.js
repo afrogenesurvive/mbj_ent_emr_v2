@@ -1288,7 +1288,7 @@ render() {
     <Container className="profilePageContainer">
       <Row className="profilePageContainerRow headRow">
         <Col md={9} className="profilePageContainerCol">
-          <h1>Profile</h1>
+          <h1 className="profileHeading">Profile</h1>
         </Col>
         <Col md={3} className="profilePageContainerCol">
           {this.state.isLoading ? (

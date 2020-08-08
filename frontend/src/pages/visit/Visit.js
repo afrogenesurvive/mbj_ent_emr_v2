@@ -100,6 +100,13 @@ componentDidMount () {
     this.getAllVisits(seshStore);
     this.getAllAppointments(seshStore);
     // this.getAllPatients(seshStore);
+    if (this.props.selectedVisit) {
+      console.log('...found existing visit selection... loading...');
+      this.setState({
+        showDetails: true,
+        selectedVisit: this.props.selectedVisit
+      })
+    }
   }
 }
 componentWillUnmount() {
@@ -579,7 +586,7 @@ showDetails = (args) => {
     overlay: false,
     tabKey: 'detail'
   })
-  this.context.selectedVisit = args;
+  this.props.selectVisit(args);
 }
 startAdd = (args) => {
   this.setState({

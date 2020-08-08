@@ -96,6 +96,13 @@ componentDidMount () {
       }
     }
     this.getAllAppointments(seshStore);
+    if (this.props.selectedAppointment) {
+      console.log('...found existing Appointment selection... loading...');
+      this.setState({
+        showDetails: true,
+        selectedAppointment: this.props.selectedAppointment
+      })
+    }
   }
 }
 componentWillUnmount() {
@@ -520,14 +527,13 @@ submitFilterForm = (event) => {
 }
 
 showDetails = (args) => {
-  // console.log('bar',args.visits);
   this.setState({
     showDetails: true,
     selectedAppointment: args,
     overlay: false,
     tabKey: 'detail'
   })
-  this.context.selectedAppointment = args;
+  this.props.selectAppointment(args);
 }
 startAdd = (args) => {
   this.setState({

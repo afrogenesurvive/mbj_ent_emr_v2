@@ -33,6 +33,10 @@ class App extends Component {
     passwordResetState: 'incomplete',
     passwordResetMessage: '...',
     userAlert: null,
+    selectedUser: null,
+    selectedPatient: null,
+    selectedAppointment: null,
+    selectedVisit: null,
   };
 
   static contextType = AuthContext;
@@ -170,7 +174,6 @@ class App extends Component {
     this.socket.emit('msg_subscribe', {user: this.context.activityId, room:'msg'+this.context.activityId});
   }
 
-
   passwordReset = (event) => {
     event.preventDefault();
     console.log('...reset password submission...');
@@ -225,6 +228,27 @@ class App extends Component {
   setUserAlert = (args) => {
     // console.log('...setUserAlert...',args);
     this.setState({userAlert: args})
+  }
+
+  selectUser = (args) => {
+    this.setState({
+      selectedUser: args
+    })
+  }
+  selectPatient = (args) => {
+    this.setState({
+      selectedPatient: args
+    })
+  }
+  selectAppointment = (args) => {
+    this.setState({
+      selectedAppointment: args
+    })
+  }
+  selectVisit = (args) => {
+    this.setState({
+      selectedVisit: args
+    })
   }
 
   render() {
@@ -283,21 +307,29 @@ class App extends Component {
               {this.state.sessionStorageAuth && (
                 <Route path="/staff" render={(props) => <StaffPage {...props}
                   title="staff"
+                  selectedUser={this.state.selectedUser}
+                  selectUser={this.selectUser}
                 />}/>
               )}
               {this.state.sessionStorageAuth && (
                 <Route path="/patients" render={(props) => <PatientPage {...props}
                   title="patients"
+                  selectedPatient={this.state.selectedPatient}
+                  selectPatient={this.selectPatient}
                 />}/>
               )}
               {this.state.sessionStorageAuth && (
                 <Route path="/appointments" render={(props) => <AppointmentPage {...props}
                   title="appointments"
+                  selectedAppointment={this.state.selectedAppointment}
+                  selectAppointment={this.selectAppointment}
                 />}/>
               )}
               {this.state.sessionStorageAuth && (
                 <Route path="/visits" render={(props) => <VisitPage {...props}
                   title="visits"
+                  selectedVisit={this.state.selectedVisit}
+                  selectVisit={this.selectVisit}
                 />}/>
               )}
 

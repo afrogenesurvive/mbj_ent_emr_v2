@@ -82,6 +82,13 @@ componentDidMount () {
       }
     }
     this.getAllPatients(seshStore);
+    if (this.props.selectedPatient) {
+      console.log('...found existing Patient selection... loading...');
+      this.setState({
+        showDetails: true,
+        selectedPatient: this.props.selectedPatient
+      })
+    }
   }
 }
 componentWillUnmount() {
@@ -515,7 +522,7 @@ showDetails = (args) => {
     selectedPatient: args,
     tabKey: 'detail'
   })
-  this.context.selectedPatient = args;
+  this.props.selectPatient(args);
 }
 startAdd = (args) => {
   this.setState({

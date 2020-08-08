@@ -77,6 +77,13 @@ componentDidMount () {
       }
     }
     this.getAllUsers(seshStore);
+    if (this.props.selectedUser) {
+      console.log('...found existing user selection... loading...');
+      this.setState({
+        showDetails: true,
+        selectedUser: this.props.selectedUser
+      })
+    }
   }
 }
 componentWillUnmount() {
@@ -346,13 +353,12 @@ submitFilterForm = (event) => {
 }
 
 showDetails = (args) => {
-  // console.log('bar',args.contact);
   this.setState({
     showDetails: true,
     selectedUser: args,
     tabKey: 'detail'
   })
-  this.context.selectedUser = args;
+  this.props.selectUser(args);
 }
 startAdd = (args) => {
   this.setState({

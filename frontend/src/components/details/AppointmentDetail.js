@@ -472,6 +472,13 @@ submitAddUserForm = (event) => {
   const consultantId = event.target.user.value;
   const appointmentId = this.props.appointment._id;
 
+  const userRole = this.state.users.filter(x => x._id === consultantId)[0].role;
+  if (userRole !== 'Doctor' && userRole !== 'Nurse') {
+    console.log('...please choose a Doctor or Nurse to add please...');
+    this.context.setUserAlert('...please choose a Doctor or Nurse to add please...')
+    return
+  }
+
   let requestBody = {
     query: `
       mutation {addAppointmentConsultant(

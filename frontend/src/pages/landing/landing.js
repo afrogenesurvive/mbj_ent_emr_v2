@@ -47,12 +47,16 @@ componentDidMount () {
       </Col>
       <Col className="landingPageCol">
 
-          {this.state.isGuest === true && (
-            <NavLink to="/login">Login</NavLink>
-          )}
-          {this.state.isGuest === true && (
-            <NavLink to="/signup">Signup</NavLink>
-          )}
+          {
+            // this.state.isGuest === true && (
+            //   <NavLink to="/login">Login</NavLink>
+            // )
+          }
+          {
+            // this.state.isGuest === true && (
+            //   <NavLink to="/signup">Signup</NavLink>
+            // )
+          }
 
       </Col>
       </Row>

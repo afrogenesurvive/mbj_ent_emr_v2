@@ -6,6 +6,10 @@
 }
 .profilePageContainerCol {
   /* border: 1px solid purple; */
+  text-align: center;
+}
+.profileHeading {
+  text-decoration: underline;
 }
 .headRow {
   /* border: 1px solid blue; */
