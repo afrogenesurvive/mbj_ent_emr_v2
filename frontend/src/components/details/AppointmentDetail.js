@@ -893,9 +893,9 @@ render() {
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Appointment Consultant List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
+
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'consultant')}>Add</Button>
-                      )}
+
                     </Row>
                     {this.state.adding.state === true &&
                       this.state.adding.field === 'consultant' &&
@@ -920,9 +920,9 @@ render() {
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Appointment Note List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
+
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
-                      )}
+
                     </Row>
                     {this.state.adding.state === true &&
                       this.state.adding.field === 'note' && (
@@ -943,9 +943,9 @@ render() {
                     <Row className="displayPaneHeadRow">
                       <p className="displayPaneTitle">Appointment Tag List:</p>
                       <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role === 'Admin' && (
+
                         <Button variant="outline-success" onClick={this.startAdd.bind(this, 'tag')}>Add</Button>
-                      )}
+
                     </Row>
                     {this.state.adding.state === true &&
                       this.state.adding.field === 'tag' && (
