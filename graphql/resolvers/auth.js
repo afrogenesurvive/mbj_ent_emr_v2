@@ -19,7 +19,7 @@ module.exports = {
         error: 'User does not exist!'
       }
     }
-    
+
     const isEqual = await bcrypt.compare(password, user.password);
     if (!isEqual) {
       return{
@@ -60,5 +60,27 @@ module.exports = {
       email: userLogout.contact.email ,
       name: userLogout.name,
     };
-  }
+  },
+  verifyInvitation: async (args) => {
+    console.log("Resolver: verifyInvitation...");
+    try {
+      const challenge = args.challenge;
+      let result;
+      const responses = ['foo','bar','baz','bat','beep']
+
+      if (responses.includes(challenge)) {
+        console.log('...code accecpted proceed to sign up...');
+        result = 'matched';
+      } else {
+        console.log('...no match! check you invite code and try again...');
+        result = 'noMatch'
+
+      }
+
+      return result;
+
+    } catch (err) {
+      throw err;
+    }
+  },
 };

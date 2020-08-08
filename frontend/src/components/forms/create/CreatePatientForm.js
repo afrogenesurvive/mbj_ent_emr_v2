@@ -4,9 +4,10 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import './createForms.css';
+import moment from 'moment';
 
 const CreatePatientForm = (props) => {
-
+  const today = moment().format('YYYY-MM-DD')
 return (
 <div className="loginFormTopDiv">
   <Form onSubmit={props.onConfirm}>
@@ -84,7 +85,7 @@ return (
     <Form.Row>
       <Form.Group as={Col} controlId="addressNumber">
         <Form.Label>addressNumber</Form.Label>
-        <Form.Control type="number" placeholder=""/>
+        <Form.Control type="number" placeholder={1}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="addressStreet">
@@ -138,8 +139,8 @@ return (
 
     <Form.Row>
       <Form.Group as={Col} controlId="referralDate">
-        <Form.Label>referralDate</Form.Label>
-        <Form.Control type="date" placeholder="YYYY-MM-DD"/>
+        <Form.Label>referralDate: YYYY-MM-DD</Form.Label>
+        <Form.Control type="date" placeholder={today}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="referralReason">
@@ -221,7 +222,7 @@ return (
       </Form.Group>
       <Form.Group as={Col} controlId="insuranceExpiryDate">
         <Form.Label>insuranceExpiryDate</Form.Label>
-        <Form.Control type="date" placeholder="insuranceExpiryDate"/>
+        <Form.Control type="date" placeholder={today}/>
       </Form.Group>
     </Form.Row>
 

@@ -50,6 +50,11 @@ const AppointmentItem = (props) => {
               </li>
               <li>
               <Card.Text className="cardText">
+                Patient: <span className="bold">{props.appointment.patient.name}</span>
+              </Card.Text>
+              </li>
+              <li>
+              <Card.Text className="cardText">
                 checkinTime: <span className="bold">{props.appointment.checkinTime}</span>
               </Card.Text>
               </li>

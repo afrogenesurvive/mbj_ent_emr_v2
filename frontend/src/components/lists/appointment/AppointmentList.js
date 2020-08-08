@@ -72,6 +72,7 @@ const AppointmentList = props => {
         onDelete={props.onDelete}
         showDetails={props.showDetails}
         visitPage={props.visitPage}
+        homePage={props.homePage}
         onSelect={props.onSelect}
       />
     );

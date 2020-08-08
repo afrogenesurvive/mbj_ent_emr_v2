@@ -39,13 +39,8 @@ componentDidMount () {
       <Col className="landingPageCol">
         <h1> Welcome to MBJ ENT EMR</h1>
       </Col>
-      <Col className="landingPageCol">
+      </Row>
 
-      </Col>
-      <Col className="landingPageCol">
-        <p>.</p>
-      </Col>
-      <Col className="landingPageCol">
 
           {
             // this.state.isGuest === true && (
@@ -58,8 +53,6 @@ componentDidMount () {
             // )
           }
 
-      </Col>
-      </Row>
       </Container>
 
       </React.Fragment>

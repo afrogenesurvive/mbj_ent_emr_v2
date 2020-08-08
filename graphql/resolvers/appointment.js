@@ -6,6 +6,7 @@ const Patient = require('../../models/patient');
 const Appointment = require('../../models/appointment');
 const Visit = require('../../models/visit');
 const Reminder = require('../../models/reminder');
+const Queue = require('../../models/queue');
 const util = require('util');
 const mongoose = require('mongoose');
 const moment = require('moment');
@@ -167,6 +168,54 @@ module.exports = {
       .populate('patient');
       return appointments.map(appointment => {
         return transformAppointment(appointment);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getAppointmentsToday: async (args, req) => {
+    console.log("Resolver: getAppointmentsToday...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      let today = moment().format('YYYY-MM-DD')
+      // console.log(query);
+      const appointments = await Appointment.find({
+        date: today
+      })
+      .sort({time: 1})
+      .populate('consultants')
+      .populate('visit')
+      .populate('creator')
+      .populate('patient');
+      return appointments.map(appointment => {
+        return transformAppointment(appointment);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getAppointmentsImportantNextWeek: async (args, req) => {
+    console.log("Resolver: getAppointmentsImportantNextWeek...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      let today = moment().format('YYYY-MM-DD')
+      let nextWeek = moment(today).add(5, 'days').format('YYYY-MM-DD')
+      // console.log(query);
+      const patients = await Appointment.find({
+        important: true,
+        date: { $gte: today, $lte: nextWeek }
+      })
+      .populate('consultants')
+      .populate('visit')
+      .populate('creator')
+      .populate('patient');
+
+      return patients.map(patient => {
+        return transformAppointment(patient);
       });
     } catch (err) {
       throw err;
@@ -560,12 +609,11 @@ module.exports = {
         throw new Error('...an appointment w/ this date & title exists already...check your info and try again...')
       }
       // console.log('1:',moment(args.appointmentInput.date));
-      const date   = moment(args.appointmentInput.date);
       const appointment = new Appointment({
         title: args.appointmentInput.title,
         type: args.appointmentInput.type,
         subType: args.appointmentInput.subType,
-        date: date,
+        date: args.appointmentInput.date,
         time: args.appointmentInput.time,
         checkinTime:0,
         seenTime: 0,

@@ -6,6 +6,7 @@ const Patient = require('../../models/patient');
 const Appointment = require('../../models/appointment');
 const Visit = require('../../models/visit');
 const Reminder = require('../../models/reminder');
+const Queue = require('../../models/queue');
 const util = require('util');
 const mongoose = require('mongoose');
 const moment = require('moment');

@@ -346,6 +346,7 @@ submitCreateNewPatientForm = (event) => {
   const contactPhone = event.target.contactPhone.value;
   const contactPhone2 = event.target.contactPhone2.value;
   const addressNumber = event.target.addressNumber.value;
+
   const addressStreet = event.target.addressStreet.value;
   const addressTown = event.target.addressTown.value;
   const addressCity = event.target.addressCity.value;
@@ -384,6 +385,7 @@ submitCreateNewPatientForm = (event) => {
       contactPhone2.trim().length === 0
     ) {
     this.context.setUserAlert("...blank fields!!!...")
+    this.setState({isLoading: false})
     return;
   }
 

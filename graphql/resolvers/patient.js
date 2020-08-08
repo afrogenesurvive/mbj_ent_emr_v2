@@ -6,6 +6,7 @@ const Patient = require('../../models/patient');
 const Appointment = require('../../models/appointment');
 const Visit = require('../../models/visit');
 const Reminder = require('../../models/reminder');
+const Queue = require('../../models/queue');
 const util = require('util');
 const mongoose = require('mongoose');
 const moment = require('moment');
@@ -137,6 +138,26 @@ module.exports = {
       .populate('appointments')
       .populate('visits')
       .populate('reminders');
+      return patients.map(patient => {
+        return transformPatient(patient);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getRecentPatients: async (args, req) => {
+    console.log("Resolver: getRecentPatients...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      let resultCount = args.amount;
+      let patients = await Patient.find({})
+      .sort({'registration.date': -1})
+      .populate('appointments')
+      .populate('visits')
+      .populate('reminders');
+      patients = patients.slice(0,resultCount)
       return patients.map(patient => {
         return transformPatient(patient);
       });

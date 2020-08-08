@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
+import {Link} from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
@@ -40,12 +41,24 @@ const AppointmentItem = (props) => {
           <Card.Text className="cardText">
             Title: <span className="bold">{props.appointment.title}</span>
           </Card.Text>
-          <Card.Text className="cardText">
-            Type: <span className="bold">{props.appointment.type}</span>
-          </Card.Text>
-          <Card.Text className="cardText">
-            Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
-          </Card.Text>
+          {!props.homePage && (
+            <Card.Text className="cardText">
+              Type: <span className="bold">{props.appointment.type}</span>
+            </Card.Text>
+          )}
+          {!props.homePage && (
+            <Card.Text className="cardText">
+              Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
+            </Card.Text>
+          )}
+          {props.homePage && (
+
+            <Card.Text className="cardText">
+              Patient: <span className="bold">{props.appointment.patient.name}</span>
+            </Card.Text>
+            
+          )}
+
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
 
           {props.canDelete && (
@@ -78,6 +91,11 @@ const AppointmentItem = (props) => {
               <li>
               <Card.Text className="cardText">
                 time: <span className="bold">{props.appointment.time}</span>
+              </Card.Text>
+              </li>
+              <li>
+              <Card.Text className="cardText">
+                Patient: <span className="bold">{props.appointment.patient.name}</span>
               </Card.Text>
               </li>
               <li>
@@ -115,7 +133,8 @@ const AppointmentItem = (props) => {
                 important: <span className="bold">{props.appointment.important.toString()}</span>
               </Card.Text>
               </li>
-              {props.visitPage !== true && (
+              {props.visitPage !== true &&
+                props.showDetails && (
                 <li>
                 <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.appointment)}>Details</Button>
                 </li>
@@ -125,6 +144,16 @@ const AppointmentItem = (props) => {
                 <Button variant="outline-primary" onClick={props.onSelect.bind(this, props.appointment)}>Select</Button>
                 </li>
               )}
+              {props.homePage && (
+                <Link
+                  to={{
+                    pathname: "/appointments",
+                    state: {appointment: props.appointment._id}
+                  }}
+                >Go!
+                </Link>
+              )}
+
             </ul>
             </Row>
           )}

@@ -4,6 +4,7 @@ const Patient = require('../../models/patient');
 const Appointment = require('../../models/appointment');
 const Visit = require('../../models/visit');
 const Reminder = require('../../models/reminder');
+const Queue = require('../../models/queue');
 const { dateToString } = require('../../helpers/date');
 
 const userLoader = new DataLoader(userIds => {
@@ -20,6 +21,9 @@ const visitLoader = new DataLoader(visitIds => {
 });
 const reminderLoader = new DataLoader(reminderIds => {
   return reminders(reminderIds);
+});
+const queueLoader = new DataLoader(queueIds => {
+  return queues(queueIds);
 });
 
 
@@ -98,6 +102,21 @@ const reminders = async reminderIds => {
     throw err;
   }
 };
+const queues = async queueIds => {
+  try {
+    const queues = await Queue.find({ _id: { $in: queueIds } });
+    queues.sort((a, b) => {
+      return (
+        queueIds.indexOf(a._id.toString()) - queueIds.indexOf(b._id.toString())
+      );
+    });
+    return queues.map(queue => {
+      return transformQueue(queue);
+    });
+  } catch (err) {
+    throw err;
+  }
+};
 
 
 const singleUser = async userId => {
@@ -136,6 +155,14 @@ const singleReminder = async reminderId => {
   try {
     const reminder = await reminderLoader.load(reminderId.toString());
     return reminder;
+  } catch (err) {
+    throw err;
+  }
+};
+const singleQueue = async queueId => {
+  try {
+    const queue = await queueLoader.load(queueId.toString());
+    return queue;
   } catch (err) {
     throw err;
   }
@@ -180,6 +207,13 @@ const transformReminder = reminder => {
     sendTime: reminder.sendTime,
   };
 };
+const transformQueue = queue => {
+  return {
+    ...queue._doc,
+    _id: queue.id,
+    date: queue.date,
+  };
+};
 
 
 
@@ -188,3 +222,4 @@ exports.transformPatient = transformPatient;
 exports.transformAppointment = transformAppointment;
 exports.transformVisit = transformVisit;
 exports.transformReminder = transformReminder;
+exports.transformQueue = transformQueue;

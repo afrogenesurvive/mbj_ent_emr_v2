@@ -6,6 +6,7 @@ const Patient = require('../../models/patient');
 const Appointment = require('../../models/appointment');
 const Visit = require('../../models/visit');
 const Reminder = require('../../models/reminder');
+const Queue = require('../../models/queue');
 const util = require('util');
 const mongoose = require('mongoose');
 const moment = require('moment');
@@ -1864,6 +1865,38 @@ module.exports = {
       throw err;
     }
   },
+  completeVisitById: async (args, req) => {
+    console.log("Resolver: completeVisitById...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const preVisit = await Visit.findById(
+          {_id:args.visitId}
+        )
+        .populate('appointment');
+        const appointment = preVisit.appointment;
+        const updateAppointment = await Appointment.findOneAndUpdate(
+          {_id: appointment._id},
+          {inProgress: false},
+          {new: true, useFindAndModify: false}
+        )
+        const visit = await Visit.findById(
+          {_id:args.visitId}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   deleteVisitById: async (args, req) => {
     console.log("Resolver: deleteVisitById...");
     if (!req.isAuth) {
@@ -1893,17 +1926,17 @@ module.exports = {
       const consultants = appointment.consultants;
       const patient = appointment.patient;
       // console.log('appointment',appointment);
+      // console.log('foo', patient);
       const today = moment();
       const dateTime = moment(appointment.date).format('YYYY-MM-DD')+'T'+appointment.time+'';
-      console.log('x',appointment.date,appointment.time,dateTime);
-      console.log('y',moment(),moment(dateTime),moment(appointment.date).add(1,'d'));
-      console.log('z',moment().format('YYYY-MM-DD'),moment(appointment.date).format('YYYY-MM-DD'));
-      // console.log('too late', moment().format('YYYY-MM-DD') > moment(appointment.date).add(1,'d').format('YYYY-MM-DD'));
-      // console.log('too early', moment().format('YYYY-MM-DD') < moment(appointment.date).add(1,'d').format('YYYY-MM-DD'));
-      // console.log('on time', moment().format('YYYY-MM-DD') === moment(appointment.date).add(1,'d').format('YYYY-MM-DD'));
-      const tooEarly = moment().format('YYYY-MM-DD') < moment(appointment.date).format('YYYY-MM-DD');
-      const tooLate = moment().format('YYYY-MM-DD') > moment(appointment.date).format('YYYY-MM-DD');
-      const onSchedule = moment().format('YYYY-MM-DD') === moment(appointment.date).add(1,'d').format('YYYY-MM-DD');
+      console.log('a',moment(appointment.date).add(1,'days').format('YYYY-MM-DD'));
+      console.log('c',moment().format('YYYY-MM-DD'));
+      console.log('d...early',moment().format('YYYY-MM-DD') < moment(appointment.date).add(1,'days').format('YYYY-MM-DD'));
+      console.log('e...late',moment().format('YYYY-MM-DD') > moment(appointment.date).add(1,'days').format('YYYY-MM-DD'));
+      console.log('f...ontime',moment().format('YYYY-MM-DD') === moment(appointment.date).add(1,'days').format('YYYY-MM-DD'));
+      const tooEarly = moment().format('YYYY-MM-DD') < moment(appointment.date).add(1,'days').format('YYYY-MM-DD');
+      const tooLate = moment().format('YYYY-MM-DD') > moment(appointment.date).add(1,'days').format('YYYY-MM-DD');
+      const onSchedule = moment().format('YYYY-MM-DD') === moment(appointment.date).add(1,'days').format('YYYY-MM-DD');
 
       if (tooEarly === true) {
         console.log('...appointment for this visit is in the future...please wait or create a new appointment...');
@@ -1948,7 +1981,7 @@ module.exports = {
         images: [],
         files: []
       });
-      // console.log('visit', visit);
+      console.log('visit', visit);
 
       const result = await visit.save();
       const updatePatient = await Patient.findOneAndUpdate(
@@ -1958,7 +1991,11 @@ module.exports = {
       )
       const updateAppointment = await Appointment.findOneAndUpdate(
         {_id: appointment},
-        {visit: result},
+        {
+          visit: result,
+          attended: true,
+          inProgress: true
+        },
         {new: true, useFindAndModify: false}
       )
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
+import {Link} from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
@@ -97,11 +98,22 @@ const PatientItem = (props) => {
                 <Button variant="outline-primary" onClick={props.onSelect.bind(this, props.patient)}>Select</Button>
                 </li>
               )}
-              {props.appointmentPage !== true && (
+              {props.appointmentPage !== true &&
+                props.showDetails && (
                 <li>
                 <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.patient)}>Details</Button>
                 </li>
               )}
+              {props.homePage && (
+                <Link
+                  to={{
+                    pathname: "/patients",
+                    state: {patient: props.patient._id}
+                  }}
+                >Go!
+                </Link>
+              )}
+
             </ul>
             </Row>
           )}

@@ -625,6 +625,26 @@ module.exports = buildSchema(`
     deliverySent: Boolean
   }
 
+  type Queue {
+    _id: ID!
+    date: String
+    slot: [QueueSlot]
+    creator: User
+  }
+  type QueueSlot {
+    number: Int
+    time: String
+    patient: Patient
+    consultant: User
+    seen: Boolean
+  }
+  input QueueInput {
+    date: String
+    queueSlotNumber: Int
+    queueSlotTime: String
+    queueSlotSeen: Boolean
+  }
+
 
   type Contact {
     phone: String
@@ -677,6 +697,8 @@ module.exports = buildSchema(`
 
     getPocketVars(activityId: ID!): String
 
+    verifyInvitation(challenge: String!): String
+
     login(email: String!, password: String!): AuthData!
     logout( activityId: ID!): User!
     getThisUser(activityId: ID!): User
@@ -693,6 +715,7 @@ module.exports = buildSchema(`
     getPatientsByFieldRegex(activityId: ID!, field: String!, query: String!): [Patient]
     getPatientByVisits(activityId: ID!, visitIds: String!): Patient
     getPatientsByTags(activityId: ID!, patientInput: PatientInput!): [Patient]
+    getRecentPatients(activityId: ID!, amount: Int!): [Patient]
 
     getAllAppointments(activityId: ID!): [Appointment]
     getAppointmentById(activityId: ID!, appointmentId: ID!): Appointment
@@ -702,6 +725,8 @@ module.exports = buildSchema(`
     getAppointmentsByPatient(activityId: ID!, patientId: ID!): [Appointment]
     getAppointmentsByConsultants(activityId: ID!, consultantIds: String!): [Appointment]
     getAppointmentsByTags(activityId: ID!, appointmentInput:AppointmentInput!): [Appointment]
+    getAppointmentsToday(activityId: ID!): [Appointment]
+    getAppointmentsImportantNextWeek(activityId: ID!): [Appointment]
 
     getAllVisits(activityId: ID!): [Visit]
     getVisitById(activityId: ID!, visitId: ID!): Visit
@@ -717,6 +742,10 @@ module.exports = buildSchema(`
     getRemindersByAppointment(activityId: ID!, appointmentId: ID!): [Reminder]
     getRemindersByRecipientsStaff(activityId: ID!, staffIds: String!): [Reminder]
     getRemindersByRecipientsPatient(activityId: ID!, patientIds: String!): [Reminder]
+
+    getAllQueues(activityId: ID!): [Queue]
+    getQueueById(activityId: ID!, queueId: ID!): Queue
+
 
   }
 
@@ -825,6 +854,7 @@ module.exports = buildSchema(`
     addVisitVigilance(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitImage(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitFile(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    completeVisitById(activityId: ID!, visitId: ID!): Visit
 
     deleteVisitById(activityId: ID!, visitId: ID!): Visit
     deleteVisitConsultant(activityId: ID!, visitId: ID!, consultantId: ID!): Visit

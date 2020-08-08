@@ -28,7 +28,6 @@ class SignUpPage extends Component {
     requestingPasswordReset: false,
     signupStatus: null,
     invited: false,
-    inviteCodes: ['foo','bar','baz','bat'],
   };
   static contextType = AuthContext;
 
@@ -142,17 +141,40 @@ class SignUpPage extends Component {
     this.context.setUserAlert('...checking inviteCode...')
 
     const challenge = event.target.inviteCode.value;
-    const responses = this.state.inviteCodes;
-    if (responses.includes(challenge)) {
-      console.log('...code accecpted proceed to sign up...');
-      this.context.setUserAlert('...code accecpted proceed to sign up...')
-      this.setState({
-        invited: true
-      })
-    } else {
-      console.log('...no match! check you invite code and try again...');
-      this.context.setUserAlert('...no match! check you invite code and try again...')
-    }
+
+    let requestBody = {
+        query: `
+            query {verifyInvitation(challenge:"${challenge}")}
+          `};
+    fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data);
+      const result = resData.data.verifyInvitation;
+      if (result === 'matched') {
+        this.setState({invited: true})
+        this.context.setUserAlert('...invite code accepted...');
+      } else {
+        this.context.setUserAlert('...invite code rejected. Check & try again...');
+      }
+
+    })
+    .catch(err => {
+      this.context.setUserAlert(err);
+    });
+
+
   }
 
 

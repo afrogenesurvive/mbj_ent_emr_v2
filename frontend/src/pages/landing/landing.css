@@ -1,4 +1,18 @@
 .landingPageContainer {
-  margin-top: 5rem;
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+  /* border: 1px solid red; */
+}
+.landingPageRow {
+
+}
+.landingPageCol {
+  text-align: center;
   border: 1px solid red;
+  padding: 1rem;
+  height: 50vh;
+  overflow: scroll;
+}
+.landingPageTopCol {
+  text-align: center;
 }
