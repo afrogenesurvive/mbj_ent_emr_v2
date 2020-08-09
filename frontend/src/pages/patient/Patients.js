@@ -345,8 +345,10 @@ submitCreateNewPatientForm = (event) => {
   const contactEmail = event.target.contactEmail.value;
   const contactPhone = event.target.contactPhone.value;
   const contactPhone2 = event.target.contactPhone2.value;
-  const addressNumber = event.target.addressNumber.value;
-
+  let addressNumber = event.target.addressNumber.value;
+  if (addressNumber === '') {
+    addressNumber = 0;
+  }
   const addressStreet = event.target.addressStreet.value;
   const addressTown = event.target.addressTown.value;
   const addressCity = event.target.addressCity.value;
@@ -381,8 +383,7 @@ submitCreateNewPatientForm = (event) => {
       role.trim().length === 0 ||
       gender.trim().length === 0 ||
       contactEmail.trim().length === 0 ||
-      contactPhone.trim().length === 0 ||
-      contactPhone2.trim().length === 0
+      contactPhone.trim().length === 0
     ) {
     this.context.setUserAlert("...blank fields!!!...")
     this.setState({isLoading: false})
@@ -459,6 +460,7 @@ submitCreateNewPatientForm = (event) => {
         isLoading: false,
         showDetails: true,
         creatingPatient: false,
+        tabKey: 'detail',
         selectedPatient: resData.data.createPatient,
         newPatient: resData.data.createPatient,
         activityA: `createPatient?activityId:${activityId},patientId:${resData.data.createPatient._id}`
@@ -548,6 +550,7 @@ updatePatient = (args) => {
   this.setState({
     selectedPatient: args
   })
+  this.props.selectPatient(args)
 }
 
 deletePatient = (args) => {

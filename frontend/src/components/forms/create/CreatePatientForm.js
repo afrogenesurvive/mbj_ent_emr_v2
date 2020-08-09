@@ -12,6 +12,7 @@ return (
 <div className="loginFormTopDiv">
   <Form onSubmit={props.onConfirm}>
     <h1>Create Patient Form</h1>
+    <p> "*" denotes required fields...</p>
     <Form.Row>
       <Form.Group as={Col} controlId="active">
         <Form.Label>Active</Form.Label>
@@ -24,7 +25,7 @@ return (
 
     <Form.Row>
       <Form.Group as={Col} controlId="title">
-        <Form.Label>Title</Form.Label>
+        <Form.Label>Title *</Form.Label>
         <Form.Control as="select">
           <option>Mr</option>
           <option>Mrs</option>
@@ -34,24 +35,24 @@ return (
       </Form.Group>
 
       <Form.Group as={Col} controlId="name">
-        <Form.Label>name</Form.Label>
+        <Form.Label>name *</Form.Label>
         <Form.Control type="text" placeholder="name"/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="username">
-        <Form.Label>username</Form.Label>
+        <Form.Label>username *</Form.Label>
         <Form.Control type="text" placeholder="username"/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row>
       <Form.Group as={Col} controlId="dob">
-        <Form.Label>dob</Form.Label>
+        <Form.Label>dob *</Form.Label>
         <Form.Control type="date" placeholder="YYYY-MM-DD"/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="gender">
-        <Form.Label>gender</Form.Label>
+        <Form.Label>gender *</Form.Label>
         <Form.Control as="select">
           <option>Female</option>
           <option>Male</option>
@@ -60,19 +61,19 @@ return (
       </Form.Group>
 
       <Form.Group as={Col} controlId="role">
-        <Form.Label>role</Form.Label>
-        <Form.Control type="text" placeholder="role"/>
+        <Form.Label>role </Form.Label>
+        <Form.Control type="text" value="standard patient"/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row>
       <Form.Group as={Col} controlId="contactEmail">
-        <Form.Label>email</Form.Label>
+        <Form.Label>email *</Form.Label>
         <Form.Control type="email" placeholder="alpha@beta.omega"/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="contactPhone">
-        <Form.Label>phone</Form.Label>
+        <Form.Label>phone *</Form.Label>
         <Form.Control type="text" placeholder="+18760001234"/>
       </Form.Group>
 
@@ -85,7 +86,7 @@ return (
     <Form.Row>
       <Form.Group as={Col} controlId="addressNumber">
         <Form.Label>addressNumber</Form.Label>
-        <Form.Control type="number" placeholder={1}/>
+        <Form.Control type="number" placeholder=""/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="addressStreet">

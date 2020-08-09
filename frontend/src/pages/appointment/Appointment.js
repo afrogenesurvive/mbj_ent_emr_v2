@@ -555,12 +555,14 @@ selectPatient = (args) => {
   this.setState({
     selectedPatient: args
   })
+
 }
 updateAppointment = (args) => {
   console.log('...updating selected appointment...');
   this.setState({
     selectedAppointment: args
   })
+  this.props.selectAppointment(args);
 }
 
 deleteAppointment = (args) => {

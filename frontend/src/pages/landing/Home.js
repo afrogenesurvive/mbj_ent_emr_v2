@@ -40,10 +40,9 @@ class HomePage extends Component {
 
 
 componentDidMount () {
-  console.log('...all patients component mounted...');
+  console.log('...home component mounted...');
   if (sessionStorage.getItem('logInfo')) {
     const seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
-
 
     this.getAppointmentsToday(seshStore);
     this.getAppointmentsImportantWeek(seshStore);
@@ -52,6 +51,17 @@ componentDidMount () {
   }
 }
 
+loadHome = () => {
+  const args = {
+    token: this.context.token,
+    activityId: this.context.activityId
+  }
+
+  this.getAppointmentsToday(args);
+  this.getAppointmentsImportantWeek(args);
+  this.getRecentPatients(args);
+
+}
 
 getAppointmentsToday = (args) => {
   console.log('...retrieving todays appointments...');
@@ -223,7 +233,7 @@ getRecentPatients = (args) => {
 
       <Row className="landingPageTopRow">
 
-        <h3>Home</h3>
+        <Button variant="outline-secondary" size="md" onClick={this.loadHome}>Home</Button>
         {this.state.isLoading ? (
           <Image src={loadingGif} className="loadingGif" fluid />
         ):(

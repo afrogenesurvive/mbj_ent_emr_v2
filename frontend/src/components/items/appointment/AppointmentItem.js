@@ -51,13 +51,15 @@ const AppointmentItem = (props) => {
               Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
             </Card.Text>
           )}
-          {props.homePage && (
+          {
+            props.homePage && (
 
             <Card.Text className="cardText">
-              Patient: <span className="bold">{props.appointment.patient.name}</span>
+              Patient: <span className="bold">{props.appointment.patient._id}</span>
             </Card.Text>
-            
-          )}
+
+          )
+        }
 
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
 

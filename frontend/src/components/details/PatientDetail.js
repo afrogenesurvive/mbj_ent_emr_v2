@@ -1953,7 +1953,10 @@ render() {
                       <ListGroup.Item>
                         <p className="listGroupText">Referral:</p>
                         <p className="listGroupText">Date:</p>
-                        <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                        {this.props.patient.referral.date && (
+                          <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                        )}
+
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.date')}>Edit</Button>
                         <p className="listGroupText">Reason:</p>
                         <p className="listGroupText bold">{this.props.patient.referral.reason}</p>
@@ -1961,8 +1964,10 @@ render() {
                         <p className="listGroupText">Referral Physician:</p>
                         <p className="listGroupText bold">{this.props.patient.referral.physician.name}</p>
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.physician.name')}>Edit</Button>
+                        <p className="listGroupText">Email:</p>
                         <p className="listGroupText bold">{this.props.patient.referral.physician.email}</p>
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.physician.email')}>Edit</Button>
+                        <p className="listGroupText">Phone:</p>
                         <p className="listGroupText bold">{this.props.patient.referral.physician.phone}</p>
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.physician.phone')}>Edit</Button>
                         <p className="listGroupText">Attending Physician:</p>
@@ -1977,10 +1982,13 @@ render() {
                         <p className="listGroupText bold">{this.props.patient.occupation.employer.name}</p>
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.name')}>Edit</Button>
                         <p className="listGroupText">Contact:</p>
+                        <p className="listGroupText">Phone:</p>
                         <p className="listGroupText bold">{this.props.patient.occupation.employer.phone}</p>
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.phone')}>Edit</Button>
+                        <p className="listGroupText">Email:</p>
                         <p className="listGroupText bold">{this.props.patient.occupation.employer.email}</p>
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.email')}>Edit</Button>
+                        <p className="listGroupText">Address:</p>
                         <p className="listGroupText bold">{this.props.patient.occupation.employer.address}</p>
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.address')}>Edit</Button>
                       </ListGroup.Item>
@@ -1992,7 +2000,10 @@ render() {
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.policyNumber')}>Edit</Button>
                         <p className="listGroupText bold">{this.props.patient.insurance.description}</p>
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.description')}>Edit</Button>
-                        <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                        {this.props.patient.insurance.expiryDate && (
+                          <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                        )}
+
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.expiryDate')}>Edit</Button>
                         <p className="listGroupText">Subscriber:</p>
                         <p className="listGroupText bold">{this.props.patient.insurance.subscriber.company}</p>

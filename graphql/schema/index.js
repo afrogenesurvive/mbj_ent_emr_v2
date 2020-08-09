@@ -745,7 +745,9 @@ module.exports = buildSchema(`
 
     getAllQueues(activityId: ID!): [Queue]
     getQueueById(activityId: ID!, queueId: ID!): Queue
-
+    getQueuesByField(activityId: ID!, field: String!, query: String!): [Queue]
+    getQueueSlotByPatient(activityId: ID!, queueId: ID!, patientId: ID!): Queue
+    getQueueByCreator(activityId: ID!, creatorId: ID!): Queue
 
   }
 
@@ -892,6 +894,10 @@ module.exports = buildSchema(`
     deleteReminderById(activityId: ID!, reminderId: ID!): Reminder
 
     sendReminders(activityId: ID!): [Reminder]
+
+    createQueue(activityId: ID!, queueInput: QueueInput!): Queue
+    addQueueSlot(activityId: ID!, queueInput: QueueInput!): Queue
+    deleteQueSlot(activityId: ID!, queueInput: QueueInput!): Queue
 
   }
 

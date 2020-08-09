@@ -609,6 +609,7 @@ updateVisit = (args) => {
   this.setState({
     selectedVisit: args
   })
+  this.props.selectVisit(args);
 }
 
 deleteVisit = (args) => {

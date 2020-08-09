@@ -378,10 +378,11 @@ cancelAdd = () => {
 }
 
 updateUser = (args) => {
-  // console.log('...updating user...');
+  console.log('...updating user...');
   this.setState({
     selectedUser: args
   })
+  this.props.selectUser(args);
 }
 
 deleteUser = (args) => {

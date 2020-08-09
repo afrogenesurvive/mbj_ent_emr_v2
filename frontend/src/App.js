@@ -231,21 +231,25 @@ class App extends Component {
   }
 
   selectUser = (args) => {
+    console.log('...updating top-level selected user...');
     this.setState({
       selectedUser: args
     })
   }
   selectPatient = (args) => {
+    console.log('...updating top-level selected patient...');
     this.setState({
       selectedPatient: args
     })
   }
   selectAppointment = (args) => {
+    console.log('...updating top-level selected appointment...');
     this.setState({
       selectedAppointment: args
     })
   }
   selectVisit = (args) => {
+    console.log('...updating top-level selected visit...');
     this.setState({
       selectedVisit: args
     })
