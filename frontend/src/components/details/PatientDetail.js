@@ -583,9 +583,10 @@ submitAddAllergyForm = (event) => {
   let file2Path;
 
   if (event.target.fileInput.value === "" ) {
-    this.context.setUserAlert("...no file!? Please add a file...")
-        this.setState({isLoading: false})
-        return;
+    file2Path = '';
+    // this.context.setUserAlert("...no file!? Please add a file...")
+    //     this.setState({isLoading: false})
+    //     return;
   }
 
   if ( event.target.fileInput.value !== "" ) {
@@ -870,11 +871,12 @@ submitAddMedicationForm = (event) => {
 
   let file2Path;
 
-  // if (event.target.fileInput.value === "" ) {
-  //   this.context.setUserAlert("...no file!? Please add a file...")
-  //       this.setState({isLoading: false})
-  //       return;
-  // }
+  if (event.target.fileInput.value === "" ) {
+    file2Path = '';
+    // this.context.setUserAlert("...no file!? Please add a file...")
+    //     this.setState({isLoading: false})
+    //     return;
+  }
 
   if ( event.target.fileInput.value !== "" ) {
     let file = AuthContext._currentValue.file;
@@ -1195,14 +1197,14 @@ addAttachment = (event) => {
       overlayStatus: {
         type: 's3',
         data: {
-          action: 'allergy attachment',
-          target: 'image'
+          action: 'upload',
+          target: `${field} attachment`,
         }
       },
       overlay: true,
     s3State:  {
       action: 'upload',
-      target: 'allergy attachment',
+      target: `${field} attachment`,
       status: 'inProgress'
     }
   });
@@ -1217,7 +1219,7 @@ addAttachment = (event) => {
             overlay: false,
             s3State:  {
               action: 'upload',
-              target: 'allergy attachment',
+              target: `${field} attachment`,
               status: 'complete'
             }
           });
@@ -1230,7 +1232,7 @@ addAttachment = (event) => {
             overlay: false,
             s3State:  {
               action: 'upload',
-              target: 'allergy attachment',
+              target: `${field} attachment`,
               status: 'failed'
             }
           });
@@ -1505,7 +1507,7 @@ deleteAttachment = (args) => {
         overlay: true,
         s3State:  {
           action: 'delete',
-          target: 'file',
+          target: `${field} attachment`,
           status: 'inProgress'
         }
       });

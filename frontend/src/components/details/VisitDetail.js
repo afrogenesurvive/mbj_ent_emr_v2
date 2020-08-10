@@ -11,6 +11,7 @@ import { NavLink } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
 import moment from 'moment';
 import AddToCalendar from 'react-add-to-calendar';
+import S3 from 'react-aws-s3';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AuthContext from '../../context/auth-context';
@@ -117,6 +118,12 @@ class VisitDetail extends Component {
       startTime: moment.unix(this.props.visit.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')+'T'+this.props.visit.time+':00-05:00',
       endTime: moment.unix(this.props.visit.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')+'T'+this.props.visit.time+':00-05:00',
     },
+    pocketVars: null,
+    s3State: {
+      action: null,
+      target: null,
+      status: null
+    },
   };
   static contextType = AuthContext;
 
@@ -130,6 +137,7 @@ componentDidMount () {
   let seshStore;
   if (sessionStorage.getItem('logInfo')) {
     seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
+    this.getPocketVars(seshStore);
   }
   if (this.context.role === 'Admin') {
     this.setState({
@@ -142,6 +150,49 @@ componentWillUnmount() {
 
 }
 
+getPocketVars (args) {
+  console.log('...retriving pocketVars..');
+  this.context.setUserAlert('...retriving pocketVars..')
+  const token = args.token;
+  const activityId = args.activityId;
+  const requestBody = {
+        query:`
+          query {getPocketVars(
+            activityId:"${activityId}")}
+        `};
+
+  fetch('http://localhost:8088/graphql', {
+    method: 'POST',
+    body: JSON.stringify(requestBody),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token
+    }
+  })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      if (resData.errors) {
+        this.setState({userAlert: resData.errors[0].message})
+      } else {
+        let pocketVarsParsed = JSON.parse(resData.data.getPocketVars)
+        console.log('...retriving pocketVars success...');
+        this.context.setUserAlert('...retriving pocketVars success...')
+        this.setState({
+          pocketVars: pocketVarsParsed
+        });
+      }
+
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+    });
+  }
 
 logUserActivity(args) {
   console.log('...logUserActivity...');
@@ -250,6 +301,95 @@ submitAddComplaintForm = (event) => {
   const anamnesis = event.target.anamnesis.value;
   const attachment = event.target.attachment.value;
 
+  if (
+      title.trim().length === 0 ||
+      description.trim().length === 0 ||
+      anamnesis.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank fields!!!...")
+    this.setState({isLoading: false})
+    return;
+  }
+
+  let file2Path;
+
+  if (event.target.fileInput.value === "" ) {
+    file2Path = '';
+    // this.context.setUserAlert("...no file!? Please add a file...")
+    //     this.setState({isLoading: false})
+    //     return;
+  }
+
+  if ( event.target.fileInput.value !== "" ) {
+    let file = AuthContext._currentValue.file;
+
+    const fileName = file.name;
+    // const fileName = file.name.substr(0, file.name.length - 4);
+    const filePath = 'visit/'+visitId+'/complaint/attachments';
+    console.log('...file present...');
+    let fileType = file.type.split('/')[1];
+    let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
+    let fileName2 = fileName+'.'+fileType;
+
+    file2Path = filePath2;
+
+    const config = {
+      bucketName: 'mbjentemrstorage',
+      dirName: filePath,
+      region: 'us-east-2',
+      accessKeyId: this.state.pocketVars.s3.a,
+      secretAccessKey: this.state.pocketVars.s3.b,
+      s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+    }
+    const ReactS3Client = new S3(config);
+    this.context.setUserAlert("...s3 uploading file ...")
+    console.log('...s3 uploading attachment..');
+    this.setState({
+      overlayStatus: {
+        type: 's3',
+        data: {
+          action: 'upload',
+          target: 'complaint attachment'
+        }
+      },
+      overlay: true,
+    s3State:  {
+      action: 'upload',
+      target: 'complaint attachment',
+      status: 'inProgress'
+    }
+  });
+
+    ReactS3Client
+        .uploadFile(file, fileName)
+        .then(data => {
+          console.log("attachment upload success!",data);
+          this.context.setUserAlert("...upload success!")
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'complaint attachment',
+              status: 'complete'
+            }
+          });
+        })
+        .catch(err => {
+          console.error("upload error:",err);
+          this.context.setUserAlert("...upload error:  "+err.statusText)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'complaint attachment',
+              status: 'failed'
+            }
+          });
+        })
+      }
+
   let requestBody = {
     query: `
       mutation {addVisitComplaint(
@@ -259,7 +399,7 @@ submitAddComplaintForm = (event) => {
             complaintTitle:"${title}",
             complaintDescription:"${description}",
             complaintAnamnesis:"${anamnesis}",
-            complaintAttachment:"${attachment}"
+            complaintAttachment:"${file2Path}"
           })
           {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
     `};
@@ -367,6 +507,72 @@ deleteComplaint = (args) => {
       });
       this.context.selectedVisit = resData.data.deleteVisitComplaint;
       this.logUserActivity({activityId: activityId,token: token});
+
+
+      const preAttachments = args.attachments;
+
+      const filePath = 'visit/'+visitId+'/complaint/attachments';
+      const filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/visit/'+visitId+'/complaint/attachments/';
+
+
+      const config = {
+        bucketName: 'mbjentemrstorage',
+        dirName: filePath,
+        region: 'us-east-2',
+        accessKeyId: this.state.pocketVars.s3.a,
+        secretAccessKey: this.state.pocketVars.s3.b,
+        s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+      }
+      const ReactS3Client = new S3(config);
+      this.context.setUserAlert('...s3 deleting attachments..')
+      console.log('...s3 deleting attachments..');
+      this.setState({
+        overlayStatus: {
+          type: 's3',
+          data: {
+            action: 'delete',
+            target: `complaint attachments`
+          }
+        },
+        overlay: true,
+        s3State:  {
+          action: 'delete',
+          target: 'file',
+          status: 'inProgress'
+        }
+      });
+
+      console.log('start');
+      for (let index = 0; index < preAttachments.length; index++) {
+        let preAttachment = preAttachments[index];
+        console.log('multifile deletion...',index);
+
+        let filename = preAttachment;
+        let filename2 = filename.replace(filePath2,'');
+
+        ReactS3Client
+        .deleteFile(filename2, config)
+        .then(response => {
+          console.log(response)
+          this.context.setUserAlert(response)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+          })
+        })
+        .catch(err => {
+          console.error(err)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+          })
+        })
+
+
+      }
+      console.log('end');
+
+
     })
     .catch(err => {
       console.log(err);
@@ -389,6 +595,94 @@ submitAddSurveyForm = (event) => {
   const description = event.target.description.value;
   const attachment = event.target.attachment.value;
 
+  if (
+      title.trim().length === 0 ||
+      description.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank fields!!!...")
+    this.setState({isLoading: false})
+    return;
+  }
+
+  let file2Path;
+
+  if (event.target.fileInput.value === "" ) {
+    file2Path = '';
+    // this.context.setUserAlert("...no file!? Please add a file...")
+    //     this.setState({isLoading: false})
+    //     return;
+  }
+
+  if ( event.target.fileInput.value !== "" ) {
+    let file = AuthContext._currentValue.file;
+
+    const fileName = file.name;
+    // const fileName = file.name.substr(0, file.name.length - 4);
+    const filePath = 'visit/'+visitId+'/survey/attachments';
+    console.log('...file present...');
+    let fileType = file.type.split('/')[1];
+    let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
+    let fileName2 = fileName+'.'+fileType;
+
+    file2Path = filePath2;
+
+    const config = {
+      bucketName: 'mbjentemrstorage',
+      dirName: filePath,
+      region: 'us-east-2',
+      accessKeyId: this.state.pocketVars.s3.a,
+      secretAccessKey: this.state.pocketVars.s3.b,
+      s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+    }
+    const ReactS3Client = new S3(config);
+    this.context.setUserAlert("...s3 uploading file ...")
+    console.log('...s3 uploading attachment..');
+    this.setState({
+      overlayStatus: {
+        type: 's3',
+        data: {
+          action: 'upload',
+          target: 'survey attachment'
+        }
+      },
+      overlay: true,
+    s3State:  {
+      action: 'upload',
+      target: 'survey attachment',
+      status: 'inProgress'
+    }
+  });
+
+    ReactS3Client
+        .uploadFile(file, fileName)
+        .then(data => {
+          console.log("attachment upload success!",data);
+          this.context.setUserAlert("...upload success!")
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'survey attachment',
+              status: 'complete'
+            }
+          });
+        })
+        .catch(err => {
+          console.error("upload error:",err);
+          this.context.setUserAlert("...upload error:  "+err.statusText)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'survey attachment',
+              status: 'failed'
+            }
+          });
+        })
+      }
+
   let requestBody = {
     query: `
       mutation {addVisitSurvey(
@@ -397,7 +691,7 @@ submitAddSurveyForm = (event) => {
         visitInput:{
           surveyTitle:"${title}",
           surveyDescription:"${description}",
-          surveyAttachment:"${attachment}"
+          surveyAttachment:"${file2Path}"
         })
         {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
     `};
@@ -503,6 +797,72 @@ deleteSurvey = (args) => {
       });
       this.context.selectedVisit = resData.data.deleteVisitSurvey;
       this.logUserActivity({activityId: activityId,token: token});
+
+
+      const preAttachments = args.attachments;
+
+      const filePath = 'visit/'+visitId+'/survey/attachments';
+      const filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/visit/'+visitId+'/survey/attachments/';
+
+
+      const config = {
+        bucketName: 'mbjentemrstorage',
+        dirName: filePath,
+        region: 'us-east-2',
+        accessKeyId: this.state.pocketVars.s3.a,
+        secretAccessKey: this.state.pocketVars.s3.b,
+        s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+      }
+      const ReactS3Client = new S3(config);
+      this.context.setUserAlert('...s3 deleting attachments..')
+      console.log('...s3 deleting attachments..');
+      this.setState({
+        overlayStatus: {
+          type: 's3',
+          data: {
+            action: 'delete',
+            target: `survey attachments`
+          }
+        },
+        overlay: true,
+        s3State:  {
+          action: 'delete',
+          target: 'file',
+          status: 'inProgress'
+        }
+      });
+
+      console.log('start');
+      for (let index = 0; index < preAttachments.length; index++) {
+        let preAttachment = preAttachments[index];
+        console.log('multifile deletion...',index);
+
+        let filename = preAttachment;
+        let filename2 = filename.replace(filePath2,'');
+
+        ReactS3Client
+        .deleteFile(filename2, config)
+        .then(response => {
+          console.log(response)
+          this.context.setUserAlert(response)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+          })
+        })
+        .catch(err => {
+          console.error(err)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+          })
+        })
+
+
+      }
+      console.log('end');
+
+
     })
     .catch(err => {
       console.log(err);
@@ -525,6 +885,94 @@ submitAddSystematicInquiryForm = (event) => {
   const description = event.target.description.value;
   const attachment = event.target.attachment.value;
 
+  if (
+      title.trim().length === 0 ||
+      description.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank fields!!!...")
+    this.setState({isLoading: false})
+    return;
+  }
+
+  let file2Path;
+
+  if (event.target.fileInput.value === "" ) {
+    file2Path = '';
+    // this.context.setUserAlert("...no file!? Please add a file...")
+    //     this.setState({isLoading: false})
+    //     return;
+  }
+
+  if ( event.target.fileInput.value !== "" ) {
+    let file = AuthContext._currentValue.file;
+
+    const fileName = file.name;
+    // const fileName = file.name.substr(0, file.name.length - 4);
+    const filePath = 'visit/'+visitId+'/systematicInquiry/attachments';
+    console.log('...file present...');
+    let fileType = file.type.split('/')[1];
+    let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
+    let fileName2 = fileName+'.'+fileType;
+
+    file2Path = filePath2;
+
+    const config = {
+      bucketName: 'mbjentemrstorage',
+      dirName: filePath,
+      region: 'us-east-2',
+      accessKeyId: this.state.pocketVars.s3.a,
+      secretAccessKey: this.state.pocketVars.s3.b,
+      s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+    }
+    const ReactS3Client = new S3(config);
+    this.context.setUserAlert("...s3 uploading file ...")
+    console.log('...s3 uploading attachment..');
+    this.setState({
+      overlayStatus: {
+        type: 's3',
+        data: {
+          action: 'upload',
+          target: 'systematicInquiry attachment'
+        }
+      },
+      overlay: true,
+    s3State:  {
+      action: 'upload',
+      target: 'systematicInquiry attachment',
+      status: 'inProgress'
+    }
+  });
+
+    ReactS3Client
+        .uploadFile(file, fileName)
+        .then(data => {
+          console.log("attachment upload success!",data);
+          this.context.setUserAlert("...upload success!")
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'systematicInquiry attachment',
+              status: 'complete'
+            }
+          });
+        })
+        .catch(err => {
+          console.error("upload error:",err);
+          this.context.setUserAlert("...upload error:  "+err.statusText)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'systematicInquiry attachment',
+              status: 'failed'
+            }
+          });
+        })
+      }
+
   let requestBody = {
     query: `
       mutation {addVisitSysInquiry(
@@ -533,7 +981,7 @@ submitAddSystematicInquiryForm = (event) => {
         visitInput:{
           systematicInquiryTitle:"${title}",
           systematicInquiryDescription:"${description}",
-          systematicInquiryAttachment:"${attachment}"
+          systematicInquiryAttachment:"${file2Path}"
         })
         {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
     `};
@@ -639,6 +1087,72 @@ deleteSystematicInquiry = (args) => {
       });
       this.context.selectedVisit = resData.data.deleteVisitSysInquiry;
       this.logUserActivity({activityId: activityId,token: token});
+
+
+      const preAttachments = args.attachments;
+
+      const filePath = 'visit/'+visitId+'/systematicInquiry/attachments';
+      const filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/visit/'+visitId+'/systematicInquiry/attachments/';
+
+
+      const config = {
+        bucketName: 'mbjentemrstorage',
+        dirName: filePath,
+        region: 'us-east-2',
+        accessKeyId: this.state.pocketVars.s3.a,
+        secretAccessKey: this.state.pocketVars.s3.b,
+        s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+      }
+      const ReactS3Client = new S3(config);
+      this.context.setUserAlert('...s3 deleting attachments..')
+      console.log('...s3 deleting attachments..');
+      this.setState({
+        overlayStatus: {
+          type: 's3',
+          data: {
+            action: 'delete',
+            target: `systematicInquiry attachments`
+          }
+        },
+        overlay: true,
+        s3State:  {
+          action: 'delete',
+          target: 'file',
+          status: 'inProgress'
+        }
+      });
+
+      console.log('start');
+      for (let index = 0; index < preAttachments.length; index++) {
+        let preAttachment = preAttachments[index];
+        console.log('multifile deletion...',index);
+
+        let filename = preAttachment;
+        let filename2 = filename.replace(filePath2,'');
+
+        ReactS3Client
+        .deleteFile(filename2, config)
+        .then(response => {
+          console.log(response)
+          this.context.setUserAlert(response)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+          })
+        })
+        .catch(err => {
+          console.error(err)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+          })
+        })
+
+
+      }
+      console.log('end');
+
+
     })
     .catch(err => {
       console.log(err);
@@ -843,6 +1357,97 @@ submitAddExaminationForm = (event) => {
   const followUp = event.target.followUp.checked;
   const attachment = event.target.attachment.value;
 
+  if (
+      general.trim().length === 0 ||
+      area.trim().length === 0 ||
+      type.trim().length === 0 ||
+      measure.trim().length === 0 ||
+      value.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank fields!!!...")
+    this.setState({isLoading: false})
+    return;
+  }
+
+  let file2Path;
+
+  if (event.target.fileInput.value === "" ) {
+    file2Path = '';
+    // this.context.setUserAlert("...no file!? Please add a file...")
+    //     this.setState({isLoading: false})
+    //     return;
+  }
+
+  if ( event.target.fileInput.value !== "" ) {
+    let file = AuthContext._currentValue.file;
+
+    const fileName = file.name;
+    // const fileName = file.name.substr(0, file.name.length - 4);
+    const filePath = 'visit/'+visitId+'/examination/attachments';
+    console.log('...file present...');
+    let fileType = file.type.split('/')[1];
+    let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
+    let fileName2 = fileName+'.'+fileType;
+
+    file2Path = filePath2;
+
+    const config = {
+      bucketName: 'mbjentemrstorage',
+      dirName: filePath,
+      region: 'us-east-2',
+      accessKeyId: this.state.pocketVars.s3.a,
+      secretAccessKey: this.state.pocketVars.s3.b,
+      s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+    }
+    const ReactS3Client = new S3(config);
+    this.context.setUserAlert("...s3 uploading file ...")
+    console.log('...s3 uploading attachment..');
+    this.setState({
+      overlayStatus: {
+        type: 's3',
+        data: {
+          action: 'upload',
+          target: 'examination attachment'
+        }
+      },
+      overlay: true,
+    s3State:  {
+      action: 'upload',
+      target: 'examination attachment',
+      status: 'inProgress'
+    }
+  });
+
+    ReactS3Client
+        .uploadFile(file, fileName)
+        .then(data => {
+          console.log("attachment upload success!",data);
+          this.context.setUserAlert("...upload success!")
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'examination attachment',
+              status: 'complete'
+            }
+          });
+        })
+        .catch(err => {
+          console.error("upload error:",err);
+          this.context.setUserAlert("...upload error:  "+err.statusText)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'examination attachment',
+              status: 'failed'
+            }
+          });
+        })
+      }
+
   let requestBody = {
     query: `
       mutation {addVisitExamination(
@@ -856,7 +1461,7 @@ submitAddExaminationForm = (event) => {
           examinationValue:"${value}",
           examinationDescription:"${description}",
           examinationFollowUp:${followUp},
-          examinationAttachment:"${attachment}"
+          examinationAttachment:"${file2Path}"
         })
         {_id,date,time,title,type,subType,patient{_id},consultants{_id},appointment{_id},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
     `};
@@ -973,6 +1578,72 @@ deleteExamination = (args) => {
       });
       this.context.selectedVisit = resData.data.deleteVisitExamination;
       this.logUserActivity({activityId: activityId,token: token});
+
+
+      const preAttachments = args.attachments;
+
+      const filePath = 'visit/'+visitId+'/examination/attachments';
+      const filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/visit/'+visitId+'/examination/attachments/';
+
+
+      const config = {
+        bucketName: 'mbjentemrstorage',
+        dirName: filePath,
+        region: 'us-east-2',
+        accessKeyId: this.state.pocketVars.s3.a,
+        secretAccessKey: this.state.pocketVars.s3.b,
+        s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+      }
+      const ReactS3Client = new S3(config);
+      this.context.setUserAlert('...s3 deleting attachments..')
+      console.log('...s3 deleting attachments..');
+      this.setState({
+        overlayStatus: {
+          type: 's3',
+          data: {
+            action: 'delete',
+            target: `examination attachments`
+          }
+        },
+        overlay: true,
+        s3State:  {
+          action: 'delete',
+          target: 'file',
+          status: 'inProgress'
+        }
+      });
+
+      console.log('start');
+      for (let index = 0; index < preAttachments.length; index++) {
+        let preAttachment = preAttachments[index];
+        console.log('multifile deletion...',index);
+
+        let filename = preAttachment;
+        let filename2 = filename.replace(filePath2,'');
+
+        ReactS3Client
+        .deleteFile(filename2, config)
+        .then(response => {
+          console.log(response)
+          this.context.setUserAlert(response)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+          })
+        })
+        .catch(err => {
+          console.error(err)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+          })
+        })
+
+
+      }
+      console.log('end');
+
+
     })
     .catch(err => {
       console.log(err);
@@ -996,6 +1667,94 @@ submitAddInvestigationForm = (event) => {
   const description = event.target.description.value;
   const attachment = event.target.attachment.value;
 
+  if (
+      title.trim().length === 0 ||
+      description.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank fields!!!...")
+    this.setState({isLoading: false})
+    return;
+  }
+
+  let file2Path;
+
+  if (event.target.fileInput.value === "" ) {
+    file2Path = '';
+    // this.context.setUserAlert("...no file!? Please add a file...")
+    //     this.setState({isLoading: false})
+    //     return;
+  }
+
+  if ( event.target.fileInput.value !== "" ) {
+    let file = AuthContext._currentValue.file;
+
+    const fileName = file.name;
+    // const fileName = file.name.substr(0, file.name.length - 4);
+    const filePath = 'visit/'+visitId+'/investigation/attachments';
+    console.log('...file present...');
+    let fileType = file.type.split('/')[1];
+    let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
+    let fileName2 = fileName+'.'+fileType;
+
+    file2Path = filePath2;
+
+    const config = {
+      bucketName: 'mbjentemrstorage',
+      dirName: filePath,
+      region: 'us-east-2',
+      accessKeyId: this.state.pocketVars.s3.a,
+      secretAccessKey: this.state.pocketVars.s3.b,
+      s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+    }
+    const ReactS3Client = new S3(config);
+    this.context.setUserAlert("...s3 uploading file ...")
+    console.log('...s3 uploading attachment..');
+    this.setState({
+      overlayStatus: {
+        type: 's3',
+        data: {
+          action: 'upload',
+          target: 'investigation attachment'
+        }
+      },
+      overlay: true,
+    s3State:  {
+      action: 'upload',
+      target: 'investigation attachment',
+      status: 'inProgress'
+    }
+  });
+
+    ReactS3Client
+        .uploadFile(file, fileName)
+        .then(data => {
+          console.log("attachment upload success!",data);
+          this.context.setUserAlert("...upload success!")
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'investigation attachment',
+              status: 'complete'
+            }
+          });
+        })
+        .catch(err => {
+          console.error("upload error:",err);
+          this.context.setUserAlert("...upload error:  "+err.statusText)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'investigation attachment',
+              status: 'failed'
+            }
+          });
+        })
+      }
+
   let requestBody = {
     query: `
       mutation {addVisitInvestigation(
@@ -1005,7 +1764,7 @@ submitAddInvestigationForm = (event) => {
           investigationTitle:"${title}",
           investigationType:"${type}",
           investigationDescription:"${description}",
-          investigationAttachment:"${attachment}"
+          investigationAttachment:"${file2Path}"
         })
         {_id,date,time,title,type,subType,patient{_id},consultants{_id},appointment{_id},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
     `};
@@ -1114,6 +1873,72 @@ deleteInvestigation = (args) => {
       });
       this.context.selectedVisit = resData.data.deleteVisitInvestigation;
       this.logUserActivity({activityId: activityId,token: token});
+
+
+      const preAttachments = args.attachments;
+
+      const filePath = 'visit/'+visitId+'/investigation/attachments';
+      const filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/visit/'+visitId+'/investigation/attachments/';
+
+
+      const config = {
+        bucketName: 'mbjentemrstorage',
+        dirName: filePath,
+        region: 'us-east-2',
+        accessKeyId: this.state.pocketVars.s3.a,
+        secretAccessKey: this.state.pocketVars.s3.b,
+        s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+      }
+      const ReactS3Client = new S3(config);
+      this.context.setUserAlert('...s3 deleting attachments..')
+      console.log('...s3 deleting attachments..');
+      this.setState({
+        overlayStatus: {
+          type: 's3',
+          data: {
+            action: 'delete',
+            target: `investigation attachments`
+          }
+        },
+        overlay: true,
+        s3State:  {
+          action: 'delete',
+          target: 'file',
+          status: 'inProgress'
+        }
+      });
+
+      console.log('start');
+      for (let index = 0; index < preAttachments.length; index++) {
+        let preAttachment = preAttachments[index];
+        console.log('multifile deletion...',index);
+
+        let filename = preAttachment;
+        let filename2 = filename.replace(filePath2,'');
+
+        ReactS3Client
+        .deleteFile(filename2, config)
+        .then(response => {
+          console.log(response)
+          this.context.setUserAlert(response)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+          })
+        })
+        .catch(err => {
+          console.error(err)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+          })
+        })
+
+
+      }
+      console.log('end');
+
+
     })
     .catch(err => {
       console.log(err);
@@ -1137,6 +1962,94 @@ submitAddDiagnosisForm = (event) => {
   const description = event.target.description.value;
   const attachment = event.target.attachment.value;
 
+  if (
+      title.trim().length === 0 ||
+      description.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank fields!!!...")
+    this.setState({isLoading: false})
+    return;
+  }
+
+  let file2Path;
+
+  if (event.target.fileInput.value === "" ) {
+    file2Path = '';
+    // this.context.setUserAlert("...no file!? Please add a file...")
+    //     this.setState({isLoading: false})
+    //     return;
+  }
+
+  if ( event.target.fileInput.value !== "" ) {
+    let file = AuthContext._currentValue.file;
+
+    const fileName = file.name;
+    // const fileName = file.name.substr(0, file.name.length - 4);
+    const filePath = 'visit/'+visitId+'/diagnosis/attachments';
+    console.log('...file present...');
+    let fileType = file.type.split('/')[1];
+    let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
+    let fileName2 = fileName+'.'+fileType;
+
+    file2Path = filePath2;
+
+    const config = {
+      bucketName: 'mbjentemrstorage',
+      dirName: filePath,
+      region: 'us-east-2',
+      accessKeyId: this.state.pocketVars.s3.a,
+      secretAccessKey: this.state.pocketVars.s3.b,
+      s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+    }
+    const ReactS3Client = new S3(config);
+    this.context.setUserAlert("...s3 uploading file ...")
+    console.log('...s3 uploading attachment..');
+    this.setState({
+      overlayStatus: {
+        type: 's3',
+        data: {
+          action: 'upload',
+          target: 'diagnosis attachment'
+        }
+      },
+      overlay: true,
+    s3State:  {
+      action: 'upload',
+      target: 'diagnosis attachment',
+      status: 'inProgress'
+    }
+  });
+
+    ReactS3Client
+        .uploadFile(file, fileName)
+        .then(data => {
+          console.log("attachment upload success!",data);
+          this.context.setUserAlert("...upload success!")
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'diagnosis attachment',
+              status: 'complete'
+            }
+          });
+        })
+        .catch(err => {
+          console.error("upload error:",err);
+          this.context.setUserAlert("...upload error:  "+err.statusText)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'diagnosis attachment',
+              status: 'failed'
+            }
+          });
+        })
+      }
+
   let requestBody = {
     query: `
       mutation {addVisitDiagnosis(
@@ -1146,7 +2059,7 @@ submitAddDiagnosisForm = (event) => {
           diagnosisTitle:"${title}",
           diagnosisType:"${type}",
           diagnosisDescription:"${description}",
-          diagnosisAttachment:"${attachment}"
+          diagnosisAttachment:"${file2Path}"
         })
       {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
     `};
@@ -1255,6 +2168,71 @@ deleteDiagnosis = (args) => {
       });
       this.context.selectedVisit = resData.data.deleteVisitDiagnosis;
       this.logUserActivity({activityId: activityId,token: token});
+
+      const preAttachments = args.attachments;
+
+      const filePath = 'visit/'+visitId+'/diagnosis/attachments';
+      const filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/visit/'+visitId+'/diagnosis/attachments/';
+
+
+      const config = {
+        bucketName: 'mbjentemrstorage',
+        dirName: filePath,
+        region: 'us-east-2',
+        accessKeyId: this.state.pocketVars.s3.a,
+        secretAccessKey: this.state.pocketVars.s3.b,
+        s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+      }
+      const ReactS3Client = new S3(config);
+      this.context.setUserAlert('...s3 deleting attachments..')
+      console.log('...s3 deleting attachments..');
+      this.setState({
+        overlayStatus: {
+          type: 's3',
+          data: {
+            action: 'delete',
+            target: `diagnosis attachments`
+          }
+        },
+        overlay: true,
+        s3State:  {
+          action: 'delete',
+          target: 'file',
+          status: 'inProgress'
+        }
+      });
+
+      console.log('start');
+      for (let index = 0; index < preAttachments.length; index++) {
+        let preAttachment = preAttachments[index];
+        console.log('multifile deletion...',index);
+
+        let filename = preAttachment;
+        let filename2 = filename.replace(filePath2,'');
+
+        ReactS3Client
+        .deleteFile(filename2, config)
+        .then(response => {
+          console.log(response)
+          this.context.setUserAlert(response)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+          })
+        })
+        .catch(err => {
+          console.error(err)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+          })
+        })
+
+
+      }
+      console.log('end');
+
+
     })
     .catch(err => {
       console.log(err);
@@ -1280,6 +2258,99 @@ submitAddTreatmentForm = (event) => {
   const frequency = event.target.frequency.value;
   const attachment = event.target.attachment.value;
 
+
+  if (
+      title.trim().length === 0 ||
+      type.trim().length === 0 ||
+      description.trim().length === 0 ||
+      dose.trim().length === 0 ||
+      frequency.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank fields!!!...")
+    this.setState({isLoading: false})
+    return;
+  }
+
+  let file2Path;
+
+  if (event.target.fileInput.value === "" ) {
+    file2Path = '';
+    // this.context.setUserAlert("...no file!? Please add a file...")
+    //     this.setState({isLoading: false})
+    //     return;
+  }
+
+  if ( event.target.fileInput.value !== "" ) {
+    let file = AuthContext._currentValue.file;
+
+    const fileName = file.name;
+    // const fileName = file.name.substr(0, file.name.length - 4);
+    const filePath = 'visit/'+visitId+'/treatment/attachments';
+    console.log('...file present...');
+    let fileType = file.type.split('/')[1];
+    let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
+    let fileName2 = fileName+'.'+fileType;
+
+    file2Path = filePath2;
+
+    const config = {
+      bucketName: 'mbjentemrstorage',
+      dirName: filePath,
+      region: 'us-east-2',
+      accessKeyId: this.state.pocketVars.s3.a,
+      secretAccessKey: this.state.pocketVars.s3.b,
+      s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+    }
+    const ReactS3Client = new S3(config);
+    this.context.setUserAlert("...s3 uploading file ...")
+    console.log('...s3 uploading attachment..');
+    this.setState({
+      overlayStatus: {
+        type: 's3',
+        data: {
+          action: 'upload',
+          target: 'treatment attachment'
+        }
+      },
+      overlay: true,
+    s3State:  {
+      action: 'upload',
+      target: 'treatment attachment',
+      status: 'inProgress'
+    }
+  });
+
+    ReactS3Client
+        .uploadFile(file, fileName)
+        .then(data => {
+          console.log("attachment upload success!",data);
+          this.context.setUserAlert("...upload success!")
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'treatment attachment',
+              status: 'complete'
+            }
+          });
+        })
+        .catch(err => {
+          console.error("upload error:",err);
+          this.context.setUserAlert("...upload error:  "+err.statusText)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'treatment attachment',
+              status: 'failed'
+            }
+          });
+        })
+      }
+
+
   let requestBody = {
     query: `
         mutation {addVisitTreatment(
@@ -1291,7 +2362,7 @@ submitAddTreatmentForm = (event) => {
             treatmentDescription:"${description}",
             treatmentDose:"${dose}",
             treatmentFrequency:"${frequency}",
-            treatmentAttachment:"${attachment}"
+            treatmentAttachment:"${file2Path}"
           })
           {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
     `};
@@ -1404,6 +2475,72 @@ deleteTreatment = (args) => {
       });
       this.context.selectedVisit = resData.data.deleteVisitTreatment;
       this.logUserActivity({activityId: activityId,token: token});
+
+
+      const preAttachments = args.attachments;
+
+      const filePath = 'visit/'+visitId+'/treatment/attachments';
+      const filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/visit/'+visitId+'/treatment/attachments/';
+
+
+      const config = {
+        bucketName: 'mbjentemrstorage',
+        dirName: filePath,
+        region: 'us-east-2',
+        accessKeyId: this.state.pocketVars.s3.a,
+        secretAccessKey: this.state.pocketVars.s3.b,
+        s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+      }
+      const ReactS3Client = new S3(config);
+      this.context.setUserAlert('...s3 deleting attachments..')
+      console.log('...s3 deleting attachments..');
+      this.setState({
+        overlayStatus: {
+          type: 's3',
+          data: {
+            action: 'delete',
+            target: `treatment attachments`
+          }
+        },
+        overlay: true,
+        s3State:  {
+          action: 'delete',
+          target: 'file',
+          status: 'inProgress'
+        }
+      });
+
+      console.log('start');
+      for (let index = 0; index < preAttachments.length; index++) {
+        let preAttachment = preAttachments[index];
+        console.log('multifile deletion...',index);
+
+        let filename = preAttachment;
+        let filename2 = filename.replace(filePath2,'');
+
+        ReactS3Client
+        .deleteFile(filename2, config)
+        .then(response => {
+          console.log(response)
+          this.context.setUserAlert(response)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+          })
+        })
+        .catch(err => {
+          console.error(err)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+          })
+        })
+
+
+      }
+      console.log('end');
+
+
     })
     .catch(err => {
       console.log(err);
@@ -1430,6 +2567,98 @@ submitAddBillingForm = (event) => {
   const notes = event.target.notes.value;
   const attachment = event.target.attachment.value;
 
+
+  if (
+      title.trim().length === 0 ||
+      description.trim().length === 0 ||
+      amount <= 0 ||
+      notes.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank fields!!!...")
+    this.setState({isLoading: false})
+    return;
+  }
+
+  let file2Path;
+
+  if (event.target.fileInput.value === "" ) {
+    file2Path = '';
+    // this.context.setUserAlert("...no file!? Please add a file...")
+    //     this.setState({isLoading: false})
+    //     return;
+  }
+
+  if ( event.target.fileInput.value !== "" ) {
+    let file = AuthContext._currentValue.file;
+
+    const fileName = file.name;
+    // const fileName = file.name.substr(0, file.name.length - 4);
+    const filePath = 'visit/'+visitId+'/billing/attachments';
+    console.log('...file present...');
+    let fileType = file.type.split('/')[1];
+    let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
+    let fileName2 = fileName+'.'+fileType;
+
+    file2Path = filePath2;
+
+    const config = {
+      bucketName: 'mbjentemrstorage',
+      dirName: filePath,
+      region: 'us-east-2',
+      accessKeyId: this.state.pocketVars.s3.a,
+      secretAccessKey: this.state.pocketVars.s3.b,
+      s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+    }
+    const ReactS3Client = new S3(config);
+    this.context.setUserAlert("...s3 uploading file ...")
+    console.log('...s3 uploading attachment..');
+    this.setState({
+      overlayStatus: {
+        type: 's3',
+        data: {
+          action: 'upload',
+          target: 'billing attachment'
+        }
+      },
+      overlay: true,
+    s3State:  {
+      action: 'upload',
+      target: 'billing attachment',
+      status: 'inProgress'
+    }
+  });
+
+    ReactS3Client
+        .uploadFile(file, fileName)
+        .then(data => {
+          console.log("attachment upload success!",data);
+          this.context.setUserAlert("...upload success!")
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'billing attachment',
+              status: 'complete'
+            }
+          });
+        })
+        .catch(err => {
+          console.error("upload error:",err);
+          this.context.setUserAlert("...upload error:  "+err.statusText)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'billing attachment',
+              status: 'failed'
+            }
+          });
+        })
+      }
+
+
   let requestBody = {
     query: `
         mutation {addVisitBilling(
@@ -1441,7 +2670,7 @@ submitAddBillingForm = (event) => {
             billingDescription:"${description}",
             billingAmount:${amount},
             billingPaid:${paid},
-            billingAttachment:"${attachment}",
+            billingAttachment:"${file2Path}",
             billingNotes:"${notes}"
           })
           {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
@@ -1557,6 +2786,71 @@ deleteBilling = (args) => {
       });
       this.context.selectedVisit = resData.data.deleteVisitBilling;
       this.logUserActivity({activityId: activityId,token: token});
+
+      const preAttachments = args.attachments;
+
+      const filePath = 'visit/'+visitId+'/billing/attachments';
+      const filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/visit/'+visitId+'/billing/attachments/';
+
+
+      const config = {
+        bucketName: 'mbjentemrstorage',
+        dirName: filePath,
+        region: 'us-east-2',
+        accessKeyId: this.state.pocketVars.s3.a,
+        secretAccessKey: this.state.pocketVars.s3.b,
+        s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+      }
+      const ReactS3Client = new S3(config);
+      this.context.setUserAlert('...s3 deleting attachments..')
+      console.log('...s3 deleting attachments..');
+      this.setState({
+        overlayStatus: {
+          type: 's3',
+          data: {
+            action: 'delete',
+            target: `billing attachments`
+          }
+        },
+        overlay: true,
+        s3State:  {
+          action: 'delete',
+          target: 'file',
+          status: 'inProgress'
+        }
+      });
+
+      console.log('start');
+      for (let index = 0; index < preAttachments.length; index++) {
+        let preAttachment = preAttachments[index];
+        console.log('multifile deletion...',index);
+
+        let filename = preAttachment;
+        let filename2 = filename.replace(filePath2,'');
+
+        ReactS3Client
+        .deleteFile(filename2, config)
+        .then(response => {
+          console.log(response)
+          this.context.setUserAlert(response)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+          })
+        })
+        .catch(err => {
+          console.error(err)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+          })
+        })
+
+
+      }
+      console.log('end');
+
+
     })
     .catch(err => {
       console.log(err);
@@ -1575,9 +2869,88 @@ submitAddImageForm = (event) => {
   const activityId = this.context.activityId;
   const visitId = this.props.visit._id;
 
-  const name = event.target.name.value;
-  const type = event.target.type.value;
-  const path = event.target.path.value;
+  let imageName;
+  let imageType;
+  let imagePath;
+
+  if (event.target.fileInput.value === "" ) {
+    this.context.setUserAlert("...no file!? Please add a file...")
+        this.setState({isLoading: false})
+        return;
+  }
+
+  if ( event.target.fileInput.value !== "" ) {
+    let file = AuthContext._currentValue.file;
+
+    const fileName = file.name;
+    // const fileName = file.name.substr(0, file.name.length - 4);
+    const filePath = 'visit/'+visitId+'/images';
+    console.log('...file present...');
+    let fileType = file.type.split('/')[1];
+    let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
+    let fileName2 = fileName+'.'+fileType;
+
+    imagePath = filePath2;
+    imageName = fileName2;
+    imageType = fileType;
+
+    const config = {
+      bucketName: 'mbjentemrstorage',
+      dirName: filePath,
+      region: 'us-east-2',
+      accessKeyId: this.state.pocketVars.s3.a,
+      secretAccessKey: this.state.pocketVars.s3.b,
+      s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+    }
+    const ReactS3Client = new S3(config);
+    this.context.setUserAlert("...s3 uploading image ...")
+    console.log('...s3 uploading image..');
+    this.setState({
+      overlayStatus: {
+        type: 's3',
+        data: {
+          action: 'upload',
+          target: 'image'
+        }
+      },
+      overlay: true,
+    s3State:  {
+      action: 'upload',
+      target: 'image',
+      status: 'inProgress'
+    }
+  });
+
+    ReactS3Client
+        .uploadFile(file, fileName)
+        .then(data => {
+          console.log("attachment upload success!",data);
+          this.context.setUserAlert("...upload success!")
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'image',
+              status: 'complete'
+            }
+          });
+        })
+        .catch(err => {
+          console.error("upload error:",err);
+          this.context.setUserAlert("...upload error:  "+err.statusText)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'image',
+              status: 'failed'
+            }
+          });
+        })
+      }
+
 
   let requestBody = {
     query: `
@@ -1585,9 +2958,9 @@ submitAddImageForm = (event) => {
           activityId:"${activityId}",
           visitId:"${visitId}",
           visitInput:{
-            imageName:"${name}",
-            imageType:"${type}",
-            imagePath:"${path}"
+            imageName:"${imageName}",
+            imageType:"${imageType}",
+            imagePath:"${imagePath}"
           })
         {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
     `};
@@ -1694,6 +3067,57 @@ deleteImage = (args) => {
       });
       this.context.selectedVisit = resData.data.deleteVisitImage;
       this.logUserActivity({activityId: activityId,token: token});
+
+
+      const filePath = 'visit/'+visitId+'/images';
+      const filename = args.name;
+
+      const config = {
+        bucketName: 'mbjentemrstorage',
+        dirName: filePath,
+        region: 'us-east-2',
+        accessKeyId: this.state.pocketVars.s3.a,
+        secretAccessKey: this.state.pocketVars.s3.b,
+        s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+      }
+      const ReactS3Client = new S3(config);
+      this.context.setUserAlert('...s3 deleting image..')
+      console.log('...s3 deleting image..');
+      this.setState({
+        overlayStatus: {
+          type: 's3',
+          data: {
+            action: 'delete',
+            target: 'image'
+          }
+        },
+        overlay: true,
+        s3State:  {
+          action: 'delete',
+          target: 'image',
+          status: 'inProgress'
+        }
+      });
+
+      ReactS3Client
+      .deleteFile(filename, config)
+      .then(response => {
+        console.log(response)
+        this.context.setUserAlert(response.message)
+        this.setState({
+          overlayStatus: null,
+          overlay: false,
+        })
+      })
+      .catch(err => {
+        console.error(err)
+        this.setState({
+          overlayStatus: null,
+          overlay: false,
+        })
+      })
+
+
     })
     .catch(err => {
       console.log(err);
@@ -1712,9 +3136,87 @@ submitAddFileForm = (event) => {
   const activityId = this.context.activityId;
   const visitId = this.props.visit._id;
 
-  const name = event.target.name.value;
-  const type = event.target.type.value;
-  const path = event.target.path.value;
+  let file2Name;
+  let file2Type;
+  let file2Path;
+
+  if (event.target.fileInput.value === "" ) {
+    this.context.setUserAlert("...no file!? Please add a file...")
+        this.setState({isLoading: false})
+        return;
+  }
+
+  if ( event.target.fileInput.value !== "" ) {
+    let file = AuthContext._currentValue.file;
+
+    const fileName = file.name;
+    // const fileName = file.name.substr(0, file.name.length - 4);
+    const filePath = 'visit/'+visitId+'/files';
+    console.log('...file present...');
+    let fileType = file.type.split('/')[1];
+    let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
+    let fileName2 = fileName+'.'+fileType;
+
+    file2Path = filePath2;
+    file2Name = fileName2;
+    file2Type = fileType;
+
+    const config = {
+      bucketName: 'mbjentemrstorage',
+      dirName: filePath,
+      region: 'us-east-2',
+      accessKeyId: this.state.pocketVars.s3.a,
+      secretAccessKey: this.state.pocketVars.s3.b,
+      s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+    }
+    const ReactS3Client = new S3(config);
+    this.context.setUserAlert("...s3 uploading file ...")
+    console.log('...s3 uploading file..');
+    this.setState({
+      overlayStatus: {
+        type: 's3',
+        data: {
+          action: 'upload',
+          target: 'file'
+        }
+      },
+      overlay: true,
+    s3State:  {
+      action: 'upload',
+      target: 'file',
+      status: 'inProgress'
+    }
+  });
+
+    ReactS3Client
+        .uploadFile(file, fileName)
+        .then(data => {
+          console.log("attachment upload success!",data);
+          this.context.setUserAlert("...upload success!")
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'file',
+              status: 'complete'
+            }
+          });
+        })
+        .catch(err => {
+          console.error("upload error:",err);
+          this.context.setUserAlert("...upload error:  "+err.statusText)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'file',
+              status: 'failed'
+            }
+          });
+        })
+      }
 
   let requestBody = {
     query: `
@@ -1722,9 +3224,9 @@ submitAddFileForm = (event) => {
           activityId:"${activityId}",
           visitId:"${visitId}",
           visitInput:{
-            fileName:"${name}",
-            fileType:"${type}",
-            filePath:"${path}"
+            fileName:"${file2Name}",
+            fileType:"${file2Type}",
+            filePath:"${file2Path}"
           })
         {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
     `};
@@ -1831,6 +3333,55 @@ deleteFile = (args) => {
       });
       this.context.selectedVisit = resData.data.deleteVisitFile;
       this.logUserActivity({activityId: activityId,token: token});
+
+      const filePath = 'visit/'+visitId+'/files';
+      const filename = args.name;
+      const config = {
+        bucketName: 'mbjentemrstorage',
+        dirName: filePath,
+        region: 'us-east-2',
+        accessKeyId: this.state.pocketVars.s3.a,
+        secretAccessKey: this.state.pocketVars.s3.b,
+        s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+      }
+      const ReactS3Client = new S3(config);
+      this.context.setUserAlert('...s3 deleting file..')
+      console.log('...s3 deleting file..');
+      this.setState({
+        overlayStatus: {
+          type: 's3',
+          data: {
+            action: 'delete',
+            target: 'file'
+          }
+        },
+        overlay: true,
+        s3State:  {
+          action: 'delete',
+          target: 'file',
+          status: 'inProgress'
+        }
+      });
+
+      ReactS3Client
+      .deleteFile(filename, config)
+      .then(response => {
+        console.log(response)
+        this.context.setUserAlert(response.message)
+        this.setState({
+          overlayStatus: null,
+          overlay: false,
+        })
+      })
+      .catch(err => {
+        console.error(err)
+        this.setState({
+          overlayStatus: null,
+          overlay: false,
+        })
+      })
+
+
     })
     .catch(err => {
       console.log(err);
@@ -2250,13 +3801,91 @@ addAttachment = (event) => {
   let args = this.state.addAttachmentArgs;
   let field = args.field;
 
+  let file2Path;
+
+  if (event.target.fileInput.value === "" ) {
+    this.context.setUserAlert("...no file!? Please add a file...")
+        this.setState({isLoading: false})
+        return;
+  }
+
+  if ( event.target.fileInput.value !== "" ) {
+    let file = AuthContext._currentValue.file;
+
+    const fileName = file.name;
+    // const fileName = file.name.substr(0, file.name.length - 4);
+    const filePath = 'visit/'+visitId+'/'+field+'/attachments';
+    console.log('...file present...');
+    let fileType = file.type.split('/')[1];
+    let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
+    let fileName2 = fileName+'.'+fileType;
+
+    file2Path = filePath2;
+
+    const config = {
+      bucketName: 'mbjentemrstorage',
+      dirName: filePath,
+      region: 'us-east-2',
+      accessKeyId: this.state.pocketVars.s3.a,
+      secretAccessKey: this.state.pocketVars.s3.b,
+      s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+    }
+    const ReactS3Client = new S3(config);
+    this.context.setUserAlert("...s3 uploading allergy attachment ...")
+    console.log('...s3 uploading allergy attachment..');
+    this.setState({
+      overlayStatus: {
+        type: 's3',
+        data: {
+          action: 'upload',
+          target: `${field} attachment`,
+        }
+      },
+      overlay: true,
+    s3State:  {
+      action: 'upload',
+      target: `${field} attachment`,
+      status: 'inProgress'
+    }
+  });
+
+    ReactS3Client
+        .uploadFile(file, fileName)
+        .then(data => {
+          console.log("attachment upload success!",data);
+          this.context.setUserAlert("...upload success!")
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'allergy attachment',
+              status: 'complete'
+            }
+          });
+        })
+        .catch(err => {
+          console.error("upload error:",err);
+          this.context.setUserAlert("...upload error:  "+err.statusText)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'allergy attachment',
+              status: 'failed'
+            }
+          });
+        })
+      }
+
   let requestBody;
 
   if (field === 'complaint') {
     let complaintTitle = args.data.title;
     let complaintDescription = args.data.description;
     let complaintAnamnesis = args.data.anamnesis;
-    let complaintAttachment = event.target.attachment.value;
+    let complaintAttachment = file2Path;
 
     requestBody = {
       query: `
@@ -2275,7 +3904,7 @@ addAttachment = (event) => {
   if (field === 'survey') {
     let surveyTitle = args.data.title;
     let surveyDescription = args.data.description;
-    let surveyAttachment = event.target.attachment.value;
+    let surveyAttachment = file2Path;
 
     requestBody = {
       query: `
@@ -2293,7 +3922,7 @@ addAttachment = (event) => {
   if (field === 'systematicInquiry') {
     let systematicInquiryTitle = args.data.title;
     let systematicInquiryDescription = args.data.description;
-    let systematicInquiryAttachment = event.target.attachment.value;
+    let systematicInquiryAttachment = file2Path;
 
     requestBody = {
       query: `
@@ -2316,7 +3945,7 @@ addAttachment = (event) => {
     let examinationValue = args.data.value;
     let examinationDescription = args.data.description;
     let examinationFollowUp = args.data.followUp;
-    let examinationAttachment = event.target.attachment.value;
+    let examinationAttachment = file2Path;
 
     requestBody = {
       query: `
@@ -2340,7 +3969,7 @@ addAttachment = (event) => {
     let investigationTitle = args.data.title;
     let investigationType = args.data.type;
     let investigationDescription = args.data.description;
-    let investigationAttachment = event.target.attachment.value;
+    let investigationAttachment = file2Path;
 
     requestBody = {
       query: `
@@ -2360,7 +3989,7 @@ addAttachment = (event) => {
     let diagnosisTitle = args.data.title;
     let diagnosisType = args.data.type;
     let diagnosisDescription = args.data.description;
-    let diagnosisAttachment = event.target.attachment.value;
+    let diagnosisAttachment = file2Path;
 
     requestBody = {
       query: `
@@ -2382,7 +4011,7 @@ addAttachment = (event) => {
     let treatmentDescription = args.data.description;
     let treatmentDose = args.data.dose;
     let treatmentFrequency = args.data.frequency;
-    let treatmentAttachment = event.target.attachment.value;
+    let treatmentAttachment = file2Path;
 
     requestBody = {
       query: `
@@ -2407,7 +4036,7 @@ addAttachment = (event) => {
     let billingType = args.data.type;
     let billingDescription = args.data.description;
     let billingNotes = args.data.notes;
-    let billingAttachment = event.target.attachment.value;
+    let billingAttachment = file2Path;
 
     requestBody = {
       query: `
@@ -2609,15 +4238,6 @@ deleteAttachment = (args) => {
   const item = args.item;
 
   let requestBody;
-
-  // complaint
-  // survey
-  // systematicInquiry
-  // examination
-  // investigation
-  // diagnosis
-  // treatment
-  // billing
 
   if (field === 'complaint') {
     let complaintTitle = item.title;
@@ -2956,6 +4576,62 @@ deleteAttachment = (args) => {
       }
 
       this.logUserActivity({activityId: activityId,token: token});
+
+
+      const filePath = 'visit/'+visitId+'/'+field+'/attachments';
+      const filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/visit/'+visitId+'/'+field+'/attachments/';
+      const filename = attachment;
+      const filename2 = filename.replace(filePath2,'');
+      console.log('1:',filePath);
+      console.log('2:',filename);
+      console.log('3:',filename2);
+      const config = {
+        bucketName: 'mbjentemrstorage',
+        dirName: filePath,
+        region: 'us-east-2',
+        accessKeyId: this.state.pocketVars.s3.a,
+        secretAccessKey: this.state.pocketVars.s3.b,
+        s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+      }
+      const ReactS3Client = new S3(config);
+      this.context.setUserAlert('...s3 deleting attachment..')
+      console.log('...s3 deleting attachment..');
+      this.setState({
+        overlayStatus: {
+          type: 's3',
+          data: {
+            action: 'delete',
+            target: `${field} attachment`
+          }
+        },
+        overlay: true,
+        s3State:  {
+          action: 'delete',
+          target: `${field} attachment`,
+          status: 'inProgress'
+        }
+      });
+
+      ReactS3Client
+      .deleteFile(filename2, config)
+      .then(response => {
+        console.log(response)
+        this.context.setUserAlert(response)
+        this.setState({
+          overlayStatus: null,
+          overlay: false,
+        })
+      })
+      .catch(err => {
+        console.error(err)
+        this.setState({
+          overlayStatus: null,
+          overlay: false,
+        })
+      })
+
+
+
     })
     .catch(err => {
       console.log(err);
