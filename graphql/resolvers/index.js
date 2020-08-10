@@ -7,12 +7,12 @@ const reminderResolver = require('./reminder');
 // const queueResolver = require('./queue');
 
 const rootResolver = {
-  ...authResolver,
-  ...userResolver,
-  ...patientResolver,
-  ...appointmentResolver,
-  ...visitResolver,
-  ...reminderResolver,
+  authResolver,
+  userResolver,
+  patientResolver,
+  appointmentResolver,
+  visitResolver,
+  reminderResolver,
   // ...queueResolver,
 };
 
