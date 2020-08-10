@@ -745,7 +745,7 @@ submitAddImageForm = (event) => {
 
     const fileName = file.name;
     // const fileName = file.name.substr(0, file.name.length - 4);
-    const filePath = 'staff/'+username+'/images';
+    const filePath = 'staff/'+activityId+'/images';
     console.log('...file present...');
     let fileType = file.type.split('/')[1];
     let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
@@ -923,7 +923,7 @@ deleteImage = (args) => {
       this.logUserActivity({activityId: activityId,token: token});
 
 
-      const filePath = 'staff/'+username+'/images';
+      const filePath = 'staff/'+activityId+'/images';
       const filename = args.name;
       const config = {
         bucketName: 'mbjentemrstorage',
@@ -1004,7 +1004,7 @@ submitAddFileForm = (event) => {
 
     const fileName = file.name;
     // const fileName = file.name.substr(0, file.name.length - 4);
-    const filePath = 'staff/'+username+'/files';
+    const filePath = 'staff/'+activityId+'/files';
     console.log('...file present...');
     let fileType = file.type.split('/')[1];
     let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
@@ -1178,7 +1178,7 @@ deleteFile = (args) => {
       this.context.activityUser = resData.data.deleteUserFile;
       this.logUserActivity({activityId: activityId,token: token});
 
-      const filePath = 'staff/'+username+'/files';
+      const filePath = 'staff/'+activityId+'/files';
       const filename = args.name;
       const config = {
         bucketName: 'mbjentemrstorage',

@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
+import Image from 'react-bootstrap/Image';
 import Container from 'react-bootstrap/Container';
 import loadingGif from '../../assets/loading.gif';
 
@@ -102,10 +103,14 @@ return (
             <p>{props.status.data.action} -ing {props.status.data.target}...</p>
 
           </Row>
+          <Row className="overlayRow">
+            <Image src={loadingGif} className="loadingGif" fluid />
+          </Row>
           </React.Fragment>
         )}
 
-        {props.toggleOverlay && (
+        {props.toggleOverlay &&
+          props.status.type !== 's3' && (
           <Button className="sidebarButton" variant="warning" onClick={props.toggleOverlay}>X</Button>
         )}
       </Container>

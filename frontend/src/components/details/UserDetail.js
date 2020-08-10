@@ -707,7 +707,7 @@ submitAddImageForm = (event) => {
 
     const fileName = file.name;
     // const fileName = file.name.substr(0, file.name.length - 4);
-    const filePath = 'staff/'+username+'/images';
+    const filePath = 'staff/'+userId+'/images';
     let fileType = file.type.split('/')[1];
     let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
     let fileName2 = fileName+'.'+fileType;
@@ -885,7 +885,7 @@ deleteImage = (args) => {
       this.logUserActivity({activityId: activityId,token: token});
 
 
-      const filePath = 'staff/'+username+'/images';
+      const filePath = 'staff/'+userId+'/images';
       const filename = args.name;
       const config = {
         bucketName: 'mbjentemrstorage',
@@ -966,7 +966,7 @@ submitAddFileForm = (event) => {
 
     const fileName = file.name;
     // const fileName = file.name.substr(0, file.name.length - 4);
-    const filePath = 'staff/'+username+'/files';
+    const filePath = 'staff/'+userId+'/files';
     console.log('...file present...');
     let fileType = file.type.split('/')[1];
     let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
@@ -1144,7 +1144,7 @@ deleteFile = (args) => {
       this.logUserActivity({activityId: activityId,token: token});
 
 
-      const filePath = 'staff/'+username+'/files';
+      const filePath = 'staff/'+userId+'/files';
       const filename = args.name;
       const config = {
         bucketName: 'mbjentemrstorage',
@@ -1161,7 +1161,7 @@ deleteFile = (args) => {
         overlayStatus: {
           type: 's3',
           data: {
-            action: 'upload',
+            action: 'delete',
             target: 'file'
           }
         },

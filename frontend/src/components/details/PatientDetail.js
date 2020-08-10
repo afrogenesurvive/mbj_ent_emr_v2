@@ -571,6 +571,93 @@ submitAddAllergyForm = (event) => {
   const description = event.target.description.value;
   const attachment = event.target.attachment.value;
 
+  if (
+      title.trim().length === 0 ||
+      description.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank fields!!!...")
+    this.setState({isLoading: false})
+    return;
+  }
+
+  let file2Path;
+
+  if (event.target.fileInput.value === "" ) {
+    this.context.setUserAlert("...no file!? Please add a file...")
+        this.setState({isLoading: false})
+        return;
+  }
+
+  if ( event.target.fileInput.value !== "" ) {
+    let file = AuthContext._currentValue.file;
+
+    const fileName = file.name;
+    // const fileName = file.name.substr(0, file.name.length - 4);
+    const filePath = 'patient/'+patientId+'/allergy/attachments';
+    console.log('...file present...');
+    let fileType = file.type.split('/')[1];
+    let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
+    let fileName2 = fileName+'.'+fileType;
+
+    file2Path = filePath2;
+
+    const config = {
+      bucketName: 'mbjentemrstorage',
+      dirName: filePath,
+      region: 'us-east-2',
+      accessKeyId: this.state.pocketVars.s3.a,
+      secretAccessKey: this.state.pocketVars.s3.b,
+      s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+    }
+    const ReactS3Client = new S3(config);
+    this.context.setUserAlert("...s3 uploading file ...")
+    console.log('...s3 uploading attachment..');
+    this.setState({
+      overlayStatus: {
+        type: 's3',
+        data: {
+          action: 'upload',
+          target: 'allergy attachment'
+        }
+      },
+      overlay: true,
+    s3State:  {
+      action: 'upload',
+      target: 'allergy attachment',
+      status: 'inProgress'
+    }
+  });
+
+    ReactS3Client
+        .uploadFile(file, fileName)
+        .then(data => {
+          console.log("attachment upload success!",data);
+          this.context.setUserAlert("...upload success!")
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'allergy attachment',
+              status: 'complete'
+            }
+          });
+        })
+        .catch(err => {
+          console.error("upload error:",err);
+          this.context.setUserAlert("...upload error:  "+err.statusText)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'allergy attachment',
+              status: 'failed'
+            }
+          });
+        })
+      }
+
   let requestBody = {
     query: `
       mutation {addPatientAllergy(
@@ -580,7 +667,7 @@ submitAddAllergyForm = (event) => {
           allergyType:"${type}",
           allergyTitle:"${title}",
           allergyDescription:"${description}",
-          allergyAttachment:"${attachment}"
+          allergyAttachment:"${file2Path}"
         })
       {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
@@ -683,6 +770,73 @@ deleteAllergy = (args) => {
       });
       this.context.selectedPatient = resData.data.deletePatientAllergy;
       this.logUserActivity({activityId: activityId,token: token});
+
+
+      const preAttachments = args.attachments;
+
+      const filePath = 'patient/'+patientId+'/allergy/attachments';
+      const filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/patient/'+patientId+'/allergy/attachments/';
+
+
+      const config = {
+        bucketName: 'mbjentemrstorage',
+        dirName: filePath,
+        region: 'us-east-2',
+        accessKeyId: this.state.pocketVars.s3.a,
+        secretAccessKey: this.state.pocketVars.s3.b,
+        s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+      }
+      const ReactS3Client = new S3(config);
+      this.context.setUserAlert('...s3 deleting attachments..')
+      console.log('...s3 deleting attachments..');
+      this.setState({
+        overlayStatus: {
+          type: 's3',
+          data: {
+            action: 'delete',
+            target: `allergy attachments`
+          }
+        },
+        overlay: true,
+        s3State:  {
+          action: 'delete',
+          target: 'file',
+          status: 'inProgress'
+        }
+      });
+
+      console.log('start');
+      for (let index = 0; index < preAttachments.length; index++) {
+        let preAttachment = preAttachments[index];
+        console.log('multifile deletion...',index);
+
+        let filename = preAttachment;
+        let filename2 = filename.replace(filePath2,'');
+
+        ReactS3Client
+        .deleteFile(filename2, config)
+        .then(response => {
+          console.log(response)
+          this.context.setUserAlert(response)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+          })
+        })
+        .catch(err => {
+          console.error(err)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+          })
+        })
+
+
+      }
+      console.log('end');
+
+
+
     })
     .catch(err => {
       console.log(err);
@@ -704,6 +858,94 @@ submitAddMedicationForm = (event) => {
   const description = event.target.description.value;
   const attachment = event.target.attachment.value;
 
+  if (
+      title.trim().length === 0 ||
+      type.trim().length === 0 ||
+      description.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank fields!!!...")
+    this.setState({isLoading: false})
+    return;
+  }
+
+  let file2Path;
+
+  // if (event.target.fileInput.value === "" ) {
+  //   this.context.setUserAlert("...no file!? Please add a file...")
+  //       this.setState({isLoading: false})
+  //       return;
+  // }
+
+  if ( event.target.fileInput.value !== "" ) {
+    let file = AuthContext._currentValue.file;
+
+    const fileName = file.name;
+    // const fileName = file.name.substr(0, file.name.length - 4);
+    const filePath = 'patient/'+patientId+'/medication/attachments';
+    console.log('...file present...');
+    let fileType = file.type.split('/')[1];
+    let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
+    let fileName2 = fileName+'.'+fileType;
+
+    file2Path = filePath2;
+
+    const config = {
+      bucketName: 'mbjentemrstorage',
+      dirName: filePath,
+      region: 'us-east-2',
+      accessKeyId: this.state.pocketVars.s3.a,
+      secretAccessKey: this.state.pocketVars.s3.b,
+      s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+    }
+    const ReactS3Client = new S3(config);
+    this.context.setUserAlert("...s3 uploading file ...")
+    console.log('...s3 uploading attachment..');
+    this.setState({
+      overlayStatus: {
+        type: 's3',
+        data: {
+          action: 'upload',
+          target: 'medication attachment'
+        }
+      },
+      overlay: true,
+    s3State:  {
+      action: 'upload',
+      target: 'medication attachment',
+      status: 'inProgress'
+    }
+  });
+
+    ReactS3Client
+        .uploadFile(file, fileName)
+        .then(data => {
+          console.log("attachment upload success!",data);
+          this.context.setUserAlert("...upload success!")
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'medication attachment',
+              status: 'complete'
+            }
+          });
+        })
+        .catch(err => {
+          console.error("upload error:",err);
+          this.context.setUserAlert("...upload error:  "+err.statusText)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'medication attachment',
+              status: 'failed'
+            }
+          });
+        })
+      }
+
   let requestBody = {
     query: `
       mutation {addPatientMedication(
@@ -713,7 +955,7 @@ submitAddMedicationForm = (event) => {
           medicationType:"${type}",
           medicationTitle:"${title}",
           medicationDescription:"${description}",
-          medicationAttachment:"${attachment}"
+          medicationAttachment:"${file2Path}"
         })
       {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
@@ -816,6 +1058,72 @@ deleteMedication = (args) => {
       });
       this.context.selectedPatient = resData.data.deletePatientMedication;
       this.logUserActivity({activityId: activityId,token: token});
+
+
+      const preAttachments = args.attachments;
+
+      const filePath = 'patient/'+patientId+'/medication/attachments';
+      const filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/patient/'+patientId+'/medication/attachments/';
+
+
+      const config = {
+        bucketName: 'mbjentemrstorage',
+        dirName: filePath,
+        region: 'us-east-2',
+        accessKeyId: this.state.pocketVars.s3.a,
+        secretAccessKey: this.state.pocketVars.s3.b,
+        s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+      }
+      const ReactS3Client = new S3(config);
+      this.context.setUserAlert('...s3 deleting attachments..')
+      console.log('...s3 deleting attachments..');
+      this.setState({
+        overlayStatus: {
+          type: 's3',
+          data: {
+            action: 'delete',
+            target: `medication attachments`
+          }
+        },
+        overlay: true,
+        s3State:  {
+          action: 'delete',
+          target: 'file',
+          status: 'inProgress'
+        }
+      });
+
+      console.log('start');
+      for (let index = 0; index < preAttachments.length; index++) {
+        let preAttachment = preAttachments[index];
+        console.log('multifile deletion...',index);
+
+        let filename = preAttachment;
+        let filename2 = filename.replace(filePath2,'');
+
+        ReactS3Client
+        .deleteFile(filename2, config)
+        .then(response => {
+          console.log(response)
+          this.context.setUserAlert(response)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+          })
+        })
+        .catch(err => {
+          console.error(err)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+          })
+        })
+
+
+      }
+      console.log('end');
+
+
     })
     .catch(err => {
       console.log(err);
@@ -864,7 +1172,7 @@ addAttachment = (event) => {
 
     const fileName = file.name;
     // const fileName = file.name.substr(0, file.name.length - 4);
-    const filePath = 'patient/'+patientName+'/'+field+'/attachments';
+    const filePath = 'patient/'+patientId+'/'+field+'/attachments';
     console.log('...file present...');
     let fileType = file.type.split('/')[1];
     let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
@@ -881,12 +1189,20 @@ addAttachment = (event) => {
       s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
     }
     const ReactS3Client = new S3(config);
-    this.context.setUserAlert("...s3 uploading file ...")
-    console.log('...s3 uploading file..');
+    this.context.setUserAlert("...s3 uploading allergy attachment ...")
+    console.log('...s3 uploading allergy attachment..');
     this.setState({
+      overlayStatus: {
+        type: 's3',
+        data: {
+          action: 'allergy attachment',
+          target: 'image'
+        }
+      },
+      overlay: true,
     s3State:  {
       action: 'upload',
-      target: 'file',
+      target: 'allergy attachment',
       status: 'inProgress'
     }
   });
@@ -897,9 +1213,11 @@ addAttachment = (event) => {
           console.log("attachment upload success!",data);
           this.context.setUserAlert("...upload success!")
           this.setState({
+            overlayStatus: null,
+            overlay: false,
             s3State:  {
               action: 'upload',
-              target: 'file',
+              target: 'allergy attachment',
               status: 'complete'
             }
           });
@@ -908,9 +1226,11 @@ addAttachment = (event) => {
           console.error("upload error:",err);
           this.context.setUserAlert("...upload error:  "+err.statusText)
           this.setState({
+            overlayStatus: null,
+            overlay: false,
             s3State:  {
               action: 'upload',
-              target: 'file',
+              target: 'allergy attachment',
               status: 'failed'
             }
           });
@@ -951,7 +1271,7 @@ addAttachment = (event) => {
             allergyType:"${allergyType}",
             allergyTitle:"${allergyTitle}",
             allergyDescription:"${allergyDescription}",
-            allergyAttachment:"${allergyAttachment}"
+            allergyAttachment:"${file2Path}"
           })
           {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
       `};
@@ -966,7 +1286,7 @@ addAttachment = (event) => {
             medicationType:"${medicationType}",
             medicationTitle:"${medicationTitle}",
             medicationDescription:"${medicationDescription}",
-            medicationAttachment:"${medicationAttachment}"
+            medicationAttachment:"${file2Path}"
           })
           {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
       `};
@@ -1097,101 +1417,123 @@ deleteAttachment = (args) => {
       `};
   }
 
-  // fetch('http://localhost:8088/graphql', {
-  //     method: 'POST',
-  //     body: JSON.stringify(requestBody),
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       Authorization: 'Bearer ' + token
-  //     }
-  //   })
-  //   .then(res => {
-  //     if (res.status !== 200 && res.status !== 201) {
-  //       throw new Error('Failed!');
-  //     }
-  //     return res.json();
-  //   })
-  //   .then(resData => {
-  //     if (field === 'allergy') {
-  //       // console.log('...resData...',resData.data.deletePatientAllergyAttachment);
-  //     }
-  //     if (field === 'medication') {
-  //       // console.log('...resData...',resData.data.deletePatientMedicationAttachment);
-  //     }
-  //
-  //     let responseAlert = '...delete attachment success!...';
-  //     let error = null;
-  //
-  //     if (field === 'allergy') {
-  //       if (resData.data.error) {
-  //         error = resData.data.error;
-  //         responseAlert = error;
-  //       }
-  //     }
-  //     if (field === 'medication') {
-  //       if (resData.data.error) {
-  //         error = resData.data.error;
-  //         responseAlert = error;
-  //       }
-  //     }
-  //
-  //     this.context.setUserAlert(responseAlert)
-  //
-  //     if (field === 'allergy') {
-  //       this.props.updatePatient(resData.data.deletePatientAllergyAttachment)
-  //       this.setState({
-  //         isLoading: false,
-  //         selectedPatient: resData.data.deletePatientAllergyAttachment,
-  //         activityA: `deletePatientAllergyAttachment?activityId:${activityId},patientId:${patientId}`
-  //       });
-  //     }
-  //     if (field === 'medication') {
-  //       this.props.updatePatient(resData.data.deletePatientMedicationAttachment)
-  //       this.setState({
-  //         isLoading: false,
-  //         selectedPatient: resData.data.deletePatientMedicationAttachment,
-  //         activityA: `deletePatientMedicationAttachment?activityId:${activityId},patientId:${patientId}`
-  //       });
-  //     }
-  //
-  //     this.logUserActivity({activityId: activityId,token: token});
+  fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      if (field === 'allergy') {
+        // console.log('...resData...',resData.data.deletePatientAllergyAttachment);
+      }
+      if (field === 'medication') {
+        // console.log('...resData...',resData.data.deletePatientMedicationAttachment);
+      }
 
-      const filePath = 'patient/'+patientName+'/'+field+'/files';
+      let responseAlert = '...delete attachment success!...';
+      let error = null;
+
+      if (field === 'allergy') {
+        if (resData.data.error) {
+          error = resData.data.error;
+          responseAlert = error;
+        }
+      }
+      if (field === 'medication') {
+        if (resData.data.error) {
+          error = resData.data.error;
+          responseAlert = error;
+        }
+      }
+
+      this.context.setUserAlert(responseAlert)
+
+      if (field === 'allergy') {
+        this.props.updatePatient(resData.data.deletePatientAllergyAttachment)
+        this.setState({
+          isLoading: false,
+          selectedPatient: resData.data.deletePatientAllergyAttachment,
+          activityA: `deletePatientAllergyAttachment?activityId:${activityId},patientId:${patientId}`
+        });
+      }
+      if (field === 'medication') {
+        this.props.updatePatient(resData.data.deletePatientMedicationAttachment)
+        this.setState({
+          isLoading: false,
+          selectedPatient: resData.data.deletePatientMedicationAttachment,
+          activityA: `deletePatientMedicationAttachment?activityId:${activityId},patientId:${patientId}`
+        });
+      }
+
+      this.logUserActivity({activityId: activityId,token: token});
+
+      const filePath = 'patient/'+patientId+'/'+field+'/attachments';
+      const filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/patient/'+patientId+'/'+field+'/attachments/';
       const filename = attachment;
+      const filename2 = filename.replace(filePath2,'');
+      console.log('1:',filePath);
+      console.log('2:',filename);
+      console.log('3:',filename2);
+      const config = {
+        bucketName: 'mbjentemrstorage',
+        dirName: filePath,
+        region: 'us-east-2',
+        accessKeyId: this.state.pocketVars.s3.a,
+        secretAccessKey: this.state.pocketVars.s3.b,
+        s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+      }
+      const ReactS3Client = new S3(config);
+      this.context.setUserAlert('...s3 deleting attachment..')
+      console.log('...s3 deleting attachment..');
+      this.setState({
+        overlayStatus: {
+          type: 's3',
+          data: {
+            action: 'delete',
+            target: `${field} attachment`
+          }
+        },
+        overlay: true,
+        s3State:  {
+          action: 'delete',
+          target: 'file',
+          status: 'inProgress'
+        }
+      });
 
-    //   const config = {
-    //     bucketName: 'mbjentemrstorage',
-    //     dirName: filePath,
-    //     region: 'us-east-2',
-    //     accessKeyId: this.state.pocketVars.s3.a,
-    //     secretAccessKey: this.state.pocketVars.s3.b,
-    //     s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
-    //   }
-    //   const ReactS3Client = new S3(config);
-    //   this.context.setUserAlert('...s3 deleting file..')
-    //   console.log('...s3 deleting file..');
-    //   this.setState({
-    //     s3State:  {
-    //       action: 'delete',
-    //       target: 'file',
-    //       status: 'inProgress'
-    //     }
-    //   });
-    //
-    //   ReactS3Client
-    //   .deleteFile(filename, config)
-    //   .then(response => {
-    //     console.log(response)
-    //     this.context.setUserAlert(response)
-    //   })
-    //   .catch(err => console.error(err))
-    //
-    // })
-    // .catch(err => {
-    //   console.log(err);
-    //   this.context.setUserAlert(err);
-    //   this.setState({isLoading: false })
-    // });
+      ReactS3Client
+      .deleteFile(filename2, config)
+      .then(response => {
+        console.log(response)
+        this.context.setUserAlert(response)
+        this.setState({
+          overlayStatus: null,
+          overlay: false,
+        })
+      })
+      .catch(err => {
+        console.error(err)
+        this.setState({
+          overlayStatus: null,
+          overlay: false,
+        })
+      })
+
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
 
 }
 
@@ -1221,7 +1563,7 @@ submitAddImageForm = (event) => {
 
     const fileName = file.name;
     // const fileName = file.name.substr(0, file.name.length - 4);
-    const filePath = 'patient/'+patientName+'/images';
+    const filePath = 'patient/'+patientId+'/images';
     console.log('...file present...');
     let fileType = file.type.split('/')[1];
     let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
@@ -1243,6 +1585,14 @@ submitAddImageForm = (event) => {
     this.context.setUserAlert("...s3 uploading image ...")
     console.log('...s3 uploading image..');
     this.setState({
+      overlayStatus: {
+        type: 's3',
+        data: {
+          action: 'upload',
+          target: 'image'
+        }
+      },
+      overlay: true,
     s3State:  {
       action: 'upload',
       target: 'image',
@@ -1256,6 +1606,8 @@ submitAddImageForm = (event) => {
           console.log("attachment upload success!",data);
           this.context.setUserAlert("...upload success!")
           this.setState({
+            overlayStatus: null,
+            overlay: false,
             s3State:  {
               action: 'upload',
               target: 'image',
@@ -1267,6 +1619,8 @@ submitAddImageForm = (event) => {
           console.error("upload error:",err);
           this.context.setUserAlert("...upload error:  "+err.statusText)
           this.setState({
+            overlayStatus: null,
+            overlay: false,
             s3State:  {
               action: 'upload',
               target: 'image',
@@ -1340,7 +1694,7 @@ deleteImage = (args) => {
   const patientId = this.props.patient._id;
   const patientName = this.props.patient.name;
 
-  const filePath = 'patient/'+patientName+'/images';
+  const filePath = 'patient/'+patientId+'/images';
   const filename = args.name;
 
   let requestBody = {
@@ -1400,6 +1754,14 @@ deleteImage = (args) => {
       this.context.setUserAlert('...s3 deleting image..')
       console.log('...s3 deleting image..');
       this.setState({
+        overlayStatus: {
+          type: 's3',
+          data: {
+            action: 'delete',
+            target: 'image'
+          }
+        },
+        overlay: true,
         s3State:  {
           action: 'delete',
           target: 'image',
@@ -1412,8 +1774,18 @@ deleteImage = (args) => {
       .then(response => {
         console.log(response)
         this.context.setUserAlert(response.message)
+        this.setState({
+          overlayStatus: null,
+          overlay: false,
+        })
       })
-      .catch(err => console.error(err))
+      .catch(err => {
+        console.error(err)
+        this.setState({
+          overlayStatus: null,
+          overlay: false,
+        })
+      })
 
     })
     .catch(err => {
@@ -1450,7 +1822,7 @@ submitAddFileForm = (event) => {
 
     const fileName = file.name;
     // const fileName = file.name.substr(0, file.name.length - 4);
-    const filePath = 'patient/'+patientName+'/files';
+    const filePath = 'patient/'+patientId+'/files';
     console.log('...file present...');
     let fileType = file.type.split('/')[1];
     let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
@@ -1472,6 +1844,14 @@ submitAddFileForm = (event) => {
     this.context.setUserAlert("...s3 uploading file ...")
     console.log('...s3 uploading file..');
     this.setState({
+      overlayStatus: {
+        type: 's3',
+        data: {
+          action: 'upload',
+          target: 'file'
+        }
+      },
+      overlay: true,
     s3State:  {
       action: 'upload',
       target: 'file',
@@ -1485,6 +1865,8 @@ submitAddFileForm = (event) => {
           console.log("attachment upload success!",data);
           this.context.setUserAlert("...upload success!")
           this.setState({
+            overlayStatus: null,
+            overlay: false,
             s3State:  {
               action: 'upload',
               target: 'file',
@@ -1496,6 +1878,8 @@ submitAddFileForm = (event) => {
           console.error("upload error:",err);
           this.context.setUserAlert("...upload error:  "+err.statusText)
           this.setState({
+            overlayStatus: null,
+            overlay: false,
             s3State:  {
               action: 'upload',
               target: 'file',
@@ -1613,7 +1997,7 @@ deleteFile = (args) => {
       this.context.selectedPatient = resData.data.deletePatientFile;
       this.logUserActivity({activityId: activityId,token: token});
 
-      const filePath = 'patient/'+patientName+'/files';
+      const filePath = 'patient/'+patientId+'/files';
       const filename = args.name;
       const config = {
         bucketName: 'mbjentemrstorage',
@@ -1627,6 +2011,14 @@ deleteFile = (args) => {
       this.context.setUserAlert('...s3 deleting file..')
       console.log('...s3 deleting file..');
       this.setState({
+        overlayStatus: {
+          type: 's3',
+          data: {
+            action: 'delete',
+            target: 'file'
+          }
+        },
+        overlay: true,
         s3State:  {
           action: 'delete',
           target: 'file',
@@ -1639,8 +2031,18 @@ deleteFile = (args) => {
       .then(response => {
         console.log(response)
         this.context.setUserAlert(response.message)
+        this.setState({
+          overlayStatus: null,
+          overlay: false,
+        })
       })
-      .catch(err => console.error(err))
+      .catch(err => {
+        console.error(err)
+        this.setState({
+          overlayStatus: null,
+          overlay: false,
+        })
+      })
 
 
     })
