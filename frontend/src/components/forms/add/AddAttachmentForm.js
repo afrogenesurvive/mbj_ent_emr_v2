@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import DatePicker from "react-datepicker";
+import AuthContext from '../../../context/auth-context';
 import './addForms.css';
 
 const AddAttachmentForm = (props) => {
@@ -17,6 +18,13 @@ return (
       <Form.Group as={Col} controlId="attachment">
         <Form.Label>attachment</Form.Label>
         <Form.Control type="textarea" placeholder="file link address"/>
+      </Form.Group>
+    </Form.Row>
+
+    <Form.Row>
+      <Form.Group as={Col}>
+        <Form.Label>File</Form.Label>
+        <Form.Control type="file" id="fileInput" placeholder="File" onChange={(e) => {AuthContext._currentValue.file = e.target.files[0]}}/>
       </Form.Group>
     </Form.Row>
 

@@ -165,21 +165,6 @@ module.exports = {
       throw err;
     }
   },
-  getPocketVars: async (args, req) => {
-    console.log('Resolver: getPocketVars...');
-    if (!req.isAuth) {
-      throw new Error('Unauthenticated!');
-    }
-    try {
-      const pocketVars = process.env.CREDS;
-      // console.log('pocketVars',pocketVars);
-      // const pocketVars = JSON.stringify(pocketVariables);
-      // console.log(pocketVariables,pocketVars);
-      return pocketVars;
-    } catch (err) {
-      throw err;
-    }
-  },
   getThisPatient: async (args, req) => {
     console.log("Resolver: getThisPatient...");
     if (!req.isAuth) {

@@ -221,21 +221,6 @@ module.exports = {
       throw err;
     }
   },
-  getPocketVars: async (args, req) => {
-    console.log('Resolver: getPocketVars...');
-    if (!req.isAuth) {
-      throw new Error('Unauthenticated!');
-    }
-    try {
-      const pocketVars = process.env.CREDS;
-      // console.log('pocketVars',pocketVars);
-      // const pocketVars = JSON.stringify(pocketVariables);
-      // console.log(pocketVariables,pocketVars);
-      return pocketVars;
-    } catch (err) {
-      throw err;
-    }
-  },
   getThisAppointment: async (args, req) => {
     console.log("Resolver: getThisAppointment...");
     if (!req.isAuth) {
@@ -387,7 +372,9 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
+      const preAppointment = await Appointment.findById({_id:args.appointmentId})
       const consultant = await User.findById({_id: args.consultantId})
+      .populate('appointments');
 
       if (!consultant) {
         console.log('consultant not found! check the reference and try again...');
@@ -401,6 +388,19 @@ module.exports = {
       //   console.log('consultant not found! check the reference and try again...');
       //   throw new Error('consultant not found! check the reference and try again...')
       // }
+
+      const consultantAppointments = consultant.appointments.map(x=> x = {
+        date: moment(x.date).format('YYYY-MM-DD'),
+        time: x.time,
+        dateTime: moment(x.date).format('YYYY-MM-DD')+'T'+x.time+'-05:00',
+        type: x.type
+      });
+      console.log('consultantAppointments',consultantAppointments);
+      const consultantAppointmentsXDate = consultantAppointments.filter(x=>x.date === moment(preAppointment.date).format('YYYY-MM-DD'));
+      console.log('consultantAppointmentsXDate',consultantAppointmentsXDate);
+      // calculate values of todays appts based on type
+      // check is above value added to new appt type/value exceeds daily cap thne throw error
+
       const appointment = await Appointment.findOneAndUpdate(
         {_id:args.appointmentId},
         {$addToSet: {consultants: consultant}},

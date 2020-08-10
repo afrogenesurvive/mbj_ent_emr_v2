@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
+import loadingGif from '../../assets/loading.gif';
 
 import "./loadingOverlay.css"
 
@@ -12,7 +13,10 @@ return (
   <div className="attachmentViewerBg">
     <div className="loadingOverlay">
 
+    {props.status && (
       <h5 className="attachmentViewerTitle">... {props.status.type} ...</h5>
+    )}
+
 
       <Container className="overlayContainer">
         {props.status.type === 'calendarAppointment' && (
@@ -88,6 +92,14 @@ return (
             <p>startDate: {props.status.data.startDate}</p>
             <p>endDate: {props.status.data.endDate}</p>
             <p>Description: {props.status.data.description}</p>
+
+          </Row>
+          </React.Fragment>
+        )}
+        {props.status.type === 's3' && (
+          <React.Fragment>
+          <Row className="overlayRow">
+            <p>{props.status.data.action} -ing {props.status.data.target}...</p>
 
           </Row>
           </React.Fragment>

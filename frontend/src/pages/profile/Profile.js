@@ -14,6 +14,8 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 // import bootstrapPlugin from '@fullcalendar/bootstrap';
 import '../../calendar.scss'
+import S3 from 'react-aws-s3';
+
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AuthContext from '../../context/auth-context';
@@ -78,6 +80,12 @@ class MyProfilePage extends Component {
     calendarAttendance: null,
     calendarLeave: null,
     calendarAppointments: null,
+    pocketVars: null,
+    s3State: {
+      action: null,
+      target: null,
+      status: null
+    },
   };
   static contextType = AuthContext;
 
@@ -86,6 +94,7 @@ componentDidMount () {
   if (sessionStorage.getItem('logInfo')) {
     const seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
     this.getThisUser(seshStore);
+    this.getPocketVars(seshStore);
 
   }
 }
@@ -93,7 +102,49 @@ componentWillUnmount() {
 
 }
 
+getPocketVars (args) {
+    console.log('...retriving pocketVars..');
+    this.context.setUserAlert('...retriving pocketVars..')
+    const token = args.token;
+    const activityId = args.activityId;
+    const requestBody = {
+          query:`
+            query {getPocketVars(
+              activityId:"${activityId}")}
+          `};
 
+    fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Failed!');
+        }
+        return res.json();
+      })
+      .then(resData => {
+        if (resData.errors) {
+          this.setState({userAlert: resData.errors[0].message})
+        } else {
+          let pocketVarsParsed = JSON.parse(resData.data.getPocketVars)
+          console.log('...retriving pocketVars success...');
+          this.context.setUserAlert('...retriving pocketVars success...')
+          this.setState({
+            pocketVars: pocketVarsParsed
+          });
+        }
+
+      })
+      .catch(err => {
+        console.log(err);
+        this.context.setUserAlert(err);
+      });
+    }
 getThisUser (args) {
   console.log('...retrieving your profile info...');
   this.context.setUserAlert('...retrieving your profile info...')
@@ -677,9 +728,89 @@ submitAddImageForm = (event) => {
   const token = this.context.token;
   const activityId = this.state.activityUser._id;
   const userId = activityId;
-  const imageName = event.target.name.value;
-  const imageType = event.target.type.value;
-  const imagePath = event.target.path.value;
+
+  const username = this.state.activityUser.username;
+  let imageName;
+  let imageType;
+  let imagePath;
+
+  if (event.target.fileInput.value === "" ) {
+    this.context.setUserAlert("...no file!? Please add a file...")
+        this.setState({isLoading: false})
+        return;
+  }
+
+  if ( event.target.fileInput.value !== "" ) {
+    let file = AuthContext._currentValue.file;
+
+    const fileName = file.name;
+    // const fileName = file.name.substr(0, file.name.length - 4);
+    const filePath = 'staff/'+username+'/images';
+    console.log('...file present...');
+    let fileType = file.type.split('/')[1];
+    let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
+    let fileName2 = fileName+'.'+fileType;
+
+    imagePath = filePath2;
+    imageName = fileName2;
+    imageType = fileType;
+
+    const config = {
+      bucketName: 'mbjentemrstorage',
+      dirName: filePath,
+      region: 'us-east-2',
+      accessKeyId: this.state.pocketVars.s3.a,
+      secretAccessKey: this.state.pocketVars.s3.b,
+      s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+    }
+    const ReactS3Client = new S3(config);
+    this.context.setUserAlert("...s3 uploading image ...")
+    console.log('...s3 uploading image..');
+    this.setState({
+      overlayStatus: {
+        type: 's3',
+        data: {
+          action: 'upload',
+          target: 'image'
+        }
+      },
+      overlay: true,
+    s3State:  {
+      action: 'upload',
+      target: 'image',
+      status: 'inProgress'
+    }
+  });
+
+    ReactS3Client
+        .uploadFile(file, fileName)
+        .then(data => {
+          console.log("attachment upload success!",data);
+          this.context.setUserAlert("...upload success!")
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'image',
+              status: 'complete'
+            }
+          });
+        })
+        .catch(err => {
+          console.error("upload error:",err);
+          this.context.setUserAlert("...upload error:  "+err.statusText)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'image',
+              status: 'failed'
+            }
+          });
+        })
+      }
 
   let requestBody = {
     query: `
@@ -742,6 +873,11 @@ deleteImage = (args) => {
   const token = this.context.token;
   const activityId = this.state.activityUser._id;
   const userId = activityId;
+  const username = this.state.activityUser.username;
+
+  const filePath = 'staff/'+username+'/images';
+  const filename = args.name;
+  // console.log('foo',filename);
 
   let requestBody = {
     query: `
@@ -753,7 +889,7 @@ deleteImage = (args) => {
             imageType:"${args.type}",
             imagePath:"${args.path}"
           })
-          {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id},reminders{_id},activity{date,request}}}
+          {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
   fetch('http://localhost:8088/graphql', {
       method: 'POST',
@@ -781,16 +917,66 @@ deleteImage = (args) => {
       this.setState({
         isLoading: false,
         activityUser: resData.data.deleteUserImage,
-        activityA: `deleteUserImage?activityId:${activityId},userId:${userId}`
+        activityA: `deleteUserImage?activityId:${activityId},userId:${userId}`,
       });
       this.context.activityUser = resData.data.deleteUserImage;
       this.logUserActivity({activityId: activityId,token: token});
+
+
+      const filePath = 'staff/'+username+'/images';
+      const filename = args.name;
+      const config = {
+        bucketName: 'mbjentemrstorage',
+        dirName: filePath,
+        region: 'us-east-2',
+        accessKeyId: this.state.pocketVars.s3.a,
+        secretAccessKey: this.state.pocketVars.s3.b,
+        s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+      }
+      const ReactS3Client = new S3(config);
+      this.context.setUserAlert('...s3 deleting image..')
+      console.log('...s3 deleting image..');
+      this.setState({
+        overlayStatus: {
+          type: 's3',
+          data: {
+            action: 'delete',
+            target: 'image'
+          }
+        },
+        overlay: true,
+        s3State:  {
+          action: 'delete',
+          target: 'image',
+          status: 'inProgress'
+        }
+      });
+
+      ReactS3Client
+      .deleteFile(filename, config)
+      .then(response => {
+        console.log(response)
+        this.context.setUserAlert(response.message)
+        this.setState({
+          overlayStatus: null,
+          overlay: false,
+        })
+      })
+      .catch(err => {
+        console.error(err)
+        this.setState({
+          overlayStatus: null,
+          overlay: false,
+        })
+      })
+
     })
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
       this.setState({isLoading: false })
     });
+
 }
 submitAddFileForm = (event) => {
   event.preventDefault();
@@ -801,9 +987,89 @@ submitAddFileForm = (event) => {
   const token = this.context.token;
   const activityId = this.state.activityUser._id;
   const userId = activityId;
-  const fileName = event.target.name.value;
-  const fileType = event.target.type.value;
-  const filePath = event.target.path.value;
+
+  const username = this.state.activityUser.username;
+  let file2Name;
+  let file2Type;
+  let file2Path;
+
+  if (event.target.fileInput.value === "" ) {
+    this.context.setUserAlert("...no file!? Please add a file...")
+        this.setState({isLoading: false})
+        return;
+  }
+
+  if ( event.target.fileInput.value !== "" ) {
+    let file = AuthContext._currentValue.file;
+
+    const fileName = file.name;
+    // const fileName = file.name.substr(0, file.name.length - 4);
+    const filePath = 'staff/'+username+'/files';
+    console.log('...file present...');
+    let fileType = file.type.split('/')[1];
+    let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
+    let fileName2 = fileName+'.'+fileType;
+
+    file2Path = filePath2;
+    file2Name = fileName2;
+    file2Type = fileType;
+
+    const config = {
+      bucketName: 'mbjentemrstorage',
+      dirName: filePath,
+      region: 'us-east-2',
+      accessKeyId: this.state.pocketVars.s3.a,
+      secretAccessKey: this.state.pocketVars.s3.b,
+      s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+    }
+    const ReactS3Client = new S3(config);
+    this.context.setUserAlert("...s3 uploading file ...")
+    console.log('...s3 uploading file..');
+    this.setState({
+      overlayStatus: {
+        type: 's3',
+        data: {
+          action: 'upload',
+          target: 'file'
+        }
+      },
+      overlay: true,
+    s3State:  {
+      action: 'upload',
+      target: 'file',
+      status: 'inProgress'
+    }
+  });
+
+    ReactS3Client
+        .uploadFile(file, fileName)
+        .then(data => {
+          console.log("attachment upload success!",data);
+          this.context.setUserAlert("...upload success!")
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'file',
+              status: 'complete'
+            }
+          });
+        })
+        .catch(err => {
+          console.error("upload error:",err);
+          this.context.setUserAlert("...upload error:  "+err.statusText)
+          this.setState({
+            overlayStatus: null,
+            overlay: false,
+            s3State:  {
+              action: 'upload',
+              target: 'file',
+              status: 'failed'
+            }
+          });
+        })
+      }
 
   let requestBody = {
     query: `
@@ -811,9 +1077,9 @@ submitAddFileForm = (event) => {
         activityId:"${activityId}",
         userId:"${userId}",
         userInput:{
-          fileName:"${fileName}",
-          fileType:"${fileType}",
-          filePath:"${filePath}"
+          fileName:"${file2Name}",
+          fileType:"${file2Type}",
+          filePath:"${file2Path}"
         })
         {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
@@ -866,6 +1132,8 @@ deleteFile = (args) => {
   const token = this.context.token;
   const activityId = this.state.activityUser._id;
   const userId = activityId;
+  const username = this.state.activityUser.username;
+  const filename = args.name;
 
   let requestBody = {
     query: `
@@ -877,7 +1145,7 @@ deleteFile = (args) => {
             fileType:"${args.type}",
             filePath:"${args.path}"
           })
-          {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id},reminders{_id},activity{date,request}}}
+          {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
   fetch('http://localhost:8088/graphql', {
       method: 'POST',
@@ -909,6 +1177,55 @@ deleteFile = (args) => {
       });
       this.context.activityUser = resData.data.deleteUserFile;
       this.logUserActivity({activityId: activityId,token: token});
+
+      const filePath = 'staff/'+username+'/files';
+      const filename = args.name;
+      const config = {
+        bucketName: 'mbjentemrstorage',
+        dirName: filePath,
+        region: 'us-east-2',
+        accessKeyId: this.state.pocketVars.s3.a,
+        secretAccessKey: this.state.pocketVars.s3.b,
+        s3Url: 'https://mbjentemrstorage.s3.amazonaws.com',
+      }
+      const ReactS3Client = new S3(config);
+      this.context.setUserAlert('...s3 deleting file..')
+      console.log('...s3 deleting file..');
+      this.setState({
+        overlayStatus: {
+          type: 's3',
+          data: {
+            action: 'delete',
+            target: 'file'
+          }
+        },
+        overlay: true,
+        s3State:  {
+          action: 'delete',
+          target: 'file',
+          status: 'inProgress'
+        }
+      });
+
+      ReactS3Client
+      .deleteFile(filename, config)
+      .then(response => {
+        console.log(response)
+        this.context.setUserAlert(response.message)
+        this.setState({
+          overlayStatus: null,
+          overlay: false,
+        })
+      })
+      .catch(err => {
+        console.error(err)
+        this.setState({
+          overlayStatus: null,
+          overlay: false,
+        })
+      })
+
+
     })
     .catch(err => {
       console.log(err);

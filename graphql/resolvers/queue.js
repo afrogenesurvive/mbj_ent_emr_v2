@@ -27,6 +27,16 @@ const AWS = require('aws-sdk');
 // const stripe = require('stripe')(process.env.STRIPE_B);
 
 module.exports = {
+//   getAllQueues
+// getQueueById
+// getQueuesByField
+// getQueueSlotByPatient
+// getQueueByCreator
+// createQueue
+// addQueueSlot
+// queueSlotSseen
+// deleteQueSlot
+
   // getAllAppointments: async (args, req) => {
   //   console.log("Resolver: getAllAppointments...");
   //   if (!req.isAuth) {

@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../../models/user');
+const moment = require('moment');
 const { pocketVariables } = require('../../helpers/pocketVars');
 
 module.exports = {
@@ -44,9 +45,31 @@ module.exports = {
     const token = jwt.sign({ userId: user.id },'ThaFamBizFile',{expiresIn: '4h'});
 
     const userLoggedIn = await User.findOneAndUpdate({_id: user.id},{loggedIn: true},{new: true, useFindAndModify: false})
-    // console.log("userLoggedIn", JSON.stringify(userLoggedIn.loggedIn));
-    // pocketVariables.token = token;
-    // pocketVariables.userId = user.id;
+
+    const userAttendance = user.attendance.map(x=> x= {
+      date: moment(x.date).add(1, 'days').format('YYYY-MM-DD'),
+      status: x.status
+    })
+    // console.log('today', moment());
+    // console.log('foo',userAttendance);
+    const userAttendanceToday = userAttendance.filter(x => x.date === moment().format('YYYY-MM-DD'))
+    // console.log('bar',userAttendanceToday);
+    if (userAttendanceToday.length <= 0) {
+      console.log('no attendance found...');
+      const attendance = {
+        date: moment().format('YYYY-MM-DD'),
+        status: 'present',
+        description: 'login auto attendance'
+      };
+
+      const user2 = await User.findOneAndUpdate(
+        {_id:user._id},
+        {$addToSet: {attendance: attendance}},
+        {new: true, useFindAndModify: false}
+      )
+    } else {
+      console.log('...attendance found...');
+    }
 
     return { activityId: userLoggedIn.id, role: userLoggedIn.role, token: token, tokenExpiration: 4 };
   },

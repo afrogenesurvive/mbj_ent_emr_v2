@@ -98,7 +98,8 @@ const UserItem = (props) => {
               </Card.Text>
               </li>
               {!props.appointmentPage &&
-                !props.visitPage && (
+                !props.visitPage &&
+                props.showDetails && (
                   <li>
                   <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.user)}>Details</Button>
                   </li>

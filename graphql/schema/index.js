@@ -896,8 +896,9 @@ module.exports = buildSchema(`
     sendReminders(activityId: ID!): [Reminder]
 
     createQueue(activityId: ID!, queueInput: QueueInput!): Queue
-    addQueueSlot(activityId: ID!, queueInput: QueueInput!): Queue
-    deleteQueSlot(activityId: ID!, queueInput: QueueInput!): Queue
+    addQueueSlot(activityId: ID!, queueId: ID!, queueInput: QueueInput!): Queue
+    queueSlotSeen(activityId: ID!, queueId: ID!, queueInput: QueueInput!): Queue
+    deleteQueSlot(activityId: ID!, queueId: ID!, queueInput: QueueInput!): Queue
 
   }
 

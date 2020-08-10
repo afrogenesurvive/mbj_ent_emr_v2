@@ -645,7 +645,7 @@ render() {
       <Tab.Container id="left-tabs-example" activeKey={this.state.tabKey}>
         <Row className="staffPageContainerRow mainRow2">
 
-          <Col md={3} className="staffPageContainerCol specialCol1">
+          <Col lg={3} className="staffPageContainerCol specialCol1">
             {this.state.sideCol === 'menu' && (
               <Nav variant="pills" className="flex-column mainMenu">
                 <Nav.Item>
@@ -673,7 +673,7 @@ render() {
           </Col>
 
           {this.state.patients && (
-            <Col md={9} className="staffPageContainerCol specialCol2">
+            <Col lg={9} className="staffPageContainerCol specialCol2">
               <Tab.Content>
                 <Tab.Pane eventKey="list">
                   <Row className="displayPaneHeadRow">
