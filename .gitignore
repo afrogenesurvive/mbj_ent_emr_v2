@@ -1,3 +1,4 @@
 .env
+ecosystem.config.js
 note.txt
 /node_modules
