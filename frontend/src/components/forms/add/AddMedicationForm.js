@@ -12,7 +12,7 @@ const AddMedicationForm = (props) => {
 return (
 <div className="addFormTopDiv">
   <Form onSubmit={props.onConfirm}>
-    <h4>Add Allergy</h4>
+    <h4>Add Medication</h4>
 
     <Form.Row>
       <Form.Group as={Col} controlId="title">
@@ -23,13 +23,12 @@ return (
         <Form.Label>type</Form.Label>
         <Form.Control type="text" placeholder="type"/>
       </Form.Group>
+    </Form.Row>
+
+    <Form.Row>
       <Form.Group as={Col} controlId="description">
         <Form.Label>description</Form.Label>
         <Form.Control as="textarea" rows="3" placeholder=""/>
-      </Form.Group>
-      <Form.Group as={Col} controlId="attachment">
-        <Form.Label>attachment</Form.Label>
-        <Form.Control type="text" placeholder="attachment"/>
       </Form.Group>
     </Form.Row>
 

@@ -76,7 +76,7 @@ return (
 
             {props.selectCalendarDetails && (
               <Row className="overlayRow">
-                <Button variant="outline-primary" className="centered_btn" size="sm" onClick={props.selectCalendarDetails.bind(this, props.status.data)}>Details</Button>
+                <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon centered_btn"  onClick={props.selectCalendarDetails.bind(this, props.status.data)}/>
               </Row>
             )}
             {props.status.goLink && (
@@ -87,7 +87,7 @@ return (
                   state: {appointment: props.status.data._id}
                 }}
               >
-              <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+              <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon centered_btn"/>
               </Link>
               </Row>
             )}
@@ -117,9 +117,10 @@ return (
             <p>Time: <span className="bold">{props.status.data.time}</span></p>
             </ListGroup.Item>
           </ListGroup>
+          </Row>
             {props.selectCalendarDetails && (
               <Row className="overlayRow">
-                <Button variant="outline-primary" className="centered_btn" size="sm" onClick={props.selectCalendarDetails.bind(this, props.status.data)}>Details</Button>
+                <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon centered_btn" onClick={props.selectCalendarDetails.bind(this, props.status.data)}/>
               </Row>
             )}
             {props.status.goLink && (
@@ -134,7 +135,7 @@ return (
               </Link>
               </Row>
             )}
-          </Row>
+
           </React.Fragment>
         )}
 

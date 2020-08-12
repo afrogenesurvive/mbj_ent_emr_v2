@@ -30,12 +30,6 @@ return (
         <Form.Control as="textarea" rows="3" placeholder="anamnesis"/>
       </Form.Group>
     </Form.Row>
-    <Form.Row>
-      <Form.Group as={Col} controlId="attachment">
-        <Form.Label>attachment</Form.Label>
-        <Form.Control path="text" placeholder="attachment"/>
-      </Form.Group>
-    </Form.Row>
 
     <Form.Row>
       <Form.Group as={Col}>

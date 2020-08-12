@@ -26,15 +26,14 @@ return (
           <option>Drug</option>
         </Form.Control>
       </Form.Group>
-      <Form.Group as={Col} controlId="description">
-        <Form.Label>description</Form.Label>
-        <Form.Control as="textarea" rows="3" placeholder=""/>
-      </Form.Group>
-      <Form.Group as={Col} controlId="attachment">
-        <Form.Label>attachment</Form.Label>
-        <Form.Control type="text" placeholder="attachment"/>
-      </Form.Group>
 
+    </Form.Row>
+
+    <Form.Row>
+    <Form.Group as={Col} controlId="description">
+      <Form.Label>description</Form.Label>
+      <Form.Control as="textarea" rows="3" placeholder=""/>
+    </Form.Group>
     </Form.Row>
 
     <Form.Row>

@@ -51,12 +51,6 @@ return (
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
       </Form.Group>
     </Form.Row>
-    <Form.Row>
-      <Form.Group as={Col} controlId="attachment">
-        <Form.Label>Attachment</Form.Label>
-        <Form.Control type="text" placeholder="attachment"/>
-      </Form.Group>
-    </Form.Row>
 
     <Form.Row>
       <Form.Group as={Col}>

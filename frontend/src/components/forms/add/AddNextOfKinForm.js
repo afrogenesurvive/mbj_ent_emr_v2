@@ -34,10 +34,17 @@ return (
           <option>Cousin</option>
         </Form.Control>
       </Form.Group>
-      <Form.Group as={Col} controlId="email">
-        <Form.Label>email</Form.Label>
-        <Form.Control type="email" placeholder="relation@nextOfKin.com"/>
-      </Form.Group>
+    </Form.Row>
+
+
+    <Form.Row>
+    <Form.Group as={Col} controlId="email">
+      <Form.Label>email</Form.Label>
+      <Form.Control type="email" placeholder="relation@nextOfKin.com"/>
+    </Form.Group>
+    </Form.Row>
+
+    <Form.Row>
       <Form.Group as={Col} controlId="phone">
         <Form.Label>phone</Form.Label>
         <Form.Control type="text" placeholder="+187600000"/>

@@ -22,18 +22,23 @@ return (
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
 
+    </Form.Row>
+
+    <Form.Row>
+
       <Form.Group as={Col} controlId="town">
         <Form.Label>addressTown</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
-    </Form.Row>
 
-    <Form.Row>
       <Form.Group as={Col} controlId="city">
         <Form.Label>addressCity</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
 
+    </Form.Row>
+
+    <Form.Row>
       <Form.Group as={Col} controlId="parish">
         <Form.Label>addressParish</Form.Label>
         <Form.Control as="select">
