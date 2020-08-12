@@ -4,9 +4,18 @@ import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
-import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBatteryThreeQuarters,
+  faPlusSquare,
+  faBatteryEmpty,
+  faFolderMinus,
+  faEye,
+  faEraser,
+  faTrashAlt,
+  faBan,
+  faCheckSquare,
+  faExternalLinkAlt
+} from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 
 import './UserItem.css';
@@ -89,7 +98,8 @@ const AppointmentItem = (props) => {
                   pathname: "/appointments",
                   state: {appointment: props.appointment._id}
                 }}
-              >Go!
+              >
+              <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
               </Link>
               </li>
             </ul>

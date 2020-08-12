@@ -4,10 +4,18 @@ import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
-import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBatteryThreeQuarters,
+  faPlusSquare,
+  faBatteryEmpty,
+  faFolderMinus,
+  faEye,
+  faEraser,
+  faTrashAlt,
+  faBan,
+  faCheckSquare,
+  faExternalLinkAlt
+} from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 
 import './UserItem.css';
@@ -101,7 +109,7 @@ const UserItem = (props) => {
                 !props.visitPage &&
                 props.showDetails && (
                   <li>
-                  <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.user)}>Details</Button>
+                  <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon" onClick={props.showDetails.bind(this, props.user)}/>
                   </li>
               )}
               {props.appointmentPage && (
@@ -111,7 +119,8 @@ const UserItem = (props) => {
                     pathname: "/staff",
                     state: {user: props.user._id}
                   }}
-                >Go!
+                >
+                <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
                 </Link>
                 </li>
               )}
@@ -122,7 +131,8 @@ const UserItem = (props) => {
                     pathname: "/staff",
                     state: {user: props.user._id}
                   }}
-                >Go!
+                >
+                <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
                 </Link>
                 </li>
               )}

@@ -651,7 +651,7 @@ module.exports = {
           useFindAndModify: false
         }
       )
-      console.log('nerfAllAddresses', nerfAllAddresses);
+      // console.log('nerfAllAddresses', nerfAllAddresses);
       const address = {
         number: args.userInput.addressNumber,
         street: args.userInput.addressStreet,

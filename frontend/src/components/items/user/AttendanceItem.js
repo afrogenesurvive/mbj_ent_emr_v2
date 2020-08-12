@@ -3,9 +3,14 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
-import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBatteryThreeQuarters,
+  faPlusSquare,
+  faBatteryEmpty,
+  faFolderMinus,
+  faEye,
+  faTrashAlt
+} from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 
 import './UserItem.css';
@@ -20,6 +25,16 @@ const AttendanceItem = props => {
       setState(true);
     }
    }
+
+   const [deleteState, setDeleteState] = useState(false);
+   const handleDeleteStateChange = () => {
+     if (deleteState === true) {
+       setDeleteState(false);
+     }
+     if (deleteState === false) {
+       setDeleteState(true);
+     }
+    }
 
   return (
     <li key={props.key} className="">
@@ -49,7 +64,16 @@ const AttendanceItem = props => {
               </li>
               {props.canDelete === true && (
                 <li>
-                <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.attendance)}>Delete</Button>
+                <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
+                </li>
+              )}
+              {deleteState === true && (
+                <li>
+                <Row className="listItemHiddenRow">
+                  {props.canDelete && (
+                    <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.attendance)}>Delete</Button>
+                  )}
+                </Row>
                 </li>
               )}
             </ul>

@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
 import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 import './PatientItem.css';
 
@@ -19,6 +20,17 @@ const NextOfKinItem = props => {
       setState(true);
     }
    }
+
+   const [deleteState, setDeleteState] = useState(false);
+   const handleDeleteStateChange = () => {
+     if (deleteState === true) {
+       setDeleteState(false);
+     }
+     if (deleteState === false) {
+       setDeleteState(true);
+     }
+    }
+
   return (
     <li key={props.key} className="">
       <Card>
@@ -60,7 +72,16 @@ const NextOfKinItem = props => {
               </li>
               {props.canDelete === true && (
                 <li>
-                <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.nextOfKin)}>Delete</Button>
+                <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
+                </li>
+              )}
+              {deleteState === true && (
+                <li>
+                <Row className="listItemHiddenRow">
+                  {props.canDelete && (
+                    <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.nextOfKin)}>Delete</Button>
+                  )}
+                </Row>
                 </li>
               )}
             </ul>

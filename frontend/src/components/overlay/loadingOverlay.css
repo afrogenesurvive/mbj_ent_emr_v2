@@ -21,13 +21,17 @@
 }
 .loadingOverlay {
   position: fixed;
-  top: 20rem;
+  top: 20vh;
   left: 30vw;
   width: 30rem;
-  height: 15rem;
+  height: 25rem;
   background-color: white;
+  overflow: scroll;
 }
-
+.overlayCloseRow {
+  float: right;
+  margin: 0;
+}
 .attachmentViewerTitle {
   margin: .5rem;
 }
@@ -43,8 +47,12 @@
   max-width: 100%;
   margin: 0 auto;
   text-align: center;
+  overflow: scroll;
 }
-
+.overlayListGroup {
+  width: 90%;
+  margin: 0 auto;
+}
 .attachmentViewer > iframe {
   display: block;
   width: 90%;

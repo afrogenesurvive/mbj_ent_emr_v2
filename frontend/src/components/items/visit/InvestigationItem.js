@@ -3,9 +3,15 @@ import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
-import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBatteryThreeQuarters,
+  faPlusSquare,
+  faBatteryEmpty,
+  faFolderMinus,
+  faEye,
+  faEraser,
+  faTrashAlt
+} from '@fortawesome/free-solid-svg-icons';
 import PatientAttachmentList from '../../lists/patient/PatientAttachmentList';
 
 import './visitItem.css';
@@ -20,6 +26,17 @@ const InvestigationItem = props => {
       setState(true);
     }
    }
+
+   const [deleteState, setDeleteState] = useState(false);
+   const handleDeleteStateChange = () => {
+     if (deleteState === true) {
+       setDeleteState(false);
+     }
+     if (deleteState === false) {
+       setDeleteState(true);
+     }
+    }
+
   return (
     <li key={props.key} className="">
       <Card>
@@ -33,17 +50,25 @@ const InvestigationItem = props => {
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           {state === true && (
             <Row className="listItemHiddenRow">
+            <ul>
+              <li>
               <Card.Text className="cardText">
                 Title: <span className="bold">{props.investigation.title}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 Type: <span className="bold">{props.investigation.type}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 Description: <span className="bold">{props.investigation.description}</span>
               </Card.Text>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                Attachments
+                Attachments: <FontAwesomeIcon icon={faPlusSquare} className="listIcon" onClick={props.onAddAttachment.bind(this, {field: 'investigation',data:props.investigation})}/>
               </Card.Text>
               <PatientAttachmentList
                 item={props.investigation}
@@ -52,10 +77,23 @@ const InvestigationItem = props => {
                 onDelete={props.deleteAttachment}
                 type="investigation"
               />
-              <Button variant="outline-primary" onClick={props.onAddAttachment.bind(this, {field: 'investigation',data:props.investigation})}>Add Attachment</Button>
+              </li>
               {props.canDelete === true && (
-                <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.investigation)}>Delete</Button>
+                <li>
+                  <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
+                </li>
               )}
+              {deleteState === true && (
+                <li>
+                <Row className="listItemHiddenRow">
+                  {props.canDelete && (
+                    <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.investigation)}>Delete</Button>
+                  )}
+                </Row>
+                </li>
+              )}
+            </ul>
+
             </Row>
           )}
         </Card.Body>

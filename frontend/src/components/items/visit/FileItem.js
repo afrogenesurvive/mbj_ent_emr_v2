@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
 import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 import './visitItem.css';
 
@@ -19,25 +20,59 @@ const FileItem = (props) => {
       setState(true);
     }
    }
+
+   const [deleteState, setDeleteState] = useState(false);
+   const handleDeleteStateChange = () => {
+     if (deleteState === true) {
+       setDeleteState(false);
+     }
+     if (deleteState === false) {
+       setDeleteState(true);
+     }
+    }
+
   return (
     <li key={props.key} className="">
       <Card>
         <Card.Body className="cardBody">
-          <Card.Text className="cardText">
-            Name: <span className="bold">{props.file.name}</span>
-          </Card.Text>
-          <Card.Text className="cardText">
-            Type: <span className="bold">{props.file.type}</span>
-          </Card.Text>
           <Card.Text className="cardText">
             Link: <span className="bold">{props.file.path}</span>
           </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           {state === true && (
             <Row className="listItemHiddenRow">
+            <ul>
+              <li>
+              <Card.Text className="cardText">
+                Name: <span className="bold">{props.file.name}</span>
+              </Card.Text>
+              </li>
+              <li>
+              <Card.Text className="cardText">
+                Type: <span className="bold">{props.file.type}</span>
+              </Card.Text>
+              </li>
+              <li>
+              <Card.Text className="cardText">
+                Link: <span className="bold">{props.file.path}</span>
+              </Card.Text>
+              </li>
               {props.canDelete === true && (
-                <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.file)}>Delete</Button>
+                <li>
+                <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
+                </li>
               )}
+              {deleteState === true && (
+                <li>
+                <Row className="listItemHiddenRow">
+                  {props.canDelete && (
+                    <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.file)}>Delete</Button>
+                  )}
+                </Row>
+                </li>
+              )}
+            </ul>
+
             </Row>
           )}
         </Card.Body>

@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
 import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import PatientAttachmentList from '../../lists/patient/PatientAttachmentList';
 
 import './PatientItem.css';
@@ -20,6 +22,18 @@ const MedicationItem = props => {
       setState(true);
     }
    }
+
+   const [deleteState, setDeleteState] = useState(false);
+   const handleDeleteStateChange = () => {
+     if (deleteState === true) {
+       setDeleteState(false);
+     }
+     if (deleteState === false) {
+       setDeleteState(true);
+     }
+    }
+
+
   return (
     <li key={props.key} className="">
       <Card>
@@ -49,7 +63,7 @@ const MedicationItem = props => {
               </li>
               <li>
               <Card.Text className="cardText">
-                Attachments:
+                Attachments: <FontAwesomeIcon icon={faPlusSquare} className="listIcon" onClick={props.onAddAttachment.bind(this, {field: 'medication',data:props.medication})}/>
               </Card.Text>
               <PatientAttachmentList
                 item={props.medication}
@@ -59,12 +73,18 @@ const MedicationItem = props => {
                 type="medication"
               />
               </li>
-              <li>
-              <Button variant="outline-primary" onClick={props.onAddAttachment.bind(this, {field: 'medication',data:props.medication})}>Add Attachment</Button>
-              </li>
               {props.canDelete === true && (
                 <li>
-                <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.medication)}>Delete</Button>
+                  <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
+                </li>
+              )}
+              {deleteState === true && (
+                <li>
+                <Row className="listItemHiddenRow">
+                  {props.canDelete && (
+                    <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.medication)}>Delete</Button>
+                  )}
+                </Row>
                 </li>
               )}
             </ul>
