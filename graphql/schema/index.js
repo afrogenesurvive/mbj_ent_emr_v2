@@ -699,7 +699,7 @@ module.exports = buildSchema(`
 
     verifyInvitation(challenge: String!): String
 
-    login(email: String!, password: String!): AuthData!
+    login(username: String!, password: String!): AuthData!
     logout( activityId: ID!): User!
     getThisUser(activityId: ID!): User
 

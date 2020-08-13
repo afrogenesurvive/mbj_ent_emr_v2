@@ -14,7 +14,8 @@ import {
   faTrashAlt,
   faBan,
   faCheckSquare,
-  faExternalLinkAlt
+  faExternalLinkAlt,
+  faUserPlus
 } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 
@@ -53,6 +54,26 @@ const PatientItem = (props) => {
             role: <span className="bold">{props.patient.role}</span>
           </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+
+          {props.appointmentPage !== true &&
+            props.showDetails && (
+            <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon" onClick={props.showDetails.bind(this, props.patient)}/>
+          )}
+
+          {props.homePage && (
+            <Link
+              to={{
+                pathname: "/patients",
+                state: {patient: props.patient._id}
+              }}
+            >
+            <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+            </Link>
+          )}
+
+          {props.appointmentPage === true && (
+            <FontAwesomeIcon icon={faUserPlus} className="listIcon" onClick={props.onSelect.bind(this, props.patient)}/>
+          )}
 
           {props.canDelete && (
             <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
@@ -101,27 +122,7 @@ const PatientItem = (props) => {
                 gender: <span className="bold">{props.patient.gender}</span>
               </Card.Text>
               </li>
-              {props.appointmentPage === true && (
-                <li>
-                <Button variant="outline-primary" onClick={props.onSelect.bind(this, props.patient)}>Select</Button>
-                </li>
-              )}
-              {props.appointmentPage !== true &&
-                props.showDetails && (
-                <li>
-                <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon" onClick={props.showDetails.bind(this, props.patient)}/>
-                </li>
-              )}
-              {props.homePage && (
-                <Link
-                  to={{
-                    pathname: "/patients",
-                    state: {patient: props.patient._id}
-                  }}
-                >
-                <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
-                </Link>
-              )}
+
 
             </ul>
             </Row>

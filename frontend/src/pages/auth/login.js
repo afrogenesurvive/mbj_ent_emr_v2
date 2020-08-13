@@ -41,16 +41,16 @@ class LoginPage extends Component {
     this.context.setUserAlert("...submitLoginForm...")
     console.log("...submitLoginForm...");
 
-    const email = event.target.email.value;
+    const username = event.target.username.value;
     const password = event.target.password.value;
 
-    if (email.trim().length === 0 || password.trim().length === 0) {
+    if (username.trim().length === 0 || password.trim().length === 0) {
       this.context.setUserAlert("...blank fields!!!...")
       return;
     }
     let requestBody = {
         query: `
-          {login(email:"${email}",password:"${password}")
+          {login(username:"${username}",password:"${password}")
           {activityId,role,token,tokenExpiration,error}}`
         };
 

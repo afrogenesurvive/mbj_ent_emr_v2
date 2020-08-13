@@ -14,7 +14,9 @@ import {
   faTrashAlt,
   faBan,
   faCheckSquare,
-  faExternalLinkAlt
+  faExternalLinkAlt,
+  faUserPlus,
+  faCalendarPlus
 } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 
@@ -53,6 +55,39 @@ const UserItem = (props) => {
             role: <span className="bold">{props.user.role}</span>
           </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+
+          {!props.appointmentPage &&
+            !props.visitPage &&
+            props.showDetails && (
+              <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon" onClick={props.showDetails.bind(this, props.user)}/>
+          )}
+
+          {props.appointmentPage && (
+            <Link
+              to={{
+                pathname: "/staff",
+                state: {user: props.user._id}
+              }}
+            >
+            <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+            </Link>
+          )}
+
+          {props.visitPage && (
+            <Link
+              to={{
+                pathname: "/staff",
+                state: {user: props.user._id}
+              }}
+            >
+            <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+            </Link>
+          )}
+
+          {props.selectUser && (
+            <FontAwesomeIcon icon={faUserPlus} className="listIcon" onClick={props.selectUser.bind(this, props.user)}/>
+          )}
+
           {props.canDelete && (
             <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
           )}
@@ -105,43 +140,11 @@ const UserItem = (props) => {
                 loggedIn: <span className="bold">{props.user.loggedIn === true && (<FontAwesomeIcon icon={faBatteryThreeQuarters} className="listIcon"/>)} {props.user.loggedIn === false && (<FontAwesomeIcon icon={faBatteryEmpty} className="listIcon"/>)}</span>
               </Card.Text>
               </li>
-              {!props.appointmentPage &&
-                !props.visitPage &&
-                props.showDetails && (
-                  <li>
-                  <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon" onClick={props.showDetails.bind(this, props.user)}/>
-                  </li>
-              )}
-              {props.appointmentPage && (
-                <li>
-                <Link
-                  to={{
-                    pathname: "/staff",
-                    state: {user: props.user._id}
-                  }}
-                >
-                <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
-                </Link>
-                </li>
-              )}
-              {props.visitPage && (
-                <li>
-                <Link
-                  to={{
-                    pathname: "/staff",
-                    state: {user: props.user._id}
-                  }}
-                >
-                <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
-                </Link>
-                </li>
-              )}
+
             </ul>
             </Row>
           )}
-          {props.selectUser && (
-            <Button variant="outline-primary" onClick={props.selectUser.bind(this, props.user)}>Add</Button>
-          )}
+
           {deleteState === true && (
             <Row className="listItemHiddenRow">
               {props.canDelete && (

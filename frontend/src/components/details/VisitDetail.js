@@ -72,7 +72,19 @@ import AddTreatmentForm from '../forms/add/AddTreatmentForm';
 import AddBillingForm from '../forms/add/AddBillingForm';
 import AddVigilanceForm from '../forms/add/AddVigilanceForm';
 import loadingGif from '../../assets/loading.gif';
-import { faBath } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBatteryThreeQuarters,
+  faPlusSquare,
+  faBatteryEmpty,
+  faFolderMinus,
+  faEye,
+  faEraser,
+  faTrashAlt,
+  faBan,
+  faCheckSquare,
+  faExternalLinkAlt,
+  faBath
+} from '@fortawesome/free-solid-svg-icons';
 import './details.css';
 
 class VisitDetail extends Component {
@@ -139,11 +151,15 @@ componentDidMount () {
     seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
     this.getPocketVars(seshStore);
   }
-  if (this.context.role === 'Admin') {
+  if (this.context.role === 'Admin' ||
+      this.context.role === 'Doctor' ||
+      this.context.role === 'Nurse'
+    ) {
     this.setState({
       canDelete: true
     })
   }
+
   this.getAllUsers(seshStore);
 }
 componentWillUnmount() {
@@ -5009,22 +5025,30 @@ render() {
                       <ListGroup.Item>
                         <p className="listGroupText">Title:</p>
                         <p className="listGroupText bold">{this.props.visit.title}</p>
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
+                        {this.context.role !== 'Staff' && (
+                          <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
+                        )}
                       </ListGroup.Item>
                       <ListGroup.Item>
                         <p className="listGroupText">Type:</p>
                         <p className="listGroupText bold">{this.props.visit.type}</p>
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'type')}>Edit</Button>
+                        {this.context.role !== 'Staff' && (
+                          <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'type')}>Edit</Button>
+                        )}
                         <p className="listGroupText">subType:</p>
                         <p className="listGroupText bold">{this.props.visit.subType}</p>
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'subType')}>Edit</Button>
+                        {this.context.role !== 'Staff' && (
+                          <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'subType')}>Edit</Button>
+                        )}
                       </ListGroup.Item>
                       <ListGroup.Item>
                         <p className="listGroupText">Date:</p>
                         <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
                         <p className="listGroupText">Time:</p>
                         <p className="listGroupText bold">{this.props.visit.time}</p>
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'time')}>Edit</Button>
+                        {this.context.role !== 'Staff' && (
+                          <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'time')}>Edit</Button>
+                        )}
                       </ListGroup.Item>
                       <ListGroup.Item>
                         <p className="listGroupText">Patient:</p>
@@ -5038,11 +5062,13 @@ render() {
                             pathname: "/patients",
                             state: {patient: this.props.visit.patient._id}
                           }}
-                        >Go!</Link>
+                        >
+                        <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+                        </Link>
                       </ListGroup.Item>
                       <ListGroup.Item>
-                      <p className="listGroupText">Id:</p>
-                      <p className="listGroupText bold">{this.props.visit.patient._id}</p>
+                      <p className="listGroupText">Attending Physician:</p>
+                      <p className="listGroupText bold">{this.props.visit.patient.attendingPhysician}</p>
                       </ListGroup.Item>
                       <ListGroup.Item>
                         <p className="listGroupText">Appointment:</p>
@@ -5050,16 +5076,16 @@ render() {
                       <ListGroup.Item>
                         <p className="listGroupText">Title:</p>
                         <p className="listGroupText bold">{this.props.visit.appointment.title}</p>
+                        <p className="listGroupText">Date:</p>
+                        <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
                         <Link
                           to={{
                             pathname: "/appointments",
                             state: {appointment: this.props.visit.appointment._id}
                           }}
-                        >Go!</Link>
-                      </ListGroup.Item>
-                      <ListGroup.Item>
-                      <p className="listGroupText">Id:</p>
-                      <p className="listGroupText bold">{this.props.visit.appointment._id}</p>
+                        >
+                        <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+                        </Link>
                       </ListGroup.Item>
                     </ListGroup>
                   </Tab.Pane>

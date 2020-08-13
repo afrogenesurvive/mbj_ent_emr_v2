@@ -56,6 +56,21 @@ const VisitItem = props => {
             Title: <span className="bold">{props.visit.title}</span>
           </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+          {!props.patientPage && (
+              <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon" onClick={props.showDetails.bind(this, props.visit)}/>
+          )}
+
+          {props.patientPage && (
+            <Link
+              to={{
+                pathname: "/visits",
+                state: {visit: props.visit._id}
+              }}
+            >
+            <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+            </Link>
+          )}
+
           {props.canDelete && (
             <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
           )}
@@ -98,23 +113,8 @@ const VisitItem = props => {
                 </Card.Text>
                 </li>
               )}
-              {props.patientPage && (
-                <li>
-                <Link
-                  to={{
-                    pathname: "/visits",
-                    state: {visit: props.visit._id}
-                  }}
-                >
-                <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
-                </Link>
-                </li>
-              )}
-              {!props.patientPage && (
-                <li>
-                  <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon" onClick={props.showDetails.bind(this, props.visit)}/>
-                </li>
-              )}
+
+
             </ul>
             </Row>
           )}

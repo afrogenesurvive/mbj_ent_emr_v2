@@ -46,51 +46,44 @@ return (
             <Row className="overlayRow">
             <ListGroup className="overlayListGroup">
               <ListGroup.Item className="overlayListGroupItem">
-              <p>Date: <span className="bold">{moment.unix(props.status.data.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span></p>
+              {props.selectCalendarDetails && (
+                <Row className="overlayRow">
+                  <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon centered_btn"  onClick={props.selectCalendarDetails.bind(this, props.status.data)}/>
+                </Row>
+              )}
+              {props.status.goLink && (
+                <Row className="overlayRow">
+                <Link className="centered_btn"
+                  to={{
+                    pathname: "/appointments",
+                    state: {appointment: props.status.data._id}
+                  }}
+                >
+                <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon centered_btn"/>
+                </Link>
+                </Row>
+              )}
               </ListGroup.Item>
               <ListGroup.Item className="overlayListGroupItem">
-              <p>Title: <span className="bold">{props.status.data.title}</span></p>
+              <p className="overlayListGroupItemText">Date: <span className="bold">{moment.unix(props.status.data.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span></p>
+              <p className="overlayListGroupItemText">Time: <span className="bold">{props.status.data.time}</span></p>
               </ListGroup.Item>
               <ListGroup.Item className="overlayListGroupItem">
-              <p>type: <span className="bold">{props.status.data.type}</span></p>
+              <p className="overlayListGroupItemText">Title: <span className="bold">{props.status.data.title}</span></p>
+              <p className="overlayListGroupItemText">type: <span className="bold">{props.status.data.type}</span></p>
+              <p className="overlayListGroupItemText">subType: <span className="bold">{props.status.data.subType}</span></p>
               </ListGroup.Item>
               <ListGroup.Item className="overlayListGroupItem">
-              <p>subType: <span className="bold">{props.status.data.subType}</span></p>
+              <p className="overlayListGroupItemText">Location: <span className="bold">{props.status.data.location}</span></p>
+              <p className="overlayListGroupItemText">important: <span className="bold">{props.status.data.important === true ?(<FontAwesomeIcon icon={faCheckSquare} className="listIcon"/>):(<FontAwesomeIcon icon={faBan} className="listIcon"/>)}</span></p>
               </ListGroup.Item>
               <ListGroup.Item className="overlayListGroupItem">
-              <p>Time: <span className="bold">{props.status.data.time}</span></p>
-              </ListGroup.Item>
-              <ListGroup.Item className="overlayListGroupItem">
-              <p>Location: <span className="bold">{props.status.data.location}</span></p>
-              </ListGroup.Item>
-              <ListGroup.Item className="overlayListGroupItem">
-              <p>important: <span className="bold">{props.status.data.important === true ?(<FontAwesomeIcon icon={faCheckSquare} className="listIcon"/>):(<FontAwesomeIcon icon={faBan} className="listIcon"/>)}</span></p>
-              </ListGroup.Item>
-              <ListGroup.Item className="overlayListGroupItem">
-              <p>description: <span className="bold">{props.status.data.description}</span></p>
+              <p className="overlayListGroupItemText">description: <span className="bold">{props.status.data.description}</span></p>
               </ListGroup.Item>
             </ListGroup>
 
             </Row>
 
-
-            {props.selectCalendarDetails && (
-              <Row className="overlayRow">
-                <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon centered_btn"  onClick={props.selectCalendarDetails.bind(this, props.status.data)}/>
-              </Row>
-            )}
-            {props.status.goLink && (
-              <Row className="overlayRow">
-              <Link className="centered_btn"
-                to={{
-                  pathname: "/appointments",
-                  state: {appointment: props.status.data._id}
-                }}
-              >
-              <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon centered_btn"/>
-              </Link>
-              </Row>
-            )}
           </React.Fragment>
         )}
 
@@ -99,25 +92,6 @@ return (
           <Row className="overlayRow">
           <ListGroup className="overlayListGroup">
             <ListGroup.Item className="overlayListGroupItem">
-            <p>ID: <span className="bold">{props.status.data._id}</span></p>
-            </ListGroup.Item>
-            <ListGroup.Item className="overlayListGroupItem">
-            <p>Date: <span className="bold">{moment.unix(props.status.data.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span></p>
-            </ListGroup.Item>
-            <ListGroup.Item className="overlayListGroupItem">
-            <p>Title: <span className="bold">{props.status.data.title}</span></p>
-            </ListGroup.Item>
-            <ListGroup.Item className="overlayListGroupItem">
-            <p>type: <span className="bold">{props.status.data.type}</span></p>
-            </ListGroup.Item>
-            <ListGroup.Item className="overlayListGroupItem">
-            <p>subType: <span className="bold">{props.status.data.subType}</span></p>
-            </ListGroup.Item>
-            <ListGroup.Item className="overlayListGroupItem">
-            <p>Time: <span className="bold">{props.status.data.time}</span></p>
-            </ListGroup.Item>
-          </ListGroup>
-          </Row>
             {props.selectCalendarDetails && (
               <Row className="overlayRow">
                 <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon centered_btn" onClick={props.selectCalendarDetails.bind(this, props.status.data)}/>
@@ -135,6 +109,20 @@ return (
               </Link>
               </Row>
             )}
+            </ListGroup.Item>
+            <ListGroup.Item className="overlayListGroupItem">
+            <p className="overlayListGroupItemText">Date: <span className="bold">{moment.unix(props.status.data.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span></p>
+            <p className="overlayListGroupItemText">Time: <span className="bold">{props.status.data.time}</span></p>
+            </ListGroup.Item>
+            <ListGroup.Item className="overlayListGroupItem">
+            <p className="overlayListGroupItemText">Title: <span className="bold">{props.status.data.title}</span></p>
+            </ListGroup.Item>
+            <ListGroup.Item className="overlayListGroupItem">
+            <p className="overlayListGroupItemText">type: <span className="bold">{props.status.data.type}</span></p>
+            <p className="overlayListGroupItemText">subType: <span className="bold">{props.status.data.subType}</span></p>
+            </ListGroup.Item>
+          </ListGroup>
+          </Row>
 
           </React.Fragment>
         )}

@@ -976,6 +976,9 @@ render() {
                   !this.state.selectedAppointment && (
                   <Col className="patientSubListCol">
                   <Row className="patientSubListRow">
+                  <h3>
+                  Choose an Appointment
+                  </h3>
                   <Button variant="outline-secondary" className="patientSublistSearchBtn" onClick={this.startSublistSearch}>Search</Button>
                   </Row>
                   <Row className="patientSubListRow">

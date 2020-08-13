@@ -20,6 +20,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AuthContext from '../../context/auth-context';
 import AlertBox from '../alertBox/AlertBox';
 import LoadingOverlay from '../overlay/LoadingOverlay';
+import PdfView from '../pdfView/PdfView';
 
 import PatientAddressList from '../lists/patient/PatientAddressList';
 import PatientNextOfKinList from '../lists/patient/PatientNextOfKinList'
@@ -99,6 +100,11 @@ class PatientDetail extends Component {
       target: null,
       status: null
     },
+    showPdfView: false,
+    showPdfData: {
+      type: null,
+      data: null
+    }
   };
   static contextType = AuthContext;
 
@@ -2514,6 +2520,26 @@ toggleOverlay = () => {
     overlay: false
   })
 }
+showPdfView = (args) => {
+  this.setState({
+    showPdfView: true,
+    showPdfData: {
+      type: args.type,
+      data: args.data
+    }
+  })
+}
+
+
+closePdfView = () => {
+  this.setState({
+    showPdfView: false,
+    showPdfData: {
+      type: null,
+      data: null
+    }
+  })
+}
 
 render() {
 
@@ -3083,6 +3109,56 @@ render() {
                       <p className="displayPaneTitle">Docu-Gen:</p>
 
                     </Row>
+                    <Row className="displayPaneHeadRow">
+                      <ListGroup className="profileBasicListGroup">
+                        <ListGroup.Item>
+                          <p className="listGroupText">Test</p>
+                          <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'test', data: 'abc_xyz'})}>Create</Button>
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                          <p className="listGroupText">Referral</p>
+                          <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'referral', data: 'abc_xyz'})}>Create</Button>
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                          <p className="listGroupText">admissionReminder</p>
+                          <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'admissionReminder', data: 'abc_xyz'})}>Create</Button>
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                          <p className="listGroupText">sickNote</p>
+                          <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'sickNote', data: 'abc_xyz'})}>Create</Button>
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                          <p className="listGroupText">insurance</p>
+                          <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'insurance', data: 'abc_xyz'})}>Create</Button>
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                          <p className="listGroupText">diagnosisTesting</p>
+                          <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'diagnosisTesting', data: 'abc_xyz'})}>Create</Button>
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                          <p className="listGroupText">prescription</p>
+                          <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'prescription', data: 'abc_xyz'})}>Create</Button>
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                          <p className="listGroupText">treatmentConsent</p>
+                          <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'treatmentConsent', data: 'abc_xyz'})}>Create</Button>
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                          <p className="listGroupText">treatmentInstructions</p>
+                          <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'treatmentInstructions', data: 'abc_xyz'})}>Create</Button>
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                          <p className="listGroupText">unfitToFly</p>
+                          <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'unfitToFly', data: 'abc_xyz'})}>Create</Button>
+                        </ListGroup.Item>
+                      </ListGroup>
+                    </Row>
+                    {this.state.showPdfView === true && (
+                      <PdfView
+                        pdfViewData={this.state.showPdfData}
+                        close={this.closePdfView}
+                      />
+                    )}
                   </Tab.Pane>
                 </Tab.Content>
 

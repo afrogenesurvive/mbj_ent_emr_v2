@@ -59,3 +59,7 @@
   height: 85%;
   margin: 1rem auto;
 }
+.overlayListGroupItemText {
+  display: inline-block;
+  margin: 0 .5rem;
+}

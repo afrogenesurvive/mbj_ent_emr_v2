@@ -44,6 +44,16 @@ const AppointmentItem = (props) => {
             Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
           </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+
+          <Link
+            to={{
+              pathname: "/appointments",
+              state: {appointment: props.appointment._id}
+            }}
+          >
+          <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+          </Link>
+
           {state === true && (
             <Row className="listItemHiddenRow">
             <ul>
@@ -91,16 +101,6 @@ const AppointmentItem = (props) => {
               <Card.Text className="cardText">
                 important: <span className="bold">{props.appointment.important.toString()}</span>
               </Card.Text>
-              </li>
-              <li>
-              <Link
-                to={{
-                  pathname: "/appointments",
-                  state: {appointment: props.appointment._id}
-                }}
-              >
-              <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
-              </Link>
               </li>
             </ul>
             </Row>

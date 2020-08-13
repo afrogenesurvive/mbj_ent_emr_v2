@@ -40,7 +40,19 @@ import AddUserForm from '../forms/add/AddUserForm';
 import AddNoteForm from '../forms/add/AddNoteForm';
 import AddTagForm from '../forms/add/AddTagForm';
 import loadingGif from '../../assets/loading.gif';
-import { faBath } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBatteryThreeQuarters,
+  faPlusSquare,
+  faBatteryEmpty,
+  faFolderMinus,
+  faEye,
+  faEraser,
+  faTrashAlt,
+  faBan,
+  faCheckSquare,
+  faExternalLinkAlt,
+  faBath
+} from '@fortawesome/free-solid-svg-icons';
 import './details.css';
 
 class AppointmentDetail extends Component {
@@ -857,7 +869,8 @@ render() {
                             pathname: "/patients",
                             state: {patient: this.props.appointment.patient._id}
                           }}
-                        >Go!
+                        >
+                        <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
                         </Link>
                       </ListGroup.Item>
                       <ListGroup.Item>

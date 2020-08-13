@@ -14,7 +14,9 @@ import {
   faTrashAlt,
   faBan,
   faCheckSquare,
-  faExternalLinkAlt
+  faExternalLinkAlt,
+  faUserPlus,
+  faCalendarPlus
 } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 
@@ -41,7 +43,6 @@ const AppointmentItem = (props) => {
      }
     }
 
-
   return (
     <li key={props.key} className="">
       <Card>
@@ -59,17 +60,33 @@ const AppointmentItem = (props) => {
               Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
             </Card.Text>
           )}
-          {
-            props.homePage && (
-
+          {props.homePage && (
             <Card.Text className="cardText">
               Patient: <span className="bold">{props.appointment.patient._id}</span>
             </Card.Text>
-
-          )
-        }
+          )}
 
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+
+          {props.visitPage !== true &&
+            props.showDetails && (
+              <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon" onClick={props.showDetails.bind(this, props.appointment)}/>
+          )}
+
+          {props.homePage && (
+            <Link
+              to={{
+                pathname: "/appointments",
+                state: {appointment: props.appointment._id}
+              }}
+            >
+            <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+            </Link>
+          )}
+
+          {props.visitPage === true && (
+            <FontAwesomeIcon icon={faCalendarPlus} className="listIcon" onClick={props.onSelect.bind(this, props.appointment)}/>
+          )}
 
           {props.canDelete && (
             <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
@@ -143,27 +160,7 @@ const AppointmentItem = (props) => {
                 important: <span className="bold">{props.appointment.important.toString()}</span>
               </Card.Text>
               </li>
-              {props.visitPage !== true &&
-                props.showDetails && (
-                <li>
-                <Button variant="outline-primary" onClick={props.showDetails.bind(this, props.appointment)}>Details</Button>
-                </li>
-              )}
-              {props.visitPage === true && (
-                <li>
-                <Button variant="outline-primary" onClick={props.onSelect.bind(this, props.appointment)}>Select</Button>
-                </li>
-              )}
-              {props.homePage && (
-                <Link
-                  to={{
-                    pathname: "/appointments",
-                    state: {appointment: props.appointment._id}
-                  }}
-                >
-                <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
-                </Link>
-              )}
+
 
             </ul>
             </Row>

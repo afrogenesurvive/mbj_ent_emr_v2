@@ -5,10 +5,10 @@ const moment = require('moment');
 const { pocketVariables } = require('../../helpers/pocketVars');
 
 module.exports = {
-  login: async ({ email, password }) => {
+  login: async ({ username, password }) => {
     console.log("Resolver: Login...");
     // console.log(email,password);
-    const user = await User.findOne({ 'contact.email': email });
+    const user = await User.findOne({ 'username': username });
     if (!user) {
       // throw new Error('User does not exist!');
       console.log('User does not exist!');

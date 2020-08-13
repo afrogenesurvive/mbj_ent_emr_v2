@@ -100,14 +100,15 @@ componentDidMount () {
     const seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
     this.getPocketVars(seshStore);
   }
-  this.setState({
-    selectedUser: this.context.selectedUser
-  })
   if (this.context.role === 'Admin') {
     this.setState({
       canDelete: true
     })
   }
+  this.setState({
+    selectedUser: this.context.selectedUser
+  })
+
   this.parseForCalendar({
     attendance: this.props.user.attendance,
     leave: this.props.user.leave,
@@ -1561,7 +1562,6 @@ toggleOverlay = () => {
 }
 
 
-
 render() {
 
   return (
@@ -1687,42 +1687,58 @@ render() {
                     <ListGroup.Item>
                       <p className="listGroupText">Title:</p>
                       <p className="listGroupText bold">{this.props.user.title}</p>
-                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
+                      {this.state.canDelete === true && (
+                          <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
+                      )}
                       <p className="listGroupText">Name:</p>
                       <p className="listGroupText bold">{this.props.user.name}</p>
-                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'name')}>Edit</Button>
+                      {this.state.canDelete === true && (
+                          <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'name')}>Edit</Button>
+                      )}
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <p className="listGroupText">Username:</p>
                       <p className="listGroupText bold">{this.props.user.username}</p>
-                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'username')}>Edit</Button>
+                      {this.state.canDelete === true && (
+                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'username')}>Edit</Button>
+                      )}
                       <p className="listGroupText">Role:</p>
                       <p className="listGroupText bold">{this.props.user.role}</p>
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <p className="listGroupText">DOB:</p>
                       <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
-                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
+                      {this.state.canDelete === true && (
+                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
+                      )}
                       <p className="listGroupText">Age:</p>
                       <p className="listGroupText bold">{this.props.user.age}</p>
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <p className="listGroupText">Gender:</p>
                       <p className="listGroupText bold">{this.props.user.gender}</p>
-                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'gender')}>Edit</Button>
+                      {this.state.canDelete === true && (
+                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'gender')}>Edit</Button>
+                      )}
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <p className="listGroupText">Email:</p>
                       <p className="listGroupText bold">{this.props.user.contact.email}</p>
-                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.email')}>Edit</Button>
+                      {this.state.canDelete === true && (
+                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.email')}>Edit</Button>
+                      )}
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <p className="listGroupText">Phone:</p>
                       <p className="listGroupText bold">{this.props.user.contact.phone}</p>
-                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone')}>Edit</Button>
+                      {this.state.canDelete === true && (
+                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone')}>Edit</Button>
+                      )}
                       <p className="listGroupText">Phone 2:</p>
                       <p className="listGroupText bold">{this.props.user.contact.phone2}</p>
-                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone2')}>Edit</Button>
+                      {this.state.canDelete === true && (
+                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone2')}>Edit</Button>
+                      )}
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <p></p>
@@ -1763,7 +1779,7 @@ render() {
                   <Row className="displayPaneHeadRow">
                     <p className="displayPaneTitle">User Address List:</p>
                     <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                    {this.context.role === 'Admin' && (
+                    {this.state.canDelete === true && (
                       <Button variant="outline-success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
                     )}
                   </Row>
@@ -1787,7 +1803,7 @@ render() {
                   <Row className="displayPaneHeadRow">
                     <p className="displayPaneTitle">User Attendance List:</p>
                     <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                    {this.context.role === 'Admin' && (
+                    {this.state.canDelete === true && (
                       <Button variant="outline-success" onClick={this.startAdd.bind(this, 'attendance')}>Add</Button>
                     )}
                   </Row>
@@ -1824,7 +1840,7 @@ render() {
                   <Row className="displayPaneHeadRow">
                     <p className="displayPaneTitle">User Leave List:</p>
                     <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                    {this.context.role === 'Admin' && (
+                    {this.state.canDelete === true && (
                       <Button variant="outline-success" onClick={this.startAdd.bind(this, 'leave')}>Add</Button>
                     )}
                   </Row>
@@ -1860,7 +1876,7 @@ render() {
                   <Row className="displayPaneHeadRow">
                     <p className="displayPaneTitle">User Image List:</p>
                     <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                    {this.context.role === 'Admin' && (
+                    {this.state.canDelete === true && (
                       <Button variant="outline-success" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
                     )}
                   </Row>
@@ -1884,7 +1900,7 @@ render() {
                   <Row className="displayPaneHeadRow">
                     <p className="displayPaneTitle">User File List:</p>
                     <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                    {this.context.role === 'Admin' && (
+                    {this.state.canDelete === true && (
                       <Button variant="outline-success" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
                     )}
                   </Row>
@@ -1932,7 +1948,7 @@ render() {
                   <Row className="displayPaneHeadRow">
                     <p className="displayPaneTitle">User Notes:</p>
                     <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                    {this.context.role === 'Admin' && (
+                    {this.state.canDelete === true && (
                       <Button variant="outline-success" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
                     )}
                   </Row>
