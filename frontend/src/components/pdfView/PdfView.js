@@ -8,7 +8,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import { PDFViewer, Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
 import moment from 'moment';
 import loadingGif from '../../assets/loading.gif';
-import letterHead from '../../assets/testLetterhead.png';
+import letterHead from '../../assets/letterhead.jpg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBatteryThreeQuarters,
@@ -54,8 +54,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Times-Roman'
   },
   image: {
-    marginVertical: 15,
-    marginHorizontal: 100,
+    // marginVertical: 15,
+    // marginHorizontal: 100,
   },
   header: {
     fontSize: 12,
@@ -115,8 +115,7 @@ return (
 
 
           <Text style={styles.subtitle}>
-            Capítulo I: Que trata de la condición y ejercicio del famoso hidalgo D.
-            Quijote de la Mancha
+            Patient name: {props.patient.name}
           </Text>
           <Text style={styles.text}>
             En un lugar de la Mancha, de cuyo nombre no quiero acordarme, no ha

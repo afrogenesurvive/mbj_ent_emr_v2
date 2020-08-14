@@ -35,8 +35,12 @@ return (
       </Form.Group>
 
       <Form.Group as={Col} controlId="name">
-        <Form.Label>name *</Form.Label>
+        <Form.Label>First Name *</Form.Label>
         <Form.Control type="text" placeholder="name"/>
+      </Form.Group>
+      <Form.Group as={Col} controlId="lastName">
+        <Form.Label>Last Name *</Form.Label>
+        <Form.Control type="text" placeholder="last name"/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="username">

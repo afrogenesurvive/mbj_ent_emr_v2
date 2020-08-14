@@ -9,6 +9,7 @@ const userSchema = new Schema({
   role: {type: String, enum: ['Admin','Staff','Nurse','Doctor']},
   username: {type: String,required: true},
   registrationNumber: {type: String},
+  employmentDate:{type: Date},
   dob:{type: Date},
   age: {type:Number},
   gender: {type: String},

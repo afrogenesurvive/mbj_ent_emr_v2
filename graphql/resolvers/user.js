@@ -1103,6 +1103,7 @@ module.exports = {
         type: args.userInput.type,
         username: args.userInput.username,
         registrationNumber: regNo,
+        employmentDate: '',
         dob: args.userInput.dob,
         age: age,
         gender: args.userInput.gender,

@@ -4,7 +4,7 @@ const patientResolver = require('./patient');
 const appointmentResolver = require('./appointment');
 const visitResolver = require('./visit');
 const reminderResolver = require('./reminder');
-// const queueResolver = require('./queue');
+const queueResolver = require('./queue');
 
 const rootResolver = {
   ...authResolver,
@@ -13,7 +13,7 @@ const rootResolver = {
   ...appointmentResolver,
   ...visitResolver,
   ...reminderResolver,
-  // ...queueResolver,
+  ...queueResolver,
 };
 
 module.exports = rootResolver;

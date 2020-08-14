@@ -12,6 +12,7 @@ module.exports = buildSchema(`
     role: String
     username: String
     registrationNumber: String
+    employmentDate: String
     dob: String
     age: Int
     gender: String
@@ -47,6 +48,7 @@ module.exports = buildSchema(`
     role: String
     username: String
     registrationNumber: String
+    employmentDate: String
     dob: String
     age: Int
     gender: String
@@ -91,6 +93,7 @@ module.exports = buildSchema(`
     password: String
     title: String
     name: String
+    lastName: String
     role: String
     username: String
     registration: PatientRegistration
@@ -181,6 +184,7 @@ module.exports = buildSchema(`
     password: String
     title: String
     name: String
+    lastName: String
     role: String
     username: String
     registrationDate: String
@@ -628,7 +632,8 @@ module.exports = buildSchema(`
   type Queue {
     _id: ID!
     date: String
-    slot: [QueueSlot]
+    currentSlot: Int
+    slots: [QueueSlot]
     creator: User
   }
   type QueueSlot {
@@ -640,9 +645,9 @@ module.exports = buildSchema(`
   }
   input QueueInput {
     date: String
-    queueSlotNumber: Int
-    queueSlotTime: String
-    queueSlotSeen: Boolean
+    slotNumber: Int
+    slotTime: String
+    slotSeen: Boolean
   }
 
 
@@ -895,8 +900,8 @@ module.exports = buildSchema(`
 
     sendReminders(activityId: ID!): [Reminder]
 
-    createQueue(activityId: ID!, queueInput: QueueInput!): Queue
-    addQueueSlot(activityId: ID!, queueId: ID!, queueInput: QueueInput!): Queue
+    createQueue(activityId: ID!): Queue
+    addQueueSlot(activityId: ID!, queueId: ID!, patientId: ID, consultantId: ID!): Queue
     queueSlotSeen(activityId: ID!, queueId: ID!, queueInput: QueueInput!): Queue
     deleteQueSlot(activityId: ID!, queueId: ID!, queueInput: QueueInput!): Queue
 

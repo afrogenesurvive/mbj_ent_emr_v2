@@ -1156,6 +1156,7 @@ module.exports = {
         title: args.patientInput.title,
         password: password,
         name: args.patientInput.name,
+        lastName: args.patientInput.lastName,
         role: args.patientInput.role,
         username: args.patientInput.username,
         registration: {

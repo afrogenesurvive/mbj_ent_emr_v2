@@ -37,138 +37,199 @@ module.exports = {
 // queueSlotSseen
 // deleteQueSlot
 
-  // getAllAppointments: async (args, req) => {
-  //   console.log("Resolver: getAllAppointments...");
-  //   if (!req.isAuth) {
-  //     throw new Error('Unauthenticated!');
-  //   }
-  //   try {
-  //     const appointments = await Appointment.find({})
-  //     .populate('consultants')
-  //     .populate('visit')
-  //     .populate('creator')
-  //     .populate('patient');
-  //     return appointments.map(appointment => {
-  //       return transformAppointment(appointment,);
-  //     });
-  //   } catch (err) {
-  //     throw err;
-  //   }
-  // },
-  // getAppointmentById: async (args, req) => {
-  //   console.log("Resolver: getAppointmentById...");
-  //   if (!req.isAuth) {
-  //     throw new Error('Unauthenticated!');
-  //   }
-  //   try {
-  //     const appointment = await Appointment.findById(args.appointmentId)
-  //     .populate('consultants')
-  //     .populate('visit')
-  //     .populate('creator')
-  //     .populate('patient');
-  //     return {
-  //       ...appointment._doc,
-  //       _id: appointment.id,
-  //       title: appointment.title,
-  //       date: appointment.date
-  //     };
-  //   } catch (err) {
-  //     throw err;
-  //   }
-  // },
+  getAllQueues: async (args, req) => {
+    console.log("Resolver: getAllQueues...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const queues = await Queue.find({})
+      .populate('slot.consultant')
+      .populate('slot.patient')
+      .populate('creator');
+      return queues.map(queue => {
+        return transformQueue(queue,);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  getQueueById: async (args, req) => {
+    console.log("Resolver: getQueueById...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const queue = await Queue.findById(args.queueId)
+      .populate('slot.consultant')
+      .populate('slot.patient')
+      .populate('creator');
+      return {
+        ...queue._doc,
+        _id: queue.id,
+        date: queue.date
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  addQueueSlot: async (args, req) => {
+    console.log("Resolver: addQueueSlot...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const patient = await Patient.findById({_id: args.patientId});
+      const consultant = await User.findById({_id: args.consultantId});
+      const time = moment().format('h:mm:ss a')
+      let number;
+      const allSlots = await Queue.findById({_id: args.queueId});
+      number = allSlots.slots.length + 1;
+      let slotPatients = allSlots.slots.map(x=>x.patient);
+
+      const slot = {
+        number: number,
+        time: time,
+        patient: patient,
+        consultant: consultant,
+        seen: false
+      }
+      // console.log('1:',number);
+      // console.log('a:',allSlots);
+      // console.log('2:',slot);
+      // console.log('3:',time);
+      // console.log('4:',slotPatients);
+      const slotPatientExists = slotPatients.includes(patient._id)
+
+      if (consultant.role === 'Staff' || consultant.role === 'Admin') {
+        console.log('...check the consultant id! Doctors and Nurses only...');
+        throw new Error('...check the consultant id! Doctors and Nurses only...')
+      }
+      if (slotPatientExists) {
+        console.log('...a slot for this patient already exists...');
+        throw new Error('...a slot for this patient already exists...')
+      }
+
+      const queue = await Queue.findOneAndUpdate(
+        {_id: args.queueId},
+        {$addToSet: {slots: slot}},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('slot.consultant')
+      .populate('slot.patient')
+      .populate('creator');
+      return {
+        ...queue._doc,
+        _id: queue.id,
+        date: queue.date
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  queueSlotSeen: async (args, req) => {
+    console.log("Resolver: queueSlotSeen...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const queue = await Queue.findOneAndUpdate(
+        {_id: args.queueId, 'slots.number': args.queueInput.slotNumber},
+        {
+          // {$inc: {currentSlot: 1}},
+          'slots.$.seen': true
+        },
+        {new: true, useFindAndModify: false}
+      )
+      .populate('slot.consultant')
+      .populate('slot.patient')
+      .populate('creator');
+      return {
+        ...queue._doc,
+        _id: queue.id,
+        date: queue.date
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  queueSlotChange: async (args, req) => {
+    console.log("Resolver: queueSlotChange...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const patient = await Patient.findById({_id: args.patientId});
+
+      // const queue = await Queue.findOneAndUpdate(
+      //   {_id: args.queueId, 'slots.patient': patient._id},
+      //   {},
+      //   {new: true, useFindAndModify: false}
+      // )
+      // .populate('slot.consultant')
+      // .populate('slot.patient')
+      // .populate('creator');
+
+
+      return {
+        ...queue._doc,
+        _id: queue.id,
+        date: queue.date
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
   //
-  // deleteAppointmentById: async (args, req) => {
-  //   console.log("Resolver: deleteAppointmentById...");
-  //   if (!req.isAuth) {
-  //     throw new Error('Unauthenticated!');
-  //   }
-  //   try {
-  //       const appointment = await Appointment.findByIdAndRemove({_id:args.appointmentId});
-  //       return {
-  //         ...appointment._doc,
-  //         _id: appointment.id,
-  //         title: appointment.title,
-  //         date: appointment.date
-  //       };
-  //   } catch (err) {
-  //     throw err;
-  //   }
-  // },
-  // createAppointment: async (args, req) => {
-  //   console.log("Resolver: createAppointment...");
-  //   try {
-  //
-  //     let consultants = [];
-  //     const creator = await User.findById({_id: args.activityId})
-  //     if (creator.role === 'Doctor') {
-  //       consultants.push(creator);
-  //     }
-  //     const patient = await Patient.findById({_id: args.patientId})
-  //     const today = moment();
-  //     // console.log(today);
-  //
-  //     if (moment(args.appointmentInput.date).format('YYYY-MM-DD') < moment().format('YYYY-MM-DD')) {
-  //       console.log('...ummm no! Please pick a date today or in the future...');
-  //       throw new Error('...ummm no! Please pick a date today or in the future...');
-  //     }
-  //     const appointmentExists = await Appointment.find({
-  //         date: args.appointmentInput.date,
-  //         title: args.appointmentInput.title
-  //     })
-  //     // console.log('appointmentExists',appointmentExists);
-  //     if (appointmentExists.length > 0) {
-  //       console.log('...an appointment w/ this date & title exists already...check your info and try again...');
-  //       throw new Error('...an appointment w/ this date & title exists already...check your info and try again...')
-  //     }
-  //     // console.log('1:',moment(args.appointmentInput.date));
-  //     const appointment = new Appointment({
-  //       title: args.appointmentInput.title,
-  //       type: args.appointmentInput.type,
-  //       subType: args.appointmentInput.subType,
-  //       date: args.appointmentInput.date,
-  //       time: args.appointmentInput.time,
-  //       checkinTime:0,
-  //       seenTime: 0,
-  //       location: args.appointmentInput.location,
-  //       description: args.appointmentInput.description,
-  //       visit: null,
-  //       patient: patient,
-  //       consultants: consultants,
-  //       inProgress: false,
-  //       attended: false,
-  //       important: args.appointmentInput.important,
-  //       notes: [],
-  //       tags: [],
-  //       reminders: [],
-  //       creator: creator
-  //     });
-  //     const result = await appointment.save();
-  //     // console.log('appointment', appointment);
-  //     const updatePatient = await Patient.findOneAndUpdate(
-  //       {_id: patient._id},
-  //       {$addToSet: {appointments: result}},
-  //       {new: true, useFindAndModify: false}
-  //     )
-  //     // console.log('updatePatient',updatePatient);
-  //     console.log('start');
-  //     for (let index = 0; index < consultants.length; index++) {
-  //       let consultant = consultants[index];
-  //       console.log('loop',index);
-  //       const updateConsultants = await User.findOneAndUpdate(
-  //         {_id: consultant},
-  //         {$addToSet: {appointments: result}},
-  //         {new: true, useFindAndModify: false}
-  //       )
-  //       // console.log('updateConsultants',updateConsultants);
-  //     }
-  //     console.log('end');
-  //     //
-  //     return {
-  //       ...result._doc,
-  //       _id: result.id
-  //     };
-  //   } catch (err) {
-  //     throw err;
-  //   }
-  // }
+  deleteQueueById: async (args, req) => {
+    console.log("Resolver: deleteQueueById...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const queue = await Queue.findByIdAndRemove({_id:args.queueId});
+        return {
+          ...queue._doc,
+          _id: queue.id,
+          date: queue.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  createQueue: async (args, req) => {
+    console.log("Resolver: createQueue...");
+    try {
+      const creator = await User.findById({_id: args.activityId});
+      const today = moment().format('YYYY-MM-DD');
+      const queueExists =  await Queue.find({date: today})
+      if (queueExists.length > 0) {
+        console.log('...ahem! 1 Queue per day please...',queueExists.length);
+        throw new Error('...ahem! 1 Queue per day please...')
+      }
+
+      const queue = new Queue({
+        date: today,
+        currentSlot: 0,
+        slots: [],
+        creator: creator
+      });
+      const result = await queue.save();
+
+      // console.log('start');
+      // for (let index = 0; index < consultants.length; index++) {
+      //   let consultant = consultants[index];
+      //   console.log('loop',index);
+      // }
+      // console.log('end');
+
+      return {
+        ...result._doc,
+        _id: result.id
+      };
+    } catch (err) {
+      throw err;
+    }
+  }
 };

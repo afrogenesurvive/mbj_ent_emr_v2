@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 
 const queueSchema = new Schema({
   date: {type: Date,required: true},
-  slot: [{
+  currentSlot: {type: Number},
+  slots: [{
     number: {type: Number},
     time: {type: String},
     patient: {type: Schema.Types.ObjectId,ref: 'Patient'},

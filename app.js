@@ -68,8 +68,8 @@ app.use(
   })
 );
 
-mongoose.connect(`mongodb+srv://${process.env.ATLAS_A}:${process.env.ATLAS_B}@${process.env.ATLAS_C}/test?retryWrites=true&w=majority`,
-// mongoose.connect('mongodb://localhost:27017/mbj_ent_emr_v2',
+// mongoose.connect(`mongodb+srv://${process.env.ATLAS_A}:${process.env.ATLAS_B}@${process.env.ATLAS_C}/test?retryWrites=true&w=majority`,
+mongoose.connect('mongodb://localhost:27017/mbj_ent_emr_v2',
 {useNewUrlParser: true, useUnifiedTopology: true})
   .then(() => {
     console.log(`

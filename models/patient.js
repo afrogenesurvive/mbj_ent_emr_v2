@@ -7,6 +7,7 @@ const patientSchema = new Schema({
   password: {type: String},
   title: {type: String},
   name: {type: String,required: true},
+  lastName: {type: String,required: true},
   role: {type: String},
   username: {type: String,required: true},
   registration: {
