@@ -70,19 +70,20 @@ class LoginPage extends Component {
     .then(resData => {
       // console.log('...resData...',resData.data.login);
       let responseAlert = '...login success!...';
+      console.log('...login success...');
       let error = null;
-      if (resData.data.login.error) {
-        error = resData.data.login.error;
+      if (resData.data.error) {
+        error = resData.data.error;
         responseAlert = error;
       }
       this.context.setUserAlert(responseAlert)
       if (resData.data.login.token !== "") {
-        this.context.login(
-          resData.data.login.token,
-          resData.data.login.activityId,
-          resData.data.login.role,
-          resData.data.login.tokenExpiration
-        );
+        // this.context.login(
+        //   resData.data.login.token,
+        //   resData.data.login.activityId,
+        //   resData.data.login.role,
+        //   resData.data.login.tokenExpiration
+        // );
         const sessionObject = {
           token: resData.data.login.token,
           activityId: resData.data.login.activityId,
@@ -91,8 +92,16 @@ class LoginPage extends Component {
         }
         this.context.setUserAlert(responseAlert)
        sessionStorage.setItem('logInfo', JSON.stringify(sessionObject));
+       console.log('...session storage set...');
        this.setState({ activityA: `login?${sessionObject.activityId}`})
        this.logUserActivity();
+
+       this.context.login(
+         resData.data.login.token,
+         resData.data.login.activityId,
+         resData.data.login.role,
+         resData.data.login.tokenExpiration
+       );
       }
     })
     .catch(err => {

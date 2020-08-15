@@ -10,7 +10,8 @@ const queueSchema = new Schema({
     time: {type: String},
     patient: {type: Schema.Types.ObjectId,ref: 'Patient'},
     consultant: {type: Schema.Types.ObjectId,ref: 'User'},
-    seen: {type: Boolean}
+    seen: {type: Boolean},
+    seenTime: {type: String}
   }],
   creator: {type: Schema.Types.ObjectId,ref: 'User'}
 },

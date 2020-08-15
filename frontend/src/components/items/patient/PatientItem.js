@@ -44,7 +44,7 @@ const PatientItem = (props) => {
     }
 
   return (
-    <li key={props.key} className="">
+    <li key={props.count} className="">
       <Card>
         <Card.Body className="cardBody">
           <Card.Text className="cardText">

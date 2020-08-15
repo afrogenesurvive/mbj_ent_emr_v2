@@ -44,8 +44,20 @@ module.exports = {
     }
     try {
       const queues = await Queue.find({})
-      .populate('slot.consultant')
-      .populate('slot.patient')
+      .populate({
+        path: 'slots',
+        populate: {
+          path: 'consultant',
+          model: 'User'
+        }
+      })
+      .populate({
+        path: 'slots',
+        populate: {
+          path: 'patient',
+          model: 'Patient'
+        }
+      })
       .populate('creator');
       return queues.map(queue => {
         return transformQueue(queue,);
@@ -61,8 +73,86 @@ module.exports = {
     }
     try {
       const queue = await Queue.findById(args.queueId)
-      .populate('slot.consultant')
-      .populate('slot.patient')
+      .populate({
+        path: 'slots',
+        populate: {
+          path: 'consultant',
+          model: 'User'
+        }
+      })
+      .populate({
+        path: 'slots',
+        populate: {
+          path: 'patient',
+          model: 'Patient'
+        }
+      })
+      .populate('creator');
+      return {
+        ...queue._doc,
+        _id: queue.id,
+        date: queue.date
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  getQueueByField: async (args, req) => {
+    console.log("Resolver: getQueueByField...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      let resolverField = args.field;
+      let resolverQuery = args.query;
+      const query = {[resolverField]:resolverQuery};
+      const queue = await Queue.findById(query)
+      .populate({
+        path: 'slots',
+        populate: {
+          path: 'consultant',
+          model: 'User'
+        }
+      })
+      .populate({
+        path: 'slots',
+        populate: {
+          path: 'patient',
+          model: 'Patient'
+        }
+      })
+      .populate('creator');
+      return {
+        ...queue._doc,
+        _id: queue.id,
+        date: queue.date
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  getQueueToday: async (args, req) => {
+    console.log("Resolver: getQueueToday...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const today = moment().format('YYYY-MM-DD')
+      const queue = await Queue.findOne({date: today})
+      .populate({
+        path: 'slots',
+        populate: {
+          path: 'consultant',
+          model: 'User'
+        }
+      })
+      .populate({
+        path: 'slots',
+        populate: {
+          path: 'patient',
+          model: 'Patient'
+        }
+      })
       .populate('creator');
       return {
         ...queue._doc,
@@ -92,7 +182,8 @@ module.exports = {
         time: time,
         patient: patient,
         consultant: consultant,
-        seen: false
+        seen: false,
+        seenTime: null
       }
       // console.log('1:',number);
       // console.log('a:',allSlots);
@@ -115,8 +206,20 @@ module.exports = {
         {$addToSet: {slots: slot}},
         {new: true, useFindAndModify: false}
       )
-      .populate('slot.consultant')
-      .populate('slot.patient')
+      .populate({
+        path: 'slots',
+        populate: {
+          path: 'consultant',
+          model: 'User'
+        }
+      })
+      .populate({
+        path: 'slots',
+        populate: {
+          path: 'patient',
+          model: 'Patient'
+        }
+      })
       .populate('creator');
       return {
         ...queue._doc,
@@ -133,17 +236,30 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-
+      const time = moment().format('h:mm:ss a');
       const queue = await Queue.findOneAndUpdate(
         {_id: args.queueId, 'slots.number': args.queueInput.slotNumber},
         {
           // {$inc: {currentSlot: 1}},
-          'slots.$.seen': true
+          'slots.$.seen': true,
+          'slots.$.seenTime': time
         },
         {new: true, useFindAndModify: false}
       )
-      .populate('slot.consultant')
-      .populate('slot.patient')
+      .populate({
+        path: 'slots',
+        populate: {
+          path: 'consultant',
+          model: 'User'
+        }
+      })
+      .populate({
+        path: 'slots',
+        populate: {
+          path: 'patient',
+          model: 'Patient'
+        }
+      })
       .populate('creator');
       return {
         ...queue._doc,
@@ -198,8 +314,34 @@ module.exports = {
       throw err;
     }
   },
+  deleteQueueSlot: async (args, req) => {
+    console.log("Resolver: deleteQueueSlot...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+        const queue = await Queue.findOneAndUpdate(
+          {_id: args.queueId, 'slots.number': args.queueInput.slotNumber},
+          {$pull: {slots: 'slots.$'}},
+          {new: true, useFindAndModify: false}
+        );
+        // for each slots with number greater than args slot number
+        // reduce slotNumber -1
+        return {
+          ...queue._doc,
+          _id: queue.id,
+          date: queue.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   createQueue: async (args, req) => {
     console.log("Resolver: createQueue...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
     try {
       const creator = await User.findById({_id: args.activityId});
       const today = moment().format('YYYY-MM-DD');

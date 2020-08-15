@@ -77,6 +77,7 @@ const PatientList = props => {
     return (
       <PatientItem
         key={count}
+        count={count}
         patient={patient}
         canDelete={props.canDelete}
         onDelete={props.onDelete}

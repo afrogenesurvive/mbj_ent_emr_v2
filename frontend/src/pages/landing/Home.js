@@ -13,6 +13,7 @@ import LoadingOverlay from '../../components/overlay/LoadingOverlay';
 
 import PatientList from '../../components/lists/patient/PatientList';
 import AppointmentList from '../../components/lists/appointment/AppointmentList';
+import QueueItem from '../../components/items/queue/QueueItem';
 import loadingGif from '../../assets/loading.gif';
 import './landing.css';
 
@@ -35,6 +36,13 @@ class HomePage extends Component {
     queue: null,
     weekImportantAppointments: null,
     recentPatients: null,
+    queueToday: null,
+    addingQueueSlot: false,
+    queueSlotAddStage: null,
+    users: null,
+    patients: null,
+    selectedUser: null,
+    selectedPatient: null,
   };
   static contextType = AuthContext;
 
@@ -47,9 +55,116 @@ componentDidMount () {
     this.getAppointmentsToday(seshStore);
     this.getAppointmentsImportantWeek(seshStore);
     this.getRecentPatients(seshStore);
+    this.getQueueToday(seshStore);
+    this.getAllPatients(seshStore);
+    this.getAllUsers(seshStore);
 
   }
 }
+
+getAllPatients (args) {
+  console.log('...retrieving all patients...');
+  this.context.setUserAlert('...retrieving all patients...')
+  this.setState({isLoading: true});
+
+  const token = args.token;
+  const activityId = args.activityId;
+  const userId = activityId;
+
+  let requestBody = {
+    query: `
+      query {getAllPatients(
+        activityId:"${activityId}"
+      )
+      {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
+    `};
+  fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.getAllPatients);
+      let responseAlert = '...all patients retrieval success!...';
+      let error = null;
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+
+      this.context.setUserAlert(responseAlert)
+      this.setState({
+        isLoading: false,
+        patients: resData.data.getAllPatients,
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+};
+getAllUsers (args) {
+  console.log('...retrieving all users...');
+  this.context.setUserAlert('...retrieving all users...')
+  this.setState({isLoading: true});
+
+  const token = args.token;
+  const activityId = args.activityId;
+  const userId = activityId;
+
+  let requestBody = {
+    query: `
+      query {getAllUsers(
+        activityId:"${activityId}" )
+        {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+    `};
+  fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.getAllUsers);
+      console.log('...all users retrieval success!...');
+      let responseAlert = '...all users retrieval success!...';
+      let error = null;
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+
+      this.context.setUserAlert(responseAlert)
+      this.setState({
+        isLoading: false,
+        users: resData.data.getAllUsers,
+      });
+
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+};
 
 loadHome = () => {
   const args = {
@@ -60,6 +175,7 @@ loadHome = () => {
   this.getAppointmentsToday(args);
   this.getAppointmentsImportantWeek(args);
   this.getRecentPatients(args);
+  this.getQueueToday(args);
 
 }
 
@@ -217,6 +333,77 @@ getRecentPatients = (args) => {
     });
 }
 
+getQueueToday = (args) => {
+  console.log('...retrieving todays queue...');
+  this.context.setUserAlert('...retrieving todays queue...')
+  this.setState({isLoading: true});
+
+  const token = args.token;
+  const activityId = args.activityId;
+
+  let requestBody = {
+    query: `
+      query {getQueueToday(
+        activityId:"${activityId}"
+      )
+      {_id,date,currentSlot,slots{number,time,patient{_id,username,name},consultant{_id,username,role},seen,seenTime},creator{_id,username,role}}}
+    `};
+  fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      console.log('...resData...',resData.data.getQueueToday);
+      console.log('...retrieve recent patients success!...');
+      let responseAlert = '...retrieve recent patients success!...';
+      let error = null;
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.setState({
+        isLoading: false,
+        queueToday: resData.data.getQueueToday,
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+}
+
+toggleOverlay = () => {
+  this.setState({
+    overlay: false
+  })
+}
+
+startAddQueueSlot = () => {
+  this.setState({
+    addingQueueSlot: true,
+    queueSlotAddStage: 1
+  })
+}
+cancelAddQueueSlot = () => {
+  this.setState({
+    addingQueueSlot: false,
+    queueSlotAddStage: null
+  })
+}
+
+
   render() {
 
     return (
@@ -226,6 +413,7 @@ getRecentPatients = (args) => {
         this.state.overlay === true && (
         <LoadingOverlay
           status={this.state.overlayStatus}
+          toggleOverlay={this.toggleOverlay}
         />
       )
     }
@@ -233,7 +421,7 @@ getRecentPatients = (args) => {
 
       <Row className="landingPageTopRow">
 
-        <Button variant="outline-secondary" size="md" onClick={this.loadHome}>Home</Button>
+        <Button variant="outline-secondary" size="md" onClick={this.loadHome}>Load</Button>
         {this.state.isLoading ? (
           <Image src={loadingGif} className="loadingGif" fluid />
         ):(
@@ -256,8 +444,22 @@ getRecentPatients = (args) => {
       </Col>
       <Col md={6} className="landingPageCol">
         <h3>Queue</h3>
-        {this.state.queue && (
-          <h3>Queue list</h3>
+        {this.state.queueToday && (
+          <React.Fragment>
+          <Button variant="outline-primary" onClick={this.startAddQueueSlot}>Add</Button>
+          <QueueItem
+            queue={this.state.queueToday}
+          />
+
+          {this.state.addingQueueSlot === true &&
+            this.state.queueSlotAddStage === 1 && (
+            <p>add queue slot patient</p>
+          )}
+          {this.state.addingQueueSlot === true &&
+            this.state.queueSlotAddStage === 2 && (
+            <p>add queue slot consultant</p>
+          )}
+          </React.Fragment>
         )}
       </Col>
       </Row>

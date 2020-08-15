@@ -642,12 +642,14 @@ module.exports = buildSchema(`
     patient: Patient
     consultant: User
     seen: Boolean
+    seenTime: String
   }
   input QueueInput {
     date: String
     slotNumber: Int
     slotTime: String
     slotSeen: Boolean
+    slotSeenTime: String
   }
 
 
@@ -753,6 +755,8 @@ module.exports = buildSchema(`
     getQueuesByField(activityId: ID!, field: String!, query: String!): [Queue]
     getQueueSlotByPatient(activityId: ID!, queueId: ID!, patientId: ID!): Queue
     getQueueByCreator(activityId: ID!, creatorId: ID!): Queue
+    getQueueToday(activityId: ID!): Queue
+
 
   }
 
@@ -904,6 +908,7 @@ module.exports = buildSchema(`
     addQueueSlot(activityId: ID!, queueId: ID!, patientId: ID, consultantId: ID!): Queue
     queueSlotSeen(activityId: ID!, queueId: ID!, queueInput: QueueInput!): Queue
     deleteQueSlot(activityId: ID!, queueId: ID!, queueInput: QueueInput!): Queue
+    deleteQueueById(activityId: ID!, queueId: ID!): Queue
 
   }
 
