@@ -5,8 +5,32 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import DatePicker from "react-datepicker";
 import './addForms.css';
+import {
+  faBatteryThreeQuarters,
+  faPlusSquare,
+  faBatteryEmpty,
+  faFolderMinus,
+  faEye,
+  faEraser,
+  faTrashAlt,
+  faBan,
+  faCheckSquare,
+  faExternalLinkAlt,
+  faUserPlus
+} from '@fortawesome/free-solid-svg-icons';
 
 const AddVitalsForm = (props) => {
+
+  const [weightUnit, setState] = useState('Lbs');
+  const handleStateChange = (args) => {
+    // setState(args)
+    if (args === 'M') {
+      setState('Kg');
+    }
+    if (args === 'In') {
+      setState('Lbs');
+    }
+   }
 
 return (
 <div className="addFormTopDiv">
@@ -46,8 +70,8 @@ return (
     <Form.Row>
       <Form.Group as={Col} controlId="heightUnit">
         <Form.Label>Height: Unit</Form.Label>
-        <Form.Control as="select">
-          <option>Ft</option>
+        <Form.Control as="select" onChange={e => handleStateChange(e.target.value)}>
+          <option>In</option>
           <option>M</option>
         </Form.Control>
       </Form.Group>
@@ -57,22 +81,22 @@ return (
       </Form.Group>
       <Form.Group as={Col} controlId="weightUnit">
         <Form.Label>Weight: Unit</Form.Label>
-        <Form.Control as="select">
-          <option>Kg</option>
-          <option>Lbs</option>
-        </Form.Control>
+        <Form.Control type="text" value={weightUnit}/>
       </Form.Group>
       <Form.Group as={Col} controlId="weightValue">
         <Form.Label>Weight: Value</Form.Label>
         <Form.Control type="number" step='0.001' placeholder="weightValue"/>
       </Form.Group>
     </Form.Row>
-    <Form.Row>
-      <Form.Group as={Col} controlId="bmi">
-        <Form.Label>BMI</Form.Label>
-        <Form.Control type="number" step='0.001' placeholder="bmi"/>
-      </Form.Group>
-    </Form.Row>
+    {
+      // <Form.Row>
+      //   <Form.Group as={Col} controlId="bmi">
+      //     <Form.Label>BMI</Form.Label>
+      //     <Form.Control type="number" step='0.001' placeholder="bmi"/>
+      //   </Form.Group>
+      // </Form.Row>
+    }
+
     <Form.Row>
       <Form.Group as={Col} controlId="urineType">
         <Form.Label>Urine: type</Form.Label>

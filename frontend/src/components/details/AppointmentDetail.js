@@ -201,6 +201,12 @@ getAllUsers (args) {
       // console.log('...resData...',resData.data.getAllUsers);
       let responseAlert = '...all users retrieval success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -259,6 +265,12 @@ submitAddNoteForm = (event) => {
       // console.log('...resData...',resData.data.addAppointmentNotes);
       let responseAlert = '...notes add success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -322,6 +334,12 @@ deleteNote = (args) => {
       // console.log('...resData...',resData.data.deleteAppointmentNote);
       let responseAlert = '...note delete success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -385,6 +403,12 @@ submitAddTagForm = (event) => {
       // console.log('...resData...',resData.data.addAppointmentTags);
       let responseAlert = '...tags add success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -448,6 +472,12 @@ deleteTag = (args) => {
       // console.log('...resData...',resData.data.deleteAppointmentTag);
       let responseAlert = '...tag delete success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -518,6 +548,12 @@ submitAddUserForm = (event) => {
       // console.log('...resData...',resData.data.addAppointmentConsultant);
       let responseAlert = '...add consultant success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -574,6 +610,12 @@ deleteConsultant = (args) => {
       // console.log('...resData...',resData.data.deleteAppointmentConsultant);
       let responseAlert = '...delete consultant success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -637,6 +679,12 @@ submitUpdateSingleFieldForm = (event) => {
       // console.log('...resData...',resData.data.updateAppointmentSingleField);
       let responseAlert = '...field update success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;

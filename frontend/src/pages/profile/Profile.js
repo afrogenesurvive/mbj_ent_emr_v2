@@ -128,8 +128,9 @@ getPocketVars (args) {
         return res.json();
       })
       .then(resData => {
+
         if (resData.errors) {
-          this.setState({userAlert: resData.errors[0].message})
+          this.context.setUserAlert(resData.errors[0].message);
         } else {
           let pocketVarsParsed = JSON.parse(resData.data.getPocketVars)
           console.log('...retriving pocketVars success...');
@@ -180,6 +181,12 @@ getThisUser (args) {
       // console.log('...resData...',resData.data.getUserById);
       let responseAlert = '...profile retrieval success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -243,8 +250,12 @@ logUserActivity(args) {
     })
     .then(resData => {
       // console.log('...resData...',resData.data.addUserActivity);
+      if (resData.errors) {
+        this.context.setUserAlert(resData.errors[0].message)
+      }
+
       if (resData.data.addUserActivity.error) {
-        console.log('...resDataError...',resData.data.addUserActivity.error);
+        this.context.setUserAlert(resData.data.addUserActivity.error)
       }
     })
     .catch(err => {
@@ -303,6 +314,12 @@ submitAddAddressForm = (event) => {
       // console.log('...resData...',resData.data.addUserAddress);
       let responseAlert = '...address add success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -370,6 +387,12 @@ deleteAddress = (args) => {
       // console.log('...resData...',resData.data.deleteUserAddress);
       let responseAlert = '...address delete success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -432,6 +455,12 @@ setAddressPrimary = (args) => {
       // console.log('...resData...',resData.data.setUserAddressPrimary);
       let responseAlert = '...address set primary success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -494,6 +523,12 @@ submitAddAttendanceForm = (event) => {
       // console.log('...resData...',resData.data.addUserAttendance);
       let responseAlert = '...attendance add success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -560,6 +595,12 @@ deleteAttendance = (args) => {
       // console.log('...resData...',resData.data.deleteUserAttendance);
       let responseAlert = '...attendance delete success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -628,6 +669,12 @@ submitAddLeaveForm = (event) => {
       // console.log('...resData...',resData.data.addUserLeave);
       let responseAlert = '...leave add success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -696,6 +743,12 @@ deleteLeave = (args) => {
       // console.log('...resData...',resData.data.deleteUserLeave);
       let responseAlert = '...leave delete success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -843,6 +896,12 @@ submitAddImageForm = (event) => {
       // console.log('...resData...',resData.data.addUserImage);
       let responseAlert = '...image add success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -910,6 +969,12 @@ deleteImage = (args) => {
       // console.log('...resData...',resData.data.deleteUserImage);
       let responseAlert = '...image delete success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -1102,6 +1167,12 @@ submitAddFileForm = (event) => {
       // console.log('...resData...',resData.data.addUserFile);
       let responseAlert = '...file add success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -1166,6 +1237,12 @@ deleteFile = (args) => {
       // console.log('...resData...',resData.data.deleteUserFile);
       let responseAlert = '...file delete success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -1272,6 +1349,12 @@ submitAddNoteForm = (event) => {
       // console.log('...resData...',resData.data.addUserNotes);
       let responseAlert = '...notes add success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -1331,6 +1414,12 @@ deleteNote = (args) => {
       // console.log('...resData...',resData.data.deleteUserNote);
       let responseAlert = '...note delete success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -1391,6 +1480,12 @@ submitUpdateSingleFieldForm = (event) => {
       // console.log('...resData...',resData.data.updateUserSingleField);
       let responseAlert = '...field update success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;

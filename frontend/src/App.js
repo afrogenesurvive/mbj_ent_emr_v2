@@ -227,6 +227,11 @@ class App extends Component {
 
   setUserAlert = (args) => {
     // console.log('...setUserAlert...',args);
+    if (args === 'Unauthenticated!') {
+      this.setState({userAlert: '...token expired! Logging you out...'})
+
+      this.logout2()
+    }
     this.setState({userAlert: args})
   }
 

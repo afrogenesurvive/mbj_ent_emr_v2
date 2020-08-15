@@ -72,6 +72,12 @@ class LoginPage extends Component {
       let responseAlert = '...login success!...';
       console.log('...login success...');
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -143,7 +149,11 @@ class LoginPage extends Component {
       })
       .then(resData => {
         // console.log('...resData...',resData.data.addUserActivity);
+        if (resData.errors) {
+          this.context.setUserAlert(resData.errors[0].message);
+        }
         if (resData.data.addUserActivity.error) {
+          this.context.setUserAlert(resData.data.addUserActivity.error);
           console.log('...resDataError...',resData.data.addUserActivity.error);
         }
       })
@@ -186,7 +196,22 @@ class LoginPage extends Component {
         return res.json();
       })
       .then(resData => {
-        console.log('...resData...',resData.data.verifyUser);
+        // console.log('...resData...',resData.data.verifyUser);
+        let responseAlert;
+        let error = null;
+
+        if (resData.errors) {
+          error = resData.errors[0].message;
+          responseAlert = error;
+        }
+
+        if (resData.data.error) {
+          error = resData.data.error;
+          responseAlert = error;
+        }
+        
+        this.context.setUserAlert(responseAlert)
+
         this.context.setUserAlert('Verified...Please try loggin in again..')
       })
       .catch(err => {

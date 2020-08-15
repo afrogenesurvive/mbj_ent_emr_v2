@@ -96,6 +96,11 @@ getAllPatients (args) {
       // console.log('...resData...',resData.data.getAllPatients);
       let responseAlert = '...all patients retrieval success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -113,6 +118,7 @@ getAllPatients (args) {
       this.setState({isLoading: false })
     });
 };
+
 getAllUsers (args) {
   console.log('...retrieving all users...');
   this.context.setUserAlert('...retrieving all users...')
@@ -147,6 +153,12 @@ getAllUsers (args) {
       console.log('...all users retrieval success!...');
       let responseAlert = '...all users retrieval success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -212,6 +224,12 @@ getAppointmentsToday = (args) => {
       console.log('...get todays appointments success!...');
       let responseAlert = '...get todays appointments success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -264,6 +282,12 @@ getAppointmentsImportantWeek = (args) => {
       console.log('...get week important appointments success!...');
       let responseAlert = '...get week important appointments success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -316,6 +340,12 @@ getRecentPatients = (args) => {
       console.log('...retrieve recent patients success!...');
       let responseAlert = '...retrieve recent patients success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -367,6 +397,12 @@ getQueueToday = (args) => {
       console.log('...retrieve recent patients success!...');
       let responseAlert = '...retrieve recent patients success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+      
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -447,9 +483,6 @@ cancelAddQueueSlot = () => {
         {this.state.queueToday && (
           <React.Fragment>
           <Button variant="outline-primary" onClick={this.startAddQueueSlot}>Add</Button>
-          <QueueItem
-            queue={this.state.queueToday}
-          />
 
           {this.state.addingQueueSlot === true &&
             this.state.queueSlotAddStage === 1 && (
@@ -459,6 +492,10 @@ cancelAddQueueSlot = () => {
             this.state.queueSlotAddStage === 2 && (
             <p>add queue slot consultant</p>
           )}
+
+          <QueueItem
+            queue={this.state.queueToday}
+          />
           </React.Fragment>
         )}
       </Col>

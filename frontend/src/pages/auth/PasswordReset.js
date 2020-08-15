@@ -80,6 +80,12 @@ class PasswordResetPage extends Component {
       console.log('...resData...',resData.data.resetUserPassword);
       let responseAlert = '...Password Reset Success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+      
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;

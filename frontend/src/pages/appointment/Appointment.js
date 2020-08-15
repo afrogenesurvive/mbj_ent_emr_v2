@@ -142,6 +142,12 @@ getAllAppointments (args) {
       // console.log('...resData...',resData.data.getAllAppointments);
       let responseAlert = '...all appointments retrieval success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -204,6 +210,12 @@ getAllPatients (args) {
       // console.log('...resData...',resData.data.getAllPatients);
       let responseAlert = '...all patients retrieval success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -256,8 +268,11 @@ logUserActivity(args) {
     })
     .then(resData => {
       // console.log('...resData...',resData.data.addUserActivity);
+      if (resData.errors) {
+        this.context.setUserAlert(resData.errors[0].message)
+      }
       if (resData.data.addUserActivity.error) {
-        console.log('...resDataError...',resData.data.addUserActivity.error);
+        this.context.setUserAlert(resData.data.addUserActivity.error);
       }
     })
     .catch(err => {
@@ -336,12 +351,20 @@ searchAppointments = (event) => {
       let error = null;
 
       if (regex === true) {
+        if (resData.errors) {
+          error = resData.errors[0].message;
+          responseAlert = error;
+        }
         if (resData.data.error) {
           error = resData.data.error;
           responseAlert = error;
         }
       }
       if (regex === false) {
+        if (resData.errors) {
+          error = resData.errors[0].message;
+          responseAlert = error;
+        }
         if (resData.data.error) {
           error = resData.data.error;
           responseAlert = error;
@@ -458,6 +481,12 @@ submitCreateNewAppointmentForm = (event) => {
       // console.log('...resData...',resData.data.createAppointment);
       let responseAlert = '...create appointment success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -601,6 +630,12 @@ deleteAppointment = (args) => {
       // console.log('...resData...',resData.data.deleteAppointmentById);
       let responseAlert = '...delete appointment success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -747,12 +782,20 @@ submitSublistSearchForm = (event) => {
       let error = null;
 
       if (regex === true) {
+        if (resData.errors) {
+          error = resData.errors[0].message;
+          responseAlert = error;
+        }
         if (resData.data.error) {
           error = resData.data.error;
           responseAlert = error;
         }
       }
       if (regex === false) {
+        if (resData.errors) {
+          error = resData.errors[0].message;
+          responseAlert = error;
+        }
         if (resData.data.error) {
           error = resData.data.error;
           responseAlert = error;

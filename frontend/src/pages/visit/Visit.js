@@ -147,6 +147,12 @@ getAllVisits (args) {
       // console.log('...resData...',resData.data.getAllVisits);
       let responseAlert = '...all visits retrieval success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -209,6 +215,12 @@ getAllAppointments (args) {
       // console.log('...resData...',resData.data.getAllAppointments);
       let responseAlert = '...all appointments retrieval success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -261,6 +273,12 @@ getAllPatients (args) {
       // console.log('...resData...',resData.data.getAllPatients);
       let responseAlert = '...all patients retrieval success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -313,8 +331,11 @@ logUserActivity(args) {
     })
     .then(resData => {
       // console.log('...resData...',resData.data.addUserActivity);
-      if (resData.data.addUserActivity.error) {
-        console.log('...resDataError...',resData.data.addUserActivity.error);
+      if (resData.errors) {
+        this.context.setUserAlert(resData.errors[0].message);
+      }
+      if (resData.data.error) {
+        this.context.setUserAlert(resData.data.error);
       }
     })
     .catch(err => {
@@ -388,12 +409,20 @@ searchVisits = (event) => {
       let error = null;
 
       if (regex === true) {
+        if (resData.errors) {
+          error = resData.errors[0].message;
+          responseAlert = error;
+        }
         if (resData.data.error) {
           error = resData.data.error;
           responseAlert = error;
         }
       }
       if (regex === false) {
+        if (resData.errors) {
+          error = resData.errors[0].message;
+          responseAlert = error;
+        }
         if (resData.data.error) {
           error = resData.data.error;
           responseAlert = error;
@@ -506,6 +535,12 @@ submitCreateNewVisitForm = (event) => {
       console.log('...resData...',resData.data.createVisit);
       let responseAlert = '...create visit success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -649,6 +684,12 @@ deleteVisit = (args) => {
       // console.log('...resData...',resData.data.deleteVisitById);
       let responseAlert = '...delete visit success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -783,12 +824,20 @@ submitSublistSearchForm = (event) => {
       let error = null;
 
       if (regex === true) {
+        if (resData.errors) {
+          error = resData.errors[0].message;
+          responseAlert = error;
+        }
         if (resData.data.error) {
           error = resData.data.error;
           responseAlert = error;
         }
       }
       if (regex === false) {
+        if (resData.errors) {
+          error = resData.errors[0].message;
+          responseAlert = error;
+        }
         if (resData.data.error) {
           error = resData.data.error;
           responseAlert = error;

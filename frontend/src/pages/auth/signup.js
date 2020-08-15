@@ -122,6 +122,12 @@ class SignUpPage extends Component {
       // console.log('...resData...',resData.data.createUser);
       let responseAlert = '...Signup success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -161,6 +167,20 @@ class SignUpPage extends Component {
     })
     .then(resData => {
       // console.log('...resData...',resData.data);
+      let responseAlert = '...Signup success!...';
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert);
+
       const result = resData.data.verifyInvitation;
       if (result === 'matched') {
         this.setState({invited: true})

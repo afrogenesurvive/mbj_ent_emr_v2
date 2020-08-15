@@ -129,6 +129,12 @@ getAllPatients (args) {
       // console.log('...resData...',resData.data.getAllPatients);
       let responseAlert = '...all patients retrieval success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -189,8 +195,11 @@ logUserActivity(args) {
     })
     .then(resData => {
       // console.log('...resData...',resData.data.addUserActivity);
-      if (resData.data.addUserActivity.error) {
-        console.log('...resDataError...',resData.data.addUserActivity.error);
+      if (resData.errors) {
+        this.context.setUserAlert(resData.errors[0].message);
+      }
+      if (resData.data.error) {
+        this.context.setUserAlert(resData.data.error);
       }
     })
     .catch(err => {
@@ -277,12 +286,20 @@ searchPatients = (event) => {
       let error = null;
 
       if (regex === true) {
+        if (resData.errors) {
+          error = resData.errors[0].message;
+          responseAlert = error;
+        }
         if (resData.data.error) {
           error = resData.data.error;
           responseAlert = error;
         }
       }
       if (regex === false) {
+        if (resData.errors) {
+          error = resData.errors[0].message;
+          responseAlert = error;
+        }
         if (resData.data.error) {
           error = resData.data.error;
           responseAlert = error;
@@ -453,6 +470,12 @@ submitCreateNewPatientForm = (event) => {
       // console.log('...resData...',resData.data.createPatient);
       let responseAlert = '...create patient success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
@@ -590,6 +613,12 @@ deletePatient = (args) => {
       // console.log('...resData...',resData.data.deletePatientById);
       let responseAlert = '...delete patient success!...';
       let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
       if (resData.data.error) {
         error = resData.data.error;
         responseAlert = error;
