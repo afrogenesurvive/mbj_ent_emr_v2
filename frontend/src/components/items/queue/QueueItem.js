@@ -46,7 +46,10 @@ const QueueItem = props => {
           </Card.Text>
 
           <QueueSlotList
-          queueSlots={props.queue.slots}
+            queueSlots={props.queue.slots}
+            slotSeen={props.slotSeen}
+            slotUnseen={props.slotUnseen}
+            onDelete={props.onDelete}
           />
 
         </Card.Body>

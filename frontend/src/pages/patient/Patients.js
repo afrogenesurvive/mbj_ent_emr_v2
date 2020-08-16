@@ -523,6 +523,7 @@ menuSelect = (args) => {
     tabKey: args
   })
 }
+
 submitFilterForm = (event) => {
   event.preventDefault();
   let field = event.target.field.value;

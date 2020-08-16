@@ -1250,6 +1250,7 @@ submitAddVitalsForm = (event) => {
   if (heightUnit === 'In' ) {
     bmi = 703 * (weightValue/(heightValue**2))
   }
+  bmi = bmi.toFixed(2)
   console.log('bmi',bmi);
 
   if (

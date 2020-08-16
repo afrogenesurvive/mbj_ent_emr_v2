@@ -183,7 +183,7 @@ module.exports = {
         patient: patient,
         consultant: consultant,
         seen: false,
-        seenTime: null
+        seenTime: ''
       }
       // console.log('1:',number);
       // console.log('a:',allSlots);
@@ -270,6 +270,46 @@ module.exports = {
       throw err;
     }
   },
+  queueSlotUnseen: async (args, req) => {
+    console.log("Resolver: queueSlotUnseen...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const time = moment().format('h:mm:ss a');
+      const queue = await Queue.findOneAndUpdate(
+        {_id: args.queueId, 'slots.number': args.queueInput.slotNumber},
+        {
+          // {$inc: {currentSlot: 1}},
+          'slots.$.seen': false,
+          'slots.$.seenTime': ''
+        },
+        {new: true, useFindAndModify: false}
+      )
+      .populate({
+        path: 'slots',
+        populate: {
+          path: 'consultant',
+          model: 'User'
+        }
+      })
+      .populate({
+        path: 'slots',
+        populate: {
+          path: 'patient',
+          model: 'Patient'
+        }
+      })
+      .populate('creator');
+      return {
+        ...queue._doc,
+        _id: queue.id,
+        date: queue.date
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
   queueSlotChange: async (args, req) => {
     console.log("Resolver: queueSlotChange...");
     if (!req.isAuth) {
@@ -320,14 +360,45 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
+        const preQueue = await Queue.findById({_id:args.queueId})
+        const thisSlot = preQueue.slots.filter(x=> x.number === args.queueInput.slotNumber)[0]
+        const greaterSlots = preQueue.slots.filter(x=> x.number > args.queueInput.slotNumber)
+
+        console.log('start');
+        for (let index = 0; index < greaterSlots.length; index++) {
+          let greaterSlot = greaterSlots[index];
+          // console.log('loop',index);
+          const updateQueue = await Queue.findOneAndUpdate(
+            {
+              _id:args.queueId,
+              'slots.number': greaterSlot.number,
+            },
+            {$inc: {'slots.$.number': -1}},
+            {new: true, useFindAndModify: false}
+          )
+        }
+        console.log('end');
 
         const queue = await Queue.findOneAndUpdate(
-          {_id: args.queueId, 'slots.number': args.queueInput.slotNumber},
-          {$pull: {slots: 'slots.$'}},
+          {_id: args.queueId},
+          {$pull: {slots: thisSlot}},
           {new: true, useFindAndModify: false}
-        );
-        // for each slots with number greater than args slot number
-        // reduce slotNumber -1
+        )
+        .populate({
+          path: 'slots',
+          populate: {
+            path: 'consultant',
+            model: 'User'
+          }
+        })
+        .populate({
+          path: 'slots',
+          populate: {
+            path: 'patient',
+            model: 'Patient'
+          }
+        })
+        .populate('creator');
         return {
           ...queue._doc,
           _id: queue.id,
@@ -345,6 +416,7 @@ module.exports = {
     try {
       const creator = await User.findById({_id: args.activityId});
       const today = moment().format('YYYY-MM-DD');
+      // const today = '2020-08-02';
       const queueExists =  await Queue.find({date: today})
       if (queueExists.length > 0) {
         console.log('...ahem! 1 Queue per day please...',queueExists.length);

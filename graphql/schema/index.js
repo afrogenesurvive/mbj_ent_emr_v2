@@ -907,7 +907,8 @@ module.exports = buildSchema(`
     createQueue(activityId: ID!): Queue
     addQueueSlot(activityId: ID!, queueId: ID!, patientId: ID, consultantId: ID!): Queue
     queueSlotSeen(activityId: ID!, queueId: ID!, queueInput: QueueInput!): Queue
-    deleteQueSlot(activityId: ID!, queueId: ID!, queueInput: QueueInput!): Queue
+    queueSlotUnseen(activityId: ID!, queueId: ID!, queueInput: QueueInput!): Queue
+    deleteQueueSlot(activityId: ID!, queueId: ID!, queueInput: QueueInput!): Queue
     deleteQueueById(activityId: ID!, queueId: ID!): Queue
 
   }

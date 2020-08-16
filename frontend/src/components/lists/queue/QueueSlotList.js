@@ -16,6 +16,8 @@ const QueueSlotList = props => {
         queueSlot={queueSlot}
         onDelete={props.onDelete}
         canDelete={props.canDelete}
+        slotSeen={props.slotSeen}
+        slotUnseen={props.slotUnseen}
       />
     );
   });

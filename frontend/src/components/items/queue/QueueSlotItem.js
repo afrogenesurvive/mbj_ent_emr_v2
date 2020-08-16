@@ -50,9 +50,7 @@ const QueueSlotItem = props => {
           <Card.Text className="cardText">
             Number: {props.queueSlot.number}
           </Card.Text>
-          <Card.Text className="cardText">
-            Time: {props.queueSlot.time}
-          </Card.Text>
+
           <Card.Text className="cardText">
             Patient: {props.queueSlot.patient.name}
           </Card.Text>
@@ -65,10 +63,29 @@ const QueueSlotItem = props => {
           <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
           </Link>
 
+          <Card.Text className="cardText">
+            Seen: {props.queueSlot.seen === true ?(<FontAwesomeIcon icon={faCheckSquare} className="listIcon"/>):(<FontAwesomeIcon icon={faBan} className="listIcon"/>)}
+          </Card.Text>
+
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+
           {state === true && (
             <Row className="listItemHiddenRow">
             <ul>
+              {props.queueSlot.seen !== true && (
+                <Button variant="outline-success" onClick={props.slotSeen.bind(this, props.queueSlot)}>Seen</Button>
+              )}
+              {props.queueSlot.seen === true && (
+                <Button variant="outline-success" onClick={props.slotUnseen.bind(this, props.queueSlot)}>Un-See</Button>
+              )}
+              <li>
+
+              </li>
+              <li>
+              <Card.Text className="cardText">
+                Time: {props.queueSlot.time}
+              </Card.Text>
+              </li>
               <li>
               <Card.Text className="cardText">
                 Consultant: {props.queueSlot.consultant.username}
@@ -99,6 +116,16 @@ const QueueSlotItem = props => {
               )}
 
               </li>
+              <li>
+              <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
+              </li>
+              {deleteState === true && (
+                <li>
+                <Row className="listItemHiddenRow">
+                    <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.queueSlot)}>Delete</Button>
+                </Row>
+                </li>
+              )}
             </ul>
             </Row>
           )}
