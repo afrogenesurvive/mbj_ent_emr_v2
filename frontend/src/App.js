@@ -44,8 +44,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.sessionStorageAuth = JSON.parse(sessionStorage.getItem('logInfo'));
-    this.socket = io('http://localhost:9099');
-    // this.socket2 = io('http://3.129.19.78:9099');
+    // this.socket = io('http://localhost:9099');
+    this.socket = io('http://3.129.19.78:9099');
     // this.socket2 = io('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com:9099');
   }
 
