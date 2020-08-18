@@ -82,6 +82,10 @@ class LoginPage extends Component {
         error = resData.data.error;
         responseAlert = error;
       }
+      if (resData.data.login.error) {
+        error = resData.data.login.error;
+        responseAlert = error;
+      }
       this.context.setUserAlert(responseAlert)
       if (resData.data.login.token !== "") {
         // this.context.login(
@@ -209,7 +213,7 @@ class LoginPage extends Component {
           error = resData.data.error;
           responseAlert = error;
         }
-        
+
         this.context.setUserAlert(responseAlert)
 
         this.context.setUserAlert('Verified...Please try loggin in again..')

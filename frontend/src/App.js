@@ -45,8 +45,8 @@ class App extends Component {
     super(props);
     this.sessionStorageAuth = JSON.parse(sessionStorage.getItem('logInfo'));
     this.socket = io('http://localhost:9099');
-    this.socket2 = io('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com');
-    this.socket2 = io('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com:9099');
+    // this.socket2 = io('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com');
+    // this.socket2 = io('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com:9099');
   }
 
   login = (token, activityId, role, tokenExpiration) => {
@@ -79,9 +79,6 @@ class App extends Component {
   };
 
   componentDidMount() {
-    console.log('1:',this.socket);
-    console.log('2:',this.socket2);
-    console.log('3:',this.socket3);
     console.log('...app component mounted...');
     if (sessionStorage.getItem('logInfo') && this.state.token === null) {
       console.log('...sessionStorageFound...');
