@@ -19,6 +19,8 @@ const https = require("https");
 const io = require('socket.io')(server);
 let cron = require('node-cron');
 const User = require('./models/user');
+// const adminSocket = require('./middleware/adminSocket')
+// adminSocket.start(io)
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -102,36 +104,65 @@ const userOnline = async function (args) {
 };
 
 let connectedClients = [];
+let appSocket = {
+  io: io,
+  socket: 'xxx',
+  log: (args) => {
+    adminEmit(args)
+  }
+}
+
+const adminEmit = (args) => {
+  console.log('admin emit');
+  // appSocket.socket.emit('admin_msg', args)
+  // appSocket.socket.broadcast.to('admin_channel').emit('admin_msg', {msg: args})
+  // appSocket.io.to('admin_channel').emit('admin_msg', {msg: args})
+  // appSocket.socket.to('admin_channel').emit('admin_msg', {msg: args})
+  // appSocket.socket.emit('backend_msg', args)
+}
 
 io.on('connection', (socket) => {
+  appSocket.socket = socket;
 
     socket.on('unauthorizedClientConnect', function(data) {
       console.log("a wild client appeared...socket..",socket.id);
-      // connectedClients.push({socket: socket.id, user: 'wild'});
-      // console.log('connectedClients',connectedClients);
-
-      socket.emit("test", {msg: "hello world"})
-
     });
-    socket.on('msg_subscribe', function(data) {
+    socket.on('notification_subscribe', function(data) {
         console.log('a domestic client appeared...socket...'+socket.id+'...user...'+data.user);
-        console.log('joining room', data.room);
+        console.log('joining private room', data.room);
         socket.join(data.room);
         connectedClients.push({socket: socket.id, user: data.user})
         console.log('connectedClients',connectedClients);
         userOnline(data.user);
-
-        socket.emit("test", {msg: "hello logged in user"})
-
+        io.to(data.room).emit('send_notification',{msg:'listening for notifications'})
+        // socket.emit("test", {msg: "hello logged in user"})
     });
-    socket.on('send message', function(data) {
-      console.log('sending room post', data.room);
+
+    socket.on('admin_subscribe', function() {
+      console.log('joining admin room');
+      socket.join('admin_channel');
+      // socket.emit("test", {msg: "you are subscribed to admin room/channel"})
+      io.to('admin_channel').emit('admin_msg', {msg:'testing admin channel...'})
+    })
+    socket.on('admin_msg', function(data) {
+      console.log('sending admin msg server',data);
+      io.to('admin_channel').emit('admin_msg', {msg:data})
+    })
+
+    socket.on('send_notification', function(data) {
+      console.log('sending individual notification', data.room);
+      socket.broadcast.to(data.room).emit('receive_notification', {msg:data.data});
+    });
+
+    socket.on('send_message', function(data) {
+      console.log('sending private room post', data.room);
       socket.broadcast.to(data.room).emit('conversation private post', {
           message: data.message
       });
       socket.emit("MESSAGE_SENT", {msg: "message sent!!"});
       console.log('sender confirmation sent');
     });
+
     socket.on('disconnect', function(){
       let clientToRemove = connectedClients.find(x => x.socket === socket.id);
       if (clientToRemove === undefined) {
@@ -164,3 +195,5 @@ app.use(
 app.get('/*', function(req, res) {
   res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
 });
+
+exports.appSocket = appSocket;

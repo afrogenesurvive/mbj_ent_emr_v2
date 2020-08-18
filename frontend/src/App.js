@@ -45,6 +45,8 @@ class App extends Component {
     super(props);
     this.sessionStorageAuth = JSON.parse(sessionStorage.getItem('logInfo'));
     this.socket = io('http://localhost:9099');
+    this.socket2 = io('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com');
+    this.socket2 = io('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com:9099');
   }
 
   login = (token, activityId, role, tokenExpiration) => {
@@ -58,7 +60,7 @@ class App extends Component {
         activityId: activityId,
         role: role,
         tokenExpiration: tokenExpiration
-      }
+      },
     });
     this.sessionStorageAuth = {
       token: token,
@@ -77,6 +79,9 @@ class App extends Component {
   };
 
   componentDidMount() {
+    console.log('1:',this.socket);
+    console.log('2:',this.socket2);
+    console.log('3:',this.socket3);
     console.log('...app component mounted...');
     if (sessionStorage.getItem('logInfo') && this.state.token === null) {
       console.log('...sessionStorageFound...');
@@ -93,11 +98,75 @@ class App extends Component {
     }
     this.socket.emit('unauthorizedClientConnect');
     console.log("socket listening....");
-    // this.userOnline();
-    this.socket.on('test', function(data) {
-      console.log("testing...",data);
+
+    this.socket.on('admin_msg', function(data) {
+      console.log('...receiving admin msg client...',data);
+      adminMessage(data);
     });
+    this.socket.on('receive_notification', function(data) {
+      console.log('...receiving notification client...',data);
+      sendNotification(data);
+    });
+
+    // this.socket.on('conversation private post', function(data) {
+    //   console.log("you got a new message..",data);
+      // addMessage(data);
+    // });
+    const sendNotification = data => {
+      // console.log('notification user alert',data);
+      this.setState({
+        userAlert: data.msg })
+    };
+    const adminMessage = data => {
+      // console.log('admin message user alert',data);
+      this.setState({
+        userAlert: data.msg.msg })
+    };
+
   }
+
+
+  sendSocketMessage (msgObject) {
+    const message = msgObject;
+    console.log("sending socket message  ",'message',message,'this.socket',this.socket);
+    this.setState({userAlert: "sending socket message  "+'message'+message+'this.socket'+this.socket})
+    let conversationId = null;
+    if (this.context.receiver === null || this.context.receiver === undefined) {
+      console.log("select someone to msg 1st...");
+      this.setState({userAlert: "select someone to msg 1st..."});
+      return
+    }
+    else {
+      conversationId = this.context.receiver._id;
+    }
+
+    this.socket.emit('send message', {
+      room: 'msg'+conversationId,
+      message: message
+    });
+    this.socket.on("MESSAGE_SENT", function(data) {
+
+      addMessage(data)
+    })
+
+    const addMessage = data => {
+      this.setState({ userAlert: data.msg})
+    };
+  };
+
+  sendSocketAdminMessage = (args) => {
+    // console.log('...sending admin msg client...');
+    this.socket.emit('admin_msg', {msg: args})
+  }
+  sendSocketNotification = (args) => {
+    let notificationId = args.userId;
+    // console.log('...sending socket notification client...');
+    this.socket.emit('send_notification', {
+      room:'msg_'+notificationId,
+      data: args.data
+    })
+  }
+
 
   componentWillUnmount() {
     console.log('...app component un-mounting...');
@@ -171,7 +240,14 @@ class App extends Component {
 
   userOnline = () => {
     console.log('...domesticating socket client...');
-    this.socket.emit('msg_subscribe', {user: this.context.activityId, room:'msg'+this.context.activityId});
+    this.socket.emit('notification_subscribe', {
+      user: this.context.activityId,
+      room:'msg_'+this.context.activityId
+    });
+
+    if (this.context.role === 'Admin') {
+      this.socket.emit('admin_subscribe')
+    }
   }
 
   passwordReset = (event) => {
@@ -311,6 +387,8 @@ class App extends Component {
               {this.state.sessionStorageAuth && (
                 <Route path="/profile" render={(props) => <MyProfilePage {...props}
                   title="profile"
+                  sendSocketAdminMessage={this.sendSocketAdminMessage}
+                  sendSocketNotification={this.sendSocketNotification}
                 />}/>
               )}
               {this.state.sessionStorageAuth && (
@@ -318,6 +396,8 @@ class App extends Component {
                   title="staff"
                   selectedUser={this.state.selectedUser}
                   selectUser={this.selectUser}
+                  sendSocketAdminMessage={this.sendSocketAdminMessage}
+                  sendSocketNotification={this.sendSocketNotification}
                 />}/>
               )}
               {this.state.sessionStorageAuth && (

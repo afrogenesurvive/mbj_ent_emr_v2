@@ -1,13 +1,23 @@
+const appSocket = require('../../app');
+// const directSocket = require('../../app');
+const socket = require('../../app');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../../models/user');
 const moment = require('moment');
 const { pocketVariables } = require('../../helpers/pocketVars');
+const { adminSocket } = require('../../middleware/adminSocket');
 
 module.exports = {
   login: async ({ username, password }) => {
     console.log("Resolver: Login...");
-    // console.log(email,password);
+    // console.log('directSocket',directSocket);
+    // console.log('appSocket.appSocket.io',appSocket.appSocket.io);
+    // appSocket.appSocket.io.to('admin_channel').emit('admin_msg', {msg: '...login...'})
+    // if (appSocket.appSocket.socket !== 'xxx') {
+    //   console.log('connected to ');
+      appSocket.appSocket.log('...login...')
+    // }
     const user = await User.findOne({ 'username': username });
     if (!user) {
       // throw new Error('User does not exist!');

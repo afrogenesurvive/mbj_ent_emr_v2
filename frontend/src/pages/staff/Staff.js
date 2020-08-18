@@ -374,6 +374,7 @@ showDetails = (args) => {
     tabKey: 'detail'
   })
   this.props.selectUser(args);
+  this.props.sendSocketNotification({userId:args._id,data:`${this.context.activityId} is watching you...`});
 }
 startAdd = (args) => {
   this.setState({

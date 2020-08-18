@@ -15,6 +15,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 // import bootstrapPlugin from '@fullcalendar/bootstrap';
 import '../../calendar.scss'
 import S3 from 'react-aws-s3';
+import io from 'socket.io-client';
 
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -89,6 +90,11 @@ class MyProfilePage extends Component {
   };
   static contextType = AuthContext;
 
+  constructor(props) {
+    super(props);
+    this.socket = io('http://localhost:9099');
+  }
+
 componentDidMount () {
   console.log('...MyProfile component mounted...');
   if (sessionStorage.getItem('logInfo')) {
@@ -101,6 +107,8 @@ componentDidMount () {
 componentWillUnmount() {
 
 }
+
+
 
 getPocketVars (args) {
     console.log('...retriving pocketVars..');
@@ -138,6 +146,7 @@ getPocketVars (args) {
           this.setState({
             pocketVars: pocketVarsParsed
           });
+
         }
 
       })
@@ -210,6 +219,8 @@ getThisUser (args) {
         appointments: resData.data.getUserById.appointments,
       })
       this.logUserActivity(args);
+      this.props.sendSocketAdminMessage(`${activityId} just logged in...`);
+
     })
     .catch(err => {
       console.log(err);
@@ -1870,7 +1881,10 @@ render() {
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <p className="listGroupText">Employment Date:</p>
-                      <p className="listGroupText bold">{moment.unix(this.state.activityUser.employmentDate.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                      {this.state.activityUser.employmentDate && (
+                        <p className="listGroupText bold">{moment.unix(this.state.activityUser.employmentDate.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                      )}
+
                       {this.context.role === 'Admin' && (
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'employmentDate')}>Edit</Button>
                       )}

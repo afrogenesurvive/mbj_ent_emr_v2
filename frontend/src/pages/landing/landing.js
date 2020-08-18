@@ -4,6 +4,7 @@ import Col from 'react-bootstrap/Col';
 // import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import { NavLink } from 'react-router-dom';
+import io from 'socket.io-client';
 
 import AuthContext from '../../context/auth-context';
 import AlertBox from '../../components/alertBox/AlertBox';
@@ -20,7 +21,15 @@ class LandingPage extends Component {
     context: null,
   };
 
+  // constructor(props) {
+  //   super(props);
+  //   this.socket = io('http://localhost:9099');
+  // }
+
 componentDidMount () {
+  // this.socket.on('toast', function(data) {
+  //   console.log("admin msg...",data);
+  // });
 }
 
   render() {
