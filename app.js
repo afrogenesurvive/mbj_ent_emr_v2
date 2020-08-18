@@ -145,7 +145,7 @@ io.on('connection', (socket) => {
       io.to('admin_channel').emit('admin_msg', {msg:'testing admin channel...'})
     })
     socket.on('admin_msg', function(data) {
-      console.log('sending admin msg server',data);
+      console.log('sending admin msg server');
       io.to('admin_channel').emit('admin_msg', {msg:data})
     })
 
