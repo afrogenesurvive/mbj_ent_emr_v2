@@ -425,7 +425,7 @@ submitCreateNewAppointmentForm = (event) => {
   const date = event.target.date.value;
   const time = event.target.time.value;
   const location = event.target.location.value;
-  const description = event.target.description.value;
+  const description = event.target.description.value.replace(/\n/g, ' ');
   const important = event.target.important.checked;
 
   if (

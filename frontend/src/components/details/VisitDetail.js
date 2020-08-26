@@ -322,8 +322,8 @@ submitAddComplaintForm = (event) => {
   const activityId = this.context.activityId;
   const visitId = this.props.visit._id;
   const title = event.target.title.value;
-  const description = event.target.description.value;
-  const anamnesis = event.target.anamnesis.value;
+  const description = event.target.description.value.replace(/\n/g, ' ');
+  const anamnesis = event.target.anamnesis.value.replace(/\n/g, ' ');
   // const attachment = event.target.attachment.value;
 
   if (
@@ -629,7 +629,7 @@ submitAddSurveyForm = (event) => {
   const visitId = this.props.visit._id;
 
   const title = event.target.title.value;
-  const description = event.target.description.value;
+  const description = event.target.description.value.replace(/\n/g, ' ');
   // const attachment = event.target.attachment.value;
 
   if (
@@ -931,17 +931,7 @@ submitAddSystematicInquiryForm = (event) => {
   const visitId = this.props.visit._id;
 
   const title = event.target.title.value;
-  const description = event.target.description.value;
-  console.log(description);
-  // str = str.replace(/\n/g, ' ');
-
-  // this will fail message: "some very long text
-  // message that appears on multiple lines
-  // with line breaks."
-  //
-  // this should pass message: """some very long text
-  // message that appears on multiple lines
-  // with line breaks."""
+  const description = event.target.description.value.replace(/\n/g, ' ');
 
   // const attachment = event.target.attachment.value;
 
@@ -1463,7 +1453,7 @@ submitAddExaminationForm = (event) => {
   const type = event.target.type.value;
   const measure = event.target.measure.value;
   const value = event.target.value.value;
-  const description = event.target.description.value;
+  const description = event.target.description.value.replace(/\n/g, ' ');
   const followUp = event.target.followUp.checked;
   // const attachment = event.target.attachment.value;
 
@@ -1786,7 +1776,7 @@ submitAddInvestigationForm = (event) => {
 
   const title = event.target.title.value;
   const type = event.target.type.value;
-  const description = event.target.description.value;
+  const description = event.target.description.value.replace(/\n/g, ' ');
   // const attachment = event.target.attachment.value;
 
   if (
@@ -2093,7 +2083,7 @@ submitAddDiagnosisForm = (event) => {
 
   const title = event.target.title.value;
   const type = event.target.type.value;
-  const description = event.target.description.value;
+  const description = event.target.description.value.replace(/\n/g, ' ');
   // const attachment = event.target.attachment.value;
 
   if (
@@ -2399,7 +2389,7 @@ submitAddTreatmentForm = (event) => {
 
   const title = event.target.title.value;
   const type = event.target.type.value;
-  const description = event.target.description.value;
+  const description = event.target.description.value.replace(/\n/g, ' ');
   const dose = event.target.dose.value;
   const frequency = event.target.frequency.value;
   // const attachment = event.target.attachment.value;
@@ -2719,12 +2709,11 @@ submitAddBillingForm = (event) => {
 
   const title = event.target.title.value;
   const type = event.target.type.value;
-  const description = event.target.description.value;
+  const description = event.target.description.value.replace(/\n/g, ' ');
   const amount = event.target.amount.value;
   const paid = event.target.paid.checked;
-  const notes = event.target.notes.value;
+  const notes = event.target.notes.value.replace(/\n/g, ' ');
   // const attachment = event.target.attachment.value;
-
 
   if (
       title.trim().length === 0 ||

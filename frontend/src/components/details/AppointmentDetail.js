@@ -235,7 +235,7 @@ submitAddNoteForm = (event) => {
   const token = this.context.token;
   const activityId = this.context.activityId;
   const appointmentId = this.props.appointment._id;
-  const notes = event.target.notes.value;
+  const notes = event.target.notes.value.replace(/\n/g, '');
 
   let requestBody = {
     query: `
@@ -373,7 +373,7 @@ submitAddTagForm = (event) => {
   const token = this.context.token;
   const activityId = this.context.activityId;
   const appointmentId = this.props.appointment._id;
-  const tags = event.target.tags.value;
+  const tags = event.target.tags.value.replace(/\n/g, '');
 
   let requestBody = {
     query: `

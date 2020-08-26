@@ -442,7 +442,7 @@ submitAddAttendanceForm = (event) => {
   const userId = this.props.user._id;
   const attendanceDate = event.target.date.value;
   const attendanceStatus = event.target.status.value;
-  const attendanceDescription = event.target.description.value;
+  const attendanceDescription = event.target.description.value.replace(/\n/g, ' ');
 
   let requestBody = {
     query: `
@@ -590,7 +590,7 @@ submitAddLeaveForm = (event) => {
   const startDate = event.target.startDate.value;
   const endDate = event.target.endDate.value;
   const type = event.target.type.value;
-  const description = event.target.description.value;
+  const description = event.target.description.value.replace(/\n/g, ' ');
 
   let requestBody = {
     query: `
@@ -1278,7 +1278,7 @@ submitAddNoteForm = (event) => {
   const token = this.context.token;
   const activityId = this.context.activityId;
   const userId = this.props.user._id;
-  const note = event.target.note.value;
+  const note = event.target.note.value.replace(/\n/g, '');
 
   let requestBody = {
     query: `

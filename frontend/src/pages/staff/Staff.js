@@ -531,8 +531,8 @@ render() {
               <Tab.Content>
                 <Tab.Pane eventKey="list">
                   <Row className="displayPaneHeadRow">
-                    <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                    <Button variant="outline-warning" onClick={this.resetFilter}>Reset</Button>
+                    <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+                    <Button variant="warning" onClick={this.resetFilter}>Reset</Button>
                   </Row>
                   <UserList
                     filter={this.state.filter}
@@ -553,7 +553,7 @@ render() {
                   </Row>
                   <Row>
                     {this.state.searchUsers && (
-                      <Button variant="outline-primary" className="centered_btn" onClick={this.toggleSideCol}>Filter</Button>
+                      <Button variant="primary" className="centered_btn" onClick={this.toggleSideCol}>Filter</Button>
                     )}
                   </Row>
                   <Row className="userSearchRow results">

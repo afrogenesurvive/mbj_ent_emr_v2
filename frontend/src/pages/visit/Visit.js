@@ -958,8 +958,8 @@ render() {
                 <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                   <Tab eventKey="1" title="list">
                   <Row className="displayPaneHeadRow">
-                    <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                    <Button variant="outline-warning" onClick={this.resetFilter}>Reset</Button>
+                    <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+                    <Button variant="warning" onClick={this.resetFilter}>Reset</Button>
                   </Row>
                     <VisitList
                       filter={this.state.filter}
@@ -992,7 +992,7 @@ render() {
                   </Row>
                   <Row>
                     {this.state.searchVisits && (
-                      <Button variant="outline-primary" onClick={this.toggleSideCol} className="centered_btn">Filter</Button>
+                      <Button variant="primary" onClick={this.toggleSideCol} className="centered_btn">Filter</Button>
                     )}
                   </Row>
                   <Row className="userSearchRow results">
@@ -1018,7 +1018,7 @@ render() {
                 </Tab.Pane>
                 <Tab.Pane eventKey="new">
                 {this.state.creatingVisit === false && (
-                  <Button variant="outline-secondary" className="filterFormBtn" onClick={this.onStartCreateNewVisit}>Create New</Button>
+                  <Button variant="secondary" className="filterFormBtn" onClick={this.onStartCreateNewVisit}>Create New</Button>
                 )}
                 {this.state.creatingVisit === true &&
                   this.state.appointments &&
@@ -1028,7 +1028,7 @@ render() {
                   <h3>
                   Choose an Appointment
                   </h3>
-                  <Button variant="outline-secondary" className="patientSublistSearchBtn" onClick={this.startSublistSearch}>Search</Button>
+                  <Button variant="secondary" className="patientSublistSearchBtn" onClick={this.startSublistSearch}>Search</Button>
                   </Row>
                   <Row className="patientSubListRow">
                   {this.state.sublistSearch === true && (

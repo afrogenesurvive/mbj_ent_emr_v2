@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
-import { useParams, NavLink } from 'react-router-dom';
+import { useParams, NavLink, Redirect } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -92,6 +92,7 @@ class PasswordResetPage extends Component {
       }
       this.context.setUserAlert(responseAlert);
       this.setState({passwordResetStatus: 'success'})
+      return <Redirect to="/login"/>
     })
     .catch(err => {
       this.context.setUserAlert(err);
@@ -118,9 +119,6 @@ class PasswordResetPage extends Component {
           {this.state.passwordResetStatus === 'success' && (
             <React.Fragment>
               <h1>Reset Success...Proceed to Login</h1>
-              <Button variant="outline-warning" className="loginFormBtn">
-                <NavLink to="/login">Login</NavLink>
-              </Button>
             </React.Fragment>
           )}
 

@@ -374,23 +374,23 @@ submitCreateNewPatientForm = (event) => {
   const addressCountry = event.target.addressCountry.value;
   const addressPostalCode = event.target.addressPostalCode.value;
   const referralDate = event.target.referralDate.value;
-  const referralReason = event.target.referralReason.value;
+  const referralReason = event.target.referralReason.value.replace(/\n/g, ' ');
   const referralPhysicianName = event.target.referralPhysicianName.value;
   const referralPhysicianPhone = event.target.referralPhysicianPhone.value;
   const referralPhysicianEmail = event.target.referralPhysicianEmail.value;
-  const referralPhysicianAddress = event.target.referralPhysicianAddress.value;
+  const referralPhysicianAddress = event.target.referralPhysicianAddress.value.replace(/\n/g, ' ');
   const attendingPhysician = event.target.attendingPhysician.value;
   const occupationRole = event.target.occupationRole.value;
   const occupationEmployerName = event.target.occupationEmployerName.value;
   const occupationEmployerEmail = event.target.occupationEmployerEmail.value;
   const occupationEmployerPhone = event.target.occupationEmployerPhone.value;
-  const occupationEmployerAddress = event.target.occupationEmployerAddress.value;
+  const occupationEmployerAddress = event.target.occupationEmployerAddress.value.replace(/\n/g, ' ');
   const insuranceCompany = event.target.insuranceCompany.value;
   const insurancePolicyNumber = event.target.insurancePolicyNumber.value;
-  const insuranceDescription = event.target.insuranceDescription.value;
+  const insuranceDescription = event.target.insuranceDescription.value.replace(/\n/g, ' ');
   const insuranceExpiryDate = event.target.insuranceExpiryDate.value;
   const insuranceSubscriberCompany = event.target.insuranceSubscriberCompany.value;
-  const insuranceSubscriberDescription = event.target.insuranceSubscriberDescription.value;
+  const insuranceSubscriberDescription = event.target.insuranceSubscriberDescription.value.replace(/\n/g, ' ');
 
   if (
       active.trim().length === 0 ||
@@ -713,8 +713,8 @@ render() {
               <Tab.Content>
                 <Tab.Pane eventKey="list">
                   <Row className="displayPaneHeadRow">
-                    <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                    <Button variant="outline-warning" onClick={this.resetFilter}>Reset</Button>
+                    <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+                    <Button variant="warning" onClick={this.resetFilter}>Reset</Button>
                   </Row>
                     <PatientList
                       filter={this.state.filter}
@@ -735,7 +735,7 @@ render() {
                   </Row>
                   <Row>
                     {this.state.searchPatients && (
-                      <Button variant="outline-primary" className="centered_btn" onClick={this.toggleSideCol}>Filter</Button>
+                      <Button variant="primary" className="centered_btn" onClick={this.toggleSideCol}>Filter</Button>
                     )}
                   </Row>
                   <Row className="userSearchRow results">
@@ -761,7 +761,7 @@ render() {
                 </Tab.Pane>
                 <Tab.Pane eventKey="new">
                 {this.state.creatingPatient === false && (
-                  <Button variant="outline-secondary" className="filterFormBtn" onClick={this.onStartCreateNewPatient}>Create New</Button>
+                  <Button variant="secondary" className="filterFormBtn" onClick={this.onStartCreateNewPatient}>Create New</Button>
                 )}
                 {this.state.creatingPatient === true && (
                   <CreatePatientForm

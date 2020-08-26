@@ -604,7 +604,7 @@ submitAddAllergyForm = (event) => {
   const patientId = this.props.patient._id;
   const title = event.target.title.value;
   const type = event.target.type.value;
-  const description = event.target.description.value;
+  const description = event.target.description.value.replace(/\n/g, ' ');
 
   if (
       title.trim().length === 0 ||
@@ -903,7 +903,7 @@ submitAddMedicationForm = (event) => {
   const patientId = this.props.patient._id;
   const title = event.target.title.value;
   const type = event.target.type.value;
-  const description = event.target.description.value;
+  const description = event.target.description.value.replace(/\n/g, ' ');
 
   if (
       title.trim().length === 0 ||
@@ -2138,7 +2138,7 @@ submitAddNoteForm = (event) => {
   const token = this.context.token;
   const activityId = this.context.activityId;
   const patientId = this.props.patient._id;
-  const notes = event.target.notes.value;
+  const notes = event.target.notes.value.replace(/\n/g, '');
 
   let requestBody = {
     query: `
@@ -2270,7 +2270,7 @@ submitAddTagForm = (event) => {
   const token = this.context.token;
   const activityId = this.context.activityId;
   const patientId = this.props.patient._id;
-  const tags = event.target.tags.value;
+  const tags = event.target.tags.value.replace(/\n/g, '');
 
   let requestBody = {
     query: `

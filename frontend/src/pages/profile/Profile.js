@@ -2046,7 +2046,7 @@ render() {
                 <Tab.Pane eventKey="8">
                   <Row className="displayPaneHeadRow">
                     <p className="displayPaneTitle">Appointments:</p>
-                    <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                    <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
                   </Row>
                   <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                     <Tab eventKey="1" title="list">

@@ -207,13 +207,6 @@ return (
     </Form.Row>
 
     <Form.Row>
-      <Form.Group as={Col} controlId="occupationEmployerAddress">
-        <Form.Label className="formLabel">occupationEmployerAddress</Form.Label>
-        <Form.Control as="textarea" rows="5" placeholder="occupationEmployerAddress"/>
-      </Form.Group>
-    </Form.Row>
-
-    <Form.Row>
       <Form.Group as={Col} controlId="insuranceCompany">
         <Form.Label className="formLabel">insuranceCompany</Form.Label>
         <Form.Control type="text" placeholder="insuranceCompany"/>
