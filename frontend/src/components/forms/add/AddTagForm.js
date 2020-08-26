@@ -15,14 +15,14 @@ return (
 
     <Form.Row>
       <Form.Group as={Col} controlId="tags">
-        <Form.Label>tags</Form.Label>
+        <Form.Label className="formLabel">Tags</Form.Label>
         <Form.Control as="textarea" rows="3" placeholder="tag,tag,tag,tag"/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row className="formBtnRow">
-      <Button variant="outline-success" type="submit" className="addFormBtn">Add</Button>
-      <Button variant="outline-primary" className="addFormBtn" onClick={props.onCancel}>Cancel</Button>
+      <Button variant="success" type="submit" className="addFormBtn">Add</Button>
+      <Button variant="primary" className="addFormBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>
 </div>

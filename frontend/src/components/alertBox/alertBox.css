@@ -1,14 +1,26 @@
-.alertBox {
+.alertBoxOpen {
   margin: .5rem auto;
-    width: 20rem;
-    max-height: 5rem;
-    position: fixed;
-    z-index: 10000;
-    bottom: 1rem;
-    left: 1.5rem;
-    overflow-x: scroll;
-    box-shadow: 3px 7px 3px rgba(20,33,61,.4)
+  width: 20rem;
+  max-height: 7rem;
+  position: fixed;
+  z-index: 10000;
+  bottom: 1rem;
+  left: 1.5rem;
+  overflow-x: scroll;
+  box-shadow: 3px 7px 3px rgba(20,33,61,.4)
 }
+.alertBoxClosed {
+  margin: .5rem auto;
+  width: 2rem;
+  max-height: 1.5rem;
+  position: fixed;
+  z-index: 10000;
+  bottom: 1rem;
+  left: 1.5rem;
+  overflow-x: scroll;
+  box-shadow: 3px 7px 3px rgba(20,33,61,.4)
+}
+
 
 .alertBoxText {
   color: black;

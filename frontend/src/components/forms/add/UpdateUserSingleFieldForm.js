@@ -14,19 +14,19 @@ return (
     <h4>Update Single Field</h4>
     <Form.Row>
       <Form.Group as={Col} controlId="field">
-        <Form.Label>field</Form.Label>
+        <Form.Label className="formLabel">Field</Form.Label>
         <Form.Control type="text" value={props.field}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="query">
-        <Form.Label>query</Form.Label>
-        <Form.Control type="text" placeholder="query... date = YYY-MM-DD!!"/>
+        <Form.Label className="formLabel">Value</Form.Label>
+        <Form.Control type="text" placeholder="new value... (Date format = YYYY-MM-DD!!)"/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row className="formBtnRow">
-      <Button variant="outline-success" type="submit" className="addFormBtn">Add</Button>
-      <Button variant="outline-primary" className="addFormBtn" onClick={props.onCancel}>Cancel</Button>
+      <Button variant="success" type="submit" className="addFormBtn">Add</Button>
+      <Button variant="primary" className="addFormBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>
 </div>

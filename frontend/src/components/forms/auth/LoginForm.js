@@ -13,23 +13,23 @@ return (
     <h1>Login</h1>
     <Form.Row>
       <Form.Group as={Col} controlId="username">
-        <Form.Label>Username</Form.Label>
+        <Form.Label className="formLabel">Username</Form.Label>
         <Form.Control type="username" placeholder="Enter username"/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row>
       <Form.Group as={Col} controlId="password">
-        <Form.Label>Password</Form.Label>
+        <Form.Label className="formLabel">Password</Form.Label>
         <Form.Control type="password" placeholder="Password" />
       </Form.Group>
     </Form.Row>
 
     <Form.Row>
-      <Button variant="outline-success" type="submit" className="loginFormBtn">Login</Button>
-      <Button variant="outline-primary" onClick={props.onStartVerification}>Verify</Button>
-      <Button variant="outline-secondary" className="loginFormBtn" onClick={props.onStartForgotPassword}>ForgotPassword</Button>
-      <Button variant="outline-warning" className="loginFormBtn">
+      <Button variant="success" type="submit" className="loginFormBtn">Login</Button>
+      <Button variant="primary" onClick={props.onStartVerification}>Verify</Button>
+      <Button variant="secondary" className="loginFormBtn" onClick={props.onStartForgotPassword}>ForgotPassword</Button>
+      <Button variant="warning" className="loginFormBtn">
         <NavLink to="/signup">Signup</NavLink>
       </Button>
     </Form.Row>

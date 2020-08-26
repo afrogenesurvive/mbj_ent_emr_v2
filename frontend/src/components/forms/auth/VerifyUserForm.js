@@ -12,26 +12,26 @@ return (
   <h1>Verify</h1>
   <Form.Row>
     <Form.Group className="searchInput" controlId="type">
-      <Form.Label>type</Form.Label>
+      <Form.Label className="formLabel">Type</Form.Label>
       <Form.Control as="select">
         <option>email</option>
       </Form.Control>
     </Form.Group>
 
     <Form.Group as={Col} controlId="username">
-      <Form.Label>username</Form.Label>
+      <Form.Label className="formLabel">Username</Form.Label>
       <Form.Control type="text" placeholder="username"/>
     </Form.Group>
   </Form.Row>
 
   <Form.Row>
     <Form.Group as={Col} controlId="email">
-      <Form.Label>email</Form.Label>
+      <Form.Label className="formLabel">Email</Form.Label>
       <Form.Control type="text" placeholder="email"/>
     </Form.Group>
 
     <Form.Group as={Col} controlId="code">
-      <Form.Label>code</Form.Label>
+      <Form.Label className="formLabel">Code</Form.Label>
       <Form.Control type="text" placeholder="verification code"/>
     </Form.Group>
   </Form.Row>

@@ -35,9 +35,9 @@ const ImageItem = (props) => {
     <li key={props.key} className="">
       <Card>
         <Card.Body className="cardBody">
-          <Card.Text className="cardText">
-            Link: <span className="bold">{props.image.path}</span>
-          </Card.Text>
+        <Card.Text className="cardText">
+        <a href={props.image.path} target="_blank" rel="noopener noreferrer">{props.image.name}</a>
+        </Card.Text>
 
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           {state === true && (

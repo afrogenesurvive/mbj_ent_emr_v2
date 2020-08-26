@@ -1,24 +1,42 @@
-1300662767 trn
-1998/12/6 dob
 
+name: CI
+on:
+  push:
+    branches:
+        [master]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
 
-***bpo hamaica tech jobs
+    # - name: Build
+    #   run: |
+    #     npm install
+    #     npm run-script build
+    #   env:
+    #     APP_SECRET: ${{ secrets.APP_SECRET }}
 
-nodejs jobs
-backend jobs
-javascript jobs
-react jobs
-react js jobs
-remote developer jobs
+      # name: Deploy to gh-pages
+      #   uses: peaceiris/actions-gh-pages@v3
+      #   with:
+      #     deploy_key: ${{ secrets.ACTIONS_DEPLOY_TOKEN }}
+      #     publish_dir: ./build
 
-ask nat about true shelf and who else would stock
+    # - name: Deploy
+      # uses: JamesIves/github-pages-deploy-action@releases/v3
+      # with:
+      #   GITHUB_TOKEN: ${{ secrets.ACTIONS_DEPLOY_TOKEN }}
+      #   BRANCH: gh-pages
+      #   FOLDER: build
+      # env:
+      #   APP_SECRET: ${{ secrets.APP_SECRET }}
 
-fontana
-clinicare
-
-craft markets
-  firestation
-  bottom road
-  fort street
-Westron boutiques
-Loj shops
+    - name: Deploy
+        run: |
+          npm install
+          git remote set-url origin https://afrogenesurvive:${{ secrets.ACTIONS_DEPLOY_TOKEN }}@github.com/afrogenesurvive/portfolio
+          npm run deploy
+        env:
+          APP_SECRET: ${{ secrets.APP_SECRET }}

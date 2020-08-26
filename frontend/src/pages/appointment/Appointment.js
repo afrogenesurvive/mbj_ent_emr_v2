@@ -124,7 +124,7 @@ getAllAppointments (args) {
       )
       {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -192,7 +192,7 @@ getAllPatients (args) {
       )
       {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -252,7 +252,7 @@ logUserActivity(args) {
         })
       {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -325,7 +325,7 @@ searchAppointments = (event) => {
       {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,reminders{_id},creator{_id}}}
       `};
   }
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -426,7 +426,7 @@ submitCreateNewAppointmentForm = (event) => {
   const time = event.target.time.value;
   const location = event.target.location.value;
   const description = event.target.description.value;
-  const important = event.target.important.value;
+  const important = event.target.important.checked;
 
   if (
       title.trim().length === 0 ||
@@ -463,7 +463,7 @@ submitCreateNewAppointmentForm = (event) => {
         })
         {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,reminders{_id},creator{_id}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -612,7 +612,7 @@ deleteAppointment = (args) => {
       )
       {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -756,7 +756,7 @@ submitSublistSearchForm = (event) => {
         {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
       `};
   }
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -855,11 +855,15 @@ render() {
     <Container className="staffPageContainer">
       <Row className="staffPageContainerRow headRow">
         <Col md={9} className="staffPageContainerCol">
-        <h1>Appointments: {this.state.showDetails === true &&
-                      this.state.selectedAppointment &&
-                      this.state.tabKey === 'detail' && (
-                            this.state.selectedAppointment.title
-                          )}</h1>
+        <h1>Appointments:
+        {
+          this.state.showDetails === true &&
+          this.state.selectedAppointment &&
+          this.state.tabKey === 'detail' && (
+            this.state.selectedAppointment.title
+              )
+            }
+          </h1>
         </Col>
         <Col md={3} className="staffPageContainerCol">
           {this.state.isLoading ? (
@@ -908,8 +912,8 @@ render() {
                 <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                   <Tab eventKey="1" title="list">
                   <Row className="displayPaneHeadRow">
-                    <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                    <Button variant="outline-warning" onClick={this.resetFilter}>Reset</Button>
+                    <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+                    <Button variant="warning" onClick={this.resetFilter}>Reset</Button>
                   </Row>
                     <AppointmentList
                       filter={this.state.filter}
@@ -943,7 +947,7 @@ render() {
                   </Row>
                   <Row>
                     {this.state.searchAppointments && (
-                      <Button variant="outline-primary" className="centered_btn" onClick={this.toggleSideCol}>Filter</Button>
+                      <Button variant="primary" className="centered_btn" onClick={this.toggleSideCol}>Filter</Button>
                     )}
                   </Row>
                   <Row className="userSearchRow results">
@@ -969,14 +973,14 @@ render() {
                 </Tab.Pane>
                 <Tab.Pane eventKey="new">
                 {this.state.creatingAppointment === false && (
-                  <Button variant="outline-secondary" className="filterFormBtn" onClick={this.onStartCreateNewAppointment}>Create New</Button>
+                  <Button variant="secondary" className="filterFormBtn" onClick={this.onStartCreateNewAppointment}>Create New</Button>
                 )}
                 {this.state.creatingAppointment === true &&
                   this.state.patients &&
                   !this.state.selectedPatient && (
                   <Col className="patientSubListCol">
                   <Row className="patientSubListRow">
-                  <Button variant="outline-success" className="patientSublistSearchBtn" onClick={this.startSublistSearch}>Search</Button>
+                  <Button variant="success" className="patientSublistSearchBtn" onClick={this.startSublistSearch}>Search</Button>
                   </Row>
                   <Row className="patientSubListRow">
                   {this.state.sublistSearch === true && (

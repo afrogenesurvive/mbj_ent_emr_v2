@@ -17,3 +17,6 @@
 .centered_btn {
   margin: 1rem auto;
 }
+.fc-unthemed td.fc-today {
+  background-color: coral;
+}

@@ -16,40 +16,40 @@ return (
 
     <Form.Row>
       <Form.Group as={Col} controlId="title">
-        <Form.Label>title</Form.Label>
+        <Form.Label className="formLabel">Title</Form.Label>
         <Form.Control type="text" placeholder="title"/>
       </Form.Group>
       <Form.Group as={Col} controlId="type">
-        <Form.Label>type</Form.Label>
+        <Form.Label className="formLabel">Type</Form.Label>
         <Form.Control type="text" placeholder="type"/>
       </Form.Group>
     </Form.Row>
     <Form.Row>
       <Form.Group as={Col} controlId="description">
-        <Form.Label>description</Form.Label>
+        <Form.Label className="formLabel">Description</Form.Label>
         <Form.Control as="textarea" rows="3" placeholder="description"/>
       </Form.Group>
     </Form.Row>
     <Form.Row>
       <Form.Group as={Col} controlId="amount">
-        <Form.Label>amount</Form.Label>
+        <Form.Label className="formLabel">Amount</Form.Label>
         <Form.Control type="number" step="0.001" placeholder="amount"/>
       </Form.Group>
       <Form.Group as={Col} controlId="paid">
-        <Form.Label>Paid ?</Form.Label>
+        <Form.Label className="formLabel">Paid ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
       </Form.Group>
     </Form.Row>
     <Form.Row>
       <Form.Group as={Col} controlId="notes">
-        <Form.Label>notes</Form.Label>
+        <Form.Label className="formLabel">Notes</Form.Label>
         <Form.Control as="textarea" rows="3" placeholder="notes"/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row>
       <Form.Group as={Col}>
-        <Form.Label>File</Form.Label>
+        <Form.Label className="formLabel">File</Form.Label>
         <Form.Control type="file" id="fileInput" placeholder="File" onChange={(e) => {AuthContext._currentValue.file = e.target.files[0]}}/>
       </Form.Group>
     </Form.Row>

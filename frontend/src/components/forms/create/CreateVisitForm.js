@@ -14,31 +14,31 @@ return (
 
     <Form.Row>
       <Form.Group as={Col} controlId="appointmentId">
-        <Form.Label>Appointment: {props.appointment.title}</Form.Label>
+        <Form.Label className="formLabel">Appointment: {props.appointment.title}</Form.Label>
         <Form.Control type="text" value={props.appointment._id}/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row>
       <Form.Group as={Col} controlId="title">
-        <Form.Label>title</Form.Label>
+        <Form.Label className="formLabel">Title</Form.Label>
         <Form.Control type="text" placeholder="title"/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="type">
-        <Form.Label>type</Form.Label>
+        <Form.Label className="formLabel">Type</Form.Label>
         <Form.Control type="text" placeholder="type"/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="subType">
-        <Form.Label>subType</Form.Label>
+        <Form.Label className="formLabel">Sub-type</Form.Label>
         <Form.Control type="text" placeholder="subType"/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row>
-      <Button variant="outline-success" type="submit" className="loginFormBtn">Create</Button>
-      <Button variant="outline-danger" className="loginFormBtn" onClick={props.onCancel}>Cancel</Button>
+      <Button variant="success" type="submit" className="loginFormBtn">Create</Button>
+      <Button variant="danger" className="loginFormBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>
 </div>

@@ -10,3 +10,6 @@
 .addFormBtn {
   margin: 0 1rem;
 }
+.formLabel {
+  font-weight: bold;
+}

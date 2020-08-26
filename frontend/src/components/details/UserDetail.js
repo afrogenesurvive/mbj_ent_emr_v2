@@ -133,7 +133,7 @@ getPocketVars (args) {
               activityId:"${activityId}")}
           `};
 
-    fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+    fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -182,7 +182,7 @@ logUserActivity(args) {
         })
       {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -244,7 +244,7 @@ submitAddAddressForm = (event) => {
         })
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -318,7 +318,7 @@ deleteAddress = (args) => {
         })
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -387,7 +387,7 @@ setAddressPrimary = (args) => {
         })
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -456,7 +456,7 @@ submitAddAttendanceForm = (event) => {
         })
       {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -529,7 +529,7 @@ deleteAttendance = (args) => {
             attendanceDescription:"${args.description}"
           }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -604,7 +604,7 @@ submitAddLeaveForm = (event) => {
           leaveDescription:"${description}"
         }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -679,7 +679,7 @@ deleteLeave = (args) => {
           })
           {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -831,7 +831,7 @@ submitAddImageForm = (event) => {
         })
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -904,7 +904,7 @@ deleteImage = (args) => {
           })
           {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1104,7 +1104,7 @@ submitAddFileForm = (event) => {
         })
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1175,7 +1175,7 @@ deleteFile = (args) => {
           })
           {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1289,7 +1289,7 @@ submitAddNoteForm = (event) => {
           notes:"${note}"
         }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1355,7 +1355,7 @@ deleteNote = (args) => {
           })
           {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1422,7 +1422,7 @@ submitUpdateSingleFieldForm = (event) => {
       )
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1791,6 +1791,9 @@ render() {
                       )}
                       <p className="listGroupText">Role:</p>
                       <p className="listGroupText bold">{this.props.user.role}</p>
+                      {this.context.role === 'Admin' && (
+                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'role')}>Edit</Button>
+                      )}
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <p className="listGroupText">DOB:</p>
@@ -1846,7 +1849,7 @@ render() {
                         <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
                       )}
                       {this.context.role === 'Admin' && (
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'employmentDate')}>Edit</Button>
+                        <Button variant="primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'employmentDate')}>Edit</Button>
                       )}
                     </ListGroup.Item>
                     <ListGroup.Item>
@@ -1874,9 +1877,9 @@ render() {
                 <Tab.Pane eventKey="3">
                   <Row className="displayPaneHeadRow">
                     <p className="displayPaneTitle">User Address List:</p>
-                    <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                    <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
                     {this.state.canDelete === true && (
-                      <Button variant="outline-success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
+                      <Button variant="success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
                     )}
                   </Row>
                   {this.state.adding.state === true &&
@@ -1898,9 +1901,9 @@ render() {
                 <Tab.Pane eventKey="4">
                   <Row className="displayPaneHeadRow">
                     <p className="displayPaneTitle">User Attendance List:</p>
-                    <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                    <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
                     {this.state.canDelete === true && (
-                      <Button variant="outline-success" onClick={this.startAdd.bind(this, 'attendance')}>Add</Button>
+                      <Button variant="success" onClick={this.startAdd.bind(this, 'attendance')}>Add</Button>
                     )}
                   </Row>
                   {this.state.adding.state === true &&
@@ -1935,9 +1938,9 @@ render() {
                 <Tab.Pane eventKey="5">
                   <Row className="displayPaneHeadRow">
                     <p className="displayPaneTitle">User Leave List:</p>
-                    <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                    <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
                     {this.state.canDelete === true && (
-                      <Button variant="outline-success" onClick={this.startAdd.bind(this, 'leave')}>Add</Button>
+                      <Button variant="success" onClick={this.startAdd.bind(this, 'leave')}>Add</Button>
                     )}
                   </Row>
                   {this.state.adding.state === true &&
@@ -1971,9 +1974,9 @@ render() {
                 <Tab.Pane eventKey="6">
                   <Row className="displayPaneHeadRow">
                     <p className="displayPaneTitle">User Image List:</p>
-                    <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                    <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
                     {this.state.canDelete === true && (
-                      <Button variant="outline-success" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
+                      <Button variant="success" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
                     )}
                   </Row>
                   {this.state.adding.state === true &&
@@ -1995,9 +1998,9 @@ render() {
                 <Tab.Pane eventKey="7">
                   <Row className="displayPaneHeadRow">
                     <p className="displayPaneTitle">User File List:</p>
-                    <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                    <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
                     {this.state.canDelete === true && (
-                      <Button variant="outline-success" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
+                      <Button variant="success" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
                     )}
                   </Row>
                   {this.state.adding.state === true &&
@@ -2018,7 +2021,7 @@ render() {
                 <Tab.Pane eventKey="8">
                   <Row className="displayPaneHeadRow">
                     <p className="displayPaneTitle">User Appointment List:</p>
-                    <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                    <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
                   </Row>
                   <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
                     <Tab eventKey="1" title="list">
@@ -2043,9 +2046,9 @@ render() {
                 <Tab.Pane eventKey="9">
                   <Row className="displayPaneHeadRow">
                     <p className="displayPaneTitle">User Notes:</p>
-                    <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                    <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
                     {this.state.canDelete === true && (
-                      <Button variant="outline-success" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
+                      <Button variant="success" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
                     )}
                   </Row>
                   {this.state.adding.state === true &&

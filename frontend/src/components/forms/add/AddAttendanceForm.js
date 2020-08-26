@@ -24,7 +24,7 @@ return (
 
     <Form.Row>
       <Form.Group as={Col} controlId="date">
-        <Form.Label>date</Form.Label>
+        <Form.Label className="formLabel">Date</Form.Label>
         <Form.Control type="date" placeholder="date"/>
       </Form.Group>
       {
@@ -47,21 +47,21 @@ return (
 
     <Form.Row>
       <Form.Group as={Col} controlId="status">
-        <Form.Label>status</Form.Label>
+        <Form.Label className="formLabel">Status</Form.Label>
         <Form.Control type="text" placeholder="status"/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row>
       <Form.Group as={Col} controlId="description">
-        <Form.Label>Description</Form.Label>
+        <Form.Label className="formLabel">Description</Form.Label>
         <Form.Control as="textarea" rows="3" placeholder=""/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row className="formBtnRow">
-      <Button variant="outline-success" type="submit" className="addFormBtn">Add</Button>
-      <Button variant="outline-primary" className="addFormBtn" onClick={props.onCancel}>Cancel</Button>
+      <Button variant="success" type="submit" className="addFormBtn">Add</Button>
+      <Button variant="primary" className="addFormBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>
 </div>

@@ -13,12 +13,12 @@ return (
     <h4>Add Address</h4>
     <Form.Row>
       <Form.Group as={Col} controlId="number">
-        <Form.Label>addressNumber</Form.Label>
+        <Form.Label className="formLabel">Address Number</Form.Label>
         <Form.Control type="number" placeholder=""/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="street">
-        <Form.Label>addressStreet</Form.Label>
+        <Form.Label className="formLabel">Address Street</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
 
@@ -27,12 +27,12 @@ return (
     <Form.Row>
 
       <Form.Group as={Col} controlId="town">
-        <Form.Label>addressTown</Form.Label>
+        <Form.Label className="formLabel">Address Town</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="city">
-        <Form.Label>addressCity</Form.Label>
+        <Form.Label className="formLabel">Address City</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
 
@@ -40,40 +40,40 @@ return (
 
     <Form.Row>
       <Form.Group as={Col} controlId="parish">
-        <Form.Label>addressParish</Form.Label>
+        <Form.Label className="formLabel">Address Parish</Form.Label>
         <Form.Control as="select">
           <option>none</option>
-          <option>Hanover</option>
-          <option>St. Elizabeth</option>
-          <option>St. James</option>
-          <option>Trelawny</option>
-          <option>Westmoreland</option>
           <option>Clarendon</option>
+          <option>Hanover</option>
+          <option>Kingston</option>
           <option>Manchester</option>
+          <option>Portland</option>
+          <option>St. Andrew</option>
           <option>St. Ann</option>
           <option>St. Catherine</option>
+          <option>St. Elizabeth</option>
+          <option>St. James</option>
           <option>St. Mary</option>
-          <option>Kingston</option>
-          <option>St. Andrew</option>
-          <option>Portland</option>
           <option>St. Thomas</option>
+          <option>Trelawny</option>
+          <option>Westmoreland</option>
         </Form.Control>
       </Form.Group>
 
       <Form.Group as={Col} controlId="country">
-        <Form.Label>addressCountry</Form.Label>
+        <Form.Label className="formLabel">Address Country</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="postalCode">
-        <Form.Label>addressPostalCode</Form.Label>
+        <Form.Label className="formLabel">Address PostalCode</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row className="formBtnRow">
-      <Button variant="outline-success" type="submit" className="addFormBtn">Add</Button>
-      <Button variant="outline-primary" className="addFormBtn" onClick={props.onCancel}>Cancel</Button>
+      <Button variant="success" type="submit" className="addFormBtn">Add</Button>
+      <Button variant="primary" className="addFormBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>
 </div>

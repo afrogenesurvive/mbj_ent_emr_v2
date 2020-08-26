@@ -36,7 +36,7 @@ const FileItem = (props) => {
       <Card>
         <Card.Body className="cardBody">
           <Card.Text className="cardText">
-            Link: <span className="bold">{props.file.path}</span>
+            <a href={props.file.path} target="_blank" rel="noopener noreferrer">{props.file.name}</a>
           </Card.Text>
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           {state === true && (

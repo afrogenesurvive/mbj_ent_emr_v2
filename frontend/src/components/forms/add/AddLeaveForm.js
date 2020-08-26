@@ -15,31 +15,31 @@ return (
 
     <Form.Row>
       <Form.Group as={Col} controlId="startDate">
-        <Form.Label>startDate</Form.Label>
+        <Form.Label className="formLabel">Start Date</Form.Label>
         <Form.Control type="date" placeholder="startDate"/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="endDate">
-        <Form.Label>endDate</Form.Label>
+        <Form.Label className="formLabel">End Date</Form.Label>
         <Form.Control type="date" placeholder="endDate"/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row>
       <Form.Group as={Col} controlId="type">
-        <Form.Label>type</Form.Label>
+        <Form.Label className="formLabel">Type</Form.Label>
         <Form.Control type="text" placeholder="type"/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="description">
-        <Form.Label>Description</Form.Label>
+        <Form.Label className="formLabel">Description</Form.Label>
         <Form.Control as="textarea" rows="3" placeholder=""/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row className="formBtnRow">
-      <Button variant="outline-success" type="submit" className="addFormBtn">Add</Button>
-      <Button variant="outline-primary" className="addFormBtn" onClick={props.onCancel}>Cancel</Button>
+      <Button variant="success" type="submit" className="addFormBtn">Add</Button>
+      <Button variant="primary" className="addFormBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>
 </div>

@@ -31,9 +31,9 @@ const AttachmentItem = props => {
     <li key={props.key} className="">
 
         <Row>
-          <p>
-            <span className="bold">{props.attachment}</span>
-          </p>
+
+          <a href={props.attachment} target="_blank" rel="noopener noreferrer">{props.attachment}</a>
+
           {props.canDelete === true && (
             <FontAwesomeIcon icon={faEraser} className="listIcon" onClick={handleDeleteStateChange}/>
           )}

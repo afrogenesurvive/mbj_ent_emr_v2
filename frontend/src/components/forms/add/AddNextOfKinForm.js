@@ -12,14 +12,13 @@ return (
 <div className="addFormTopDiv">
   <Form onSubmit={props.onConfirm}>
     <h4>Add Next of Kin</h4>
-
     <Form.Row>
       <Form.Group as={Col} controlId="name">
-        <Form.Label>name</Form.Label>
+        <Form.Label className="formLabel">Name</Form.Label>
         <Form.Control type="text" placeholder="name"/>
       </Form.Group>
       <Form.Group as={Col} controlId="relation">
-        <Form.Label>relation</Form.Label>
+        <Form.Label className="formLabel">Relation</Form.Label>
         <Form.Control as="select">
           <option>Mother</option>
           <option>Father</option>
@@ -36,28 +35,27 @@ return (
       </Form.Group>
     </Form.Row>
 
-
     <Form.Row>
     <Form.Group as={Col} controlId="email">
-      <Form.Label>email</Form.Label>
+      <Form.Label className="formLabel">Email</Form.Label>
       <Form.Control type="email" placeholder="relation@nextOfKin.com"/>
     </Form.Group>
     </Form.Row>
 
     <Form.Row>
       <Form.Group as={Col} controlId="phone">
-        <Form.Label>phone</Form.Label>
+        <Form.Label className="formLabel">Phone</Form.Label>
         <Form.Control type="text" placeholder="+187600000"/>
       </Form.Group>
       <Form.Group as={Col} controlId="phone2">
-        <Form.Label>phone2</Form.Label>
+        <Form.Label className="formLabel">Phone #2</Form.Label>
         <Form.Control type="text" placeholder="+187600000"/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row className="formBtnRow">
-      <Button variant="outline-success" type="submit" className="addFormBtn">Add</Button>
-      <Button variant="outline-primary" className="addFormBtn" onClick={props.onCancel}>Cancel</Button>
+      <Button variant="success" type="submit" className="addFormBtn">Add</Button>
+      <Button variant="primary" className="addFormBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>
 </div>

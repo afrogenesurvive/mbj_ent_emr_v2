@@ -18,7 +18,7 @@ return (
 
     <Form.Row>
       <Form.Group as={Col} controlId="key">
-        <Form.Label>Field</Form.Label>
+        <Form.Label className="formLabel">Field</Form.Label>
         <Form.Control as="select">
         <option>title</option>
         <option>description</option>
@@ -29,7 +29,7 @@ return (
 
     <Form.Row>
       <Form.Group as={Col} controlId="value">
-        <Form.Label>Query</Form.Label>
+        <Form.Label className="formLabel">Query</Form.Label>
         <Form.Control as="select">
           <option>Ascending</option>
           <option>Descending</option>
@@ -38,8 +38,8 @@ return (
     </Form.Row>
 
     <Form.Row>
-      <Button variant="outline-success" type="submit" className="filterFormBtn">Filter</Button>
-      <Button variant="outline-secondary" className="filterFormBtn" onClick={props.onCancel}>Cancel</Button>
+      <Button variant="success" type="submit" className="filterFormBtn">Filter</Button>
+      <Button variant="secondary" className="filterFormBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>
 </div>

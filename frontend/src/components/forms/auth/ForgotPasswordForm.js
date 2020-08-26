@@ -14,14 +14,14 @@ return (
   <h1>Forgot Password</h1>
   <Form.Row>
     <Form.Group as={Col} controlId="username">
-      <Form.Label>Username</Form.Label>
+      <Form.Label className="formLabel">Username</Form.Label>
       <Form.Control type="text" placeholder="username"/>
     </Form.Group>
   </Form.Row>
 
   <Form.Row>
     <Form.Group as={Col} controlId="email">
-      <Form.Label>email</Form.Label>
+      <Form.Label className="formLabel">Email</Form.Label>
       <Form.Control type="email" placeholder="email"/>
     </Form.Group>
   </Form.Row>

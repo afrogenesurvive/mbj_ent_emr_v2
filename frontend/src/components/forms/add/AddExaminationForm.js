@@ -16,52 +16,52 @@ return (
 
     <Form.Row>
       <Form.Group as={Col} controlId="general">
-        <Form.Label>General</Form.Label>
+        <Form.Label className="formLabel">General</Form.Label>
         <Form.Control type="text" placeholder="general"/>
       </Form.Group>
       <Form.Group as={Col} controlId="area">
-        <Form.Label>Area</Form.Label>
+        <Form.Label className="formLabel">Area</Form.Label>
         <Form.Control type="text" placeholder="area"/>
       </Form.Group>
     </Form.Row>
     <Form.Row>
       <Form.Group as={Col} controlId="type">
-        <Form.Label>Type</Form.Label>
+        <Form.Label className="formLabel">Type</Form.Label>
         <Form.Control type="text" placeholder="type"/>
       </Form.Group>
       <Form.Group as={Col} controlId="measure">
-        <Form.Label>Measure</Form.Label>
+        <Form.Label className="formLabel">Measure</Form.Label>
         <Form.Control type="text" placeholder="measure"/>
       </Form.Group>
     </Form.Row>
     <Form.Row>
       <Form.Group as={Col} controlId="value">
-        <Form.Label>Value</Form.Label>
+        <Form.Label className="formLabel">Value</Form.Label>
         <Form.Control type="text" placeholder="value"/>
       </Form.Group>
       <Form.Group as={Col} controlId="description">
-        <Form.Label>Description</Form.Label>
+        <Form.Label className="formLabel">Description</Form.Label>
         <Form.Control as="textarea" rows="3" placeholder="description"/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row>
       <Form.Group as={Col} controlId="followUp">
-        <Form.Label>FollowUp ?</Form.Label>
+        <Form.Label className="formLabel">FollowUp ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row>
       <Form.Group as={Col}>
-        <Form.Label>File</Form.Label>
+        <Form.Label className="formLabel">File</Form.Label>
         <Form.Control type="file" id="fileInput" placeholder="File" onChange={(e) => {AuthContext._currentValue.file = e.target.files[0]}}/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row className="formBtnRow">
-      <Button variant="outline-success" type="submit" className="addFormBtn">Add</Button>
-      <Button variant="outline-primary" className="addFormBtn" onClick={props.onCancel}>Cancel</Button>
+      <Button variant="success" type="submit" className="addFormBtn">Add</Button>
+      <Button variant="primary" className="addFormBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>
 </div>

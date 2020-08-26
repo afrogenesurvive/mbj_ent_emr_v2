@@ -13,19 +13,19 @@ return (
     <h1>Signup</h1>
     <Form.Row>
       <Form.Group as={Col} controlId="email">
-        <Form.Label>email Address</Form.Label>
+        <Form.Label className="formLabel">Email Address</Form.Label>
         <Form.Control type="email" placeholder="alpha@beta.omega"/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="password">
-        <Form.Label>password</Form.Label>
+        <Form.Label className="formLabel">Password</Form.Label>
         <Form.Control type="password" placeholder="password"/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row>
       <Form.Group as={Col} controlId="role">
-        <Form.Label>role</Form.Label>
+        <Form.Label className="formLabel">Role</Form.Label>
         <Form.Control as="select">
           <option>Admin</option>
           <option>Staff</option>
@@ -35,7 +35,7 @@ return (
       </Form.Group>
 
       <Form.Group as={Col} controlId="title">
-        <Form.Label>title</Form.Label>
+        <Form.Label className="formLabel">Title</Form.Label>
         <Form.Control as="select">
           <option>Mr</option>
           <option>Mrs</option>
@@ -45,24 +45,24 @@ return (
       </Form.Group>
 
       <Form.Group as={Col} controlId="name">
-        <Form.Label>name</Form.Label>
+        <Form.Label className="formLabel">Name</Form.Label>
         <Form.Control type="text" placeholder="name"/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="username">
-        <Form.Label>username</Form.Label>
+        <Form.Label className="formLabel">Username</Form.Label>
         <Form.Control type="text" placeholder="username"/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row>
       <Form.Group as={Col} controlId="dob">
-        <Form.Label>dob</Form.Label>
+        <Form.Label className="formLabel">D.O.B</Form.Label>
         <Form.Control type="date" placeholder="YYYY-MM-DD"/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="gender">
-        <Form.Label>gender</Form.Label>
+        <Form.Label className="formLabel">Gender</Form.Label>
         <Form.Control as="select">
           <option>Female</option>
           <option>Male</option>
@@ -73,76 +73,76 @@ return (
 
     <Form.Row>
       <Form.Group as={Col} controlId="phone">
-        <Form.Label>phone</Form.Label>
+        <Form.Label className="formLabel">Phone</Form.Label>
         <Form.Control type="text" placeholder="+18760001234"/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="phone2">
-        <Form.Label>phone2</Form.Label>
+        <Form.Label className="formLabel">Phone #2</Form.Label>
         <Form.Control type="text" placeholder="+18760005678"/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row>
       <Form.Group as={Col} controlId="addressNumber">
-        <Form.Label>addressNumber</Form.Label>
+        <Form.Label className="formLabel">Address Number</Form.Label>
         <Form.Control type="number" placeholder=""/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="addressStreet">
-        <Form.Label>addressStreet</Form.Label>
+        <Form.Label className="formLabel">Address Street</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="addressTown">
-        <Form.Label>addressTown</Form.Label>
+        <Form.Label className="formLabel">Address Town</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row>
       <Form.Group as={Col} controlId="addressCity">
-        <Form.Label>addressCity</Form.Label>
+        <Form.Label className="formLabel">Address City</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="addressParish">
-        <Form.Label>addressParish</Form.Label>
+        <Form.Label className="formLabel">Address Parish</Form.Label>
         <Form.Control as="select">
           <option>none</option>
-          <option>Hanover</option>
-          <option>St. Elizabeth</option>
-          <option>St. James</option>
-          <option>Trelawny</option>
-          <option>Westmoreland</option>
           <option>Clarendon</option>
+          <option>Hanover</option>
+          <option>Kingston</option>
           <option>Manchester</option>
+          <option>Portland</option>
+          <option>St. Andrew</option>
           <option>St. Ann</option>
           <option>St. Catherine</option>
+          <option>St. Elizabeth</option>
+          <option>St. James</option>
           <option>St. Mary</option>
-          <option>Kingston</option>
-          <option>St. Andrew</option>
-          <option>Portland</option>
           <option>St. Thomas</option>
+          <option>Trelawny</option>
+          <option>Westmoreland</option>
         </Form.Control>
       </Form.Group>
 
       <Form.Group as={Col} controlId="addressCountry">
-        <Form.Label>addressCountry</Form.Label>
+        <Form.Label className="formLabel">Address Country</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="addressPostalCode">
-        <Form.Label>addressPostalCode</Form.Label>
+        <Form.Label className="formLabel">Address Postalcode</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row>
-      <Button variant="outline-success" type="submit" className="loginFormBtn">Signup</Button>
+      <Button variant="success" type="submit" className="loginFormBtn">Signup</Button>
     </Form.Row>
     <Form.Row>
-      <Button variant="outline-warning" className="loginFormBtn">
+      <Button variant="warning" className="loginFormBtn">
         <NavLink to="/login">Login</NavLink>
       </Button>
     </Form.Row>
