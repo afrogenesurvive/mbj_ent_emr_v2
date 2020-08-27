@@ -1,4 +1,5 @@
 .env
 ecosystem.config.js
 note.txt
+.eslintrc.json
 /node_modules
