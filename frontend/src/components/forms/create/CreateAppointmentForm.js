@@ -28,7 +28,7 @@ return (
       <Form.Group as={Col} controlId="type">
         <Form.Label className="formLabel">Type</Form.Label>
         <Form.Control as="select">
-          <option>new_nreferred</option>
+          <option>new_unreferred</option>
           <option>referral</option>
           <option>follow_up</option>
         </Form.Control>

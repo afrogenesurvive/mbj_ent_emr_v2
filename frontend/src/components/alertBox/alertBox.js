@@ -14,8 +14,9 @@ const AlertBox = (props) => {
   if (props.alert !== null) {
     alert = '"'+props.alert+'"';
   }
-  const [state, setState] = useState('alertBoxClosed');
+  const [state, setState] = useState('alertBoxOpen');
   const handleStateChange = () => {
+    console.log('foooo');
     if (state === 'alertBoxClosed') {
       setState('alertBoxOpen');
     }

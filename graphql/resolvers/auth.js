@@ -52,7 +52,7 @@ module.exports = {
         tokenExpiration:0 ,
         error: 'Please  verify user 1st!'}
     }
-    const token = jwt.sign({ userId: user.id },'Toast',{expiresIn: '4h'});
+    const token = jwt.sign({ userId: user.id },process.env.JWT_TOKEN,{expiresIn: '4h'});
 
     const userLoggedIn = await User.findOneAndUpdate({_id: user.id},{loggedIn: true},{new: true, useFindAndModify: false})
 
