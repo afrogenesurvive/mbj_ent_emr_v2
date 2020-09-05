@@ -593,7 +593,10 @@ module.exports = {
       }
       const patient = await Patient.findById({_id: args.patientId})
       const today = moment();
-      // console.log(today);
+
+      console.log('1:',moment().format('YYYY-MM-DD'));
+      console.log('2:',moment(args.appointmentInput.date).format('YYYY-MM-DD'));
+      console.log('3:',moment.unix(args.appointmentInput.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'));
 
       if (moment(args.appointmentInput.date).format('YYYY-MM-DD') < moment().format('YYYY-MM-DD')) {
         console.log('...ummm no! Please pick a date today or in the future...');
