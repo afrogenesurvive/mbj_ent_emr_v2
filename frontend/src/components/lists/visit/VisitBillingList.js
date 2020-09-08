@@ -60,6 +60,7 @@ const VisitBillingList = props => {
         onDelete={props.onDelete}
         onAddAttachment={props.onAddAttachment}
         deleteAttachment={props.deleteAttachment}
+        updateBillingPaid={props.updateBillingPaid}
       />
     );
   });

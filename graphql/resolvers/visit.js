@@ -1357,6 +1357,46 @@ module.exports = {
       throw err;
     }
   },
+  updateVisitBillingPaid: async (args, req) => {
+    console.log("Resolver: updateVisitBillingPaid...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const billing = {
+          title: args.visitInput.billingTitle,
+          type: args.visitInput.billingType,
+          description: args.visitInput.billingDescription,
+          amount: args.visitInput.billingAmount,
+          paid: args.visitInput.billingPaid,
+          notes: args.visitInput.billingNotes
+        }
+        const preVisit = await Visit.findById(args.visitId)
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,
+            'billing.title': billing.title,
+            // 'billing.type': billing.type,
+            // 'billing.description': billing.description,
+            'billing.amount': billing.amount,
+            'billing.paid': billing.paid,
+            // 'billing.notes': billing.notes
+          },
+          {'billing.$.paid': true},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   deleteVisitBillingAttachment: async (args, req) => {
     console.log("Resolver: deleteVisitBillingAttachment...");
     if (!req.isAuth) {

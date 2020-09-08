@@ -82,6 +82,9 @@ const BillingItem = props => {
               <li>
               <Card.Text className="cardText">
                 Paid: <span className="bold">{props.billing.paid === true ?(<FontAwesomeIcon icon={faCheckSquare} className="listIcon"/>):(<FontAwesomeIcon icon={faBan} className="listIcon"/>)}</span>
+                {props.billing.paid === false && (
+                  <span onClick={props.updateBillingPaid.bind(this, props.billing)}>Update?</span>
+                )}
               </Card.Text>
               </li>
               <li>

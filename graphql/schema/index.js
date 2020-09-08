@@ -861,6 +861,7 @@ module.exports = buildSchema(`
     addVisitTreatmentAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitBilling(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitBillingAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    updateVisitBillingPaid(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitVigilance(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitImage(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitFile(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
