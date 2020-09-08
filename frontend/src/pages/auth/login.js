@@ -54,7 +54,7 @@ class LoginPage extends Component {
           {activityId,role,token,tokenExpiration,error}}`
         };
 
-    fetch('http://localhost:8088/graphql', {
+    fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -137,7 +137,7 @@ class LoginPage extends Component {
           })
         {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id},reminders{_id},activity{date,request}}}
       `};
-    fetch('http://localhost:8088/graphql', {
+    fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
         method: 'POST',
         body: JSON.stringify(requestBody),
         headers: {
@@ -187,7 +187,7 @@ class LoginPage extends Component {
         {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id},reminders{_id},activity{date,request}}}
         `};
 
-    fetch('http://localhost:8088/graphql', {
+    fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -266,7 +266,7 @@ class LoginPage extends Component {
            {_id,username,contact{email}verification{verified,type,code}}}
         `};
 
-    fetch('http://localhost:8088/graphql', {
+    fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
