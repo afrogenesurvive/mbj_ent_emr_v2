@@ -13,9 +13,8 @@ return (
 
     <Form.Row>
       <Form.Group as={Col} controlId="field">
-        <Form.Label className="formLabel">Field</Form.Label>
+        <Form.Label className="formLabel">Search Field</Form.Label>
         <Form.Control as="select">
-        <option>active</option>
         <option>name</option>
         <option>username</option>
         <option>title</option>
@@ -80,14 +79,14 @@ return (
       </Form.Group>
 
       <Form.Group as={Col} controlId="query">
-        <Form.Label className="formLabel">Value</Form.Label>
+        <Form.Label className="formLabel">Search Query</Form.Label>
         <Form.Control type="text" placeholder="date format: 'YYYY-MM-DD'"/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row>
-      <Button variant="success" type="submit" className="filterFormBtn">Search</Button>
-      <Button variant="secondary" className="filterFormBtn" onClick={props.onCancel}>Cancel</Button>
+      <Button variant="success" type="submit" className="filterFormBtn searchBtn">Search</Button>
+      <Button variant="secondary" className="filterFormBtn searchBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>
 </div>

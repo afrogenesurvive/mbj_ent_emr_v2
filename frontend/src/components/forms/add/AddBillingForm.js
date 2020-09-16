@@ -13,26 +13,23 @@ return (
 <div className="addFormTopDiv">
   <Form onSubmit={props.onConfirm}>
     <h4>Add Billing</h4>
+    <p>required feilds are denoted by a ' * '</p>
 
     <Form.Row>
-      <Form.Group as={Col} controlId="title">
-        <Form.Label className="formLabel">Title</Form.Label>
-        <Form.Control type="text" placeholder="title"/>
-      </Form.Group>
       <Form.Group as={Col} controlId="type">
-        <Form.Label className="formLabel">Type</Form.Label>
+        <Form.Label className="formLabel">Type * </Form.Label>
         <Form.Control type="text" placeholder="type"/>
       </Form.Group>
     </Form.Row>
     <Form.Row>
       <Form.Group as={Col} controlId="description">
-        <Form.Label className="formLabel">Description</Form.Label>
+        <Form.Label className="formLabel">Description * </Form.Label>
         <Form.Control as="textarea" rows="3" placeholder="description"/>
       </Form.Group>
     </Form.Row>
     <Form.Row>
       <Form.Group as={Col} controlId="amount">
-        <Form.Label className="formLabel">Amount</Form.Label>
+        <Form.Label className="formLabel">Amount * </Form.Label>
         <Form.Control type="number" step="0.001" placeholder="amount"/>
       </Form.Group>
       <Form.Group as={Col} controlId="paid">

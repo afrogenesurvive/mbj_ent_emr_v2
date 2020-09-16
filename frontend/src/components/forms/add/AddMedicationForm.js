@@ -13,15 +13,16 @@ return (
 <div className="addFormTopDiv">
   <Form onSubmit={props.onConfirm}>
     <h4>Add Medication</h4>
+    <p>Required fields are denoted by a ' * '</p>
 
     <Form.Row>
       <Form.Group as={Col} controlId="title">
-        <Form.Label className="formLabel">Title</Form.Label>
-        <Form.Control type="text" placeholder="title"/>
+        <Form.Label className="formLabel">Name * </Form.Label>
+        <Form.Control type="text" placeholder=""/>
       </Form.Group>
       <Form.Group as={Col} controlId="type">
-        <Form.Label className="formLabel">Type</Form.Label>
-        <Form.Control type="text" placeholder="type"/>
+        <Form.Label className="formLabel">Type * </Form.Label>
+        <Form.Control type="text" placeholder=""/>
       </Form.Group>
     </Form.Row>
 
@@ -30,11 +31,9 @@ return (
         <Form.Label className="formLabel">Description</Form.Label>
         <Form.Control as="textarea" rows="3" placeholder=""/>
       </Form.Group>
-    </Form.Row>
 
-    <Form.Row>
       <Form.Group as={Col}>
-        <Form.Label className="formLabel">File</Form.Label>
+        <Form.Label className="formLabel">Attachment</Form.Label>
         <Form.Control type="file" id="fileInput" placeholder="File" onChange={(e) => {AuthContext._currentValue.file = e.target.files[0]}}/>
       </Form.Group>
     </Form.Row>

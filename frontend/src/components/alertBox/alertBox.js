@@ -28,9 +28,9 @@ const AlertBox = (props) => {
 return (
   <div className={state}>
   {state === 'alertBoxOpen' ? (
-    <FontAwesomeIcon icon={faMinusSquare} className="listIcon" onClick={handleStateChange}/>
+    <FontAwesomeIcon icon={faMinusSquare} className="alertIcon" size='2x' onClick={handleStateChange}/>
   ):(
-    <FontAwesomeIcon icon={faPlusSquare} className="listIcon" onClick={handleStateChange}/>
+    <FontAwesomeIcon icon={faPlusSquare} className="alertIcon" size='2x' onClick={handleStateChange}/>
   )}
 
   <Alert variant="warning">

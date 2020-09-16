@@ -12,13 +12,14 @@ return (
 <div className="addFormTopDiv">
   <Form onSubmit={props.onConfirm}>
     <h4>Add Next of Kin</h4>
+    <p>Required fields are denoted by a ' * '</p>
     <Form.Row>
       <Form.Group as={Col} controlId="name">
-        <Form.Label className="formLabel">Name</Form.Label>
-        <Form.Control type="text" placeholder="name"/>
+        <Form.Label className="formLabel">Name * </Form.Label>
+        <Form.Control type="text" placeholder=""/>
       </Form.Group>
       <Form.Group as={Col} controlId="relation">
-        <Form.Label className="formLabel">Relation</Form.Label>
+        <Form.Label className="formLabel">Relation (select) * </Form.Label>
         <Form.Control as="select">
           <option>Mother</option>
           <option>Father</option>
@@ -38,18 +39,18 @@ return (
     <Form.Row>
     <Form.Group as={Col} controlId="email">
       <Form.Label className="formLabel">Email</Form.Label>
-      <Form.Control type="email" placeholder="relation@nextOfKin.com"/>
+      <Form.Control type="email" placeholder=""/>
     </Form.Group>
     </Form.Row>
 
     <Form.Row>
       <Form.Group as={Col} controlId="phone">
-        <Form.Label className="formLabel">Phone</Form.Label>
-        <Form.Control type="text" placeholder="+187600000"/>
+        <Form.Label className="formLabel">Phone * </Form.Label>
+        <Form.Control type="text" placeholder=""/>
       </Form.Group>
       <Form.Group as={Col} controlId="phone2">
         <Form.Label className="formLabel">Phone #2</Form.Label>
-        <Form.Control type="text" placeholder="+187600000"/>
+        <Form.Control type="text" placeholder=""/>
       </Form.Group>
     </Form.Row>
 

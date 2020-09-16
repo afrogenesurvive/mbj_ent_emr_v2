@@ -209,7 +209,12 @@ return (
     <Form.Row>
       <Form.Group as={Col} controlId="insuranceCompany">
         <Form.Label className="formLabel">insuranceCompany</Form.Label>
-        <Form.Control type="text" placeholder="insuranceCompany"/>
+        <Form.Control as="select">
+          <option>Guardian</option>
+          <option>Sagicor</option>
+          <option>Canopy</option>
+          <option>Other</option>
+        </Form.Control>
       </Form.Group>
       <Form.Group as={Col} controlId="insurancePolicyNumber">
         <Form.Label className="formLabel">insurancePolicyNumber</Form.Label>

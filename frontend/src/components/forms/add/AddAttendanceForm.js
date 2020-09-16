@@ -21,10 +21,10 @@ return (
 <div className="addFormTopDiv">
   <Form onSubmit={props.onConfirm}>
     <h4>Add Attendance</h4>
-
+    <p>required feilds are denoted by a ' * '</p>
     <Form.Row>
       <Form.Group as={Col} controlId="date">
-        <Form.Label className="formLabel">Date</Form.Label>
+        <Form.Label className="formLabel">Date * </Form.Label>
         <Form.Control type="date" placeholder="date"/>
       </Form.Group>
       {
@@ -43,20 +43,23 @@ return (
         //   />
         // </Form.Group>
       }
-    </Form.Row>
-
-    <Form.Row>
       <Form.Group as={Col} controlId="status">
-        <Form.Label className="formLabel">Status</Form.Label>
-        <Form.Control type="text" placeholder="status"/>
+        <Form.Label className="formLabel">Status * </Form.Label>
+        <Form.Control type="text" placeholder="present/absent"/>
       </Form.Group>
-    </Form.Row>
 
-    <Form.Row>
       <Form.Group as={Col} controlId="description">
         <Form.Label className="formLabel">Description</Form.Label>
         <Form.Control as="textarea" rows="3" placeholder=""/>
       </Form.Group>
+    </Form.Row>
+
+    <Form.Row>
+
+    </Form.Row>
+
+    <Form.Row>
+
     </Form.Row>
 
     <Form.Row className="formBtnRow">

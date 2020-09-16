@@ -20,10 +20,18 @@ return (
     </Form.Row>
 
     <Form.Row>
-      <Form.Group as={Col} controlId="title">
-        <Form.Label className="formLabel">Title</Form.Label>
-        <Form.Control type="text" placeholder="title"/>
-      </Form.Group>
+
+      {
+        // <Form.Group as={Col} controlId="title">
+        //   <Form.Label className="formLabel">Title</Form.Label>
+        //   <Form.Control type="text" placeholder="title"/>
+        // </Form.Group>
+
+        // <Form.Group as={Col} controlId="subType">
+        //   <Form.Label className="formLabel">Sub-type</Form.Label>
+        //   <Form.Control type="text" placeholder="subType"/>
+        // </Form.Group>
+      }
 
       <Form.Group as={Col} controlId="type">
         <Form.Label className="formLabel">Type</Form.Label>
@@ -34,10 +42,11 @@ return (
         </Form.Control>
       </Form.Group>
 
-      <Form.Group as={Col} controlId="subType">
-        <Form.Label className="formLabel">Sub-type</Form.Label>
-        <Form.Control type="text" placeholder="subType"/>
+      <Form.Group as={Col} controlId="important">
+        <Form.Label className="formLabel">Important ?</Form.Label>
+        <Form.Control type="checkbox" />
       </Form.Group>
+
     </Form.Row>
 
     <Form.Row>
@@ -61,13 +70,6 @@ return (
       <Form.Group as={Col} controlId="description">
         <Form.Label className="formLabel">Description</Form.Label>
         <Form.Control as="textarea" rows="3" placeholder="description"/>
-      </Form.Group>
-    </Form.Row>
-
-    <Form.Row>
-      <Form.Group as={Col} controlId="important">
-        <Form.Label className="formLabel">Important</Form.Label>
-        <Form.Control type="checkbox" />
       </Form.Group>
     </Form.Row>
 

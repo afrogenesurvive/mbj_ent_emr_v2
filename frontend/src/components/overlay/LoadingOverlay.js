@@ -69,15 +69,11 @@ return (
               <p className="overlayListGroupItemText">Time: <span className="bold">{props.status.data.time}</span></p>
               </ListGroup.Item>
               <ListGroup.Item className="overlayListGroupItem">
-              <p className="overlayListGroupItemText">Title: <span className="bold">{props.status.data.title}</span></p>
-              <p className="overlayListGroupItemText">type: <span className="bold">{props.status.data.type}</span></p>
-              <p className="overlayListGroupItemText">subType: <span className="bold">{props.status.data.subType}</span></p>
-              </ListGroup.Item>
-              <ListGroup.Item className="overlayListGroupItem">
               <p className="overlayListGroupItemText">Location: <span className="bold">{props.status.data.location}</span></p>
               <p className="overlayListGroupItemText">important: <span className="bold">{props.status.data.important === true ?(<FontAwesomeIcon icon={faCheckSquare} className="listIcon"/>):(<FontAwesomeIcon icon={faBan} className="listIcon"/>)}</span></p>
               </ListGroup.Item>
               <ListGroup.Item className="overlayListGroupItem">
+              <p className="overlayListGroupItemText">type: <span className="bold">{props.status.data.type}</span></p>
               <p className="overlayListGroupItemText">description: <span className="bold">{props.status.data.description}</span></p>
               </ListGroup.Item>
             </ListGroup>
@@ -115,11 +111,7 @@ return (
             <p className="overlayListGroupItemText">Time: <span className="bold">{props.status.data.time}</span></p>
             </ListGroup.Item>
             <ListGroup.Item className="overlayListGroupItem">
-            <p className="overlayListGroupItemText">Title: <span className="bold">{props.status.data.title}</span></p>
-            </ListGroup.Item>
-            <ListGroup.Item className="overlayListGroupItem">
             <p className="overlayListGroupItemText">type: <span className="bold">{props.status.data.type}</span></p>
-            <p className="overlayListGroupItemText">subType: <span className="bold">{props.status.data.subType}</span></p>
             </ListGroup.Item>
           </ListGroup>
           </Row>

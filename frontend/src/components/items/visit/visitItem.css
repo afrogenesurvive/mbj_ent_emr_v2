@@ -3,4 +3,9 @@
   max-height: 11rem;
   overflow: scroll;
   border: 1px dashed black;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.listItemHiddenRow::-webkit-scrollbar {
+  display: none;
 }

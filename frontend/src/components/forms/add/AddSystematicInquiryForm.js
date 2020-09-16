@@ -13,24 +13,25 @@ return (
 <div className="addFormTopDiv">
   <Form onSubmit={props.onConfirm}>
     <h4>Add SystematicInquiry</h4>
+    <p>required feilds are denoted by a ' * '</p>
 
     <Form.Row>
       <Form.Group as={Col} controlId="title">
-        <Form.Label className="formLabel">Title</Form.Label>
-        <Form.Control type="text" placeholder="title"/>
+        <Form.Label className="formLabel">Title * </Form.Label>
+        <Form.Control type="text" placeholder=""/>
       </Form.Group>
     </Form.Row>
     <Form.Row>
       <Form.Group as={Col} controlId="description">
-        <Form.Label className="formLabel">Description</Form.Label>
-        <Form.Control as="textarea" rows="3" placeholder="description"/>
+        <Form.Label className="formLabel">Description * </Form.Label>
+        <Form.Control as="textarea" rows="3" placeholder=""/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row>
       <Form.Group as={Col}>
-        <Form.Label className="formLabel">File</Form.Label>
-        <Form.Control type="file" id="fileInput" placeholder="File" onChange={(e) => {AuthContext._currentValue.file = e.target.files[0]}}/>
+        <Form.Label className="formLabel">Attachment</Form.Label>
+        <Form.Control type="file" id="fileInput" placeholder="" onChange={(e) => {AuthContext._currentValue.file = e.target.files[0]}}/>
       </Form.Group>
     </Form.Row>
 

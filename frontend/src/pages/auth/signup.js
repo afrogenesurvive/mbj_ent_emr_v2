@@ -77,7 +77,7 @@ class SignUpPage extends Component {
         addressCountry.trim().length === 0 ||
         addressPostalCode.trim().length === 0
         ) {
-      this.context.setUserAlert("...blank fields!!!...");
+      this.context.setUserAlert("...blank required fields!!!...");
       return;
     }
     let requestBody = {
@@ -105,7 +105,7 @@ class SignUpPage extends Component {
             )
             {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id},reminders{_id},activity{date,request}}}
           `};
-    fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+    fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -152,7 +152,7 @@ class SignUpPage extends Component {
         query: `
             query {verifyInvitation(challenge:"${challenge}")}
           `};
-    fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+    fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {

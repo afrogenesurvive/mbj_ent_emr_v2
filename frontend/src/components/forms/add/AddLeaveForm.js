@@ -12,23 +12,23 @@ return (
 <div className="addFormTopDiv">
   <Form onSubmit={props.onConfirm}>
     <h4>Add Leave</h4>
-
+    <p>required feilds are denoted by a ' * '</p>
     <Form.Row>
       <Form.Group as={Col} controlId="startDate">
-        <Form.Label className="formLabel">Start Date</Form.Label>
+        <Form.Label className="formLabel">Start Date * </Form.Label>
         <Form.Control type="date" placeholder="startDate"/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="endDate">
-        <Form.Label className="formLabel">End Date</Form.Label>
+        <Form.Label className="formLabel">End Date * </Form.Label>
         <Form.Control type="date" placeholder="endDate"/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row>
       <Form.Group as={Col} controlId="type">
-        <Form.Label className="formLabel">Type</Form.Label>
-        <Form.Control type="text" placeholder="type"/>
+        <Form.Label className="formLabel">Type * </Form.Label>
+        <Form.Control type="text" placeholder=""/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="description">

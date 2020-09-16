@@ -73,6 +73,7 @@ class VisitPage extends Component {
     creatingVisit: false,
     newVisit: null,
     calendarVisits: null,
+    calendarAppointments: null,
     fromGoLink: null,
     goLinkId: null,
     sublistSearch: false,
@@ -129,7 +130,7 @@ getAllVisits (args) {
       )
       {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -145,7 +146,7 @@ getAllVisits (args) {
     })
     .then(resData => {
       // console.log('...resData...',resData.data.getAllVisits);
-      let responseAlert = '...all visits retrieval success!...';
+      let responseAlert = '...visits loaded!...';
       let error = null;
 
       if (resData.errors) {
@@ -197,7 +198,7 @@ getAllAppointments (args) {
       )
       {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -213,7 +214,7 @@ getAllAppointments (args) {
     })
     .then(resData => {
       // console.log('...resData...',resData.data.getAllAppointments);
-      let responseAlert = '...all appointments retrieval success!...';
+      let responseAlert = '...appointments loaded...';
       let error = null;
 
       if (resData.errors) {
@@ -232,6 +233,7 @@ getAllAppointments (args) {
         activityA: `getAllAppointments?activityId:${activityId}`
       });
       this.logUserActivity({activityId: activityId,token: token});
+      this.parseForCalendarAppts(resData.data.getAllAppointments)
     })
     .catch(err => {
       console.log(err);
@@ -255,7 +257,7 @@ getAllPatients (args) {
       )
       {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -271,7 +273,7 @@ getAllPatients (args) {
     })
     .then(resData => {
       // console.log('...resData...',resData.data.getAllPatients);
-      let responseAlert = '...all patients retrieval success!...';
+      let responseAlert = '...patients loaded...';
       let error = null;
 
       if (resData.errors) {
@@ -315,7 +317,7 @@ logUserActivity(args) {
         })
       {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -383,7 +385,7 @@ searchVisits = (event) => {
         {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
       `};
   }
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -477,15 +479,15 @@ submitCreateNewVisitForm = (event) => {
   const activityId = this.context.activityId;
   const appointmentId = this.state.selectedAppointment._id;
 
-  const title = event.target.title.value;
+  const title = '';
   const type = event.target.type.value;
-  const subType = event.target.subType.value;
+  const subType = '';
 
   if (
       title.trim().length === 0 ||
       type.trim().length === 0
     ) {
-    this.context.setUserAlert("...blank fields!!!...")
+    this.context.setUserAlert("...blank required fields!!!...")
     return;
   }
 
@@ -517,7 +519,7 @@ submitCreateNewVisitForm = (event) => {
         })
         {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -614,6 +616,11 @@ selectAppointment = (args) => {
     selectedAppointment: args
   })
 }
+selectCalendarAppointment = (args) => {
+  this.setState({
+    selectedAppointment: args.event.extendedProps.props
+  })
+}
 
 showDetails = (args) => {
   this.setState({
@@ -666,7 +673,7 @@ deleteVisit = (args) => {
       )
       {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments},surveys{title,description,attachments},systematicInquiry{title,description,attachments},vitals{pr,bp1,bp2,rr,temp,ps02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value}},examination{general,area,type,measure,value,description,followUp,attachments},investigation{type,title,description,attachments},diagnosis{type,title,description,attachments},treatment{type,title,description,dose,frequency,attachments},billing{title,type,description,amount,paid,attachments,notes},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}}},images{name,type,path},files{name,type,path}}}
     `};
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -726,6 +733,28 @@ parseForCalendar = (args) => {
     this.setState({
       calendarVisits: calendarVisits
     })
+}
+parseForCalendarAppts = (args) => {
+  console.log('...parsing appointments for calendar...');
+  let calendarAppointments = args.map(x => ({
+      title: x.title,
+      date: moment.unix(x.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      props: {
+        _id: x._id,
+        date: x.date,
+        title: x.title,
+        type: x.type,
+        subType: x.subType,
+        time: x.time,
+        location: x.location,
+        description: x.description,
+        important: x.important,
+      }
+    }))
+    this.setState({
+      calendarAppointments: calendarAppointments
+    })
+
 }
 
 viewCalendarEvent = (args) => {
@@ -798,7 +827,7 @@ submitSublistSearchForm = (event) => {
       {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,reminders{_id},creator{_id}}}
       `};
   }
-  fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+  fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -852,6 +881,7 @@ submitSublistSearchForm = (event) => {
           appointments: resData.data.getAppointmentsByFieldRegex,
           activityA: `getAppointmentsByFieldRegex?activityId:${activityId},userId:${userId}`
         });
+        this.parseForCalendarAppts(resData.data.getAppointmentsByFieldRegex)
       }
       if (regex === false) {
         this.setState({
@@ -859,6 +889,7 @@ submitSublistSearchForm = (event) => {
           appointments: resData.data.getAppointmentsByField,
           activityA: `getAppointmentsByField?activityId:${activityId},userId:${userId}`
         });
+        this.parseForCalendarAppts(resData.data.getAppointmentsByField)
       }
 
       this.logUserActivity({activityId: activityId,token: token});
@@ -919,22 +950,32 @@ render() {
             {this.state.sideCol === 'menu' && (
               <Nav variant="pills" className="flex-column mainMenu">
                 <Nav.Item>
-                  <Nav.Link eventKey="list" onClick={this.menuSelect.bind(this, 'list')}>List</Nav.Link>
+                  <Nav.Link eventKey="list" onClick={this.menuSelect.bind(this, 'list')}>
+                  <Button variant="light">List</Button>
+                  </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="search" onClick={this.menuSelect.bind(this, 'search')}>Search</Nav.Link>
+                  <Nav.Link eventKey="search" onClick={this.menuSelect.bind(this, 'search')}>
+                  <Button variant="light">Search</Button>
+                  </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="detail" onClick={this.menuSelect.bind(this, 'detail')}>Details</Nav.Link>
+                  <Nav.Link eventKey="detail" onClick={this.menuSelect.bind(this, 'detail')}>
+                  <Button variant="light">Detail</Button>
+                  </Nav.Link>
                 </Nav.Item>
                 {this.context.role === 'Nurse' && (
                   <Nav.Item>
-                    <Nav.Link eventKey="new" onClick={this.menuSelect.bind(this, 'new')}>New</Nav.Link>
+                    <Nav.Link eventKey="new" onClick={this.menuSelect.bind(this, 'new')}>
+                    <Button variant="light">New</Button>
+                    </Nav.Link>
                   </Nav.Item>
                 )}
                 {this.context.role === 'Doctor' && (
                   <Nav.Item>
-                    <Nav.Link eventKey="new" onClick={this.menuSelect.bind(this, 'new')}>New</Nav.Link>
+                    <Nav.Link eventKey="new" onClick={this.menuSelect.bind(this, 'new')}>
+                    <Button variant="light">New</Button>
+                    </Nav.Link>
                   </Nav.Item>
                 )}
 
@@ -958,7 +999,7 @@ render() {
                 <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                   <Tab eventKey="1" title="list">
                   <Row className="displayPaneHeadRow">
-                    <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+                    <Button variant="secondary" onClick={this.toggleSideCol}>Filter</Button>
                     <Button variant="warning" onClick={this.resetFilter}>Reset</Button>
                   </Row>
                     <VisitList
@@ -1039,13 +1080,29 @@ render() {
                   )}
                   </Row>
                   <Row className="patientSubListRow">
-                  <AppointmentList
-                    filter={this.state.filter}
-                    appointments={this.state.appointments}
-                    authId={this.context.activityId}
-                    onSelect={this.selectAppointment}
-                    visitPage={true}
-                  />
+
+                  <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
+                    <Tab eventKey="1" title="list">
+                      <AppointmentList
+                        filter={this.state.filter}
+                        appointments={this.state.appointments}
+                        authId={this.context.activityId}
+                        onSelect={this.selectAppointment}
+                        visitPage={true}
+                      />
+                    </Tab>
+                    <Tab eventKey="2" title="calendar" className="calendarTab">
+                      <h3>Calendar</h3>
+                      <FullCalendar
+                        defaultView="dayGridMonth"
+                        plugins={[dayGridPlugin]}
+                        events={this.state.calendarAppointments}
+                        eventClick={this.selectCalendarAppointment}
+                      />
+                    </Tab>
+                  </Tabs>
+
+
                   </Row>
 
                   </Col>

@@ -89,6 +89,11 @@ const PatientItem = (props) => {
               </li>
               <li>
               <Card.Text className="cardText">
+                Regno: <span className="bold">{props.patient.registration.number}</span>
+              </Card.Text>
+              </li>
+              <li>
+              <Card.Text className="cardText">
                 name: <span className="bold">{props.patient.name}</span>
               </Card.Text>
               </li>

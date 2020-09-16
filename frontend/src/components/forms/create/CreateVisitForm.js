@@ -20,20 +20,18 @@ return (
     </Form.Row>
 
     <Form.Row>
-      <Form.Group as={Col} controlId="title">
-        <Form.Label className="formLabel">Title</Form.Label>
-        <Form.Control type="text" placeholder="title"/>
-      </Form.Group>
+    {
+      // <Form.Group as={Col} controlId="title">
+      //   <Form.Label className="formLabel">Title</Form.Label>
+      //   <Form.Control type="text" placeholder="title"/>
+      // </Form.Group>
+    }
 
       <Form.Group as={Col} controlId="type">
         <Form.Label className="formLabel">Type</Form.Label>
         <Form.Control type="text" placeholder="type"/>
       </Form.Group>
 
-      <Form.Group as={Col} controlId="subType">
-        <Form.Label className="formLabel">Sub-type</Form.Label>
-        <Form.Control type="text" placeholder="subType"/>
-      </Form.Group>
     </Form.Row>
 
     <Form.Row>

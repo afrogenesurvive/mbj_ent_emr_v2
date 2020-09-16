@@ -18,7 +18,7 @@ return (
 
     <Form.Row>
       <Form.Group as={Col} controlId="key">
-        <Form.Label className="formLabel">Field</Form.Label>
+        <Form.Label className="formLabel">Field to Filter</Form.Label>
         <Form.Control as="select">
           <option>note</option>
         </Form.Control>
@@ -27,7 +27,7 @@ return (
 
     <Form.Row>
       <Form.Group as={Col} controlId="value">
-        <Form.Label className="formLabel">Value</Form.Label>
+        <Form.Label className="formLabel">Filter Type</Form.Label>
         <Form.Control as="select">
           <option>Ascending</option>
           <option>Descending</option>

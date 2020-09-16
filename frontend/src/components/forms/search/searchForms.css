@@ -14,3 +14,17 @@
   padding: 1rem;
   border-radius: 15px;
 }
+.fontAwesome {
+  /* font-family: "Font Awesome 5 Free" !important;
+  font-weight: 900; */
+  /* font-family: 'Helvetica', FontAwesome, sans-serif;
+  /* font-family:'FontAwesome' !important; */
+}
+.fontAwesome::placeholder {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  /* font-family:'FontAwesome' !important; */
+}
+.searchBtn {
+  margin-right: 1.5rem;
+}

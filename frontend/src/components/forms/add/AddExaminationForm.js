@@ -13,35 +13,36 @@ return (
 <div className="addFormTopDiv">
   <Form onSubmit={props.onConfirm}>
     <h4>Add Examination</h4>
+    <p>required feilds are denoted by a ' * '</p>
 
     <Form.Row>
       <Form.Group as={Col} controlId="general">
-        <Form.Label className="formLabel">General</Form.Label>
-        <Form.Control type="text" placeholder="general"/>
+        <Form.Label className="formLabel">General * </Form.Label>
+        <Form.Control type="text" placeholder=""/>
       </Form.Group>
       <Form.Group as={Col} controlId="area">
-        <Form.Label className="formLabel">Area</Form.Label>
-        <Form.Control type="text" placeholder="area"/>
+        <Form.Label className="formLabel">Area * </Form.Label>
+        <Form.Control type="text" placeholder=""/>
       </Form.Group>
     </Form.Row>
     <Form.Row>
       <Form.Group as={Col} controlId="type">
-        <Form.Label className="formLabel">Type</Form.Label>
-        <Form.Control type="text" placeholder="type"/>
+        <Form.Label className="formLabel">Type * </Form.Label>
+        <Form.Control type="text" placeholder=""/>
       </Form.Group>
       <Form.Group as={Col} controlId="measure">
-        <Form.Label className="formLabel">Measure</Form.Label>
-        <Form.Control type="text" placeholder="measure"/>
+        <Form.Label className="formLabel">Measure * </Form.Label>
+        <Form.Control type="text" placeholder=""/>
       </Form.Group>
     </Form.Row>
     <Form.Row>
       <Form.Group as={Col} controlId="value">
-        <Form.Label className="formLabel">Value</Form.Label>
-        <Form.Control type="text" placeholder="value"/>
+        <Form.Label className="formLabel">Value * </Form.Label>
+        <Form.Control type="text" placeholder=""/>
       </Form.Group>
       <Form.Group as={Col} controlId="description">
         <Form.Label className="formLabel">Description</Form.Label>
-        <Form.Control as="textarea" rows="3" placeholder="description"/>
+        <Form.Control as="textarea" rows="3" placeholder=""/>
       </Form.Group>
     </Form.Row>
 
@@ -55,7 +56,7 @@ return (
     <Form.Row>
       <Form.Group as={Col}>
         <Form.Label className="formLabel">File</Form.Label>
-        <Form.Control type="file" id="fileInput" placeholder="File" onChange={(e) => {AuthContext._currentValue.file = e.target.files[0]}}/>
+        <Form.Control type="file" id="fileInput" placeholder="" onChange={(e) => {AuthContext._currentValue.file = e.target.files[0]}}/>
       </Form.Group>
     </Form.Row>
 

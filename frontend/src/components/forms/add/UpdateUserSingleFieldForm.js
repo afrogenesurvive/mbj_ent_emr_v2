@@ -19,8 +19,8 @@ return (
       </Form.Group>
 
       <Form.Group as={Col} controlId="query">
-        <Form.Label className="formLabel">Value</Form.Label>
-        <Form.Control type="text" placeholder="new value... (Date format = YYYY-MM-DD!!)"/>
+        <Form.Label className="formLabel">New Data</Form.Label>
+        <Form.Control type="text" placeholder="(Date format = YYYY-MM-DD!!)"/>
       </Form.Group>
     </Form.Row>
 

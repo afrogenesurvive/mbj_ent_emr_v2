@@ -12,10 +12,10 @@ return (
 <div className="addFormTopDiv">
   <Form onSubmit={props.onConfirm}>
     <h4>Add Notes</h4>
-
+    <p>required feilds are denoted by a ' * '</p>
     <Form.Row>
       <Form.Group as={Col} controlId="notes">
-        <Form.Label className="formLabel">Notes</Form.Label>
+        <Form.Label className="formLabel">Notes * </Form.Label>
         <Form.Control as="textarea" rows="3" placeholder="note,note,note,note"/>
       </Form.Group>
     </Form.Row>

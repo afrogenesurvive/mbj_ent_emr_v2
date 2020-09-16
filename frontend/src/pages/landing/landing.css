@@ -12,6 +12,11 @@
   padding: 1rem;
   height: 50vh;
   overflow: scroll;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.landingPageCol::-webkit-scrollbar {
+  display: none;
 }
 .landingPageTopCol {
   text-align: center;

@@ -25,6 +25,11 @@
   max-height: 89%;
   overflow: scroll;
   /* width: 107%; */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.mainRow2::-webkit-scrollbar {
+  display: none;
 }
 .specialCol1 {
   padding-top: 2rem;

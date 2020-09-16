@@ -379,7 +379,8 @@ module.exports = {
       const key = 'Request_MBJ_ENT__emr_v2_Password';
       const encryptor = require('simple-encryptor')(key);
       const encrypted = encryptor.encrypt(verificationCode);
-      const resetUrl = 'localhost:3000/passwordReset/'+userExists._id+'@'+encrypted+'';
+      const resetUrl = 'http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/passwordReset/'+userExists._id+'@'+encrypted+'';
+      // const resetUrl = 'localhost:3000/passwordReset/'+userExists._id+'@'+encrypted+'';
       const user = await User.findOneAndUpdate(
         {_id: userExists._id},
         {verification: {

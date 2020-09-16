@@ -20,3 +20,6 @@
 .fc-unthemed td.fc-today {
   background-color: coral;
 }
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  background-color: rgba(255,255,255,0) !important;
+}

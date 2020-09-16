@@ -17,6 +17,11 @@
   height: 85vh;
   background-color: white;
   overflow: scroll;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.pdfView::-webkit-scrollbar {
+  display: none;
 }
 .viewer {
   width: 95%;

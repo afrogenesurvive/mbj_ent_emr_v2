@@ -1,18 +1,19 @@
 .alertBoxOpen {
   margin: .5rem auto;
-  width: 20rem;
-  max-height: 7rem;
+  width: 23rem;
+  max-height: 10rem;
   position: fixed;
   z-index: 10000;
-  bottom: 1rem;
+  bottom: 2rem;
   left: 1.5rem;
   overflow-x: scroll;
-  box-shadow: 3px 7px 3px rgba(20,33,61,.4)
+
+  /* box-shadow: 3px 7px 3px rgba(20,33,61,.4) */
 }
 .alertBoxClosed {
   margin: .5rem auto;
   width: 2rem;
-  max-height: 1.5rem;
+  max-height: 2.5rem;
   position: fixed;
   z-index: 10000;
   bottom: 1rem;
@@ -20,11 +21,19 @@
   overflow-x: scroll;
   box-shadow: 3px 7px 3px rgba(20,33,61,.4)
 }
+.alert-warning {
+  height: 7rem;
+  border: 1px solid black;
 
+  box-shadow: 3px 7px 3px rgba(20,33,61,.4)
+}
 
 .alertBoxText {
   color: black;
 }
 .alert {
   margin: 0;
+}
+.alertIcon {
+  /* width: 2rem !important; */
 }

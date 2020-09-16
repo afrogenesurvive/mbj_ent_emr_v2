@@ -11,14 +11,15 @@ return (
 <div className="addFormTopDiv">
   <Form onSubmit={props.onConfirm}>
     <h4>Add Address</h4>
+    <p>required feilds are denoted by a ' * '</p>
     <Form.Row>
       <Form.Group as={Col} controlId="number">
-        <Form.Label className="formLabel">Address Number</Form.Label>
+        <Form.Label className="formLabel">Address Number * </Form.Label>
         <Form.Control type="number" placeholder=""/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="street">
-        <Form.Label className="formLabel">Address Street</Form.Label>
+        <Form.Label className="formLabel">Address Street * </Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
 
@@ -32,7 +33,7 @@ return (
       </Form.Group>
 
       <Form.Group as={Col} controlId="city">
-        <Form.Label className="formLabel">Address City</Form.Label>
+        <Form.Label className="formLabel">Address City * </Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
 
@@ -61,7 +62,7 @@ return (
       </Form.Group>
 
       <Form.Group as={Col} controlId="country">
-        <Form.Label className="formLabel">Address Country</Form.Label>
+        <Form.Label className="formLabel">Address Country * </Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
 
