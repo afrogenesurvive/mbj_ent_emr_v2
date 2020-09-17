@@ -203,7 +203,7 @@ searchUsers = (event) => {
   event.preventDefault();
   console.log('...searching users...');
   this.context.setUserAlert('...searching users...')
-  // this.setState({isLoading: true});
+  this.setState({isLoading: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;

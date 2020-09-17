@@ -87,6 +87,12 @@ const patientSchema = new Schema({
     attachments: [{type: String}],
       _id: false
   }],
+  comorbidities: [{
+    type: {type:String},
+    title: {type:String},
+    description: {type:String},
+      _id: false
+  }],
   medication: [{
     title: {type: String},
     type: {type: String},

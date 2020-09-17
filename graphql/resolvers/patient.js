@@ -853,6 +853,64 @@ module.exports = {
       throw err;
     }
   },
+  addPatientComorbidity: async (args, req) => {
+    console.log("Resolver: addPatientComorbidity...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const comorbidity = {
+        type: args.patientInput.comorbidityType,
+        title: args.patientInput.comorbidityTitle,
+        description: args.patientInput.comorbidityDescription,
+      };
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId},
+        {$addToSet: {comorbidities: comorbidity}},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('visits')
+      .populate('reminders');
+      return {
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deletePatientComorbidity: async (args, req) => {
+    console.log("Resolver: deletePatientComorbidity...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const comorbidity = {
+        type: args.patientInput.comorbidityType,
+        title: args.patientInput.comorbidityTitle,
+        description: args.patientInput.comorbidityDescription,
+      };
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId},
+        {$pull: {comorbidities: comorbidity}},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('visits')
+      .populate('reminders');
+      return {
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
   addPatientImage: async (args, req) => {
     console.log("Resolver: addPatientImage...");
     if (!req.isAuth) {
@@ -1221,6 +1279,7 @@ module.exports = {
         nextOfKin: [],
         allergies: [],
         medication: [],
+        comorbidities: [],
         images: [],
         files: [],
         notes: [],

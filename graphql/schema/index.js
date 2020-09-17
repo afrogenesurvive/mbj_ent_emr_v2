@@ -112,6 +112,7 @@ module.exports = buildSchema(`
     nextOfKin: [PatientNextOfKin]
     allergies: [PatientAllergies]
     medication: [PatientMedication]
+    comorbidities: [PatientComorbidity]
     images: [Image]
     files: [File]
     notes: [String]
@@ -178,6 +179,11 @@ module.exports = buildSchema(`
     description: String
     attachments: [String]
   }
+  type PatientComorbidity {
+    type: String
+    title: String
+    description: String
+  }
   input PatientInput {
     active: Boolean
     password: String
@@ -242,6 +248,9 @@ module.exports = buildSchema(`
     medicationDescription: String
     medicationAttachment: String
     medicationAttachments: String
+    comorbidityTitle: String
+    comorbidityType: String
+    comorbidityDescription: String
     imageName: String
     imageType: String
     imagePath: String
@@ -800,6 +809,7 @@ module.exports = buildSchema(`
     addPatientAllergyAttachment(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientMedication(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientMedicationAttachment(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    addPatientComorbidity(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientImage(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientFile(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientNotes(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
@@ -814,6 +824,7 @@ module.exports = buildSchema(`
     deletePatientAllergyAttachment(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     deletePatientMedication(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     deletePatientMedicationAttachment(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    deletePatientComorbidity(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     deletePatientImage(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     deletePatientFile(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     deletePatientNote(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
