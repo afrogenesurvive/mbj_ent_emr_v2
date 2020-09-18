@@ -3,6 +3,8 @@ import {Link} from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Popover from 'react-bootstrap/Popover';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBatteryThreeQuarters,
@@ -43,7 +45,20 @@ const AppointmentItem = (props) => {
           <Card.Text className="cardText">
             Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
           </Card.Text>
-          <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+
+          <OverlayTrigger
+            key={'top'}
+            placement={'top'}
+            overlay={
+              <Popover id={`popover-positioned-${'top'}`}>
+                <Popover.Content>
+                  <strong>Holy guacamole!</strong> Check this info.
+                </Popover.Content>
+              </Popover>
+            }
+          >
+            <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+          </OverlayTrigger>
 
           <Link
             to={{
@@ -51,7 +66,21 @@ const AppointmentItem = (props) => {
               state: {appointment: props.appointment._id}
             }}
           >
-          <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+
+          <OverlayTrigger
+            key={'top'}
+            placement={'top'}
+            overlay={
+              <Popover id={`popover-positioned-${'top'}`}>
+                <Popover.Content>
+                  <strong>Holy guacamole!</strong> Check this info.
+                </Popover.Content>
+              </Popover>
+            }
+          >
+            <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+          </OverlayTrigger>
+
           </Link>
 
           {state === true && (

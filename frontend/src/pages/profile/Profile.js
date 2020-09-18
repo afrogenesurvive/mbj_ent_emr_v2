@@ -9,6 +9,9 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import { NavLink } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Overlay from 'react-bootstrap/Overlay';
+import Popover from 'react-bootstrap/Popover';
 import moment from 'moment';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -1893,6 +1896,7 @@ render() {
 
               <Tab.Content className="tabContent" >
                 <Tab.Pane eventKey="1">
+
                   <p className="displayPaneTitle">Basic:</p>
                   <ListGroup className="profileBasicListGroup">
                     <ListGroup.Item>

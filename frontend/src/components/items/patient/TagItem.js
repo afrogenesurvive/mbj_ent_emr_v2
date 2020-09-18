@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Popover from 'react-bootstrap/Popover';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
 import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
@@ -26,7 +28,21 @@ const TagItem = props => {
           <Card.Text className="cardText">
             Tag: <span className="bold">{props.tag}</span>
           </Card.Text>
-          <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleStateChange}/>
+
+          <OverlayTrigger
+            key={'top'}
+            placement={'top'}
+            overlay={
+              <Popover id={`popover-positioned-${'top'}`}>
+                <Popover.Content>
+                  <strong>Holy guacamole!</strong> Check this info.
+                </Popover.Content>
+              </Popover>
+            }
+          >
+            <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleStateChange}/>
+          </OverlayTrigger>
+
           {state === true && (
             <Row className="listItemHiddenRow">
               {props.canDelete === true && (

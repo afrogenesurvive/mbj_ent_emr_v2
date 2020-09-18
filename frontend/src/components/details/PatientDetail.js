@@ -9,6 +9,8 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import { NavLink } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Popover from 'react-bootstrap/Popover';
 import moment from 'moment';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -3188,7 +3190,7 @@ render() {
                   </Tab.Pane>
                   <Tab.Pane eventKey="3">
                     <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">User Address List:</p>
+                      <p className="displayPaneTitle">Patient Address List:</p>
                       <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
 
                         <Button variant="success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>

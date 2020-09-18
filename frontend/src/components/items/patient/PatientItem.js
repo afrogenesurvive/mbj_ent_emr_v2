@@ -3,6 +3,8 @@ import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import {Link} from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Popover from 'react-bootstrap/Popover';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBatteryThreeQuarters,
@@ -53,11 +55,37 @@ const PatientItem = (props) => {
           <Card.Text className="cardText">
             role: <span className="bold">{props.patient.role}</span>
           </Card.Text>
-          <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+
+          <OverlayTrigger
+            key={'top'}
+            placement={'top'}
+            overlay={
+              <Popover id={`popover-positioned-${'top'}`}>
+                <Popover.Content>
+                  <strong>Holy guacamole!</strong> Check this info.
+                </Popover.Content>
+              </Popover>
+            }
+          >
+            <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+          </OverlayTrigger>
 
           {props.appointmentPage !== true &&
             props.showDetails && (
-            <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon" onClick={props.showDetails.bind(this, props.patient)}/>
+              <OverlayTrigger
+                key={'top'}
+                placement={'top'}
+                overlay={
+                  <Popover id={`popover-positioned-${'top'}`}>
+                    <Popover.Content>
+                      <strong>Holy guacamole!</strong> Check this info.
+                    </Popover.Content>
+                  </Popover>
+                }
+              >
+                <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon" onClick={props.showDetails.bind(this, props.patient)}/>
+              </OverlayTrigger>
+
           )}
 
           {props.homePage && (
@@ -67,16 +95,55 @@ const PatientItem = (props) => {
                 state: {patient: props.patient._id}
               }}
             >
-            <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+            <OverlayTrigger
+              key={'top'}
+              placement={'top'}
+              overlay={
+                <Popover id={`popover-positioned-${'top'}`}>
+                  <Popover.Content>
+                    <strong>Holy guacamole!</strong> Check this info.
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+            </OverlayTrigger>
+
             </Link>
           )}
 
           {props.appointmentPage === true && (
-            <FontAwesomeIcon icon={faUserPlus} className="listIcon" onClick={props.onSelect.bind(this, props.patient)}/>
+            <OverlayTrigger
+              key={'top'}
+              placement={'top'}
+              overlay={
+                <Popover id={`popover-positioned-${'top'}`}>
+                  <Popover.Content>
+                    <strong>Holy guacamole!</strong> Check this info.
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <FontAwesomeIcon icon={faUserPlus} className="listIcon" onClick={props.onSelect.bind(this, props.patient)}/>
+            </OverlayTrigger>
+
           )}
 
           {props.canDelete && (
-            <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
+            <OverlayTrigger
+              key={'top'}
+              placement={'top'}
+              overlay={
+                <Popover id={`popover-positioned-${'top'}`}>
+                  <Popover.Content>
+                    <strong>Holy guacamole!</strong> Check this info.
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
+            </OverlayTrigger>
+
           )}
 
           {state === true && (

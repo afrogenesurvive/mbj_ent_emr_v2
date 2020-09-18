@@ -538,7 +538,7 @@ render() {
                 <Tab.Pane eventKey="list">
                   <Row className="displayPaneHeadRow">
                     <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                    <Button variant="warning" onClick={this.resetFilter}>Reset</Button>
+                    <Button variant="warning" onClick={this.resetFilter}>Reset Filter</Button>
                   </Row>
                   <UserList
                     filter={this.state.filter}

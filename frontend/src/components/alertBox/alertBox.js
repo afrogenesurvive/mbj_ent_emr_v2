@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import Alert from 'react-bootstrap/Alert';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Popover from 'react-bootstrap/Popover';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faMinusSquare,
@@ -16,7 +18,6 @@ const AlertBox = (props) => {
   }
   const [state, setState] = useState('alertBoxOpen');
   const handleStateChange = () => {
-    console.log('foooo');
     if (state === 'alertBoxClosed') {
       setState('alertBoxOpen');
     }

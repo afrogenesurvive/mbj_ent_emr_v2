@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Popover from 'react-bootstrap/Popover';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -35,7 +37,20 @@ const AttachmentItem = props => {
           <a href={props.attachment} target="_blank" rel="noopener noreferrer">{props.attachment}</a>
 
           {props.canDelete === true && (
-            <FontAwesomeIcon icon={faEraser} className="listIcon" onClick={handleDeleteStateChange}/>
+            <OverlayTrigger
+              key={'top'}
+              placement={'top'}
+              overlay={
+                <Popover id={`popover-positioned-${'top'}`}>
+                  <Popover.Content>
+                    <strong>Holy guacamole!</strong> Check this info.
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <FontAwesomeIcon icon={faEraser} className="listIcon" onClick={handleDeleteStateChange}/>
+            </OverlayTrigger>
+
           )}
 
           {props.canDelete === true &&

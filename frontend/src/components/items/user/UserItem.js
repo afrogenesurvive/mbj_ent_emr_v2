@@ -3,6 +3,8 @@ import {Link} from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Popover from 'react-bootstrap/Popover';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBatteryThreeQuarters,
@@ -54,12 +56,39 @@ const UserItem = (props) => {
           <Card.Text className="cardText">
             role: <span className="bold">{props.user.role}</span>
           </Card.Text>
-          <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+
+          <OverlayTrigger
+            key={'top'}
+            placement={'top'}
+            overlay={
+              <Popover id={`popover-positioned-${'top'}`}>
+                <Popover.Content>
+                  <strong>Holy guacamole!</strong> Check this info.
+                </Popover.Content>
+              </Popover>
+            }
+          >
+            <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+          </OverlayTrigger>
+
 
           {!props.appointmentPage &&
             !props.visitPage &&
             props.showDetails && (
-              <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon" onClick={props.showDetails.bind(this, props.user)}/>
+              <OverlayTrigger
+                key={'top'}
+                placement={'top'}
+                overlay={
+                  <Popover id={`popover-positioned-${'top'}`}>
+                    <Popover.Content>
+                      <strong>Holy guacamole!</strong> Check this info.
+                    </Popover.Content>
+                  </Popover>
+                }
+              >
+                <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon" onClick={props.showDetails.bind(this, props.user)}/>
+              </OverlayTrigger>
+
           )}
 
           {props.appointmentPage && (
@@ -69,7 +98,20 @@ const UserItem = (props) => {
                 state: {user: props.user._id}
               }}
             >
-            <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+            <OverlayTrigger
+              key={'top'}
+              placement={'top'}
+              overlay={
+                <Popover id={`popover-positioned-${'top'}`}>
+                  <Popover.Content>
+                    <strong>Holy guacamole!</strong> Check this info.
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+            </OverlayTrigger>
+
             </Link>
           )}
 
@@ -80,7 +122,20 @@ const UserItem = (props) => {
                 state: {user: props.user._id}
               }}
             >
-            <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+            <OverlayTrigger
+              key={'top'}
+              placement={'top'}
+              overlay={
+                <Popover id={`popover-positioned-${'top'}`}>
+                  <Popover.Content>
+                    <strong>Holy guacamole!</strong> Check this info.
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+            </OverlayTrigger>
+
             </Link>
           )}
 
@@ -89,7 +144,20 @@ const UserItem = (props) => {
           )}
 
           {props.canDelete && (
-            <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
+            <OverlayTrigger
+              key={'top'}
+              placement={'top'}
+              overlay={
+                <Popover id={`popover-positioned-${'top'}`}>
+                  <Popover.Content>
+                    <strong>Holy guacamole!</strong> Check this info.
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
+            </OverlayTrigger>
+
           )}
 
           {state === true && (

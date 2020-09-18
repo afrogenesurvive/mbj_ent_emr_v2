@@ -5,6 +5,8 @@ import Row from 'react-bootstrap/Row';
 import Image from 'react-bootstrap/Image';
 import Container from 'react-bootstrap/Container';
 import ListGroup from 'react-bootstrap/ListGroup';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Popover from 'react-bootstrap/Popover';
 import moment from 'moment';
 import loadingGif from '../../assets/loading.gif';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

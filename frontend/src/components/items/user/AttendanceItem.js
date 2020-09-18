@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Popover from 'react-bootstrap/Popover';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBatteryThreeQuarters,
@@ -43,7 +45,21 @@ const AttendanceItem = props => {
           <Card.Text className="cardText">
           Date: <span className="bold">{moment.unix(props.attendance.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
           </Card.Text>
-          <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+
+          <OverlayTrigger
+            key={'right'}
+            placement={'right'}
+            overlay={
+              <Popover id={`popover-positioned-${'right'}`}>
+                <Popover.Content>
+                  <strong>Holy guacamole!</strong> Check this info.
+                </Popover.Content>
+              </Popover>
+            }
+          >
+            <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+          </OverlayTrigger>
+
           {state === true && (
             <Row className="listItemHiddenRow">
             <ul>
@@ -64,7 +80,20 @@ const AttendanceItem = props => {
               </li>
               {props.canDelete === true && (
                 <li>
-                <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
+                <OverlayTrigger
+                  key={'right'}
+                  placement={'right'}
+                  overlay={
+                    <Popover id={`popover-positioned-${'right'}`}>
+                      <Popover.Content>
+                        <strong>Holy guacamole!</strong> Check this info.
+                      </Popover.Content>
+                    </Popover>
+                  }
+                >
+                  <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
+                </OverlayTrigger>
+
                 </li>
               )}
               {deleteState === true && (

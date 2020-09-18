@@ -6,6 +6,8 @@ import Container from 'react-bootstrap/Container';
 import { NavLink } from 'react-router-dom';
 import Image from 'react-bootstrap/Image';
 import moment from 'moment';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Popover from 'react-bootstrap/Popover';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBatteryThreeQuarters,
@@ -1162,7 +1164,20 @@ selectUser = (args) => {
         {this.state.queueToday && (
           <React.Fragment>
           {this.state.addingQueueSlot !== true && (
-            <FontAwesomeIcon icon={faUserPlus} className="listIcon" onClick={this.startAddQueueSlot}/>
+            <OverlayTrigger
+              key={'right'}
+              placement={'right'}
+              overlay={
+                <Popover id={`popover-positioned-${'right'}`}>
+                  <Popover.Content>
+                    <strong>Add to Queue</strong>
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <FontAwesomeIcon icon={faUserPlus} className="listIcon" onClick={this.startAddQueueSlot}/>
+            </OverlayTrigger>
+
           )}
           {this.state.addingQueueSlot === true && (
             <Button variant="danger" onClick={this.cancelAddQueueSlot}>Cancel</Button>
@@ -1192,8 +1207,7 @@ selectUser = (args) => {
               />
               </Row>
               </React.Fragment>
-          )
-        }
+          )}
         {
           this.state.addingQueueSlot === true &&
           this.state.queueSlotAddStage === 2 && (
@@ -1218,8 +1232,7 @@ selectUser = (args) => {
             />
             </Row>
             </React.Fragment>
-        )
-      }
+        )}
 
           <QueueItem
             queue={this.state.queueToday}

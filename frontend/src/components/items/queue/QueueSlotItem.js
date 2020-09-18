@@ -3,6 +3,8 @@ import {Link} from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Popover from 'react-bootstrap/Popover';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBatteryThreeQuarters,
@@ -60,14 +62,40 @@ const QueueSlotItem = props => {
               state: {patient: props.queueSlot.patient._id}
             }}
           >
-          <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+
+          <OverlayTrigger
+            key={'left'}
+            placement={'left'}
+            overlay={
+              <Popover id={`popover-positioned-${'left'}`}>
+                <Popover.Content>
+                  <strong>Holy guacamole!</strong> Check this info.
+                </Popover.Content>
+              </Popover>
+            }
+          >
+            <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+          </OverlayTrigger>
+
           </Link>
 
           <Card.Text className="cardText">
             Seen: {props.queueSlot.seen === true ?(<FontAwesomeIcon icon={faCheckSquare} className="listIcon"/>):(<FontAwesomeIcon icon={faBan} className="listIcon"/>)}
           </Card.Text>
 
-          <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+          <OverlayTrigger
+            key={'bottom'}
+            placement={'bottom'}
+            overlay={
+              <Popover id={`popover-positioned-${'bottom'}`}>
+                <Popover.Content>
+                  <strong>Holy guacamole!</strong> Check this info.
+                </Popover.Content>
+              </Popover>
+            }
+          >
+            <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+          </OverlayTrigger>
 
           {state === true && (
             <Row className="listItemHiddenRow">
@@ -117,7 +145,20 @@ const QueueSlotItem = props => {
 
               </li>
               <li>
-              <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
+              <OverlayTrigger
+                key={'right'}
+                placement={'right'}
+                overlay={
+                  <Popover id={`popover-positioned-${'right'}`}>
+                    <Popover.Content>
+                      <strong>Holy guacamole!</strong> Check this info.
+                    </Popover.Content>
+                  </Popover>
+                }
+              >
+                <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
+              </OverlayTrigger>
+
               </li>
               {deleteState === true && (
                 <li>
