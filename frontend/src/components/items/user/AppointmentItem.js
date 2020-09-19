@@ -52,7 +52,7 @@ const AppointmentItem = (props) => {
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
                 <Popover.Content>
-                  <strong>Holy guacamole!</strong> Check this info.
+                  <strong>More Info</strong>
                 </Popover.Content>
               </Popover>
             }
@@ -73,7 +73,7 @@ const AppointmentItem = (props) => {
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
                 <Popover.Content>
-                  <strong>Holy guacamole!</strong> Check this info.
+                  <strong>Go to Appointment Details</strong>
                 </Popover.Content>
               </Popover>
             }

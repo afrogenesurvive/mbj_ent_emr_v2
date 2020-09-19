@@ -37,9 +37,11 @@ return (
     )}
     </Row>
 
-    {props.status && (
-      <h5 className="attachmentViewerTitle">... {props.status.type} ...</h5>
-    )}
+    {
+    //   props.status && (
+    //   <h5 className="attachmentViewerTitle">... {props.status.type} ...</h5>
+    // )
+  }
 
 
       <Container className="overlayContainer">
@@ -50,7 +52,20 @@ return (
               <ListGroup.Item className="overlayListGroupItem">
               {props.selectCalendarDetails && (
                 <Row className="overlayRow">
-                  <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon centered_btn"  onClick={props.selectCalendarDetails.bind(this, props.status.data)}/>
+                <OverlayTrigger
+                  key={'top'}
+                  placement={'top'}
+                  overlay={
+                    <Popover id={`popover-positioned-${'top'}`}>
+                      <Popover.Content>
+                        <strong>Go To Appointment Details</strong>
+                      </Popover.Content>
+                    </Popover>
+                  }
+                >
+                <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon centered_btn"  onClick={props.selectCalendarDetails.bind(this, props.status.data)}/>
+                </OverlayTrigger>
+
                 </Row>
               )}
               {props.status.goLink && (
@@ -61,10 +76,26 @@ return (
                     state: {appointment: props.status.data._id}
                   }}
                 >
-                <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon centered_btn"/>
+                <OverlayTrigger
+                  key={'top'}
+                  placement={'top'}
+                  overlay={
+                    <Popover id={`popover-positioned-${'top'}`}>
+                      <Popover.Content>
+                        <strong>Go To Appointment Details</strong>
+                      </Popover.Content>
+                    </Popover>
+                  }
+                >
+                  <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon centered_btn"/>
+                </OverlayTrigger>
+
                 </Link>
                 </Row>
               )}
+              </ListGroup.Item>
+              <ListGroup.Item className="overlayListGroupItem">
+              <p className="overlayListGroupItemText">Patient: <span className="bold">{props.status.data.patient.name}</span></p>
               </ListGroup.Item>
               <ListGroup.Item className="overlayListGroupItem">
               <p className="overlayListGroupItemText">Date: <span className="bold">{moment.unix(props.status.data.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span></p>
@@ -92,7 +123,20 @@ return (
             <ListGroup.Item className="overlayListGroupItem">
             {props.selectCalendarDetails && (
               <Row className="overlayRow">
+              <OverlayTrigger
+                key={'top'}
+                placement={'top'}
+                overlay={
+                  <Popover id={`popover-positioned-${'top'}`}>
+                    <Popover.Content>
+                      <strong>Go To Visit Details</strong>
+                    </Popover.Content>
+                  </Popover>
+                }
+              >
                 <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon centered_btn" onClick={props.selectCalendarDetails.bind(this, props.status.data)}/>
+              </OverlayTrigger>
+
               </Row>
             )}
             {props.status.goLink && (
@@ -103,10 +147,26 @@ return (
                   state: {visit: props.status.data._id}
                 }}
               >
+              <OverlayTrigger
+                key={'top'}
+                placement={'top'}
+                overlay={
+                  <Popover id={`popover-positioned-${'top'}`}>
+                    <Popover.Content>
+                      <strong>Go To Visit Details</strong>
+                    </Popover.Content>
+                  </Popover>
+                }
+              >
               <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+              </OverlayTrigger>
+
               </Link>
               </Row>
             )}
+            </ListGroup.Item>
+            <ListGroup.Item className="overlayListGroupItem">
+            <p className="overlayListGroupItemText">Patient: <span className="bold">{props.status.data.patient.name}</span></p>
             </ListGroup.Item>
             <ListGroup.Item className="overlayListGroupItem">
             <p className="overlayListGroupItemText">Date: <span className="bold">{moment.unix(props.status.data.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span></p>

@@ -50,7 +50,7 @@ const ComorbidityItem = props => {
               <Popover id={`popover-positioned-${'top'}`}>
                 <Popover.Title as="h3">{`Popover ${'top'}`}</Popover.Title>
                 <Popover.Content>
-                  <strong>Holy guacamole!</strong> Check this info.
+                  <strong>More Info</strong>
                 </Popover.Content>
               </Popover>
             }
@@ -87,7 +87,7 @@ const ComorbidityItem = props => {
                     <Popover id={`popover-positioned-${'top'}`}>
                       <Popover.Title as="h3">{`Popover ${'top'}`}</Popover.Title>
                       <Popover.Content>
-                        <strong>Holy guacamole!</strong> Check this info.
+                        <strong>Delete!?</strong>
                       </Popover.Content>
                     </Popover>
                   }

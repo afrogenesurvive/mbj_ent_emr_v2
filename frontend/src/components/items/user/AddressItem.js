@@ -5,10 +5,18 @@ import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Popover from 'react-bootstrap/Popover';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
-import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBatteryThreeQuarters,
+  faPlusSquare,
+  faBatteryEmpty,
+  faFolderMinus,
+  faEye,
+  faEraser,
+  faTrashAlt,
+  faBan,
+  faCheckSquare,
+  faExternalLinkAlt
+} from '@fortawesome/free-solid-svg-icons';
 
 import './UserItem.css';
 
@@ -50,7 +58,7 @@ const AddressItem = props => {
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
                 <Popover.Content>
-                  <strong>Holy guacamole!</strong> Check this info.
+                  <strong>More Info</strong>
                 </Popover.Content>
               </Popover>
             }
@@ -93,7 +101,7 @@ const AddressItem = props => {
               </li>
               <li>
               <Card.Text className="cardText">
-                Primary: <span className="bold"> {props.address.primary === true && (<FontAwesomeIcon icon={faBatteryThreeQuarters} className="listIcon"/>)} {props.address.primary === false && (<FontAwesomeIcon icon={faBatteryEmpty} className="listIcon"/>)}</span>
+                Primary: <span className="bold"> {props.address.primary === true && (<FontAwesomeIcon icon={faCheckSquare} className="listIcon"/>)} {props.address.primary === false && (<FontAwesomeIcon icon={faBan} className="listIcon"/>)}</span>
               </Card.Text>
               </li>
               {props.makePrimary && (
@@ -109,7 +117,7 @@ const AddressItem = props => {
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>
                       <Popover.Content>
-                        <strong>Holy guacamole!</strong> Check this info.
+                        <strong>Delete!?</strong>
                       </Popover.Content>
                     </Popover>
                   }

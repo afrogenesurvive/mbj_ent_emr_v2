@@ -1170,7 +1170,7 @@ selectUser = (args) => {
               overlay={
                 <Popover id={`popover-positioned-${'right'}`}>
                   <Popover.Content>
-                    <strong>Add to Queue</strong>
+                    <strong>Add Patient to Queue</strong>
                   </Popover.Content>
                 </Popover>
               }

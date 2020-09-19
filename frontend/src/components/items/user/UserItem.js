@@ -63,7 +63,7 @@ const UserItem = (props) => {
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
                 <Popover.Content>
-                  <strong>Holy guacamole!</strong> Check this info.
+                  <strong>More Info</strong>
                 </Popover.Content>
               </Popover>
             }
@@ -81,7 +81,7 @@ const UserItem = (props) => {
                 overlay={
                   <Popover id={`popover-positioned-${'top'}`}>
                     <Popover.Content>
-                      <strong>Holy guacamole!</strong> Check this info.
+                      <strong>Go To Staff Details</strong>
                     </Popover.Content>
                   </Popover>
                 }
@@ -104,7 +104,7 @@ const UserItem = (props) => {
               overlay={
                 <Popover id={`popover-positioned-${'top'}`}>
                   <Popover.Content>
-                    <strong>Holy guacamole!</strong> Check this info.
+                    <strong>Go To Staff Details</strong>
                   </Popover.Content>
                 </Popover>
               }
@@ -128,7 +128,7 @@ const UserItem = (props) => {
               overlay={
                 <Popover id={`popover-positioned-${'top'}`}>
                   <Popover.Content>
-                    <strong>Holy guacamole!</strong> Check this info.
+                    <strong>Go To Staff Details</strong>
                   </Popover.Content>
                 </Popover>
               }
@@ -140,7 +140,20 @@ const UserItem = (props) => {
           )}
 
           {props.selectUser && (
-            <FontAwesomeIcon icon={faUserPlus} className="listIcon" onClick={props.selectUser.bind(this, props.user)}/>
+            <OverlayTrigger
+              key={'top'}
+              placement={'top'}
+              overlay={
+                <Popover id={`popover-positioned-${'top'}`}>
+                  <Popover.Content>
+                    <strong>Select/Add User</strong>
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <FontAwesomeIcon icon={faUserPlus} className="listIcon" onClick={props.selectUser.bind(this, props.user)}/>
+            </OverlayTrigger>
+
           )}
 
           {props.canDelete && (
@@ -150,7 +163,7 @@ const UserItem = (props) => {
               overlay={
                 <Popover id={`popover-positioned-${'top'}`}>
                   <Popover.Content>
-                    <strong>Holy guacamole!</strong> Check this info.
+                    <strong>Delete!?</strong>
                   </Popover.Content>
                 </Popover>
               }

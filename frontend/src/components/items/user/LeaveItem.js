@@ -48,7 +48,7 @@ const LeaveItem = props => {
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
                 <Popover.Content>
-                  <strong>Holy guacamole!</strong> Check this info.
+                  <strong>More Info</strong>
                 </Popover.Content>
               </Popover>
             }
@@ -89,7 +89,7 @@ const LeaveItem = props => {
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>
                       <Popover.Content>
-                        <strong>Holy guacamole!</strong> Check this info.
+                        <strong>Delete!?</strong>
                       </Popover.Content>
                     </Popover>
                   }

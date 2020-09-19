@@ -74,7 +74,7 @@ const AppointmentItem = (props) => {
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
                 <Popover.Content>
-                  <strong>Holy guacamole!</strong> Check this info.
+                  <strong>Delete!?</strong>
                 </Popover.Content>
               </Popover>
             }
@@ -84,7 +84,20 @@ const AppointmentItem = (props) => {
 
           {props.visitPage !== true &&
             props.showDetails && (
-              <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon" onClick={props.showDetails.bind(this, props.appointment)}/>
+              <OverlayTrigger
+                key={'top'}
+                placement={'top'}
+                overlay={
+                  <Popover id={`popover-positioned-${'top'}`}>
+                    <Popover.Content>
+                      <strong>Go To Appointment Details</strong>
+                    </Popover.Content>
+                  </Popover>
+                }
+              >
+                <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon" onClick={props.showDetails.bind(this, props.appointment)}/>
+              </OverlayTrigger>
+
           )}
 
           {props.homePage && (
@@ -94,16 +107,55 @@ const AppointmentItem = (props) => {
                 state: {appointment: props.appointment._id}
               }}
             >
-            <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+            <OverlayTrigger
+              key={'top'}
+              placement={'top'}
+              overlay={
+                <Popover id={`popover-positioned-${'top'}`}>
+                  <Popover.Content>
+                    <strong>Go To Appointment Details</strong>
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+            </OverlayTrigger>
+
             </Link>
           )}
 
           {props.visitPage === true && (
-            <FontAwesomeIcon icon={faCalendarPlus} className="listIcon" onClick={props.onSelect.bind(this, props.appointment)}/>
+            <OverlayTrigger
+              key={'top'}
+              placement={'top'}
+              overlay={
+                <Popover id={`popover-positioned-${'top'}`}>
+                  <Popover.Content>
+                    <strong>Add/Use Appointment</strong>
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <FontAwesomeIcon icon={faCalendarPlus} className="listIcon" onClick={props.onSelect.bind(this, props.appointment)}/>
+            </OverlayTrigger>
+
           )}
 
           {props.canDelete && (
-            <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
+            <OverlayTrigger
+              key={'top'}
+              placement={'top'}
+              overlay={
+                <Popover id={`popover-positioned-${'top'}`}>
+                  <Popover.Content>
+                    <strong>Delete!?</strong>
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
+            </OverlayTrigger>
+
           )}
 
           {state === true && (

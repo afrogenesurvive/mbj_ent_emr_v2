@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Popover from 'react-bootstrap/Popover';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBatteryThreeQuarters,
@@ -49,7 +51,21 @@ const DiagnosisItem = props => {
           <Card.Text className="cardText">
             Type: <span className="bold">{props.diagnosis.type}</span>
           </Card.Text>
-          <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+
+          <OverlayTrigger
+            key={'top'}
+            placement={'top'}
+            overlay={
+              <Popover id={`popover-positioned-${'top'}`}>
+                <Popover.Content>
+                  <strong>More Info</strong>
+                </Popover.Content>
+              </Popover>
+            }
+          >
+            <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+          </OverlayTrigger>
+
           {state === true && (
             <Row className="listItemHiddenRow">
             <ul>
@@ -70,7 +86,21 @@ const DiagnosisItem = props => {
               </li>
               <li>
               <Card.Text className="cardText">
-                Attachments: <FontAwesomeIcon icon={faPlusSquare} className="listIcon" onClick={props.onAddAttachment.bind(this, {field: 'diagnosis',data:props.diagnosis})}/>
+                Attachments:
+                <OverlayTrigger
+                  key={'top'}
+                  placement={'top'}
+                  overlay={
+                    <Popover id={`popover-positioned-${'top'}`}>
+                      <Popover.Content>
+                        <strong>Add Attachment</strong>
+                      </Popover.Content>
+                    </Popover>
+                  }
+                >
+                  <FontAwesomeIcon icon={faPlusSquare} className="listIcon" onClick={props.onAddAttachment.bind(this, {field: 'diagnosis',data:props.diagnosis})}/>
+                </OverlayTrigger>
+
               </Card.Text>
               <PatientAttachmentList
                 item={props.diagnosis}
@@ -82,7 +112,20 @@ const DiagnosisItem = props => {
               </li>
               {props.canDelete === true && (
                 <li>
+                <OverlayTrigger
+                  key={'top'}
+                  placement={'top'}
+                  overlay={
+                    <Popover id={`popover-positioned-${'top'}`}>
+                      <Popover.Content>
+                        <strong>Delete!?</strong>
+                      </Popover.Content>
+                    </Popover>
+                  }
+                >
                   <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
+                </OverlayTrigger>
+
                 </li>
               )}
               {deleteState === true && (

@@ -2,10 +2,15 @@ import React, { useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Popover from 'react-bootstrap/Popover';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
 import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
+import {
+  faEye,
+  faTrashAlt
+ } from '@fortawesome/free-solid-svg-icons';
 
 import './visitItem.css';
 
@@ -19,6 +24,17 @@ const VigilanceItem = (props) => {
       setState(true);
     }
    }
+
+   const [deleteState, setDeleteState] = useState(false);
+   const handleDeleteStateChange = () => {
+     if (deleteState === true) {
+       setDeleteState(false);
+     }
+     if (deleteState === false) {
+       setDeleteState(true);
+     }
+    }
+
   return (
     <li key={props.key} className="">
       <Card>
@@ -26,7 +42,21 @@ const VigilanceItem = (props) => {
           <Card.Text className="cardText">
             number: <span className="bold">{props.key}</span>
           </Card.Text>
-          <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+
+          <OverlayTrigger
+            key={'top'}
+            placement={'top'}
+            overlay={
+              <Popover id={`popover-positioned-${'top'}`}>
+                <Popover.Content>
+                  <strong>More Info</strong>
+                </Popover.Content>
+              </Popover>
+            }
+          >
+            <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+          </OverlayTrigger>
+
           {state === true && (
             <Row className="listItemHiddenRow">
               <h3>chronicIllness:</h3>
@@ -289,8 +319,23 @@ const VigilanceItem = (props) => {
                 Comment: <span className="bold">{props.vigilance.vaccines.other.comment}</span>
               </Card.Text>
 
-
               {props.canDelete === true && (
+                <OverlayTrigger
+                  key={'top'}
+                  placement={'top'}
+                  overlay={
+                    <Popover id={`popover-positioned-${'top'}`}>
+                      <Popover.Content>
+                        <strong>Delete!?</strong>
+                      </Popover.Content>
+                    </Popover>
+                  }
+                >
+                  <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
+                </OverlayTrigger>
+
+              )}
+              {deleteState === true && (
                 <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.vigilance)}>Delete</Button>
               )}
             </Row>

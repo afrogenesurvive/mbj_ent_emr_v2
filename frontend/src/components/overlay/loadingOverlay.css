@@ -31,7 +31,7 @@
   left: 30vw;
   width: 35rem;
   /* height: 25rem; */
-  padding-bottom: 1rem;
+  padding: 1rem 0;
   height: fit-content;
   background-color: white;
   border-radius: 10px;

@@ -50,7 +50,7 @@ const MedicationItem = props => {
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
                 <Popover.Content>
-                  <strong>Holy guacamole!</strong> Check this info.
+                  <strong>More Info</strong>
                 </Popover.Content>
               </Popover>
             }
@@ -78,7 +78,21 @@ const MedicationItem = props => {
               </li>
               <li>
               <Card.Text className="cardText">
-                Attachments: <FontAwesomeIcon icon={faPlusSquare} className="listIcon" onClick={props.onAddAttachment.bind(this, {field: 'medication',data:props.medication})}/>
+                Attachments:
+                <OverlayTrigger
+                  key={'top'}
+                  placement={'top'}
+                  overlay={
+                    <Popover id={`popover-positioned-${'top'}`}>
+                      <Popover.Content>
+                        <strong>Add Attachment</strong>
+                      </Popover.Content>
+                    </Popover>
+                  }
+                >
+                  <FontAwesomeIcon icon={faPlusSquare} className="listIcon" onClick={props.onAddAttachment.bind(this, {field: 'medication',data:props.medication})}/>
+                </OverlayTrigger>
+
               </Card.Text>
               <PatientAttachmentList
                 item={props.medication}
@@ -96,7 +110,7 @@ const MedicationItem = props => {
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>
                       <Popover.Content>
-                        <strong>Holy guacamole!</strong> Check this info.
+                        <strong>Delete!?</strong>
                       </Popover.Content>
                     </Popover>
                   }

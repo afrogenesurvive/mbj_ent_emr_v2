@@ -69,7 +69,7 @@ const QueueSlotItem = props => {
             overlay={
               <Popover id={`popover-positioned-${'left'}`}>
                 <Popover.Content>
-                  <strong>Holy guacamole!</strong> Check this info.
+                  <strong>Go to Patient Details</strong>
                 </Popover.Content>
               </Popover>
             }
@@ -89,7 +89,7 @@ const QueueSlotItem = props => {
             overlay={
               <Popover id={`popover-positioned-${'bottom'}`}>
                 <Popover.Content>
-                  <strong>Holy guacamole!</strong> Check this info.
+                  <strong>More Info</strong>
                 </Popover.Content>
               </Popover>
             }
@@ -124,7 +124,20 @@ const QueueSlotItem = props => {
                   state: {user: props.queueSlot.consultant._id}
                 }}
               >
-              <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+              <OverlayTrigger
+                key={'bottom'}
+                placement={'bottom'}
+                overlay={
+                  <Popover id={`popover-positioned-${'bottom'}`}>
+                    <Popover.Content>
+                      <strong>Go To Consultant Details</strong>
+                    </Popover.Content>
+                  </Popover>
+                }
+              >
+                <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+              </OverlayTrigger>
+
               </Link>
               </li>
               <li>
@@ -151,7 +164,7 @@ const QueueSlotItem = props => {
                 overlay={
                   <Popover id={`popover-positioned-${'right'}`}>
                     <Popover.Content>
-                      <strong>Holy guacamole!</strong> Check this info.
+                      <strong>Delete!?</strong>
                     </Popover.Content>
                   </Popover>
                 }

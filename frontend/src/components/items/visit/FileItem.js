@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Popover from 'react-bootstrap/Popover';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
 import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
@@ -39,7 +41,20 @@ const FileItem = (props) => {
         <a href={props.file.path} target="_blank" rel="noopener noreferrer">{props.file.name}</a>
         </Card.Text>
 
+        <OverlayTrigger
+          key={'top'}
+          placement={'top'}
+          overlay={
+            <Popover id={`popover-positioned-${'top'}`}>
+              <Popover.Content>
+                <strong>More Info</strong>
+              </Popover.Content>
+            </Popover>
+          }
+        >
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+        </OverlayTrigger>
+
           {state === true && (
             <Row className="listItemHiddenRow">
             <ul>
@@ -60,7 +75,20 @@ const FileItem = (props) => {
               </li>
               {props.canDelete === true && (
                 <li>
-                <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
+                <OverlayTrigger
+                  key={'top'}
+                  placement={'top'}
+                  overlay={
+                    <Popover id={`popover-positioned-${'top'}`}>
+                      <Popover.Content>
+                        <strong>Delete!?</strong>
+                      </Popover.Content>
+                    </Popover>
+                  }
+                >
+                  <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
+                </OverlayTrigger>
+
                 </li>
               )}
               {deleteState === true && (

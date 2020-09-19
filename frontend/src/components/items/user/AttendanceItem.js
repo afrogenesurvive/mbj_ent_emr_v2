@@ -52,7 +52,7 @@ const AttendanceItem = props => {
             overlay={
               <Popover id={`popover-positioned-${'right'}`}>
                 <Popover.Content>
-                  <strong>Holy guacamole!</strong> Check this info.
+                  <strong>More Info</strong>
                 </Popover.Content>
               </Popover>
             }
@@ -86,7 +86,7 @@ const AttendanceItem = props => {
                   overlay={
                     <Popover id={`popover-positioned-${'right'}`}>
                       <Popover.Content>
-                        <strong>Holy guacamole!</strong> Check this info.
+                        <strong>Delete!?</strong>
                       </Popover.Content>
                     </Popover>
                   }

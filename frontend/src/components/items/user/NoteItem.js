@@ -36,7 +36,7 @@ const NoteItem = props => {
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
                 <Popover.Content>
-                  <strong>Holy guacamole!</strong> Check this info.
+                  <strong>Delete!?</strong>
                 </Popover.Content>
               </Popover>
             }
