@@ -522,6 +522,12 @@ render() {
                 </Nav.Item>
               </Nav>
             )}
+
+          </Col>
+
+          {this.state.users && (
+            <Col md={9} className="staffPageContainerCol specialCol2">
+
             {this.state.sideCol === 'filter' && (
               <Col>
                 <FilterUserForm
@@ -530,10 +536,7 @@ render() {
                 />
               </Col>
             )}
-          </Col>
-
-          {this.state.users && (
-            <Col md={9} className="staffPageContainerCol specialCol2">
+            
               <Tab.Content>
                 <Tab.Pane eventKey="list">
                   <Row className="displayPaneHeadRow">

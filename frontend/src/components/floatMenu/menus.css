@@ -1,0 +1,14 @@
+.FloatMenuTop {
+  border: 1px solid black;
+  position: absolute;
+  bottom: 5rem;
+  left: 1rem;
+  height: 15rem;
+  width: 5rem;
+  z-index: 3;
+}
+
+.FloatMenuList {
+  list-style-type: none;
+  padding: 0;
+}

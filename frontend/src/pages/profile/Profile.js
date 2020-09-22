@@ -49,6 +49,8 @@ import AddLeaveForm from '../../components/forms/add/AddLeaveForm';
 import AddNoteForm from '../../components/forms/add/AddNoteForm';
 import AddImageForm from '../../components/forms/add/AddImageForm';
 import AddFileForm from '../../components/forms/add/AddFileForm';
+
+import FloatMenu from '../../components/floatMenu/FloatMenu';
 import loadingGif from '../../assets/loading.gif';
 import { faBath } from '@fortawesome/free-solid-svg-icons';
 import './profile.css';
@@ -72,6 +74,7 @@ class MyProfilePage extends Component {
       value: null
     },
     menuSelected: null,
+    menuSelect: 'basic',
     adding: {
       state: null,
       field: null
@@ -1750,6 +1753,11 @@ render() {
   return (
     <React.Fragment>
 
+    <FloatMenu
+      state={this.state.sideCol}
+      menuSelect={this.menuSelect}
+    />
+
     {this.state.overlay === true && (
       <LoadingOverlay
         status={this.state.overlayStatus}
@@ -1758,7 +1766,7 @@ render() {
     )}
 
     <Container className="profilePageContainer">
-      <Row className="profilePageContainerRow headRow">
+      <Row className="profilePageContainerRow mainRow2">
         <Col md={9} className="profilePageContainerCol">
           <h1 className="profileHeading">Profile</h1>
         </Col>
@@ -1771,120 +1779,117 @@ render() {
         </Col>
       </Row>
 
-      <Row className="profilePageContainerRow mainRow">
-        <Col md={2} className="profilePageContainerCol">
-
-        </Col>
-        <Col md={10} className="profilePageContainerCol">
-          {!this.state.activityUser && (
-            <h3>...</h3>
-          )}
-        </Col>
-      </Row>
-      <Tab.Container id="left-tabs-example" defaultActiveKey="1">
         <Row className="profilePageContainerRow mainRow2">
-          <Col md={3} className="profilePageContainerCol specialCol1">
 
-          {this.state.sideCol === 'menu' && (
-            <Nav variant="pills" className="flex-column mainMenu">
-              <Nav.Item>
-                <Nav.Link eventKey="1" onClick={this.menuSelect.bind(this, 'basic')}>
-                <Button variant="light">Basic</Button>
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="2" onClick={this.menuSelect.bind(this, 'admin')}>
-                <Button variant="light">Admin</Button>
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="3" onClick={this.menuSelect.bind(this, 'address')}>
-                <Button variant="light">Addresses</Button>
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="4" onClick={this.menuSelect.bind(this, 'attendance')}>
-                <Button variant="light">Attendance</Button>
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="5" onClick={this.menuSelect.bind(this, 'leave')}>
-                <Button variant="light">Leave</Button>
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="6" onClick={this.menuSelect.bind(this, 'image')}>
-                <Button variant="light">Images</Button>
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="7" onClick={this.menuSelect.bind(this, 'file')}>
-                <Button variant="light">Files</Button>
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="8" onClick={this.menuSelect.bind(this, 'appointment')}>
-                <Button variant="light">Appointments</Button>
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="9" onClick={this.menuSelect.bind(this, 'note')}>
-                <Button variant="light">Notes</Button>
-                </Nav.Link>
-              </Nav.Item>
-            </Nav>
-          )}
-          {this.state.sideCol === 'filter' && (
-            <Col>
-              {this.state.menuSelect === 'address' && (
-                <FilterAddressForm
-                  onCancel={this.toggleSideCol}
-                  onConfirm={this.submitFilterForm}
-                />
-              )}
-              {this.state.menuSelect === 'attendance' && (
-                <FilterAttendanceForm
-                  onCancel={this.toggleSideCol}
-                  onConfirm={this.submitFilterForm}
-                />
-              )}
-              {this.state.menuSelect === 'leave' && (
-                <FilterLeaveForm
-                  onCancel={this.toggleSideCol}
-                  onConfirm={this.submitFilterForm}
-                />
-              )}
-              {this.state.menuSelect === 'image' && (
-                <FilterImageForm
-                  onCancel={this.toggleSideCol}
-                  onConfirm={this.submitFilterForm}
-                />
-              )}
-              {this.state.menuSelect === 'file' && (
-                <FilterFileForm
-                  onCancel={this.toggleSideCol}
-                  onConfirm={this.submitFilterForm}
-                />
-              )}
-              {this.state.menuSelect === 'appointment' && (
-                <FilterAppointmentForm
-                  onCancel={this.toggleSideCol}
-                  onConfirm={this.submitFilterForm}
-                />
-              )}
-              {this.state.menuSelect === 'note' && (
-                <FilterNoteForm
-                  onCancel={this.toggleSideCol}
-                  onConfirm={this.submitFilterForm}
-                />
-              )}
-            </Col>
 
-          )}
-          </Col>
+
+        {
+        // <Col md={2} className="FloatMenuCol">
+        //   this.state.sideCol === 'menu' && (
+        //
+        //   <Nav variant="pills" className="flex-column mainMenu">
+        //     <Nav.Item>
+        //       <Nav.Link eventKey="1" onClick={this.menuSelect.bind(this, 'basic')}>
+        //       <Button variant="light">Basic</Button>
+        //       </Nav.Link>
+        //     </Nav.Item>
+        //     <Nav.Item>
+        //       <Nav.Link eventKey="2" onClick={this.menuSelect.bind(this, 'admin')}>
+        //       <Button variant="light">Admin</Button>
+        //       </Nav.Link>
+        //     </Nav.Item>
+        //     <Nav.Item>
+        //       <Nav.Link eventKey="3" onClick={this.menuSelect.bind(this, 'address')}>
+        //       <Button variant="light">Addresses</Button>
+        //       </Nav.Link>
+        //     </Nav.Item>
+        //     <Nav.Item>
+        //       <Nav.Link eventKey="4" onClick={this.menuSelect.bind(this, 'attendance')}>
+        //       <Button variant="light">Attendance</Button>
+        //       </Nav.Link>
+        //     </Nav.Item>
+        //     <Nav.Item>
+        //       <Nav.Link eventKey="5" onClick={this.menuSelect.bind(this, 'leave')}>
+        //       <Button variant="light">Leave</Button>
+        //       </Nav.Link>
+        //     </Nav.Item>
+        //     <Nav.Item>
+        //       <Nav.Link eventKey="6" onClick={this.menuSelect.bind(this, 'image')}>
+        //       <Button variant="light">Images</Button>
+        //       </Nav.Link>
+        //     </Nav.Item>
+        //     <Nav.Item>
+        //       <Nav.Link eventKey="7" onClick={this.menuSelect.bind(this, 'file')}>
+        //       <Button variant="light">Files</Button>
+        //       </Nav.Link>
+        //     </Nav.Item>
+        //     <Nav.Item>
+        //       <Nav.Link eventKey="8" onClick={this.menuSelect.bind(this, 'appointment')}>
+        //       <Button variant="light">Appointments</Button>
+        //       </Nav.Link>
+        //     </Nav.Item>
+        //     <Nav.Item>
+        //       <Nav.Link eventKey="9" onClick={this.menuSelect.bind(this, 'note')}>
+        //       <Button variant="light">Notes</Button>
+        //       </Nav.Link>
+        //     </Nav.Item>
+        //   </Nav>
+        // )
+        // </Col>
+        }
+
+
+
 
           {this.state.activityUser && (
-            <Col md={9} className="profilePageContainerCol specialCol2">
+            <Col md={12} className="profilePageContainerCol specialCol2">
+
+            {this.state.sideCol === 'filter' && (
+              <Col>
+                {this.state.menuSelect === 'address' && (
+                  <FilterAddressForm
+                    onCancel={this.toggleSideCol}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                {this.state.menuSelect === 'attendance' && (
+                  <FilterAttendanceForm
+                    onCancel={this.toggleSideCol}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                {this.state.menuSelect === 'leave' && (
+                  <FilterLeaveForm
+                    onCancel={this.toggleSideCol}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                {this.state.menuSelect === 'image' && (
+                  <FilterImageForm
+                    onCancel={this.toggleSideCol}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                {this.state.menuSelect === 'file' && (
+                  <FilterFileForm
+                    onCancel={this.toggleSideCol}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                {this.state.menuSelect === 'appointment' && (
+                  <FilterAppointmentForm
+                    onCancel={this.toggleSideCol}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                {this.state.menuSelect === 'note' && (
+                  <FilterNoteForm
+                    onCancel={this.toggleSideCol}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+              </Col>
+            )}
 
               {this.state.updateSingleField.state === true && (
                 <UpdateUserSingleFieldForm
@@ -1894,276 +1899,562 @@ render() {
                 />
               )}
 
-              <Tab.Content className="tabContent" >
-                <Tab.Pane eventKey="1">
+              {this.state.sideCol === 'menu' && (
+                <Col>
+                {this.state.menuSelect === 'basic' && (
+                <Row>
 
-                  <p className="displayPaneTitle">Basic:</p>
-                  <ListGroup className="profileBasicListGroup">
-                    <ListGroup.Item>
-                      <p className="listGroupText">Title:</p>
-                      <p className="listGroupText bold">{this.state.activityUser.title}</p>
-                      <p className="listGroupText">Name:</p>
-                      <p className="listGroupText bold">{this.state.activityUser.name}</p>
-                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                      <p className="listGroupText">Username:</p>
-                      <p className="listGroupText bold">{this.state.activityUser.username}</p>
-                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'username')}>Edit</Button>
-                      <p className="listGroupText">Role:</p>
-                      <p className="listGroupText bold">{this.state.activityUser.role}</p>
-                    </ListGroup.Item>
+                <ListGroup className="profileBasicListGroup">
+                <p className="displayPaneTitle">Basic:</p>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Title:</p>
+                    <p className="listGroupText bold">{this.state.activityUser.title}</p>
+                    <p className="listGroupText">Name:</p>
+                    <p className="listGroupText bold">{this.state.activityUser.name}</p>
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Username:</p>
+                    <p className="listGroupText bold">{this.state.activityUser.username}</p>
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'username')}>Edit</Button>
+                    <p className="listGroupText">Role:</p>
+                    <p className="listGroupText bold">{this.state.activityUser.role}</p>
+                  </ListGroup.Item>
 
-                    <ListGroup.Item>
-                      <p className="listGroupText">DOB:</p>
-                      <p className="listGroupText bold">{moment.unix(this.state.activityUser.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
-                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
-                      <p className="listGroupText">Age:</p>
-                      <p className="listGroupText bold">{this.state.activityUser.age}</p>
-                      <p className="listGroupText">Gender:</p>
-                      <p className="listGroupText bold">{this.state.activityUser.gender}</p>
-                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'gender')}>Edit</Button>
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                    <p className="listGroupText">Email:</p>
-                    <p className="listGroupText bold">{this.state.activityUser.contact.email}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.email')}>Edit</Button>
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                    <p className="listGroupText">Phone:</p>
-                    <p className="listGroupText bold">{this.state.activityUser.contact.phone}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone')}>Edit</Button>
-                    <p className="listGroupText">Phone 2:</p>
-                    <p className="listGroupText bold">{this.state.activityUser.contact.phone2}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone2')}>Edit</Button>
-                    </ListGroup.Item>
-                  </ListGroup>
-                </Tab.Pane>
-                <Tab.Pane eventKey="2">
-                  <p className="displayPaneTitle">Admin:</p>
-                  <ListGroup className="profileBasicListGroup">
-                    <ListGroup.Item>
-                      <p className="listGroupText">Reg No:</p>
-                      <p className="listGroupText bold">{this.state.activityUser.registrationNumber}</p>
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                      <p className="listGroupText">Employment Date:</p>
-                      {this.state.activityUser.employmentDate && (
-                        <p className="listGroupText bold">{moment.unix(this.state.activityUser.employmentDate.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
-                      )}
+                  <ListGroup.Item>
+                    <p className="listGroupText">DOB:</p>
+                    <p className="listGroupText bold">{moment.unix(this.state.activityUser.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
+                    <p className="listGroupText">Age:</p>
+                    <p className="listGroupText bold">{this.state.activityUser.age}</p>
+                    <p className="listGroupText">Gender:</p>
+                    <p className="listGroupText bold">{this.state.activityUser.gender}</p>
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'gender')}>Edit</Button>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                  <p className="listGroupText">Email:</p>
+                  <p className="listGroupText bold">{this.state.activityUser.contact.email}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.email')}>Edit</Button>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                  <p className="listGroupText">Phone:</p>
+                  <p className="listGroupText bold">{this.state.activityUser.contact.phone}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone')}>Edit</Button>
+                  <p className="listGroupText">Phone 2:</p>
+                  <p className="listGroupText bold">{this.state.activityUser.contact.phone2}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone2')}>Edit</Button>
+                  </ListGroup.Item>
+                </ListGroup>
+                </Row>
+                )}
+                {this.state.menuSelect === 'admin' && (
+                <Row>
+                <p className="displayPaneTitle">Admin:</p>
+                <ListGroup className="profileBasicListGroup">
+                  <ListGroup.Item>
+                    <p className="listGroupText">Reg No:</p>
+                    <p className="listGroupText bold">{this.state.activityUser.registrationNumber}</p>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Employment Date:</p>
+                    {this.state.activityUser.employmentDate && (
+                      <p className="listGroupText bold">{moment.unix(this.state.activityUser.employmentDate.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                    )}
 
-                      {this.context.role === 'Admin' && (
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'employmentDate')}>Edit</Button>
-                      )}
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                      <p className="listGroupText">Id:</p>
-                      <p className="listGroupText bold">{this.state.activityUser._id}</p>
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                      <p className="listGroupText">LoggedIn:</p>
-                      <p className="listGroupText bold">{this.state.activityUser.loggedIn.toString()}</p>
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                      <p className="listGroupText">ClientConnected:</p>
-                      <p className="listGroupText bold">{this.state.activityUser.clientConnected.toString()}</p>
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                      <p className="listGroupText">Verified:</p>
-                      <p className="listGroupText bold">{this.state.activityUser.verification.verified.toString()}</p>
-                      <p className="listGroupText">Type:</p>
-                      <p className="listGroupText bold">{this.state.activityUser.verification.type}</p>
-                      <p className="listGroupText">Code:</p>
-                      <p className="listGroupText bold">{this.state.activityUser.verification.code}</p>
-                    </ListGroup.Item>
-                  </ListGroup>
-                </Tab.Pane>
-                <Tab.Pane eventKey="3">
-                  <Row className="displayPaneHeadRow">
-                    <p className="displayPaneTitle">Addresses:</p>
-                    <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                    <Button variant="success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
-                  </Row>
-                  {this.state.adding.state === true &&
-                    this.state.adding.field === 'address' && (
-                      <AddAddressForm
-                        onConfirm={this.submitAddAddressForm}
-                        onCancel={this.cancelAdd}
-                      />
-                  )}
-                  <UserAddressList
-                    filter={this.state.filter}
-                    addresses={this.state.activityUser.addresses}
-                    authId={this.state.activityUser._id}
-                    onDelete={this.deleteAddress}
-                    canDelete={this.state.canDelete}
-                    makePrimary={this.setAddressPrimary}
-                  />
-                </Tab.Pane>
-                <Tab.Pane eventKey="4">
-                  <Row className="displayPaneHeadRow">
-                    <p className="displayPaneTitle">Attendance:</p>
-                    <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                    <Button variant="success" onClick={this.startAdd.bind(this, 'attendance')}>Add</Button>
-                  </Row>
-                  {this.state.adding.state === true &&
-                    this.state.adding.field === 'attendance' && (
-                      <AddAttendanceForm
-                        onConfirm={this.submitAddAttendanceForm}
-                        onCancel={this.cancelAdd}
-                      />
-                  )}
-                  <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
-                    <Tab eventKey="1" title="list">
-                    <UserAttendanceList
-                      filter={this.state.filter}
-                      attendance={this.state.activityUser.attendance}
-                      authId={this.state.activityUser._id}
-                      canDelete={this.state.canDelete}
-                      onDelete={this.deleteAttendance}
+                    {this.context.role === 'Admin' && (
+                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'employmentDate')}>Edit</Button>
+                    )}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Id:</p>
+                    <p className="listGroupText bold">{this.state.activityUser._id}</p>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">LoggedIn:</p>
+                    <p className="listGroupText bold">{this.state.activityUser.loggedIn.toString()}</p>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">ClientConnected:</p>
+                    <p className="listGroupText bold">{this.state.activityUser.clientConnected.toString()}</p>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Verified:</p>
+                    <p className="listGroupText bold">{this.state.activityUser.verification.verified.toString()}</p>
+                    <p className="listGroupText">Type:</p>
+                    <p className="listGroupText bold">{this.state.activityUser.verification.type}</p>
+                    <p className="listGroupText">Code:</p>
+                    <p className="listGroupText bold">{this.state.activityUser.verification.code}</p>
+                  </ListGroup.Item>
+                </ListGroup>
+                </Row>
+                )}
+                {this.state.menuSelect === 'address' && (
+                <Row>
+                <Row className="displayPaneHeadRow">
+                  <p className="displayPaneTitle">Addresses:</p>
+                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
+                </Row>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'address' && (
+                    <AddAddressForm
+                      onConfirm={this.submitAddAddressForm}
+                      onCancel={this.cancelAdd}
                     />
-                    </Tab>
-                    <Tab eventKey="2" title="calendar" className="calendarTab">
-                      <h3>Calendar</h3>
-                      <FullCalendar
-                        defaultView="dayGridMonth"
-                        plugins={[dayGridPlugin]}
-                        events={this.state.calendarAttendance}
-                        eventClick={this.viewCalendarEvent}
-                      />
-                    </Tab>
-                  </Tabs>
-
-                </Tab.Pane>
-                <Tab.Pane eventKey="5">
-                  <Row className="displayPaneHeadRow">
-                    <p className="displayPaneTitle">Leave:</p>
-                    <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                    <Button variant="success" onClick={this.startAdd.bind(this, 'leave')}>Add</Button>
-                  </Row>
-                  {this.state.adding.state === true &&
-                    this.state.adding.field === 'leave' && (
-                      <AddLeaveForm
-                        onConfirm={this.submitAddLeaveForm}
-                        onCancel={this.cancelAdd}
-                      />
-                  )}
-                  <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
-                    <Tab eventKey="1" title="list">
-                    <UserLeaveList
-                      filter={this.state.filter}
-                      leave={this.state.activityUser.leave}
-                      authId={this.state.activityUser._id}
-                      canDelete={this.state.canDelete}
-                      onDelete={this.deleteLeave}
+                )}
+                <UserAddressList
+                  filter={this.state.filter}
+                  addresses={this.state.activityUser.addresses}
+                  authId={this.state.activityUser._id}
+                  onDelete={this.deleteAddress}
+                  canDelete={this.state.canDelete}
+                  makePrimary={this.setAddressPrimary}
+                />
+                </Row>
+                )}
+                {this.state.menuSelect === 'attendance' && (
+                <Row>
+                <Row className="displayPaneHeadRow">
+                  <p className="displayPaneTitle">Attendance:</p>
+                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'attendance')}>Add</Button>
+                </Row>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'attendance' && (
+                    <AddAttendanceForm
+                      onConfirm={this.submitAddAttendanceForm}
+                      onCancel={this.cancelAdd}
                     />
-                    </Tab>
-                    <Tab eventKey="2" title="calendar" className="calendarTab">
-                      <h3>Calendar</h3>
-                      <FullCalendar
-                        defaultView="dayGridMonth"
-                        plugins={[dayGridPlugin]}
-                        events={this.state.calendarLeave}
-                        eventClick={this.viewCalendarEvent}
-                      />
-                    </Tab>
-                  </Tabs>
-                </Tab.Pane>
-                <Tab.Pane eventKey="6">
-                  <Row className="displayPaneHeadRow">
-                    <p className="displayPaneTitle">Images:</p>
-                    <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                    <Button variant="success" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
-                  </Row>
-                  {this.state.adding.state === true &&
-                    this.state.adding.field === 'image' && (
-                      <AddImageForm
-                        onConfirm={this.submitAddImageForm}
-                        onCancel={this.cancelAdd}
-                      />
-                  )}
-                  <UserImageList
+                )}
+                <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+                  <Tab eventKey="1" title="list">
+                  <UserAttendanceList
                     filter={this.state.filter}
-                    images={this.state.activityUser.images}
-                    authId={this.state.activityUser._id}showListDetails={this.showListDetails}
-                    canDelete={this.state.canDelete}
-                    onDelete={this.deleteImage}
-                  />
-                </Tab.Pane>
-                <Tab.Pane eventKey="7">
-                  <Row className="displayPaneHeadRow">
-                    <p className="displayPaneTitle">Files:</p>
-                    <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                    <Button variant="success" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
-                  </Row>
-                  {this.state.adding.state === true &&
-                    this.state.adding.field === 'file' && (
-                      <AddFileForm
-                        onConfirm={this.submitAddFileForm}
-                        onCancel={this.cancelAdd}
-                      />
-                  )}
-                  <UserFileList
-                    filter={this.state.filter}
-                    files={this.state.activityUser.files}
+                    attendance={this.state.activityUser.attendance}
                     authId={this.state.activityUser._id}
                     canDelete={this.state.canDelete}
-                    onDelete={this.deleteFile}
+                    onDelete={this.deleteAttendance}
                   />
-                </Tab.Pane>
-                <Tab.Pane eventKey="8">
-                  <Row className="displayPaneHeadRow">
-                    <p className="displayPaneTitle">Appointments:</p>
-                    <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                  </Row>
-                  <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
-                    <Tab eventKey="1" title="list">
-                    <UserAppointmentList
-                      filter={this.state.filter}
-                      appointments={this.state.activityUser.appointments}
-                      authId={this.state.activityUser._id}
+                  </Tab>
+                  <Tab eventKey="2" title="calendar" className="calendarTab">
+                    <h3>Calendar</h3>
+                    <FullCalendar
+                      defaultView="dayGridMonth"
+                      plugins={[dayGridPlugin]}
+                      events={this.state.calendarAttendance}
+                      eventClick={this.viewCalendarEvent}
                     />
-                    </Tab>
-                    <Tab eventKey="2" title="calendar" className="calendarTab">
-                      <h3>Calendar</h3>
-                      <FullCalendar
-                        defaultView="dayGridMonth"
-                        plugins={[dayGridPlugin]}
-                        events={this.state.calendarAppointments}
-                        eventClick={this.viewCalendarEvent}
-                      />
-                    </Tab>
-                  </Tabs>
-
-                </Tab.Pane>
-                <Tab.Pane eventKey="9">
-                  <Row className="displayPaneHeadRow">
-                    <p className="displayPaneTitle">Notes:</p>
-                    <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                    <Button variant="success" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
-                  </Row>
-                  {this.state.adding.state === true &&
-                    this.state.adding.field === 'note' && (
-                      <AddNoteForm
-                        onConfirm={this.submitAddNoteForm}
-                        onCancel={this.cancelAdd}
-                      />
-                  )}
-                  <UserNoteList
+                  </Tab>
+                </Tabs>
+                </Row>
+                )}
+                {this.state.menuSelect === 'leave' && (
+                <Row>
+                <Row className="displayPaneHeadRow">
+                  <p className="displayPaneTitle">Leave:</p>
+                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'leave')}>Add</Button>
+                </Row>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'leave' && (
+                    <AddLeaveForm
+                      onConfirm={this.submitAddLeaveForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+                  <Tab eventKey="1" title="list">
+                  <UserLeaveList
                     filter={this.state.filter}
-                    notes={this.state.activityUser.notes}
+                    leave={this.state.activityUser.leave}
                     authId={this.state.activityUser._id}
                     canDelete={this.state.canDelete}
-                    onDelete={this.deleteNote}
+                    onDelete={this.deleteLeave}
                   />
-                </Tab.Pane>
-              </Tab.Content>
+                  </Tab>
+                  <Tab eventKey="2" title="calendar" className="calendarTab">
+                    <h3>Calendar</h3>
+                    <FullCalendar
+                      defaultView="dayGridMonth"
+                      plugins={[dayGridPlugin]}
+                      events={this.state.calendarLeave}
+                      eventClick={this.viewCalendarEvent}
+                    />
+                  </Tab>
+                </Tabs>
+                </Row>
+                )}
+                {this.state.menuSelect === 'image' && (
+                <Row>
+                <Row className="displayPaneHeadRow">
+                  <p className="displayPaneTitle">Images:</p>
+                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
+                </Row>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'image' && (
+                    <AddImageForm
+                      onConfirm={this.submitAddImageForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                <UserImageList
+                  filter={this.state.filter}
+                  images={this.state.activityUser.images}
+                  authId={this.state.activityUser._id}showListDetails={this.showListDetails}
+                  canDelete={this.state.canDelete}
+                  onDelete={this.deleteImage}
+                />
+                </Row>
+                )}
+                {this.state.menuSelect === 'file' && (
+                <Row>
+                <Row className="displayPaneHeadRow">
+                  <p className="displayPaneTitle">Files:</p>
+                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
+                </Row>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'file' && (
+                    <AddFileForm
+                      onConfirm={this.submitAddFileForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                <UserFileList
+                  filter={this.state.filter}
+                  files={this.state.activityUser.files}
+                  authId={this.state.activityUser._id}
+                  canDelete={this.state.canDelete}
+                  onDelete={this.deleteFile}
+                />
+                </Row>
+                )}
+                {this.state.menuSelect === 'appointment' && (
+                <Row>
+                <Row className="displayPaneHeadRow">
+                  <p className="displayPaneTitle">Appointments:</p>
+                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+                </Row>
+                <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
+                  <Tab eventKey="1" title="list">
+                  <UserAppointmentList
+                    filter={this.state.filter}
+                    appointments={this.state.activityUser.appointments}
+                    authId={this.state.activityUser._id}
+                  />
+                  </Tab>
+                  <Tab eventKey="2" title="calendar" className="calendarTab">
+                    <h3>Calendar</h3>
+                    <FullCalendar
+                      defaultView="dayGridMonth"
+                      plugins={[dayGridPlugin]}
+                      events={this.state.calendarAppointments}
+                      eventClick={this.viewCalendarEvent}
+                    />
+                  </Tab>
+                </Tabs>
+                </Row>
+                )}
+                {this.state.menuSelect === 'note' && (
+                <Row>
+                <Row className="displayPaneHeadRow">
+                  <p className="displayPaneTitle">Notes:</p>
+                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
+                </Row>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'note' && (
+                    <AddNoteForm
+                      onConfirm={this.submitAddNoteForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                <UserNoteList
+                  filter={this.state.filter}
+                  notes={this.state.activityUser.notes}
+                  authId={this.state.activityUser._id}
+                  canDelete={this.state.canDelete}
+                  onDelete={this.deleteNote}
+                />
+                </Row>
+                )}
+
+                </Col>
+              )}
+
+              {
+              // <Tab.Content className="tabContent" >
+              //   <Tab.Pane eventKey="1">
+              //   <p className="displayPaneTitle">Basic:</p>
+              //   <ListGroup className="profileBasicListGroup">
+              //     <ListGroup.Item>
+              //       <p className="listGroupText">Title:</p>
+              //       <p className="listGroupText bold">{this.state.activityUser.title}</p>
+              //       <p className="listGroupText">Name:</p>
+              //       <p className="listGroupText bold">{this.state.activityUser.name}</p>
+              //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
+              //     </ListGroup.Item>
+              //     <ListGroup.Item>
+              //       <p className="listGroupText">Username:</p>
+              //       <p className="listGroupText bold">{this.state.activityUser.username}</p>
+              //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'username')}>Edit</Button>
+              //       <p className="listGroupText">Role:</p>
+              //       <p className="listGroupText bold">{this.state.activityUser.role}</p>
+              //     </ListGroup.Item>
+              //
+              //     <ListGroup.Item>
+              //       <p className="listGroupText">DOB:</p>
+              //       <p className="listGroupText bold">{moment.unix(this.state.activityUser.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+              //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
+              //       <p className="listGroupText">Age:</p>
+              //       <p className="listGroupText bold">{this.state.activityUser.age}</p>
+              //       <p className="listGroupText">Gender:</p>
+              //       <p className="listGroupText bold">{this.state.activityUser.gender}</p>
+              //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'gender')}>Edit</Button>
+              //     </ListGroup.Item>
+              //     <ListGroup.Item>
+              //     <p className="listGroupText">Email:</p>
+              //     <p className="listGroupText bold">{this.state.activityUser.contact.email}</p>
+              //     <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.email')}>Edit</Button>
+              //     </ListGroup.Item>
+              //     <ListGroup.Item>
+              //     <p className="listGroupText">Phone:</p>
+              //     <p className="listGroupText bold">{this.state.activityUser.contact.phone}</p>
+              //     <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone')}>Edit</Button>
+              //     <p className="listGroupText">Phone 2:</p>
+              //     <p className="listGroupText bold">{this.state.activityUser.contact.phone2}</p>
+              //     <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone2')}>Edit</Button>
+              //     </ListGroup.Item>
+              //   </ListGroup>
+              //   </Tab.Pane>
+              //   <Tab.Pane eventKey="2">
+              //     <p className="displayPaneTitle">Admin:</p>
+              //     <ListGroup className="profileBasicListGroup">
+              //       <ListGroup.Item>
+              //         <p className="listGroupText">Reg No:</p>
+              //         <p className="listGroupText bold">{this.state.activityUser.registrationNumber}</p>
+              //       </ListGroup.Item>
+              //       <ListGroup.Item>
+              //         <p className="listGroupText">Employment Date:</p>
+              //         {this.state.activityUser.employmentDate && (
+              //           <p className="listGroupText bold">{moment.unix(this.state.activityUser.employmentDate.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+              //         )}
+              //
+              //         {this.context.role === 'Admin' && (
+              //           <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'employmentDate')}>Edit</Button>
+              //         )}
+              //       </ListGroup.Item>
+              //       <ListGroup.Item>
+              //         <p className="listGroupText">Id:</p>
+              //         <p className="listGroupText bold">{this.state.activityUser._id}</p>
+              //       </ListGroup.Item>
+              //       <ListGroup.Item>
+              //         <p className="listGroupText">LoggedIn:</p>
+              //         <p className="listGroupText bold">{this.state.activityUser.loggedIn.toString()}</p>
+              //       </ListGroup.Item>
+              //       <ListGroup.Item>
+              //         <p className="listGroupText">ClientConnected:</p>
+              //         <p className="listGroupText bold">{this.state.activityUser.clientConnected.toString()}</p>
+              //       </ListGroup.Item>
+              //       <ListGroup.Item>
+              //         <p className="listGroupText">Verified:</p>
+              //         <p className="listGroupText bold">{this.state.activityUser.verification.verified.toString()}</p>
+              //         <p className="listGroupText">Type:</p>
+              //         <p className="listGroupText bold">{this.state.activityUser.verification.type}</p>
+              //         <p className="listGroupText">Code:</p>
+              //         <p className="listGroupText bold">{this.state.activityUser.verification.code}</p>
+              //       </ListGroup.Item>
+              //     </ListGroup>
+              //   </Tab.Pane>
+              //   <Tab.Pane eventKey="3">
+              //     <Row className="displayPaneHeadRow">
+              //       <p className="displayPaneTitle">Addresses:</p>
+              //       <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+              //       <Button variant="success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
+              //     </Row>
+              //     {this.state.adding.state === true &&
+              //       this.state.adding.field === 'address' && (
+              //         <AddAddressForm
+              //           onConfirm={this.submitAddAddressForm}
+              //           onCancel={this.cancelAdd}
+              //         />
+              //     )}
+              //     <UserAddressList
+              //       filter={this.state.filter}
+              //       addresses={this.state.activityUser.addresses}
+              //       authId={this.state.activityUser._id}
+              //       onDelete={this.deleteAddress}
+              //       canDelete={this.state.canDelete}
+              //       makePrimary={this.setAddressPrimary}
+              //     />
+              //   </Tab.Pane>
+              //   <Tab.Pane eventKey="4">
+              //     <Row className="displayPaneHeadRow">
+              //       <p className="displayPaneTitle">Attendance:</p>
+              //       <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+              //       <Button variant="success" onClick={this.startAdd.bind(this, 'attendance')}>Add</Button>
+              //     </Row>
+              //     {this.state.adding.state === true &&
+              //       this.state.adding.field === 'attendance' && (
+              //         <AddAttendanceForm
+              //           onConfirm={this.submitAddAttendanceForm}
+              //           onCancel={this.cancelAdd}
+              //         />
+              //     )}
+              //     <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+              //       <Tab eventKey="1" title="list">
+              //       <UserAttendanceList
+              //         filter={this.state.filter}
+              //         attendance={this.state.activityUser.attendance}
+              //         authId={this.state.activityUser._id}
+              //         canDelete={this.state.canDelete}
+              //         onDelete={this.deleteAttendance}
+              //       />
+              //       </Tab>
+              //       <Tab eventKey="2" title="calendar" className="calendarTab">
+              //         <h3>Calendar</h3>
+              //         <FullCalendar
+              //           defaultView="dayGridMonth"
+              //           plugins={[dayGridPlugin]}
+              //           events={this.state.calendarAttendance}
+              //           eventClick={this.viewCalendarEvent}
+              //         />
+              //       </Tab>
+              //     </Tabs>
+              //
+              //   </Tab.Pane>
+              //   <Tab.Pane eventKey="5">
+              //     <Row className="displayPaneHeadRow">
+              //       <p className="displayPaneTitle">Leave:</p>
+              //       <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+              //       <Button variant="success" onClick={this.startAdd.bind(this, 'leave')}>Add</Button>
+              //     </Row>
+              //     {this.state.adding.state === true &&
+              //       this.state.adding.field === 'leave' && (
+              //         <AddLeaveForm
+              //           onConfirm={this.submitAddLeaveForm}
+              //           onCancel={this.cancelAdd}
+              //         />
+              //     )}
+              //     <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+              //       <Tab eventKey="1" title="list">
+              //       <UserLeaveList
+              //         filter={this.state.filter}
+              //         leave={this.state.activityUser.leave}
+              //         authId={this.state.activityUser._id}
+              //         canDelete={this.state.canDelete}
+              //         onDelete={this.deleteLeave}
+              //       />
+              //       </Tab>
+              //       <Tab eventKey="2" title="calendar" className="calendarTab">
+              //         <h3>Calendar</h3>
+              //         <FullCalendar
+              //           defaultView="dayGridMonth"
+              //           plugins={[dayGridPlugin]}
+              //           events={this.state.calendarLeave}
+              //           eventClick={this.viewCalendarEvent}
+              //         />
+              //       </Tab>
+              //     </Tabs>
+              //   </Tab.Pane>
+              //   <Tab.Pane eventKey="6">
+              //     <Row className="displayPaneHeadRow">
+              //       <p className="displayPaneTitle">Images:</p>
+              //       <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+              //       <Button variant="success" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
+              //     </Row>
+              //     {this.state.adding.state === true &&
+              //       this.state.adding.field === 'image' && (
+              //         <AddImageForm
+              //           onConfirm={this.submitAddImageForm}
+              //           onCancel={this.cancelAdd}
+              //         />
+              //     )}
+              //     <UserImageList
+              //       filter={this.state.filter}
+              //       images={this.state.activityUser.images}
+              //       authId={this.state.activityUser._id}showListDetails={this.showListDetails}
+              //       canDelete={this.state.canDelete}
+              //       onDelete={this.deleteImage}
+              //     />
+              //   </Tab.Pane>
+              //   <Tab.Pane eventKey="7">
+              //     <Row className="displayPaneHeadRow">
+              //       <p className="displayPaneTitle">Files:</p>
+              //       <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+              //       <Button variant="success" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
+              //     </Row>
+              //     {this.state.adding.state === true &&
+              //       this.state.adding.field === 'file' && (
+              //         <AddFileForm
+              //           onConfirm={this.submitAddFileForm}
+              //           onCancel={this.cancelAdd}
+              //         />
+              //     )}
+              //     <UserFileList
+              //       filter={this.state.filter}
+              //       files={this.state.activityUser.files}
+              //       authId={this.state.activityUser._id}
+              //       canDelete={this.state.canDelete}
+              //       onDelete={this.deleteFile}
+              //     />
+              //   </Tab.Pane>
+              //   <Tab.Pane eventKey="8">
+              //     <Row className="displayPaneHeadRow">
+              //       <p className="displayPaneTitle">Appointments:</p>
+              //       <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+              //     </Row>
+              //     <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
+              //       <Tab eventKey="1" title="list">
+              //       <UserAppointmentList
+              //         filter={this.state.filter}
+              //         appointments={this.state.activityUser.appointments}
+              //         authId={this.state.activityUser._id}
+              //       />
+              //       </Tab>
+              //       <Tab eventKey="2" title="calendar" className="calendarTab">
+              //         <h3>Calendar</h3>
+              //         <FullCalendar
+              //           defaultView="dayGridMonth"
+              //           plugins={[dayGridPlugin]}
+              //           events={this.state.calendarAppointments}
+              //           eventClick={this.viewCalendarEvent}
+              //         />
+              //       </Tab>
+              //     </Tabs>
+              //
+              //   </Tab.Pane>
+              //   <Tab.Pane eventKey="9">
+              //     <Row className="displayPaneHeadRow">
+              //       <p className="displayPaneTitle">Notes:</p>
+              //       <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+              //       <Button variant="success" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
+              //     </Row>
+              //     {this.state.adding.state === true &&
+              //       this.state.adding.field === 'note' && (
+              //         <AddNoteForm
+              //           onConfirm={this.submitAddNoteForm}
+              //           onCancel={this.cancelAdd}
+              //         />
+              //     )}
+              //     <UserNoteList
+              //       filter={this.state.filter}
+              //       notes={this.state.activityUser.notes}
+              //       authId={this.state.activityUser._id}
+              //       canDelete={this.state.canDelete}
+              //       onDelete={this.deleteNote}
+              //     />
+              //   </Tab.Pane>
+              // </Tab.Content>
+              }
+
             </Col>
           )}
 
 
         </Row>
-      </Tab.Container>
+
     </Container>
     </React.Fragment>
   );

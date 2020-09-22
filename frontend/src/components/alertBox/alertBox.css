@@ -5,7 +5,7 @@
   position: fixed;
   z-index: 10000;
   bottom: 2rem;
-  left: 1.5rem;
+  right: 1.5rem;
   overflow-x: scroll;
 
   /* box-shadow: 3px 7px 3px rgba(20,33,61,.4) */
@@ -13,11 +13,11 @@
 .alertBoxClosed {
   margin: .5rem auto;
   width: 2rem;
-  max-height: 2.5rem;
+  max-height: 2rem;
   position: fixed;
   z-index: 10000;
   bottom: 1rem;
-  left: 1.5rem;
+  right: 1.5rem;
   overflow-x: scroll;
   box-shadow: 3px 7px 3px rgba(20,33,61,.4)
 }

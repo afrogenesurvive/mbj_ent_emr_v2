@@ -1,11 +1,12 @@
 .profilePageContainer {
-  margin-top: 5rem;
+  margin: 5rem 1rem 0 1rem;;
   /* border: 1px solid red; */
   height: 87vh;
+  /* position: relative; */
   /* overflow: hidden; */
 }
 .profilePageContainerCol {
-  /* border: 1px solid purple; */
+  border: 1px solid purple;
   text-align: center;
 }
 .profileHeading {
@@ -24,7 +25,8 @@
   text-align: center;
   max-height: 89%;
   overflow: scroll;
-  /* width: 107%; */
+  /* width: 90%; */
+  margin: 0 auto;
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
@@ -42,6 +44,7 @@
 }
 .profileBasicListGroup {
   text-align: left;
+  margin: 0 auto;
 }
 .listGroupText {
   display: inline-block;
@@ -61,4 +64,28 @@
 }
 .displayPaneTitle {
   font-weight: bold;
+}
+
+/* .FloatMenuCol {
+  border: 1px solid black;
+  width: 5rem;
+  position: absolute;
+  z-index: 3;
+  left: -1rem;
+  top: 2rem;
+}
+.FloatMenuCol2 {
+  border: 1px solid black;
+  width: 5rem;
+  position: absolute;
+  z-index: 3;
+  left: -1rem;
+  bottom: 1rem;
+}
+.FloatMenuList {
+  list-style-type: none;
+  padding: 0;
+} */
+.tabCont {
+  /* position: relative; */
 }

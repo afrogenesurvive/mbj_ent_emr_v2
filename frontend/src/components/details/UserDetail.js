@@ -210,7 +210,6 @@ logUserActivity(args) {
     });
 };
 
-
 submitAddAddressForm = (event) => {
   event.preventDefault();
   console.log('...adding address...');
@@ -1519,7 +1518,6 @@ submitUpdateSingleFieldForm = (event) => {
       this.setState({isLoading: false })
     });
 }
-
 startUpdateSingleField = (args) => {
   this.setState({
     updateSingleField: {
@@ -1643,7 +1641,6 @@ parseForCalendar = (args) => {
       calendarAppointments: calendarAppointments,
     })
 }
-
 viewCalendarEvent = (args) => {
 
   let input = args.event.extendedProps.props;
@@ -1724,9 +1721,10 @@ render() {
           }
         </Col>
       </Row>
-      <Tab.Container id="left-tabs-example" defaultActiveKey="1">
+      <Tab.Container id="left-tabs-example" defaultActiveKey="1" className="tabCont">
         <Row className="detailPageContainerRow mainRow2">
-          <Col md={2} className="detailPageContainerCol specialCol1">
+
+          <Col className="detailPageContainerCol specialCol1 FloatMenuCol2">
             {this.state.sideCol === 'menu' && (
               <Nav variant="pills" className="flex-column subMenu">
                 <Nav.Item>
@@ -1776,6 +1774,12 @@ render() {
                 </Nav.Item>
               </Nav>
             )}
+
+          </Col>
+
+          {this.props.user && (
+            <Col md={12} className="detailPageContainerCol specialCol2">
+
             {this.state.sideCol === 'filter' && (
               <Col>
                 {this.state.menuSelect === 'address' && (
@@ -1823,10 +1827,7 @@ render() {
               </Col>
 
             )}
-          </Col>
 
-          {this.props.user && (
-            <Col md={10} className="detailPageContainerCol specialCol2">
               {this.state.updateSingleField.state === true && (
                 <UpdateUserSingleFieldForm
                   field={this.state.updateSingleField.field}
