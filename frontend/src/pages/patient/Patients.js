@@ -23,6 +23,7 @@ import PatientDetail from '../../components/details/PatientDetail';
 import FilterPatientForm from '../../components/forms/filter/FilterPatientForm';
 import PatientSearchForm from '../../components/forms/search/PatientSearchForm';
 
+import FloatMenu from '../../components/floatMenu/FloatMenu';
 import loadingGif from '../../assets/loading.gif';
 import { faBath } from '@fortawesome/free-solid-svg-icons';
 import './patient.css';
@@ -43,13 +44,16 @@ class PatientPage extends Component {
     seshStore: null,
     profileLoaded: false,
     canDelete: false,
-    sideCol: 'menu',
+    sideCol: 'menuPatient',
     filter: {
       field: null,
       key: null,
       value: null
     },
     menuSelected: null,
+    menuSelect: 'list',
+    subMenuState: false,
+    subMenu: 'basic',
     adding: {
       state: null,
       field: null
@@ -522,6 +526,20 @@ menuSelect = (args) => {
     menuSelect: args,
     tabKey: args
   })
+  if (args === 'detail') {
+    this.setState({
+      subMenuState: true
+    })
+  } else {
+    this.setState({
+      subMenuState: false
+    })
+  }
+}
+subMenuSelect = (args) => {
+  this.setState({
+    subMenu: args
+  })
 }
 
 submitFilterForm = (event) => {
@@ -550,7 +568,9 @@ showDetails = (args) => {
   this.setState({
     showDetails: true,
     selectedPatient: args,
-    tabKey: 'detail'
+    tabKey: 'detail',
+    menuSelect: 'detail',
+    subMenuState: true
   })
   this.props.selectPatient(args);
 }
@@ -654,6 +674,15 @@ render() {
   return (
     <React.Fragment>
 
+    <FloatMenu
+      state={this.state.sideCol}
+      menuSelect={this.menuSelect}
+      subMenuState={this.state.subMenuState}
+      subMenu={this.state.subMenu}
+      subMenuSelect={this.subMenuSelect}
+      page='patient'
+    />
+
     {this.state.overlay === true && (
       <LoadingOverlay
         status={this.state.overlayStatus}
@@ -678,34 +707,11 @@ render() {
         </Col>
       </Row>
 
-      <Tab.Container id="left-tabs-example" activeKey={this.state.tabKey}>
         <Row className="staffPageContainerRow mainRow2">
 
-          <Col lg={3} className="staffPageContainerCol specialCol1">
-            {this.state.sideCol === 'menu' && (
-              <Nav variant="pills" className="flex-column mainMenu">
-                <Nav.Item>
-                  <Nav.Link eventKey="list" onClick={this.menuSelect.bind(this, 'list')}>
-                  <Button variant="light">List</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="search" onClick={this.menuSelect.bind(this, 'search')}>
-                  <Button variant="light">Search</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="detail" onClick={this.menuSelect.bind(this, 'detail')}>
-                  <Button variant="light">Detail</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="new" onClick={this.menuSelect.bind(this, 'new')}>
-                  <Button variant="light">New</Button>
-                  </Nav.Link>
-                </Nav.Item>
-              </Nav>
-            )}
+          {this.state.patients && (
+            <Col lg={12} className="staffPageContainerCol specialCol2">
+
             {this.state.sideCol === 'filter' && (
               <Col>
                 <FilterPatientForm
@@ -714,81 +720,164 @@ render() {
                 />
               </Col>
             )}
-          </Col>
 
-          {this.state.patients && (
-            <Col lg={9} className="staffPageContainerCol specialCol2">
-              <Tab.Content>
-                <Tab.Pane eventKey="list">
-                  <Row className="displayPaneHeadRow">
-                    <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                    <Button variant="warning" onClick={this.resetFilter}>Reset</Button>
-                  </Row>
-                    <PatientList
+            {this.state.menuSelect === 'list' && (
+              <Row className="tabRow">
+
+              <Row className="displayPaneHeadRow">
+                <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+                <Button variant="warning" onClick={this.resetFilter}>Reset</Button>
+              </Row>
+                <PatientList
+                  filter={this.state.filter}
+                  patients={this.state.patients}
+                  authId={this.context.activityId}
+                  canDelete={this.state.canDelete}
+                  showDetails={this.showDetails}
+                  onDelete={this.deletePatient}
+                />
+
+              </Row>
+            )}
+
+            {this.state.menuSelect === 'search' && (
+              <Row className="tabRow">
+
+              <Col className="userSearchCol">
+                <h3>Search Patient</h3>
+                <Row className="userSearchRow">
+                  <PatientSearchForm
+                    onConfirm={this.searchPatients}
+                  />
+                </Row>
+                <Row>
+                  {this.state.searchPatients && (
+                    <Button variant="primary" className="centered_btn" onClick={this.toggleSideCol}>Filter</Button>
+                  )}
+                </Row>
+                <Row className="userSearchRow results">
+                  {this.state.searchPatients && (
+                    <SearchPatientList
                       filter={this.state.filter}
-                      patients={this.state.patients}
+                      patients={this.state.searchPatients}
                       authId={this.context.activityId}
-                      canDelete={this.state.canDelete}
                       showDetails={this.showDetails}
-                      onDelete={this.deletePatient}
                     />
-                </Tab.Pane>
-                <Tab.Pane eventKey="search">
-                <Col className="userSearchCol">
-                  <h3>Search Patient</h3>
-                  <Row className="userSearchRow">
-                    <PatientSearchForm
-                      onConfirm={this.searchPatients}
-                    />
-                  </Row>
-                  <Row>
-                    {this.state.searchPatients && (
-                      <Button variant="primary" className="centered_btn" onClick={this.toggleSideCol}>Filter</Button>
-                    )}
-                  </Row>
-                  <Row className="userSearchRow results">
-                    {this.state.searchPatients && (
-                      <SearchPatientList
-                        filter={this.state.filter}
-                        patients={this.state.searchPatients}
-                        authId={this.context.activityId}
-                        showDetails={this.showDetails}
-                      />
-                    )}
-                  </Row>
-                </Col>
-                </Tab.Pane>
-                <Tab.Pane eventKey="detail">
-                {this.state.showDetails === true &&
-                  this.state.selectedPatient && (
-                  <PatientDetail
-                    patient={this.state.selectedPatient}
-                    updatePatient={this.updatePatient}
-                  />
-                )}
-                </Tab.Pane>
-                <Tab.Pane eventKey="new">
-                {this.state.creatingPatient === false && (
-                  <Button variant="secondary" className="filterFormBtn" onClick={this.onStartCreateNewPatient}>Create New</Button>
-                )}
-                {this.state.creatingPatient === true && (
-                  <CreatePatientForm
-                    onConfirm={this.submitCreateNewPatientForm}
-                    onCancel={this.cancelCreateNewPatient}
-                  />
-                )}
-                {this.state.newPatient && (
-                  <Row>
-                    <h3>Review New Patient</h3>
-                    {this.state.newPatient.username}
-                  </Row>
-                )}
-                </Tab.Pane>
-              </Tab.Content>
+                  )}
+                </Row>
+              </Col>
+
+              </Row>
+            )}
+            {this.state.menuSelect === 'detail' && (
+              <Row className="tabRow">
+
+              {this.state.showDetails === true &&
+                this.state.selectedPatient && (
+                <PatientDetail
+                  patient={this.state.selectedPatient}
+                  updatePatient={this.updatePatient}
+                  subMenu={this.state.subMenu}
+                />
+              )}
+
+              </Row>
+            )}
+            {this.state.menuSelect === 'new' && (
+              <Row className="tabRow">
+
+              {this.state.creatingPatient === false && (
+                <Button variant="secondary" className="filterFormBtn" onClick={this.onStartCreateNewPatient}>Create New</Button>
+              )}
+              {this.state.creatingPatient === true && (
+                <CreatePatientForm
+                  onConfirm={this.submitCreateNewPatientForm}
+                  onCancel={this.cancelCreateNewPatient}
+                />
+              )}
+              {this.state.newPatient && (
+                <Row>
+                  <h3>Review New Patient</h3>
+                  {this.state.newPatient.username}
+                </Row>
+              )}
+
+              </Row>
+            )}
+
+            {
+              // <Tab.Content>
+              //   <Tab.Pane eventKey="list">
+              //     <Row className="displayPaneHeadRow">
+              //       <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+              //       <Button variant="warning" onClick={this.resetFilter}>Reset</Button>
+              //     </Row>
+              //       <PatientList
+              //         filter={this.state.filter}
+              //         patients={this.state.patients}
+              //         authId={this.context.activityId}
+              //         canDelete={this.state.canDelete}
+              //         showDetails={this.showDetails}
+              //         onDelete={this.deletePatient}
+              //       />
+              //   </Tab.Pane>
+              //
+              //   <Tab.Pane eventKey="search">
+              //   <Col className="userSearchCol">
+              //     <h3>Search Patient</h3>
+              //     <Row className="userSearchRow">
+              //       <PatientSearchForm
+              //         onConfirm={this.searchPatients}
+              //       />
+              //     </Row>
+              //     <Row>
+              //       {this.state.searchPatients && (
+              //         <Button variant="primary" className="centered_btn" onClick={this.toggleSideCol}>Filter</Button>
+              //       )}
+              //     </Row>
+              //     <Row className="userSearchRow results">
+              //       {this.state.searchPatients && (
+              //         <SearchPatientList
+              //           filter={this.state.filter}
+              //           patients={this.state.searchPatients}
+              //           authId={this.context.activityId}
+              //           showDetails={this.showDetails}
+              //         />
+              //       )}
+              //     </Row>
+              //   </Col>
+              //   </Tab.Pane>
+              //   <Tab.Pane eventKey="detail">
+              //   {this.state.showDetails === true &&
+              //     this.state.selectedPatient && (
+              //     <PatientDetail
+              //       patient={this.state.selectedPatient}
+              //       updatePatient={this.updatePatient}
+              //     />
+              //   )}
+              //   </Tab.Pane>
+              //   <Tab.Pane eventKey="new">
+              //   {this.state.creatingPatient === false && (
+              //     <Button variant="secondary" className="filterFormBtn" onClick={this.onStartCreateNewPatient}>Create New</Button>
+              //   )}
+              //   {this.state.creatingPatient === true && (
+              //     <CreatePatientForm
+              //       onConfirm={this.submitCreateNewPatientForm}
+              //       onCancel={this.cancelCreateNewPatient}
+              //     />
+              //   )}
+              //   {this.state.newPatient && (
+              //     <Row>
+              //       <h3>Review New Patient</h3>
+              //       {this.state.newPatient.username}
+              //     </Row>
+              //   )}
+              //   </Tab.Pane>
+              // </Tab.Content>
+            }
             </Col>
           )}
         </Row>
-      </Tab.Container>
     </Container>
     </React.Fragment>
   );

@@ -67,7 +67,7 @@ class MyProfilePage extends Component {
     isLoading: false,
     seshStore: null,
     profileLoaded: false,
-    sideCol: 'menu',
+    sideCol: 'menuProfile',
     filter: {
       field: null,
       key: null,
@@ -1899,13 +1899,13 @@ render() {
                 />
               )}
 
-              {this.state.sideCol === 'menu' && (
+              {this.state.sideCol === 'menuProfile' && (
                 <Col>
                 {this.state.menuSelect === 'basic' && (
-                <Row>
-
-                <ListGroup className="profileBasicListGroup">
+                <Row className="tabRow">
                 <p className="displayPaneTitle">Basic:</p>
+                <ListGroup className="profileBasicListGroup">
+
                   <ListGroup.Item>
                     <p className="listGroupText">Title:</p>
                     <p className="listGroupText bold">{this.state.activityUser.title}</p>
@@ -1948,7 +1948,7 @@ render() {
                 </Row>
                 )}
                 {this.state.menuSelect === 'admin' && (
-                <Row>
+                <Row className="tabRow">
                 <p className="displayPaneTitle">Admin:</p>
                 <ListGroup className="profileBasicListGroup">
                   <ListGroup.Item>
@@ -1989,7 +1989,7 @@ render() {
                 </Row>
                 )}
                 {this.state.menuSelect === 'address' && (
-                <Row>
+                <Row className="tabRow">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">Addresses:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -2013,7 +2013,7 @@ render() {
                 </Row>
                 )}
                 {this.state.menuSelect === 'attendance' && (
-                <Row>
+                <Row className="tabRow">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">Attendance:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -2049,7 +2049,7 @@ render() {
                 </Row>
                 )}
                 {this.state.menuSelect === 'leave' && (
-                <Row>
+                <Row className="tabRow">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">Leave:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -2085,7 +2085,7 @@ render() {
                 </Row>
                 )}
                 {this.state.menuSelect === 'image' && (
-                <Row>
+                <Row className="tabRow">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">Images:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -2108,7 +2108,7 @@ render() {
                 </Row>
                 )}
                 {this.state.menuSelect === 'file' && (
-                <Row>
+                <Row className="tabRow">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">Files:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -2131,7 +2131,7 @@ render() {
                 </Row>
                 )}
                 {this.state.menuSelect === 'appointment' && (
-                <Row>
+                <Row className="tabRow">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">Appointments:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -2157,7 +2157,7 @@ render() {
                 </Row>
                 )}
                 {this.state.menuSelect === 'note' && (
-                <Row>
+                <Row className="tabRow">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">Notes:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>

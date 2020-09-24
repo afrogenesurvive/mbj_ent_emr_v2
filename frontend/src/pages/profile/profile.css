@@ -1,5 +1,5 @@
 .profilePageContainer {
-  margin: 5rem 1rem 0 1rem;;
+  margin: 5rem auto 0 auto;
   /* border: 1px solid red; */
   height: 87vh;
   /* position: relative; */
@@ -44,11 +44,11 @@
 }
 .profileBasicListGroup {
   text-align: left;
-  margin: 0 auto;
+  margin: 1rem auto;
 }
 .listGroupText {
   display: inline-block;
-  margin: 0 .5rem;
+  /* margin: 0 .5rem; */
 }
 .bold {
   font-weight: bold;
@@ -64,6 +64,7 @@
 }
 .displayPaneTitle {
   font-weight: bold;
+  text-align: center;
 }
 
 /* .FloatMenuCol {
@@ -78,7 +79,7 @@
   border: 1px solid black;
   width: 5rem;
   position: absolute;
-  z-index: 3;
+  z-indmex: 3;
   left: -1rem;
   bottom: 1rem;
 }
@@ -86,6 +87,11 @@
   list-style-type: none;
   padding: 0;
 } */
-.tabCont {
-  /* position: relative; */
+.tabRow {
+  margin: 0 auto;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }

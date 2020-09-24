@@ -1,14 +1,26 @@
 .FloatMenuTop {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   position: absolute;
-  bottom: 5rem;
+  top: 4rem;
   left: 1rem;
-  height: 15rem;
+  height: fit-content;
   width: 5rem;
   z-index: 3;
+}
+.FloatSubMenuTop {
+  border: 1px solid black;
+  position: absolute;
+  bottom: 3rem;
+  height: fit-content;
 }
 
 .FloatMenuList {
   list-style-type: none;
   padding: 0;
+}
+.FloatSubMenuList {
+  margin-top: 3rem;
+  list-style-type: none;
+  padding: 0;
+  text-align: left;
 }
