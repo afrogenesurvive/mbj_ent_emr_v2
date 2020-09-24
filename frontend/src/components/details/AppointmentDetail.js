@@ -74,6 +74,7 @@ class AppointmentDetail extends Component {
       value: null
     },
     menuSelected: null,
+    menuSelect: 'basic',
     adding: {
       state: null,
       field: null
@@ -836,38 +837,12 @@ render() {
           )}
         </Col>
       </Row>
-      <Tab.Container id="left-tabs-example" defaultActiveKey="1">
+
         <Row className="detailPageContainerRow mainRow2">
-          <Col md={3} className="detailPageContainerCol specialCol1">
-            {this.state.sideCol === 'menu' && (
-              <Nav variant="pills" className="flex-column subMenu">
-                <Nav.Item>
-                  <Nav.Link eventKey="1" onClick={this.menuSelect.bind(this, 'basic')}>
-                  <Button variant="light">Basic</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="2" onClick={this.menuSelect.bind(this, 'admin')}>
-                  <Button variant="light">Admin</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="3" onClick={this.menuSelect.bind(this, 'consultant')}>
-                  <Button variant="light">Consultants</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="4" onClick={this.menuSelect.bind(this, 'note')}>
-                  <Button variant="light">Notes</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="5" onClick={this.menuSelect.bind(this, 'tag')}>
-                  <Button variant="light">Tag</Button>
-                  </Nav.Link>
-                </Nav.Item>
-              </Nav>
-            )}
+
+          {this.props.appointment && (
+            <Col md={12} className="detailPageContainerCol specialCol2">
+
             {this.state.sideCol === 'filter' && (
               <Col>
                 {this.state.menuSelect === 'consultant' && (
@@ -891,10 +866,7 @@ render() {
               </Col>
 
             )}
-          </Col>
 
-          {this.props.appointment && (
-            <Col md={9} className="detailPageContainerCol specialCol2">
               {this.state.updateSingleField.state === true && (
                 <UpdatePatientSingleFieldForm
                   field={this.state.updateSingleField.field}
@@ -902,173 +874,180 @@ render() {
                   onCancel={this.cancelUpdateSingleField}
                 />
               )}
-                <Tab.Content className="tabContent">
-                  <Tab.Pane eventKey="1">
-                    Appointment Basic:
-                    <ListGroup className="profileBasicListGroup">
-                      <ListGroup.Item>
-                        <p className="listGroupText">Title:</p>
-                        <p className="listGroupText bold">{this.props.appointment.title}</p>
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
-                      </ListGroup.Item>
-                      <ListGroup.Item>
-                        <p className="listGroupText">Type:</p>
-                        <p className="listGroupText bold">{this.props.appointment.type}</p>
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'type')}>Edit</Button>
-                        <p className="listGroupText">subType:</p>
-                        <p className="listGroupText bold">{this.props.appointment.subType}</p>
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'subType')}>Edit</Button>
-                      </ListGroup.Item>
-                      <ListGroup.Item>
-                        <p className="listGroupText">Date:</p>
-                        <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
-                        <p className="listGroupText">Time:</p>
-                        <p className="listGroupText bold">{this.props.appointment.time}</p>
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'time')}>Edit</Button>
-                      </ListGroup.Item>
-                      <ListGroup.Item>
-                        <p className="listGroupText">Location:</p>
-                        <p className="listGroupText bold">{this.props.appointment.location}</p>
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'location')}>Edit</Button>
-                      </ListGroup.Item>
-                      <ListGroup.Item>
-                        <p className="listGroupText">Description:</p>
-                        <p className="listGroupText bold">{this.props.appointment.description}</p>
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'description')}>Edit</Button>
-                      </ListGroup.Item>
-                      <ListGroup.Item>
-                        <p className="listGroupText">Important:</p>
-                        <p className="listGroupText bold">{this.props.appointment.important.toString()}</p>
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'important')}>Edit</Button>
-                        <p className="listGroupText">In Progress:</p>
-                        <p className="listGroupText bold">{this.props.appointment.inProgress.toString()}</p>
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'inProgress')}>Edit</Button>
-                        <p className="listGroupText">Attended:</p>
-                        <p className="listGroupText bold">{this.props.appointment.attended.toString()}</p>
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'attended')}>Edit</Button>
-                      </ListGroup.Item>
-                      <ListGroup.Item>
-                        <p className="listGroupText">Patient:</p>
-                      </ListGroup.Item>
-                      <ListGroup.Item>
-                        <p className="listGroupText">Name:</p>
-                        <p className="listGroupText bold">{this.props.appointment.patient.title}</p>
-                        <p className="listGroupText bold">{this.props.appointment.patient.name}</p>
-                        <Link
-                          to={{
-                            pathname: "/patients",
-                            state: {patient: this.props.appointment.patient._id}
-                          }}
-                        >
-                        <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
-                        </Link>
-                      </ListGroup.Item>
-                      <ListGroup.Item>
-                      <p className="listGroupText">Id:</p>
-                      <p className="listGroupText bold">{this.props.appointment.patient._id}</p>
-                      </ListGroup.Item>
-                      {this.props.appointment.visit && (
-                        <ListGroup.Item>
-                          <p className="listGroupText">Visit:</p>
-                          <p className="listGroupText bold">{this.props.appointment.visit._id}</p>
-                        </ListGroup.Item>
-                      )}
-                      <ListGroup.Item>
-                        <p className="listGroupText">Export:</p>
-                        <AddToCalendar event={this.state.calEvent} />
-                      </ListGroup.Item>
-                    </ListGroup>
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="2">
-                    Appointment Admin
-                    <ListGroup className="profileBasicListGroup">
-                      <ListGroup.Item>
-                        <p className="listGroupText">Id:</p>
-                        <p className="listGroupText bold">{this.props.appointment._id}</p>
-                      </ListGroup.Item>
-                      <ListGroup.Item>
-                        <p className="listGroupText">Creator:</p>
-                        <p className="listGroupText bold">{this.props.appointment.creator._id}</p>
-                      </ListGroup.Item>
-                    </ListGroup>
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="3">
-                    <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Appointment Consultant List:</p>
-                      <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                      <Button variant="success" onClick={this.startAdd.bind(this, 'consultant')}>Add</Button>
 
-                    </Row>
-                    {this.state.adding.state === true &&
-                      this.state.adding.field === 'consultant' &&
-                      this.state.users && (
-                        <AddUserForm
-                          onConfirm={this.submitAddUserForm}
-                          onCancel={this.cancelAdd}
-                          filter={this.state.filter}
-                          users={this.state.users}
-                        />
-                    )}
-                    <UserList
-                      filter={this.state.filter}
-                      authId={this.context.activityId}
-                      users={this.props.appointment.consultants}
-                      appointmentPage={true}
-                      canDelete={this.state.canDelete}
-                      onDelete={this.deleteConsultant}
-                    />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="4">
-                    <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Appointment Note List:</p>
-                      <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                      <Button variant="success" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
+              {this.props.subMenu === 'basic' && (
+                <Row className="tabRowDetails">
+                Appointment Basic:
+                <ListGroup className="profileBasicListGroup">
+                  <ListGroup.Item>
+                    <p className="listGroupText">Title:</p>
+                    <p className="listGroupText bold">{this.props.appointment.title}</p>
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Type:</p>
+                    <p className="listGroupText bold">{this.props.appointment.type}</p>
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'type')}>Edit</Button>
+                    <p className="listGroupText">subType:</p>
+                    <p className="listGroupText bold">{this.props.appointment.subType}</p>
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'subType')}>Edit</Button>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Date:</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText">Time:</p>
+                    <p className="listGroupText bold">{this.props.appointment.time}</p>
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'time')}>Edit</Button>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Location:</p>
+                    <p className="listGroupText bold">{this.props.appointment.location}</p>
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'location')}>Edit</Button>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Description:</p>
+                    <p className="listGroupText bold">{this.props.appointment.description}</p>
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'description')}>Edit</Button>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Important:</p>
+                    <p className="listGroupText bold">{this.props.appointment.important.toString()}</p>
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'important')}>Edit</Button>
+                    <p className="listGroupText">In Progress:</p>
+                    <p className="listGroupText bold">{this.props.appointment.inProgress.toString()}</p>
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'inProgress')}>Edit</Button>
+                    <p className="listGroupText">Attended:</p>
+                    <p className="listGroupText bold">{this.props.appointment.attended.toString()}</p>
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'attended')}>Edit</Button>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Patient:</p>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Name:</p>
+                    <p className="listGroupText bold">{this.props.appointment.patient.title}</p>
+                    <p className="listGroupText bold">{this.props.appointment.patient.name}</p>
+                    <Link
+                      to={{
+                        pathname: "/patients",
+                        state: {patient: this.props.appointment.patient._id}
+                      }}
+                    >
+                    <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+                    </Link>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                  <p className="listGroupText">Id:</p>
+                  <p className="listGroupText bold">{this.props.appointment.patient._id}</p>
+                  </ListGroup.Item>
+                  {this.props.appointment.visit && (
+                    <ListGroup.Item>
+                      <p className="listGroupText">Visit:</p>
+                      <p className="listGroupText bold">{this.props.appointment.visit._id}</p>
+                    </ListGroup.Item>
+                  )}
+                  <ListGroup.Item>
+                    <p className="listGroupText">Export:</p>
+                    <AddToCalendar event={this.state.calEvent} />
+                  </ListGroup.Item>
+                </ListGroup>
+                </Row>
+              )}
+              {this.props.subMenu === 'admin' && (
+                <Row className="tabRowDetails">
+                Appointment Admin
+                <ListGroup className="profileBasicListGroup">
+                  <ListGroup.Item>
+                    <p className="listGroupText">Id:</p>
+                    <p className="listGroupText bold">{this.props.appointment._id}</p>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Creator:</p>
+                    <p className="listGroupText bold">{this.props.appointment.creator._id}</p>
+                  </ListGroup.Item>
+                </ListGroup>
+                </Row>
+              )}
+              {this.props.subMenu === 'consultant' && (
+                <Row className="tabRowDetails">
+                <Row className="displayPaneHeadRow">
+                  <p className="displayPaneTitle">Appointment Consultant List:</p>
+                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'consultant')}>Add</Button>
 
-                    </Row>
-                    {this.state.adding.state === true &&
-                      this.state.adding.field === 'note' && (
-                        <AddNoteForm
-                          onConfirm={this.submitAddNoteForm}
-                          onCancel={this.cancelAdd}
-                        />
-                    )}
-                    <AppointmentNoteList
+                </Row>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'consultant' &&
+                  this.state.users && (
+                    <AddUserForm
+                      onConfirm={this.submitAddUserForm}
+                      onCancel={this.cancelAdd}
                       filter={this.state.filter}
-                      notes={this.props.appointment.notes}
-                      authId={this.context.activityId}
-                      canDelete={this.state.canDelete}
-                      onDelete={this.deleteNote}
+                      users={this.state.users}
                     />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="5">
-                    <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Appointment Tag List:</p>
-                      <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                      <Button variant="success" onClick={this.startAdd.bind(this, 'tag')}>Add</Button>
-                    </Row>
-                    {this.state.adding.state === true &&
-                      this.state.adding.field === 'tag' && (
-                        <AddTagForm
-                          onConfirm={this.submitAddTagForm}
-                          onCancel={this.cancelAdd}
-                        />
-                    )}
-                    <AppointmentTagList
-                      filter={this.state.filter}
-                      tags={this.props.appointment.tags}
-                      authId={this.context.activityId}
-                      canDelete={this.state.canDelete}
-                      onDelete={this.deleteTag}
-                    />
-                  </Tab.Pane>
+                )}
+                <UserList
+                  filter={this.state.filter}
+                  authId={this.context.activityId}
+                  users={this.props.appointment.consultants}
+                  appointmentPage={true}
+                  canDelete={this.state.canDelete}
+                  onDelete={this.deleteConsultant}
+                />
+                </Row>
+              )}
+              {this.props.subMenu === 'note' && (
+                <Row className="tabRowDetails">
+                <Row className="displayPaneHeadRow">
+                  <p className="displayPaneTitle">Appointment Note List:</p>
+                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
 
-                </Tab.Content>
+                </Row>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'note' && (
+                    <AddNoteForm
+                      onConfirm={this.submitAddNoteForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                <AppointmentNoteList
+                  filter={this.state.filter}
+                  notes={this.props.appointment.notes}
+                  authId={this.context.activityId}
+                  canDelete={this.state.canDelete}
+                  onDelete={this.deleteNote}
+                />
+                </Row>
+              )}
+              {this.props.subMenu === 'tag' && (
+                <Row className="tabRowDetails">
+                <Row className="displayPaneHeadRow">
+                  <p className="displayPaneTitle">Appointment Tag List:</p>
+                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'tag')}>Add</Button>
+                </Row>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'tag' && (
+                    <AddTagForm
+                      onConfirm={this.submitAddTagForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                <AppointmentTagList
+                  filter={this.state.filter}
+                  tags={this.props.appointment.tags}
+                  authId={this.context.activityId}
+                  canDelete={this.state.canDelete}
+                  onDelete={this.deleteTag}
+                />
+                </Row>
+              )}
 
             </Col>
           )}
 
         </Row>
-      </Tab.Container>
     </Container>
     </React.Fragment>
   );

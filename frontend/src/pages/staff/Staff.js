@@ -42,6 +42,7 @@ class StaffPage extends Component {
     seshStore: null,
     profileLoaded: false,
     sideCol: 'menuStaff',
+    startFilter: false,
     filter: {
       field: null,
       key: null,
@@ -344,20 +345,25 @@ toggleSideCol = () => {
   }
 
 }
+toggleFilter = () => {
+  this.setState({
+    startFilter: !this.state.startFilter
+  })
+}
 menuSelect = (args) => {
   this.setState({
     menuSelect: args,
     tabKey: args
   })
-  if (args === 'detail') {
-    this.setState({
-      subMenuState: true
-    })
-  } else {
-    this.setState({
-      subMenuState: false
-    })
-  }
+  // if (args === 'detail') {
+  //   this.setState({
+  //     subMenuState: true
+  //   })
+  // } else {
+  //   this.setState({
+  //     subMenuState: false
+  //   })
+  // }
 }
 subMenuSelect = (args) => {
   this.setState({
@@ -503,6 +509,7 @@ render() {
       subMenu={this.state.subMenu}
       subMenuSelect={this.subMenuSelect}
       page='staff'
+      role={this.context.role}
     />
 
     {this.state.overlay === true && (
@@ -514,11 +521,12 @@ render() {
     <Container className="staffPageContainer">
       <Row className="staffPageContainerRow headRow">
         <Col md={9} className="staffPageContainerCol">
-        <h1>Staff: {this.state.showDetails === true &&
-                      this.state.selectedUser &&
-                      this.state.tabKey === 'detail' && (
-                            this.state.selectedUser.name
-                          )}</h1>
+        <h1>Staff:
+        {this.state.showDetails === true &&
+          this.state.selectedUser &&
+          this.state.tabKey === 'detail' && (
+            this.state.selectedUser.name
+          )}</h1>
         </Col>
         <Col md={3} className="staffPageContainerCol">
           {this.state.isLoading ? (
@@ -536,11 +544,10 @@ render() {
           {this.state.users && (
             <Col md={12} className="staffPageContainerCol specialCol2">
 
-
-            {this.state.sideCol === 'filter' && (
+            {this.state.startFilter === true && (
               <Col>
                 <FilterUserForm
-                  onCancel={this.toggleSideCol}
+                  onCancel={this.toggleFilter}
                   onConfirm={this.submitFilterForm}
                 />
               </Col>
@@ -549,7 +556,7 @@ render() {
             {this.state.menuSelect === 'list' && (
               <Row className="tabRow">
               <Row className="displayPaneHeadRow">
-                <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
                 <Button variant="warning" onClick={this.resetFilter}>Reset Filter</Button>
               </Row>
               <UserList
@@ -573,7 +580,7 @@ render() {
                 </Row>
                 <Row>
                   {this.state.searchUsers && (
-                    <Button variant="primary" className="centered_btn" onClick={this.toggleSideCol}>Filter</Button>
+                    <Button variant="primary" className="centered_btn" onClick={this.toggleFilter}>Filter</Button>
                   )}
                 </Row>
                 <Row className="userSearchRow results">
@@ -591,7 +598,10 @@ render() {
             )}
             {this.state.menuSelect === 'detail' && (
               <Row className="tabRow">
-
+              {this.state.showDetails === false &&
+                !this.state.selectedUser &&(
+                <h3>Select a Staff Member to see details</h3>
+              )}
               {this.state.showDetails === true &&
                 this.state.selectedUser && (
                   <UserDetail

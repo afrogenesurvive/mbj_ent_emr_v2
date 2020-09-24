@@ -106,6 +106,7 @@ class VisitDetail extends Component {
       value: null
     },
     menuSelected: null,
+    menuSelect: 'basic',
     adding: {
       state: null,
       field: null
@@ -4846,8 +4847,6 @@ deleteAttachment = (args) => {
 
 }
 
-
-
 submitUpdateSingleFieldForm = (event) => {
   event.preventDefault();
   console.log('...updating single field...');
@@ -5087,88 +5086,12 @@ render() {
           )}
         </Col>
       </Row>
-      <Tab.Container id="left-tabs-example" defaultActiveKey="1">
+
         <Row className="detailPageContainerRow mainRow2">
-          <Col md={3} className="detailPageContainerCol specialCol1">
-            {this.state.sideCol === 'menu' && (
-              <Nav variant="pills" className="flex-column subMenu">
-                <Nav.Item>
-                  <Nav.Link eventKey="1" onClick={this.menuSelect.bind(this, 'basic')}>
-                  <Button variant="light">Basic</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="2" onClick={this.menuSelect.bind(this, 'admin')}>
-                  <Button variant="light">Admin</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="3" onClick={this.menuSelect.bind(this, 'consultant')}>
-                  <Button variant="light">Consultants</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="4" onClick={this.menuSelect.bind(this, 'complaint')}>
-                  <Button variant="light">Complaints</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="5" onClick={this.menuSelect.bind(this, 'survey')}>
-                  <Button variant="light">Surveys</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="6" onClick={this.menuSelect.bind(this, 'systematicInquiry')}>
-                  <Button variant="light">Systematic Inquiry</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="7" onClick={this.menuSelect.bind(this, 'vitals')}>
-                  <Button variant="light">Vitals</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="8" onClick={this.menuSelect.bind(this, 'examination')}>
-                  <Button variant="light">Examination</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="9" onClick={this.menuSelect.bind(this, 'investigation')}>
-                  <Button variant="light">Investigation</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="10" onClick={this.menuSelect.bind(this, 'diagnosis')}>
-                  <Button variant="light">Diagnosis</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="11" onClick={this.menuSelect.bind(this, 'treatment')}>
-                  <Button variant="light">Treatment</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="12" onClick={this.menuSelect.bind(this, 'billing')}>
-                  <Button variant="light">Billing</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="13" onClick={this.menuSelect.bind(this, 'vigilance')}>
-                  <Button variant="light">Vigilance</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="14" onClick={this.menuSelect.bind(this, 'image')}>
-                  <Button variant="light">Images</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="15" onClick={this.menuSelect.bind(this, 'file')}>
-                  <Button variant="light">Files</Button>
-                  </Nav.Link>
-                </Nav.Item>
-              </Nav>
-            )}
+
+          {this.props.visit && (
+            <Col md={12} className="detailPageContainerCol specialCol2">
+
             {this.state.sideCol === 'filter' && (
               <Col>
                 {this.state.menuSelect === 'consultant' && (
@@ -5248,10 +5171,7 @@ render() {
                 )}
               </Col>
             )}
-          </Col>
 
-          {this.props.visit && (
-            <Col md={9} className="detailPageContainerCol specialCol2">
               {this.state.updateSingleField.state === true && (
                 <UpdatePatientSingleFieldForm
                   field={this.state.updateSingleField.field}
@@ -5259,463 +5179,490 @@ render() {
                   onCancel={this.cancelUpdateSingleField}
                 />
               )}
-                <Tab.Content className="tabContent">
-                  <Tab.Pane eventKey="1">
-                    Visit Basic:
-                    <ListGroup className="profileBasicListGroup">
-                      <ListGroup.Item>
-                        <p className="listGroupText">Title:</p>
-                        <p className="listGroupText bold">{this.props.visit.title}</p>
-                        {this.context.role !== 'Staff' && (
-                          <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
-                        )}
-                      </ListGroup.Item>
-                      <ListGroup.Item>
-                        <p className="listGroupText">Type:</p>
-                        <p className="listGroupText bold">{this.props.visit.type}</p>
-                        {this.context.role !== 'Staff' && (
-                          <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'type')}>Edit</Button>
-                        )}
-                        <p className="listGroupText">subType:</p>
-                        <p className="listGroupText bold">{this.props.visit.subType}</p>
-                        {this.context.role !== 'Staff' && (
-                          <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'subType')}>Edit</Button>
-                        )}
-                      </ListGroup.Item>
-                      <ListGroup.Item>
-                        <p className="listGroupText">Date:</p>
-                        <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
-                        <p className="listGroupText">Time:</p>
-                        <p className="listGroupText bold">{this.props.visit.time}</p>
-                        {this.context.role !== 'Staff' && (
-                          <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'time')}>Edit</Button>
-                        )}
-                      </ListGroup.Item>
-                      <ListGroup.Item>
-                        <p className="listGroupText">Patient:</p>
-                      </ListGroup.Item>
-                      <ListGroup.Item>
-                        <p className="listGroupText">Name:</p>
-                        <p className="listGroupText bold">{this.props.visit.patient.title}</p>
-                        <p className="listGroupText bold">{this.props.visit.patient.name}</p>
-                        <Link
-                          to={{
-                            pathname: "/patients",
-                            state: {patient: this.props.visit.patient._id}
-                          }}
-                        >
-                        <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
-                        </Link>
-                      </ListGroup.Item>
-                      <ListGroup.Item>
-                      <p className="listGroupText">Attending Physician:</p>
-                      <p className="listGroupText bold">{this.props.visit.patient.attendingPhysician}</p>
-                      </ListGroup.Item>
-                      <ListGroup.Item>
-                        <p className="listGroupText">Appointment:</p>
-                      </ListGroup.Item>
-                      <ListGroup.Item>
-                        <p className="listGroupText">Title:</p>
-                        <p className="listGroupText bold">{this.props.visit.appointment.title}</p>
-                        <p className="listGroupText">Date:</p>
-                        <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
-                        <Link
-                          to={{
-                            pathname: "/appointments",
-                            state: {appointment: this.props.visit.appointment._id}
-                          }}
-                        >
-                        <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
-                        </Link>
-                      </ListGroup.Item>
-                    </ListGroup>
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="2">
-                    Visit Admin
-                    <ListGroup className="profileBasicListGroup">
-                      <ListGroup.Item>
-                        <p className="listGroupText">Id:</p>
-                        <p className="listGroupText bold">{this.props.visit._id}</p>
-                      </ListGroup.Item>
-                    </ListGroup>
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="3">
-                    <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Visit Consultant List:</p>
-                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role !== 'Staff' && (
-                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'consultant')}>Add</Button>
-                      )}
-                    </Row>
-                    {this.state.adding.state === true &&
-                      this.state.adding.field === 'consultant' &&
-                      this.state.users && (
-                        <AddUserForm
-                          onConfirm={this.submitAddUserForm}
-                          onCancel={this.cancelAdd}
-                          filter={this.state.filter}
-                          users={this.state.users}
-                        />
-                    )}
-                    <UserList
-                      filter={this.state.filter}
-                      authId={this.context.activityId}
-                      users={this.props.visit.consultants}
-                      visitPage={true}
-                      canDelete={this.state.canDelete}
-                      onDelete={this.deleteConsultant}
-                    />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="4">
-                    <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Visit Complaint List:</p>
-                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role !== 'Staff' && (
-                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'complaint')}>Add</Button>
-                      )}
-                    </Row>
-                    {this.state.adding.state === true &&
-                      this.state.adding.field === 'complaint' && (
-                        <AddComplaintForm
-                          onConfirm={this.submitAddComplaintForm}
-                          onCancel={this.cancelAdd}
-                        />
-                    )}
-                    {this.state.addAttachmentForm === true && (
-                      <AddAttachmentForm
-                        onCancel={this.cancelAddAttachment}
-                        onConfirm={this.addAttachment}
-                      />
-                    )}
-                    <VisitComplaintList
-                      filter={this.state.filter}
-                      complaints={this.props.visit.complaints}
-                      authId={this.context.activityId}
-                      canDelete={this.state.canDelete}
-                      onDelete={this.deleteComplaint}
-                      onAddAttachment={this.startAddAttachment}
-                      deleteAttachment={this.deleteAttachment}
-                    />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="5">
-                    <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Visit Survey List:</p>
-                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role !== 'Staff' && (
-                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'survey')}>Add</Button>
-                      )}
-                    </Row>
-                    {this.state.adding.state === true &&
-                      this.state.adding.field === 'survey' && (
-                        <AddSurveyForm
-                          onConfirm={this.submitAddSurveyForm}
-                          onCancel={this.cancelAdd}
-                        />
-                    )}
-                    {this.state.addAttachmentForm === true && (
-                      <AddAttachmentForm
-                        onCancel={this.cancelAddAttachment}
-                        onConfirm={this.addAttachment}
-                      />
-                    )}
-                    <VisitSurveyList
-                      filter={this.state.filter}
-                      surveys={this.props.visit.surveys}
-                      authId={this.context.activityId}
-                      canDelete={this.state.canDelete}
-                      onDelete={this.deleteSurvey}
-                      onAddAttachment={this.startAddAttachment}
-                      deleteAttachment={this.deleteAttachment}
-                    />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="6">
-                    <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Visit SystematicInquiry List:</p>
-                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role !== 'Staff' && (
-                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'systematicInquiry')}>Add</Button>
-                      )}
-                    </Row>
-                    {this.state.adding.state === true &&
-                      this.state.adding.field === 'systematicInquiry' && (
-                        <AddSystematicInquiryForm
-                          onConfirm={this.submitAddSystematicInquiryForm}
-                          onCancel={this.cancelAdd}
-                        />
-                    )}
-                    {this.state.addAttachmentForm === true && (
-                      <AddAttachmentForm
-                        onCancel={this.cancelAddAttachment}
-                        onConfirm={this.addAttachment}
-                      />
-                    )}
-                    <VisitSystematicInquiryList
-                      filter={this.state.filter}
-                      systematicInquiry={this.props.visit.systematicInquiry}
-                      authId={this.context.activityId}
-                      canDelete={this.state.canDelete}
-                      onDelete={this.deleteSystematicInquiry}
-                      onAddAttachment={this.startAddAttachment}
-                      deleteAttachment={this.deleteAttachment}
-                    />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="7">
-                    <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Visit Vitals List:</p>
-                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role !== 'Staff' && (
-                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'vitals')}>Add</Button>
-                      )}
-                    </Row>
-                    {this.state.adding.state === true &&
-                      this.state.adding.field === 'vitals' && (
-                        <AddVitalsForm
-                          onConfirm={this.submitAddVitalsForm}
-                          onCancel={this.cancelAdd}
-                        />
-                    )}
-                    <VisitVitalsList
-                      filter={this.state.filter}
-                      vitals={this.props.visit.vitals}
-                      authId={this.context.activityId}
-                      canDelete={this.state.canDelete}
-                      onDelete={this.deleteVitals}
-                    />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="8">
-                    <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Visit Examination List:</p>
-                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role !== 'Staff' && (
-                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'examination')}>Add</Button>
-                      )}
-                    </Row>
-                    {this.state.adding.state === true &&
-                      this.state.adding.field === 'examination' && (
-                        <AddExaminationForm
-                          onConfirm={this.submitAddExaminationForm}
-                          onCancel={this.cancelAdd}
-                        />
-                    )}
-                    {this.state.addAttachmentForm === true && (
-                      <AddAttachmentForm
-                        onCancel={this.cancelAddAttachment}
-                        onConfirm={this.addAttachment}
-                      />
-                    )}
-                    <VisitExaminationList
-                      filter={this.state.filter}
-                      examination={this.props.visit.examination}
-                      authId={this.context.activityId}
-                      canDelete={this.state.canDelete}
-                      onDelete={this.deleteExamination}
-                      onAddAttachment={this.startAddAttachment}
-                      deleteAttachment={this.deleteAttachment}
-                    />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="9">
-                    <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Visit Investigation List:</p>
-                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role !== 'Staff' && (
-                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'investigation')}>Add</Button>
-                      )}
-                    </Row>
-                    {this.state.adding.state === true &&
-                      this.state.adding.field === 'investigation' && (
-                        <AddInvestigationForm
-                          onConfirm={this.submitAddInvestigationForm}
-                          onCancel={this.cancelAdd}
-                        />
-                    )}
-                    {this.state.addAttachmentForm === true && (
-                      <AddAttachmentForm
-                        onCancel={this.cancelAddAttachment}
-                        onConfirm={this.addAttachment}
-                      />
-                    )}
-                    <VisitInvestigationList
-                      filter={this.state.filter}
-                      investigation={this.props.visit.investigation}
-                      authId={this.context.activityId}
-                      canDelete={this.state.canDelete}
-                      onDelete={this.deleteInvestigation}
-                      onAddAttachment={this.startAddAttachment}
-                      deleteAttachment={this.deleteAttachment}
-                    />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="10">
-                    <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Visit Diagnosis List:</p>
-                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role !== 'Staff' && (
-                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'diagnosis')}>Add</Button>
-                      )}
-                    </Row>
-                    {this.state.adding.state === true &&
-                      this.state.adding.field === 'diagnosis' && (
-                        <AddDiagnosisForm
-                          onConfirm={this.submitAddDiagnosisForm}
-                          onCancel={this.cancelAdd}
-                        />
-                    )}
-                    {this.state.addAttachmentForm === true && (
-                      <AddAttachmentForm
-                        onCancel={this.cancelAddAttachment}
-                        onConfirm={this.addAttachment}
-                      />
-                    )}
-                    <VisitDiagnosisList
-                      filter={this.state.filter}
-                      diagnosis={this.props.visit.diagnosis}
-                      authId={this.context.activityId}
-                      canDelete={this.state.canDelete}
-                      onDelete={this.deleteDiagnosis}
-                      onAddAttachment={this.startAddAttachment}
-                      deleteAttachment={this.deleteAttachment}
-                    />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="11">
-                    <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Visit Treatment List:</p>
-                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role !== 'Staff' && (
-                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'treatment')}>Add</Button>
-                      )}
-                    </Row>
-                    {this.state.adding.state === true &&
-                      this.state.adding.field === 'treatment' && (
-                        <AddTreatmentForm
-                          onConfirm={this.submitAddTreatmentForm}
-                          onCancel={this.cancelAdd}
-                        />
-                    )}
-                    {this.state.addAttachmentForm === true && (
-                      <AddAttachmentForm
-                        onCancel={this.cancelAddAttachment}
-                        onConfirm={this.addAttachment}
-                      />
-                    )}
-                    <VisitTreatmentList
-                      filter={this.state.filter}
-                      treatment={this.props.visit.treatment}
-                      authId={this.context.activityId}
-                      canDelete={this.state.canDelete}
-                      onDelete={this.deleteTreatment}
-                      onAddAttachment={this.startAddAttachment}
-                      deleteAttachment={this.deleteAttachment}
-                    />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="12">
-                    <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Visit Billing List:</p>
-                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
 
-                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'billing')}>Add</Button>
-                        <Button variant="outline-primary" size="sm" onClick={this.completeVisit}>Complete Visit</Button>
+              {this.props.subMenu === 'basic' && (
+                <Row className="tabRowDetails">
+                Visit Basic:
+                <ListGroup className="profileBasicListGroup">
+                  <ListGroup.Item>
+                    <p className="listGroupText">Title:</p>
+                    <p className="listGroupText bold">{this.props.visit.title}</p>
+                    {this.context.role !== 'Staff' && (
+                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
+                    )}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Type:</p>
+                    <p className="listGroupText bold">{this.props.visit.type}</p>
+                    {this.context.role !== 'Staff' && (
+                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'type')}>Edit</Button>
+                    )}
+                    <p className="listGroupText">subType:</p>
+                    <p className="listGroupText bold">{this.props.visit.subType}</p>
+                    {this.context.role !== 'Staff' && (
+                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'subType')}>Edit</Button>
+                    )}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Date:</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText">Time:</p>
+                    <p className="listGroupText bold">{this.props.visit.time}</p>
+                    {this.context.role !== 'Staff' && (
+                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'time')}>Edit</Button>
+                    )}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Patient:</p>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Name:</p>
+                    <p className="listGroupText bold">{this.props.visit.patient.title}</p>
+                    <p className="listGroupText bold">{this.props.visit.patient.name}</p>
+                    <Link
+                      to={{
+                        pathname: "/patients",
+                        state: {patient: this.props.visit.patient._id}
+                      }}
+                    >
+                    <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+                    </Link>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                  <p className="listGroupText">Attending Physician:</p>
+                  <p className="listGroupText bold">{this.props.visit.patient.attendingPhysician}</p>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Appointment:</p>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Title:</p>
+                    <p className="listGroupText bold">{this.props.visit.appointment.title}</p>
+                    <p className="listGroupText">Date:</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                    <Link
+                      to={{
+                        pathname: "/appointments",
+                        state: {appointment: this.props.visit.appointment._id}
+                      }}
+                    >
+                    <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+                    </Link>
+                  </ListGroup.Item>
+                </ListGroup>
+                </Row>
+              )}
+              {this.props.subMenu === 'admin' && (
+                <Row className="tabRowDetails">
+                Visit Admin
+                <ListGroup className="profileBasicListGroup">
+                  <ListGroup.Item>
+                    <p className="listGroupText">Id:</p>
+                    <p className="listGroupText bold">{this.props.visit._id}</p>
+                  </ListGroup.Item>
+                </ListGroup>
+                </Row>
+              )}
+              {this.props.subMenu === 'consultant' && (
+                <Row className="tabRowDetails">
+                <Row className="displayPaneHeadRow">
+                  <p className="displayPaneTitle">Visit Consultant List:</p>
+                  <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                  {this.context.role !== 'Staff' && (
+                    <Button variant="outline-success" onClick={this.startAdd.bind(this, 'consultant')}>Add</Button>
+                  )}
+                </Row>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'consultant' &&
+                  this.state.users && (
+                    <AddUserForm
+                      onConfirm={this.submitAddUserForm}
+                      onCancel={this.cancelAdd}
+                      filter={this.state.filter}
+                      users={this.state.users}
+                    />
+                )}
+                <UserList
+                  filter={this.state.filter}
+                  authId={this.context.activityId}
+                  users={this.props.visit.consultants}
+                  visitPage={true}
+                  canDelete={this.state.canDelete}
+                  onDelete={this.deleteConsultant}
+                />
+                </Row>
+              )}
+              {this.props.subMenu === 'complaint' && (
+                <Row className="tabRowDetails">
+                <Row className="displayPaneHeadRow">
+                  <p className="displayPaneTitle">Visit Complaint List:</p>
+                  <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                  {this.context.role !== 'Staff' && (
+                    <Button variant="outline-success" onClick={this.startAdd.bind(this, 'complaint')}>Add</Button>
+                  )}
+                </Row>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'complaint' && (
+                    <AddComplaintForm
+                      onConfirm={this.submitAddComplaintForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                {this.state.addAttachmentForm === true && (
+                  <AddAttachmentForm
+                    onCancel={this.cancelAddAttachment}
+                    onConfirm={this.addAttachment}
+                  />
+                )}
+                <VisitComplaintList
+                  filter={this.state.filter}
+                  complaints={this.props.visit.complaints}
+                  authId={this.context.activityId}
+                  canDelete={this.state.canDelete}
+                  onDelete={this.deleteComplaint}
+                  onAddAttachment={this.startAddAttachment}
+                  deleteAttachment={this.deleteAttachment}
+                />
+                </Row>
+              )}
+              {this.props.subMenu === 'survey' && (
+                <Row className="tabRowDetails">
+                <Row className="displayPaneHeadRow">
+                  <p className="displayPaneTitle">Visit Survey List:</p>
+                  <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                  {this.context.role !== 'Staff' && (
+                    <Button variant="outline-success" onClick={this.startAdd.bind(this, 'survey')}>Add</Button>
+                  )}
+                </Row>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'survey' && (
+                    <AddSurveyForm
+                      onConfirm={this.submitAddSurveyForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                {this.state.addAttachmentForm === true && (
+                  <AddAttachmentForm
+                    onCancel={this.cancelAddAttachment}
+                    onConfirm={this.addAttachment}
+                  />
+                )}
+                <VisitSurveyList
+                  filter={this.state.filter}
+                  surveys={this.props.visit.surveys}
+                  authId={this.context.activityId}
+                  canDelete={this.state.canDelete}
+                  onDelete={this.deleteSurvey}
+                  onAddAttachment={this.startAddAttachment}
+                  deleteAttachment={this.deleteAttachment}
+                />
+                </Row>
+              )}
+              {this.props.subMenu === 'systematicInquiry' && (
+                <Row className="tabRowDetails">
+                <Row className="displayPaneHeadRow">
+                  <p className="displayPaneTitle">Visit SystematicInquiry List:</p>
+                  <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                  {this.context.role !== 'Staff' && (
+                    <Button variant="outline-success" onClick={this.startAdd.bind(this, 'systematicInquiry')}>Add</Button>
+                  )}
+                </Row>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'systematicInquiry' && (
+                    <AddSystematicInquiryForm
+                      onConfirm={this.submitAddSystematicInquiryForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                {this.state.addAttachmentForm === true && (
+                  <AddAttachmentForm
+                    onCancel={this.cancelAddAttachment}
+                    onConfirm={this.addAttachment}
+                  />
+                )}
+                <VisitSystematicInquiryList
+                  filter={this.state.filter}
+                  systematicInquiry={this.props.visit.systematicInquiry}
+                  authId={this.context.activityId}
+                  canDelete={this.state.canDelete}
+                  onDelete={this.deleteSystematicInquiry}
+                  onAddAttachment={this.startAddAttachment}
+                  deleteAttachment={this.deleteAttachment}
+                />
+                </Row>
+              )}
+              {this.props.subMenu === 'vitals' && (
+                <Row className="tabRowDetails">
+                <Row className="displayPaneHeadRow">
+                  <p className="displayPaneTitle">Visit Vitals List:</p>
+                  <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                  {this.context.role !== 'Staff' && (
+                    <Button variant="outline-success" onClick={this.startAdd.bind(this, 'vitals')}>Add</Button>
+                  )}
+                </Row>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'vitals' && (
+                    <AddVitalsForm
+                      onConfirm={this.submitAddVitalsForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                <VisitVitalsList
+                  filter={this.state.filter}
+                  vitals={this.props.visit.vitals}
+                  authId={this.context.activityId}
+                  canDelete={this.state.canDelete}
+                  onDelete={this.deleteVitals}
+                />
+                </Row>
+              )}
+              {this.props.subMenu === 'examination' && (
+                <Row className="tabRowDetails">
+                <Row className="displayPaneHeadRow">
+                  <p className="displayPaneTitle">Visit Examination List:</p>
+                  <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                  {this.context.role !== 'Staff' && (
+                    <Button variant="outline-success" onClick={this.startAdd.bind(this, 'examination')}>Add</Button>
+                  )}
+                </Row>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'examination' && (
+                    <AddExaminationForm
+                      onConfirm={this.submitAddExaminationForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                {this.state.addAttachmentForm === true && (
+                  <AddAttachmentForm
+                    onCancel={this.cancelAddAttachment}
+                    onConfirm={this.addAttachment}
+                  />
+                )}
+                <VisitExaminationList
+                  filter={this.state.filter}
+                  examination={this.props.visit.examination}
+                  authId={this.context.activityId}
+                  canDelete={this.state.canDelete}
+                  onDelete={this.deleteExamination}
+                  onAddAttachment={this.startAddAttachment}
+                  deleteAttachment={this.deleteAttachment}
+                />
+                </Row>
+              )}
+              {this.props.subMenu === 'investigation' && (
+                <Row className="tabRowDetails">
+                <Row className="displayPaneHeadRow">
+                  <p className="displayPaneTitle">Visit Investigation List:</p>
+                  <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                  {this.context.role !== 'Staff' && (
+                    <Button variant="outline-success" onClick={this.startAdd.bind(this, 'investigation')}>Add</Button>
+                  )}
+                </Row>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'investigation' && (
+                    <AddInvestigationForm
+                      onConfirm={this.submitAddInvestigationForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                {this.state.addAttachmentForm === true && (
+                  <AddAttachmentForm
+                    onCancel={this.cancelAddAttachment}
+                    onConfirm={this.addAttachment}
+                  />
+                )}
+                <VisitInvestigationList
+                  filter={this.state.filter}
+                  investigation={this.props.visit.investigation}
+                  authId={this.context.activityId}
+                  canDelete={this.state.canDelete}
+                  onDelete={this.deleteInvestigation}
+                  onAddAttachment={this.startAddAttachment}
+                  deleteAttachment={this.deleteAttachment}
+                />
+                </Row>
+              )}
+              {this.props.subMenu === 'diagnosis' && (
+                <Row className="tabRowDetails">
+                <Row className="displayPaneHeadRow">
+                  <p className="displayPaneTitle">Visit Diagnosis List:</p>
+                  <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                  {this.context.role !== 'Staff' && (
+                    <Button variant="outline-success" onClick={this.startAdd.bind(this, 'diagnosis')}>Add</Button>
+                  )}
+                </Row>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'diagnosis' && (
+                    <AddDiagnosisForm
+                      onConfirm={this.submitAddDiagnosisForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                {this.state.addAttachmentForm === true && (
+                  <AddAttachmentForm
+                    onCancel={this.cancelAddAttachment}
+                    onConfirm={this.addAttachment}
+                  />
+                )}
+                <VisitDiagnosisList
+                  filter={this.state.filter}
+                  diagnosis={this.props.visit.diagnosis}
+                  authId={this.context.activityId}
+                  canDelete={this.state.canDelete}
+                  onDelete={this.deleteDiagnosis}
+                  onAddAttachment={this.startAddAttachment}
+                  deleteAttachment={this.deleteAttachment}
+                />
+                </Row>
+              )}
+              {this.props.subMenu === 'treatment' && (
+                <Row className="tabRowDetails">
+                <Row className="displayPaneHeadRow">
+                  <p className="displayPaneTitle">Visit Treatment List:</p>
+                  <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                  {this.context.role !== 'Staff' && (
+                    <Button variant="outline-success" onClick={this.startAdd.bind(this, 'treatment')}>Add</Button>
+                  )}
+                </Row>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'treatment' && (
+                    <AddTreatmentForm
+                      onConfirm={this.submitAddTreatmentForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                {this.state.addAttachmentForm === true && (
+                  <AddAttachmentForm
+                    onCancel={this.cancelAddAttachment}
+                    onConfirm={this.addAttachment}
+                  />
+                )}
+                <VisitTreatmentList
+                  filter={this.state.filter}
+                  treatment={this.props.visit.treatment}
+                  authId={this.context.activityId}
+                  canDelete={this.state.canDelete}
+                  onDelete={this.deleteTreatment}
+                  onAddAttachment={this.startAddAttachment}
+                  deleteAttachment={this.deleteAttachment}
+                />
+                </Row>
+              )}
+              {this.props.subMenu === 'billing' && (
+                <Row className="tabRowDetails">
+                <Row className="displayPaneHeadRow">
+                  <p className="displayPaneTitle">Visit Billing List:</p>
+                  <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
 
-                    </Row>
-                    {this.state.adding.state === true &&
-                      this.state.adding.field === 'billing' && (
-                        <AddBillingForm
-                          onConfirm={this.submitAddBillingForm}
-                          onCancel={this.cancelAdd}
-                        />
-                    )}
-                    {this.state.addAttachmentForm === true && (
-                      <AddAttachmentForm
-                        onCancel={this.cancelAddAttachment}
-                        onConfirm={this.addAttachment}
-                      />
-                    )}
-                    <VisitBillingList
-                      filter={this.state.filter}
-                      billing={this.props.visit.billing}
-                      authId={this.context.activityId}
-                      canDelete={this.state.canDelete}
-                      onDelete={this.deleteBilling}
-                      onAddAttachment={this.startAddAttachment}
-                      deleteAttachment={this.deleteAttachment}
-                      updateBillingPaid={this.updateBillingPaid}
-                    />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="13">
-                    <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Visit Vigilance List:</p>
-                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role !== 'Staff' && (
-                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'vigilance')}>Add</Button>
-                      )}
-                    </Row>
-                    {this.state.adding.state === true &&
-                      this.state.adding.field === 'vigilance' && (
-                        <AddVigilanceForm
-                          onConfirm={this.submitAddVigilanceForm}
-                          onCancel={this.cancelAdd}
-                        />
-                    )}
-                    <VisitVigilanceList
-                      filter={this.state.filter}
-                      vigilance={this.props.visit.vigilance}
-                      authId={this.context.activityId}
-                      canDelete={this.state.canDelete}
-                      onDelete={this.deleteVigilance}
-                    />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="14">
-                    <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Visit Image List:</p>
-                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role !== 'Staff' && (
-                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
-                      )}
-                    </Row>
-                    {this.state.adding.state === true &&
-                      this.state.adding.field === 'image' && (
-                        <AddImageForm
-                          onConfirm={this.submitAddImageForm}
-                          onCancel={this.cancelAdd}
-                        />
-                    )}
-                    <VisitImageList
-                      filter={this.state.filter}
-                      images={this.props.visit.images}
-                      authId={this.context.activityId}
-                      canDelete={this.state.canDelete}
-                      onDelete={this.deleteImage}
-                    />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="15">
-                    <Row className="displayPaneHeadRow">
-                      <p className="displayPaneTitle">Visit File List:</p>
-                      <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-                      {this.context.role !== 'Staff' && (
-                        <Button variant="outline-success" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
-                      )}
-                    </Row>
-                    {this.state.adding.state === true &&
-                      this.state.adding.field === 'file' && (
-                        <AddFileForm
-                          onConfirm={this.submitAddFileForm}
-                          onCancel={this.cancelAdd}
-                        />
-                    )}
-                    <VisitFileList
-                      filter={this.state.filter}
-                      files={this.props.visit.files}
-                      authId={this.context.activityId}
-                      canDelete={this.state.canDelete}
-                      onDelete={this.deleteFile}
-                    />
-                  </Tab.Pane>
+                    <Button variant="outline-success" onClick={this.startAdd.bind(this, 'billing')}>Add</Button>
+                    <Button variant="outline-primary" size="sm" onClick={this.completeVisit}>Complete Visit</Button>
 
-                </Tab.Content>
+                </Row>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'billing' && (
+                    <AddBillingForm
+                      onConfirm={this.submitAddBillingForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                {this.state.addAttachmentForm === true && (
+                  <AddAttachmentForm
+                    onCancel={this.cancelAddAttachment}
+                    onConfirm={this.addAttachment}
+                  />
+                )}
+                <VisitBillingList
+                  filter={this.state.filter}
+                  billing={this.props.visit.billing}
+                  authId={this.context.activityId}
+                  canDelete={this.state.canDelete}
+                  onDelete={this.deleteBilling}
+                  onAddAttachment={this.startAddAttachment}
+                  deleteAttachment={this.deleteAttachment}
+                  updateBillingPaid={this.updateBillingPaid}
+                />
+                </Row>
+              )}
+              {this.props.subMenu === 'vigilance' && (
+                <Row className="tabRowDetails">
+                <Row className="displayPaneHeadRow">
+                  <p className="displayPaneTitle">Visit Vigilance List:</p>
+                  <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                  {this.context.role !== 'Staff' && (
+                    <Button variant="outline-success" onClick={this.startAdd.bind(this, 'vigilance')}>Add</Button>
+                  )}
+                </Row>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'vigilance' && (
+                    <AddVigilanceForm
+                      onConfirm={this.submitAddVigilanceForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                <VisitVigilanceList
+                  filter={this.state.filter}
+                  vigilance={this.props.visit.vigilance}
+                  authId={this.context.activityId}
+                  canDelete={this.state.canDelete}
+                  onDelete={this.deleteVigilance}
+                />
+                </Row>
+              )}
+              {this.props.subMenu === 'image' && (
+                <Row className="tabRowDetails">
+                <Row className="displayPaneHeadRow">
+                  <p className="displayPaneTitle">Visit Image List:</p>
+                  <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                  {this.context.role !== 'Staff' && (
+                    <Button variant="outline-success" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
+                  )}
+                </Row>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'image' && (
+                    <AddImageForm
+                      onConfirm={this.submitAddImageForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                <VisitImageList
+                  filter={this.state.filter}
+                  images={this.props.visit.images}
+                  authId={this.context.activityId}
+                  canDelete={this.state.canDelete}
+                  onDelete={this.deleteImage}
+                />
+                </Row>
+              )}
+              {this.props.subMenu === 'file' && (
+                <Row className="tabRowDetails">
+                <Row className="displayPaneHeadRow">
+                  <p className="displayPaneTitle">Visit File List:</p>
+                  <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                  {this.context.role !== 'Staff' && (
+                    <Button variant="outline-success" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
+                  )}
+                </Row>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'file' && (
+                    <AddFileForm
+                      onConfirm={this.submitAddFileForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                <VisitFileList
+                  filter={this.state.filter}
+                  files={this.props.visit.files}
+                  authId={this.context.activityId}
+                  canDelete={this.state.canDelete}
+                  onDelete={this.deleteFile}
+                />
+                </Row>
+              )}
 
             </Col>
           )}
 
         </Row>
-      </Tab.Container>
     </Container>
     </React.Fragment>
   );

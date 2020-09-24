@@ -45,6 +45,7 @@ class PatientPage extends Component {
     profileLoaded: false,
     canDelete: false,
     sideCol: 'menuPatient',
+    startFilter: false,
     filter: {
       field: null,
       key: null,
@@ -521,20 +522,25 @@ toggleSideCol = () => {
   }
 
 }
+toggleFilter = () => {
+  this.setState({
+    startFilter: !this.state.startFilter
+  })
+}
 menuSelect = (args) => {
   this.setState({
     menuSelect: args,
     tabKey: args
   })
-  if (args === 'detail') {
-    this.setState({
-      subMenuState: true
-    })
-  } else {
-    this.setState({
-      subMenuState: false
-    })
-  }
+  // if (args === 'detail') {
+  //   this.setState({
+  //     subMenuState: true
+  //   })
+  // } else {
+  //   this.setState({
+  //     subMenuState: false
+  //   })
+  // }
 }
 subMenuSelect = (args) => {
   this.setState({
@@ -681,6 +687,7 @@ render() {
       subMenu={this.state.subMenu}
       subMenuSelect={this.subMenuSelect}
       page='patient'
+      role={this.context.role}
     />
 
     {this.state.overlay === true && (
@@ -692,11 +699,12 @@ render() {
     <Container className="staffPageContainer">
       <Row className="staffPageContainerRow headRow">
         <Col md={9} className="staffPageContainerCol">
-        <h1>Patients: {this.state.showDetails === true &&
-                      this.state.selectedPatient &&
-                      this.state.tabKey === 'detail' && (
-                            this.state.selectedPatient.name
-                          )}</h1>
+        <h1>Patients:
+        {this.state.showDetails === true &&
+          this.state.selectedPatient &&
+          this.state.tabKey === 'detail' && (
+              this.state.selectedPatient.name
+          )}</h1>
         </Col>
         <Col md={3} className="staffPageContainerCol">
           {this.state.isLoading ? (
@@ -712,10 +720,10 @@ render() {
           {this.state.patients && (
             <Col lg={12} className="staffPageContainerCol specialCol2">
 
-            {this.state.sideCol === 'filter' && (
+            {this.state.startFilter === true && (
               <Col>
                 <FilterPatientForm
-                  onCancel={this.toggleSideCol}
+                  onCancel={this.toggleFilter}
                   onConfirm={this.submitFilterForm}
                 />
               </Col>
@@ -725,7 +733,7 @@ render() {
               <Row className="tabRow">
 
               <Row className="displayPaneHeadRow">
-                <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
                 <Button variant="warning" onClick={this.resetFilter}>Reset</Button>
               </Row>
                 <PatientList
@@ -771,7 +779,10 @@ render() {
             )}
             {this.state.menuSelect === 'detail' && (
               <Row className="tabRow">
-
+              {this.state.showDetails === false &&
+                !this.state.selectedPatient &&(
+                <h3>Select a Patient to see details</h3>
+              )}
               {this.state.showDetails === true &&
                 this.state.selectedPatient && (
                 <PatientDetail

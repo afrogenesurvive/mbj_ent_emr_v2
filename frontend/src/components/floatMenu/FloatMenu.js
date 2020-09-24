@@ -92,6 +92,45 @@ return (
       </li>
     </ul>
   )}
+  {props.state === 'menuAppointment' && (
+    <ul className="FloatMenuList">
+      <li>
+      <Button variant="light" onClick={props.menuSelect.bind(this, 'list')}>List</Button>
+      </li>
+      <li>
+      <Button variant="light" onClick={props.menuSelect.bind(this, 'search')}>Search</Button>
+      </li>
+      <li>
+      <Button variant="light" onClick={props.menuSelect.bind(this, 'detail')}>Detail</Button>
+      </li>
+      <li>
+      <Button variant="light" onClick={props.menuSelect.bind(this, 'new')}>New</Button>
+      </li>
+    </ul>
+  )}
+  {props.state === 'menuVisit' && (
+    <ul className="FloatMenuList">
+      <li>
+      <Button variant="light" onClick={props.menuSelect.bind(this, 'list')}>List</Button>
+      </li>
+      <li>
+      <Button variant="light" onClick={props.menuSelect.bind(this, 'search')}>Search</Button>
+      </li>
+      <li>
+      <Button variant="light" onClick={props.menuSelect.bind(this, 'detail')}>Detail</Button>
+      </li>
+      {props.role === 'Nurse' && (
+        <li>
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'new')}>New</Button>
+        </li>
+      )}
+      {props.role === 'Doctor' && (
+        <li>
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'new')}>New</Button>
+        </li>
+      )}
+    </ul>
+  )}
   {props.subMenuState === true &&
     props.page === 'patient' && (
     <ul className="FloatSubMenuList">
@@ -171,6 +210,76 @@ return (
     </li>
     <li>
     <Button variant="light" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
+    </li>
+    </ul>
+  )}
+  {props.subMenuState === true &&
+    props.page === 'appointment' && (
+    <ul className="FloatSubMenuList">
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'basic')}>Basic</Button>
+    </li>
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'admin')}>Admin</Button>
+    </li>
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'consultant')}>Consultants</Button>
+    </li>
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'note')}>Note</Button>
+    </li>
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'tag')}>Tag</Button>
+    </li>
+    </ul>
+  )}
+  {props.subMenuState === true &&
+    props.page === 'visit' && (
+    <ul className="FloatSubMenuList">
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'basic')}>Basic</Button>
+    </li>
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'admin')}>Admin</Button>
+    </li>
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'consultant')}>Consultants</Button>
+    </li>
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'complaint')}>Complaints</Button>
+    </li>
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'survey')}>Surveys</Button>
+    </li>
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'systematicInquiry')}>Systematic Inquiry</Button>
+    </li>
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'vitals')}>Vitals</Button>
+    </li>
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'examination')}>Examination</Button>
+    </li>
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'investigation')}>Investigation</Button>
+    </li>
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'diagnosis')}>Diagnosis</Button>
+    </li>
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'treatment')}>Treatment</Button>
+    </li>
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'billing')}>Billing</Button>
+    </li>
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'vigilance')}>Vigilance</Button>
+    </li>
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'image')}>Images</Button>
+    </li>
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'file')}>Files</Button>
     </li>
     </ul>
   )}

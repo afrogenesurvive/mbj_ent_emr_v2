@@ -32,6 +32,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 // import bootstrapPlugin from '@fullcalendar/bootstrap';
 import '../../calendar.scss'
 
+import FloatMenu from '../../components/floatMenu/FloatMenu';
 import loadingGif from '../../assets/loading.gif';
 import { faBath } from '@fortawesome/free-solid-svg-icons';
 import './visit.css';
@@ -54,13 +55,17 @@ class VisitPage extends Component {
     isLoading: false,
     seshStore: null,
     profileLoaded: false,
-    sideCol: 'menu',
+    sideCol: 'menuVisit',
+    startFilter: false,
     filter: {
       field: null,
       key: null,
       value: null
     },
     menuSelected: null,
+    menuSelect: 'list',
+    subMenuState: false,
+    subMenu: 'basic',
     adding: {
       state: null,
       field: null
@@ -590,6 +595,12 @@ menuSelect = (args) => {
     tabKey: args
   })
 }
+subMenuSelect = (args) => {
+  this.setState({
+    subMenu: args
+  })
+}
+
 submitFilterForm = (event) => {
   event.preventDefault();
   let field = event.target.field.value;
@@ -627,7 +638,9 @@ showDetails = (args) => {
     showDetails: true,
     selectedVisit: args,
     overlay: false,
-    tabKey: 'detail'
+    tabKey: 'detail',
+    menuSelect: 'detail',
+    subMenuState: true
   })
   this.props.selectVisit(args);
 }
@@ -917,6 +930,16 @@ render() {
   return (
     <React.Fragment>
 
+    <FloatMenu
+      state={this.state.sideCol}
+      menuSelect={this.menuSelect}
+      subMenuState={this.state.subMenuState}
+      subMenu={this.state.subMenu}
+      subMenuSelect={this.subMenuSelect}
+      page='visit'
+      role={this.context.role}
+    />
+
     {this.state.overlay === true && (
       <LoadingOverlay
         status={this.state.overlayStatus}
@@ -928,11 +951,12 @@ render() {
     <Container className="staffPageContainer">
       <Row className="staffPageContainerRow headRow">
         <Col md={9} className="staffPageContainerCol">
-          <h1>Visits: {this.state.showDetails === true &&
-                        this.state.selectedVisit &&
-                        this.state.tabKey === 'detail' && (
-                              this.state.selectedVisit.title
-                            )}</h1>
+          <h1>Visits:
+          {this.state.showDetails === true &&
+            this.state.selectedVisit &&
+            this.state.tabKey === 'detail' && (
+                this.state.selectedVisit.title
+            )}</h1>
         </Col>
         <Col md={3} className="staffPageContainerCol">
           {this.state.isLoading ? (
@@ -943,191 +967,164 @@ render() {
         </Col>
       </Row>
 
-      <Tab.Container id="left-tabs-example" activeKey={this.state.tabKey}>
         <Row className="staffPageContainerRow mainRow2">
 
-          <Col md={3} className="staffPageContainerCol specialCol1">
-            {this.state.sideCol === 'menu' && (
-              <Nav variant="pills" className="flex-column mainMenu">
-                <Nav.Item>
-                  <Nav.Link eventKey="list" onClick={this.menuSelect.bind(this, 'list')}>
-                  <Button variant="light">List</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="search" onClick={this.menuSelect.bind(this, 'search')}>
-                  <Button variant="light">Search</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="detail" onClick={this.menuSelect.bind(this, 'detail')}>
-                  <Button variant="light">Detail</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                {this.context.role === 'Nurse' && (
-                  <Nav.Item>
-                    <Nav.Link eventKey="new" onClick={this.menuSelect.bind(this, 'new')}>
-                    <Button variant="light">New</Button>
-                    </Nav.Link>
-                  </Nav.Item>
-                )}
-                {this.context.role === 'Doctor' && (
-                  <Nav.Item>
-                    <Nav.Link eventKey="new" onClick={this.menuSelect.bind(this, 'new')}>
-                    <Button variant="light">New</Button>
-                    </Nav.Link>
-                  </Nav.Item>
-                )}
+          {this.state.visits && (
+            <Col md={12} className="staffPageContainerCol specialCol2">
 
-              </Nav>
-            )}
             {this.state.sideCol === 'filter' && (
               <Col>
                 <FilterVisitForm
-                  onCancel={this.toggleSideCol}
+                  onCancel={this.toggleFilter}
                   onConfirm={this.submitFilterForm}
                 />
               </Col>
             )}
-          </Col>
 
-          {this.state.visits && (
-            <Col md={9} className="staffPageContainerCol specialCol2">
-              <Tab.Content>
-                <Tab.Pane eventKey="list">
+            {this.state.menuSelect === 'list' && (
+              <Row className="tabRow tabRowAppt">
+              <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
+                <Tab eventKey="1" title="list">
+                <Row className="displayPaneHeadRow">
+                  <Button variant="secondary" onClick={this.toggleFilter}>Filter</Button>
+                  <Button variant="warning" onClick={this.resetFilter}>Reset</Button>
+                </Row>
+                  <VisitList
+                    filter={this.state.filter}
+                    visits={this.state.visits}
+                    authId={this.context.activityId}
+                    canDelete={this.state.canDelete}
+                    showDetails={this.showDetails}
+                    onDelete={this.deleteVisit}
+                  />
+                </Tab>
+                <Tab eventKey="2" title="calendar" className="calendarTab">
+                  <h3>Calendar</h3>
+                  <FullCalendar
+                    plugins={[dayGridPlugin]}
+                    intitialView="dayGridMonth"
+                    events={this.state.calendarVisits}
+                    eventClick={this.viewCalendarEvent}
+                  />
+                </Tab>
+              </Tabs>
+              </Row>
+            )}
+            {this.state.menuSelect === 'search' && (
+              <Row className="tabRow">
+              <Col className="userSearchCol">
+                <h3>Search Visit</h3>
+                <Row className="userSearchRow">
+                  <VisitSearchForm
+                    onConfirm={this.searchVisits}
+                  />
+                </Row>
+                <Row>
+                  {this.state.searchVisits && (
+                    <Button variant="primary" onClick={this.toggleSideCol} className="centered_btn">Filter</Button>
+                  )}
+                </Row>
+                <Row className="userSearchRow results">
+                  {this.state.searchVisits && (
+                    <VisitList
+                      filter={this.state.filter}
+                      visits={this.state.searchVisits}
+                      authId={this.context.activityId}
+                      showDetails={this.showDetails}
+                    />
+                  )}
+                </Row>
+              </Col>
+              </Row>
+            )}
+            {this.state.menuSelect === 'detail' && (
+              <Row className="tabRow">
+              {this.state.showDetails === false &&
+                !this.state.selectedVisit &&(
+                <h3>Select a Visit to see details</h3>
+              )}
+              {this.state.showDetails === true &&
+                this.state.selectedVisit && (
+                  <VisitDetail
+                    visit={this.state.selectedVisit}
+                    updateVisit={this.updateVisit}
+                    subMenu={this.state.subMenu}
+                  />
+              )}
+              </Row>
+            )}
+            {this.state.menuSelect === 'new' && (
+              <Row className="tabRow">
+              {this.state.creatingVisit === false && (
+                <Button variant="secondary" className="filterFormBtn" onClick={this.onStartCreateNewVisit}>Create New</Button>
+              )}
+              {this.state.creatingVisit === true &&
+                this.state.appointments &&
+                !this.state.selectedAppointment && (
+                <Col className="patientSubListCol">
+                <Row className="patientSubListRow">
+                <h3>
+                Choose an Appointment
+                </h3>
+                <Button variant="secondary" className="patientSublistSearchBtn" onClick={this.startSublistSearch}>Search</Button>
+                </Row>
+                <Row className="patientSubListRow">
+                {this.state.sublistSearch === true && (
+                  <AppointmentSearchForm
+                    onCancel={this.cancelSublistSearch}
+                    onConfirm={this.submitSublistSearchForm}
+                  />
+                )}
+                </Row>
+                <Row className="patientSubListRow">
 
                 <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                   <Tab eventKey="1" title="list">
-                  <Row className="displayPaneHeadRow">
-                    <Button variant="secondary" onClick={this.toggleSideCol}>Filter</Button>
-                    <Button variant="warning" onClick={this.resetFilter}>Reset</Button>
-                  </Row>
-                    <VisitList
+                    <AppointmentList
                       filter={this.state.filter}
-                      visits={this.state.visits}
+                      appointments={this.state.appointments}
                       authId={this.context.activityId}
-                      canDelete={this.state.canDelete}
-                      showDetails={this.showDetails}
-                      onDelete={this.deleteVisit}
+                      onSelect={this.selectAppointment}
+                      visitPage={true}
                     />
                   </Tab>
                   <Tab eventKey="2" title="calendar" className="calendarTab">
                     <h3>Calendar</h3>
                     <FullCalendar
+                      defaultView="dayGridMonth"
                       plugins={[dayGridPlugin]}
-                      intitialView="dayGridMonth"
-                      events={this.state.calendarVisits}
-                      eventClick={this.viewCalendarEvent}
+                      events={this.state.calendarAppointments}
+                      eventClick={this.selectCalendarAppointment}
                     />
                   </Tab>
                 </Tabs>
 
-                </Tab.Pane>
-                <Tab.Pane eventKey="search">
-                <Col className="userSearchCol">
-                  <h3>Search Visit</h3>
-                  <Row className="userSearchRow">
-                    <VisitSearchForm
-                      onConfirm={this.searchVisits}
-                    />
-                  </Row>
-                  <Row>
-                    {this.state.searchVisits && (
-                      <Button variant="primary" onClick={this.toggleSideCol} className="centered_btn">Filter</Button>
-                    )}
-                  </Row>
-                  <Row className="userSearchRow results">
-                    {this.state.searchVisits && (
-                      <VisitList
-                        filter={this.state.filter}
-                        visits={this.state.searchVisits}
-                        authId={this.context.activityId}
-                        showDetails={this.showDetails}
-                      />
-                    )}
-                  </Row>
+
+                </Row>
+
                 </Col>
-                </Tab.Pane>
-                <Tab.Pane eventKey="detail">
-                {this.state.showDetails === true &&
-                  this.state.selectedVisit && (
-                    <VisitDetail
-                      visit={this.state.selectedVisit}
-                      updateVisit={this.updateVisit}
-                    />
-                )}
-                </Tab.Pane>
-                <Tab.Pane eventKey="new">
-                {this.state.creatingVisit === false && (
-                  <Button variant="secondary" className="filterFormBtn" onClick={this.onStartCreateNewVisit}>Create New</Button>
-                )}
-                {this.state.creatingVisit === true &&
-                  this.state.appointments &&
-                  !this.state.selectedAppointment && (
-                  <Col className="patientSubListCol">
-                  <Row className="patientSubListRow">
-                  <h3>
-                  Choose an Appointment
-                  </h3>
-                  <Button variant="secondary" className="patientSublistSearchBtn" onClick={this.startSublistSearch}>Search</Button>
-                  </Row>
-                  <Row className="patientSubListRow">
-                  {this.state.sublistSearch === true && (
-                    <AppointmentSearchForm
-                      onCancel={this.cancelSublistSearch}
-                      onConfirm={this.submitSublistSearchForm}
-                    />
-                  )}
-                  </Row>
-                  <Row className="patientSubListRow">
+              )}
+              {this.state.creatingVisit === true &&
+                this.state.selectedAppointment && (
+                <Row>
+                  <CreateVisitForm
+                    onConfirm={this.submitCreateNewVisitForm}
+                    onCancel={this.cancelCreateNewVisit}
+                    appointment={this.state.selectedAppointment}
+                  />
+                </Row>
+              )}
+              {this.state.newVisit && (
+                <Row>
+                  <h3>Review New Visit {this.state.newVisit._id}</h3>
+                </Row>
+              )}
+              </Row>
+            )}
 
-                  <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
-                    <Tab eventKey="1" title="list">
-                      <AppointmentList
-                        filter={this.state.filter}
-                        appointments={this.state.appointments}
-                        authId={this.context.activityId}
-                        onSelect={this.selectAppointment}
-                        visitPage={true}
-                      />
-                    </Tab>
-                    <Tab eventKey="2" title="calendar" className="calendarTab">
-                      <h3>Calendar</h3>
-                      <FullCalendar
-                        defaultView="dayGridMonth"
-                        plugins={[dayGridPlugin]}
-                        events={this.state.calendarAppointments}
-                        eventClick={this.selectCalendarAppointment}
-                      />
-                    </Tab>
-                  </Tabs>
-
-
-                  </Row>
-
-                  </Col>
-                )}
-                {this.state.creatingVisit === true &&
-                  this.state.selectedAppointment && (
-                  <Row>
-                    <CreateVisitForm
-                      onConfirm={this.submitCreateNewVisitForm}
-                      onCancel={this.cancelCreateNewVisit}
-                      appointment={this.state.selectedAppointment}
-                    />
-                  </Row>
-                )}
-                {this.state.newVisit && (
-                  <Row>
-                    <h3>Review New Visit {this.state.newVisit._id}</h3>
-                  </Row>
-                )}
-                </Tab.Pane>
-              </Tab.Content>
             </Col>
           )}
         </Row>
-      </Tab.Container>
     </Container>
     </React.Fragment>
   );

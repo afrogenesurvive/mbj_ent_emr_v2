@@ -1795,7 +1795,7 @@ render() {
               )}
 
               {this.props.subMenu === 'basic' && (
-                <Row className="tabRow">
+                <Row className="tabRowDetails">
                 User Basic:
                 <ListGroup className="profileBasicListGroup">
                   <ListGroup.Item>
@@ -1865,7 +1865,7 @@ render() {
                 </Row>
               )}
               {this.props.subMenu === 'admin' && (
-                <Row className="tabRow">
+                <Row className="tabRowDetails">
                 User Admin
                 <ListGroup className="profileBasicListGroup">
                   <ListGroup.Item>
@@ -1905,7 +1905,7 @@ render() {
                 </Row>
               )}
               {this.props.subMenu === 'address' && (
-                <Row className="tabRow">
+                <Row className="tabRowDetails">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">User Address List:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -1931,7 +1931,7 @@ render() {
                 </Row>
               )}
               {this.props.subMenu === 'attendance' && (
-                <Row className="tabRow">
+                <Row className="tabRowDetails">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">User Attendance List:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -1969,7 +1969,7 @@ render() {
                 </Row>
               )}
               {this.props.subMenu === 'leave' && (
-                <Row className="tabRow">
+                <Row className="tabRowDetails">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">User Leave List:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -2007,7 +2007,7 @@ render() {
                 </Row>
               )}
               {this.props.subMenu === 'image' && (
-                <Row className="tabRow">
+                <Row className="tabRowDetails">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">User Image List:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -2033,7 +2033,7 @@ render() {
                 </Row>
               )}
               {this.props.subMenu === 'file' && (
-                <Row className="tabRow">
+                <Row className="tabRowDetails">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">User File List:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -2058,7 +2058,7 @@ render() {
                 </Row>
               )}
               {this.props.subMenu === 'appointment' && (
-                <Row className="tabRow">
+                <Row className="tabRowDetails">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">User Appointment List:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -2084,7 +2084,7 @@ render() {
                 </Row>
               )}
               {this.props.subMenu === 'note' && (
-                <Row className="tabRow">
+                <Row className="tabRowDetails">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">User Notes:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>

@@ -31,6 +31,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 // import bootstrapPlugin from '@fullcalendar/bootstrap';
 import '../../calendar.scss'
 
+import FloatMenu from '../../components/floatMenu/FloatMenu';
 import loadingGif from '../../assets/loading.gif';
 import { faBath } from '@fortawesome/free-solid-svg-icons';
 import './appointment.css';
@@ -52,13 +53,17 @@ class AppointmentPage extends Component {
     isLoading: false,
     seshStore: null,
     profileLoaded: false,
-    sideCol: 'menu',
+    sideCol: 'menuAppointment',
+    startFilter: false,
     filter: {
       field: null,
       key: null,
       value: null
     },
     menuSelected: null,
+    menuSelect: 'list',
+    subMenuState: false,
+    subMenu: 'basic',
     adding: {
       state: null,
       field: null
@@ -528,12 +533,23 @@ toggleSideCol = () => {
   }
 
 }
+toggleFilter = () => {
+  this.setState({
+    startFilter: !this.state.startFilter
+  })
+}
 menuSelect = (args) => {
   this.setState({
     menuSelect: args,
     tabKey: args
   })
 }
+subMenuSelect = (args) => {
+  this.setState({
+    subMenu: args
+  })
+}
+
 submitFilterForm = (event) => {
   event.preventDefault();
   let field = event.target.field.value;
@@ -560,7 +576,9 @@ showDetails = (args) => {
     showDetails: true,
     selectedAppointment: args,
     overlay: false,
-    tabKey: 'detail'
+    tabKey: 'detail',
+    menuSelect: 'detail',
+    subMenuState: true
   })
   this.props.selectAppointment(args);
 }
@@ -844,6 +862,16 @@ render() {
   return (
     <React.Fragment>
 
+    <FloatMenu
+      state={this.state.sideCol}
+      menuSelect={this.menuSelect}
+      subMenuState={this.state.subMenuState}
+      subMenu={this.state.subMenu}
+      subMenuSelect={this.subMenuSelect}
+      page='appointment'
+      role={this.context.role}
+    />
+
     {this.state.overlay === true && (
       <LoadingOverlay
         status={this.state.overlayStatus}
@@ -861,8 +889,7 @@ render() {
           this.state.selectedAppointment &&
           this.state.tabKey === 'detail' && (
             this.state.selectedAppointment.title
-              )
-            }
+          )}
           </h1>
         </Col>
         <Col md={3} className="staffPageContainerCol">
@@ -874,163 +901,145 @@ render() {
         </Col>
       </Row>
 
-      <Tab.Container id="left-tabs-example" activeKey={this.state.tabKey}>
         <Row className="staffPageContainerRow mainRow2">
 
-          <Col md={3} className="staffPageContainerCol specialCol1">
-            {this.state.sideCol === 'menu' && (
-              <Nav variant="pills" className="flex-column mainMenu">
-                <Nav.Item>
-                  <Nav.Link eventKey="list" onClick={this.menuSelect.bind(this, 'list')}>
-                  <Button variant="light">List</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="search" onClick={this.menuSelect.bind(this, 'search')}>
-                  <Button variant="light">Search</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="detail" onClick={this.menuSelect.bind(this, 'detail')}>
-                  <Button variant="light">Details</Button>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="new" onClick={this.menuSelect.bind(this, 'new')}>
-                  <Button variant="light">New</Button>
-                  </Nav.Link>
-                </Nav.Item>
-              </Nav>
-            )}
-            {this.state.sideCol === 'filter' && (
+          {this.state.appointments && (
+            <Col md={12} className="staffPageContainerCol specialCol2">
+
+            {this.state.startFilter === true && (
               <Col>
                 <FilterAppointmentForm
-                  onCancel={this.toggleSideCol}
+                  onCancel={this.toggleFilter}
                   onConfirm={this.submitFilterForm}
                 />
               </Col>
             )}
-          </Col>
 
-          {this.state.appointments && (
-            <Col md={9} className="staffPageContainerCol specialCol2">
-              <Tab.Content >
-                <Tab.Pane eventKey="list" className="mainList">
-
-                <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
-                  <Tab eventKey="1" title="list">
-                  <Row className="displayPaneHeadRow">
-                    <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                    <Button variant="warning" onClick={this.resetFilter}>Reset</Button>
-                  </Row>
+            {this.state.menuSelect === 'list' && (
+              <Row className="tabRow tabRowAppt">
+              <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
+                <Tab eventKey="1" title="list">
+                <Row className="displayPaneHeadRow">
+                  <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                  <Button variant="warning" onClick={this.resetFilter}>Reset</Button>
+                </Row>
+                  <AppointmentList
+                    filter={this.state.filter}
+                    appointments={this.state.appointments}
+                    authId={this.context.activityId}
+                    canDelete={this.state.canDelete}
+                    showDetails={this.showDetails}
+                    onDelete={this.deleteAppointment}
+                  />
+                </Tab>
+                <Tab eventKey="2" title="calendar" className="calendarTab">
+                  <h3>Calendar</h3>
+                  <FullCalendar
+                    defaultView="dayGridMonth"
+                    plugins={[dayGridPlugin]}
+                    events={this.state.calendarAppointments}
+                    eventClick={this.viewCalendarEvent}
+                  />
+                </Tab>
+              </Tabs>
+              </Row>
+            )}
+            {this.state.menuSelect === 'search' && (
+              <Row className="tabRow">
+              <Col className="userSearchCol">
+                <h3>Search Appointment</h3>
+                <Row className="userSearchRow searchForm">
+                  <AppointmentSearchForm
+                    onConfirm={this.searchAppointments}
+                  />
+                </Row>
+                <Row>
+                  {this.state.searchAppointments && (
+                    <Button variant="primary" className="centered_btn" onClick={this.toggleSideCol}>Filter</Button>
+                  )}
+                </Row>
+                <Row className="userSearchRow results">
+                  {this.state.searchAppointments && (
                     <AppointmentList
                       filter={this.state.filter}
-                      appointments={this.state.appointments}
+                      appointments={this.state.searchAppointments}
                       authId={this.context.activityId}
-                      canDelete={this.state.canDelete}
                       showDetails={this.showDetails}
-                      onDelete={this.deleteAppointment}
-                    />
-                  </Tab>
-                  <Tab eventKey="2" title="calendar" className="calendarTab">
-                    <h3>Calendar</h3>
-                    <FullCalendar
-                      defaultView="dayGridMonth"
-                      plugins={[dayGridPlugin]}
-                      events={this.state.calendarAppointments}
-                      eventClick={this.viewCalendarEvent}
-                    />
-                  </Tab>
-                </Tabs>
-
-
-                </Tab.Pane>
-                <Tab.Pane eventKey="search">
-                <Col className="userSearchCol">
-                  <h3>Search Appointment</h3>
-                  <Row className="userSearchRow searchForm">
-                    <AppointmentSearchForm
-                      onConfirm={this.searchAppointments}
-                    />
-                  </Row>
-                  <Row>
-                    {this.state.searchAppointments && (
-                      <Button variant="primary" className="centered_btn" onClick={this.toggleSideCol}>Filter</Button>
-                    )}
-                  </Row>
-                  <Row className="userSearchRow results">
-                    {this.state.searchAppointments && (
-                      <AppointmentList
-                        filter={this.state.filter}
-                        appointments={this.state.searchAppointments}
-                        authId={this.context.activityId}
-                        showDetails={this.showDetails}
-                      />
-                    )}
-                  </Row>
-                </Col>
-                </Tab.Pane>
-                <Tab.Pane eventKey="detail">
-                {this.state.showDetails === true &&
-                  this.state.selectedAppointment && (
-                  <AppointmentDetail
-                    appointment={this.state.selectedAppointment}
-                    updateAppointment={this.updateAppointment}
-                  />
-                )}
-                </Tab.Pane>
-                <Tab.Pane eventKey="new">
-                {this.state.creatingAppointment === false && (
-                  <Button variant="secondary" className="filterFormBtn" onClick={this.onStartCreateNewAppointment}>Create New</Button>
-                )}
-                {this.state.creatingAppointment === true &&
-                  this.state.patients &&
-                  !this.state.selectedPatient && (
-                  <Col className="patientSubListCol">
-                  <Row className="patientSubListRow">
-                  <Button variant="success" className="patientSublistSearchBtn" onClick={this.startSublistSearch}>Search</Button>
-                  </Row>
-                  <Row className="patientSubListRow">
-                  {this.state.sublistSearch === true && (
-                    <PatientSearchForm
-                      onCancel={this.cancelSublistSearch}
-                      onConfirm={this.submitSublistSearchForm}
                     />
                   )}
-                  </Row>
-                  <Row className="patientSubListRow">
-                  <PatientList
-                    filter={this.state.filter}
-                    patients={this.state.patients}
-                    authId={this.context.activityId}
-                    onSelect={this.selectPatient}
-                    appointmentPage={true}
+                </Row>
+              </Col>
+              </Row>
+            )}
+            {this.state.menuSelect === 'detail' && (
+              <Row className="tabRow">
+              {this.state.showDetails === false &&
+                !this.state.selectedAppointment &&(
+                <h3>Select a Appointment to see details</h3>
+              )}
+              {this.state.showDetails === true &&
+                this.state.selectedAppointment && (
+                <AppointmentDetail
+                  appointment={this.state.selectedAppointment}
+                  updateAppointment={this.updateAppointment}
+                  subMenu={this.state.subMenu}
+                />
+              )}
+              </Row>
+            )}
+            {this.state.menuSelect === 'new' && (
+              <Row className="tabRow">
+              {this.state.creatingAppointment === false && (
+                <Button variant="secondary" className="filterFormBtn" onClick={this.onStartCreateNewAppointment}>Create New</Button>
+              )}
+              {this.state.creatingAppointment === true &&
+                this.state.patients &&
+                !this.state.selectedPatient && (
+                <Col className="patientSubListCol">
+                <Row className="patientSubListRow">
+                <Button variant="success" className="patientSublistSearchBtn" onClick={this.startSublistSearch}>Search</Button>
+                </Row>
+                <Row className="patientSubListRow">
+                {this.state.sublistSearch === true && (
+                  <PatientSearchForm
+                    onCancel={this.cancelSublistSearch}
+                    onConfirm={this.submitSublistSearchForm}
                   />
-                  </Row>
+                )}
+                </Row>
+                <Row className="patientSubListRow">
+                <PatientList
+                  filter={this.state.filter}
+                  patients={this.state.patients}
+                  authId={this.context.activityId}
+                  onSelect={this.selectPatient}
+                  appointmentPage={true}
+                />
+                </Row>
 
-                  </Col>
-                )}
-                {this.state.creatingAppointment === true &&
-                  this.state.selectedPatient && (
-                  <Row>
-                    <CreateAppointmentForm
-                      onConfirm={this.submitCreateNewAppointmentForm}
-                      onCancel={this.cancelCreateNewAppointment}
-                      patient={this.state.selectedPatient}
-                    />
-                  </Row>
-                )}
-                {this.state.newAppointment && (
-                  <Row>
-                    <h3>Review New Appointment {this.state.newAppointment._id}</h3>
-                  </Row>
-                )}
-                </Tab.Pane>
-              </Tab.Content>
+                </Col>
+              )}
+              {this.state.creatingAppointment === true &&
+                this.state.selectedPatient && (
+                <Row>
+                  <CreateAppointmentForm
+                    onConfirm={this.submitCreateNewAppointmentForm}
+                    onCancel={this.cancelCreateNewAppointment}
+                    patient={this.state.selectedPatient}
+                  />
+                </Row>
+              )}
+              {this.state.newAppointment && (
+                <Row>
+                  <h3>Review New Appointment {this.state.newAppointment._id}</h3>
+                </Row>
+              )}
+              </Row>
+            )}
+
             </Col>
           )}
         </Row>
-      </Tab.Container>
     </Container>
     </React.Fragment>
   );

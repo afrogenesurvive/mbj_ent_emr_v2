@@ -1756,6 +1756,7 @@ render() {
     <FloatMenu
       state={this.state.sideCol}
       menuSelect={this.menuSelect}
+      role={this.context.role}
     />
 
     {this.state.overlay === true && (

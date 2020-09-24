@@ -74,7 +74,7 @@ const AppointmentItem = (props) => {
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
                 <Popover.Content>
-                  <strong>Delete!?</strong>
+                  <strong>More Info</strong>
                 </Popover.Content>
               </Popover>
             }
@@ -226,7 +226,6 @@ const AppointmentItem = (props) => {
                 important: <span className="bold">{props.appointment.important.toString()}</span>
               </Card.Text>
               </li>
-
 
             </ul>
             </Row>

@@ -2869,7 +2869,7 @@ render() {
           )}
         </Col>
       </Row>
-      <Tab.Container id="left-tabs-example" defaultActiveKey="1">
+
         <Row className="detailPageContainerRow mainRow2">
 
           {this.props.patient && (
@@ -2956,7 +2956,7 @@ render() {
               )}
 
               {this.props.subMenu === 'basic' && (
-                <Row className="tabRow">
+                <Row className="tabRowDetails">
                 Patient Basic:
                 <ListGroup className="profileBasicListGroup">
                   <ListGroup.Item>
@@ -3098,7 +3098,7 @@ render() {
                 </Row>
               )}
               {this.props.subMenu === 'admin' && (
-                <Row className="tabRow">
+                <Row className="tabRowDetails">
                 Patient Admin
                 <ListGroup className="profileBasicListGroup">
                   <ListGroup.Item>
@@ -3125,7 +3125,7 @@ render() {
                 </Row>
               )}
               {this.props.subMenu === 'address' && (
-                <Row className="tabRow">
+                <Row className="tabRowDetails">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">Patient Address List:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -3151,7 +3151,7 @@ render() {
                 </Row>
               )}
               {this.props.subMenu === 'nextOfKin' && (
-                <Row className="tabRow">
+                <Row className="tabRowDetails">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">Patient Next of Kin List:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -3176,7 +3176,7 @@ render() {
                 </Row>
               )}
               {this.props.subMenu === 'allergy' && (
-                <Row className="tabRow">
+                <Row className="tabRowDetails">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">Patient Allergies List:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -3209,7 +3209,7 @@ render() {
                 </Row>
               )}
               {this.props.subMenu === 'medication' && (
-                <Row className="tabRow">
+                <Row className="tabRowDetails">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">Patient Medication List:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -3242,7 +3242,7 @@ render() {
                 </Row>
               )}
               {this.props.subMenu === 'comorbidities' && (
-                <Row className="tabRow">
+                <Row className="tabRowDetails">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">Patient Comorbidity List:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -3267,7 +3267,7 @@ render() {
                 </Row>
               )}
               {this.props.subMenu === 'image' && (
-                <Row className="tabRow">
+                <Row className="tabRowDetails">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">Patient Image List:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -3292,7 +3292,7 @@ render() {
                 </Row>
               )}
               {this.props.subMenu === 'file' && (
-                <Row className="tabRow">
+                <Row className="tabRowDetails">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">Patient File List:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -3317,7 +3317,7 @@ render() {
                 </Row>
               )}
               {this.props.subMenu === 'appointment' && (
-                <Row className="tabRow">
+                <Row className="tabRowDetails">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">Patient Appointment List:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -3343,7 +3343,7 @@ render() {
                 </Row>
               )}
               {this.props.subMenu === 'visit' && (
-                <Row className="tabRow">
+                <Row className="tabRowDetails">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">Patient Visit List:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -3370,7 +3370,7 @@ render() {
                 </Row>
               )}
               {this.props.subMenu === 'note' && (
-                <Row className="tabRow">
+                <Row className="tabRowDetails">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">Patient Notes:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -3395,7 +3395,7 @@ render() {
                 </Row>
               )}
               {this.props.subMenu === 'tag' && (
-                <Row className="tabRow">
+                <Row className="tabRowDetails">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">Patient Tags:</p>
                   <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
@@ -3419,7 +3419,7 @@ render() {
                 </Row>
               )}
               {this.props.subMenu === 'doc' && (
-                <Row className="tabRow">
+                <Row className="tabRowDetails">
                 <Row className="displayPaneHeadRow">
                   <p className="displayPaneTitle">Docu-Gen:</p>
 
@@ -3961,7 +3961,6 @@ render() {
           )}
 
         </Row>
-      </Tab.Container>
     </Container>
     </React.Fragment>
   );
