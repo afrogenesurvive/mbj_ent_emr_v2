@@ -56,6 +56,7 @@ class AppointmentPage extends Component {
     sideCol: 'menuAppointment',
     startFilter: false,
     filter: {
+      calendar: false,
       field: null,
       key: null,
       value: null
@@ -181,7 +182,6 @@ getAllAppointments (args) {
       this.setState({isLoading: false })
     });
 };
-
 getAllPatients (args) {
   console.log('...retrieving all patients...');
   this.context.setUserAlert('...retrieving all patients...')
@@ -533,7 +533,17 @@ toggleSideCol = () => {
   }
 
 }
-toggleFilter = () => {
+toggleFilter = (args) => {
+  if (args === 'calendar') {
+    this.setState({
+      filter: {
+        calendar: !this.state.calendar,
+        field: this.state.field,
+        key: this.state.key,
+        value: this.state.value
+      }
+    })
+  }
   this.setState({
     startFilter: !this.state.startFilter
   })
@@ -552,6 +562,7 @@ subMenuSelect = (args) => {
 
 submitFilterForm = (event) => {
   event.preventDefault();
+
   let field = event.target.field.value;
   let key = event.target.key.value;
   let value = event.target.value.value;
@@ -563,12 +574,12 @@ submitFilterForm = (event) => {
   }
   this.setState({
     filter: {
+      calendar: this.state.filter.calendar,
       field: field,
       key: key,
       value: value
     }
   })
-
 }
 
 showDetails = (args) => {
@@ -604,6 +615,7 @@ selectPatient = (args) => {
   })
 
 }
+
 updateAppointment = (args) => {
   console.log('...updating selected appointment...');
   this.setState({
@@ -611,7 +623,6 @@ updateAppointment = (args) => {
   })
   this.props.selectAppointment(args);
 }
-
 deleteAppointment = (args) => {
   console.log('...deleteing appointment...',args);
   this.context.setUserAlert('...deleteing appointment...')
@@ -690,12 +701,12 @@ parseForCalendar = (args) => {
         important: x.important,
       }
     }))
+
     this.setState({
-      calendarAppointments: calendarAppointments
+      calendarAppointments: calendarAppointments,
     })
 
 }
-
 viewCalendarEvent = (args) => {
   console.log('...viewing calendar appointment...',args.event.extendedProps.props);
   const appointment = this.state.appointments.filter(x => x._id === args.event.extendedProps.props._id)[0];
@@ -851,11 +862,16 @@ resetFilter = () => {
     filter: {
       field: null,
       key: null,
-      value: null
+      value: null,
+      calendar: false
     }
   })
 }
-
+clearSearch = () => {
+  this.setState({
+    searchAppointments: null
+  })
+}
 
 render() {
 
@@ -880,9 +896,8 @@ render() {
       />
     )}
 
-    <Container className="staffPageContainer">
-      <Row className="staffPageContainerRow headRow">
-        <Col md={9} className="staffPageContainerCol">
+    <Container className="topContainer">
+      <Row className="">
         <h1>Appointments:
         {
           this.state.showDetails === true &&
@@ -890,39 +905,37 @@ render() {
           this.state.tabKey === 'detail' && (
             this.state.selectedAppointment.title
           )}
-          </h1>
-        </Col>
-        <Col md={3} className="staffPageContainerCol">
-          {this.state.isLoading ? (
-            <Image src={loadingGif} className="loadingGif" fluid />
-          ):(
-            <p>.</p>
-          )}
-        </Col>
+        </h1>
+      </Row>
+      <Row className="">
+        {this.state.isLoading ? (
+          <Image src={loadingGif} className="loadingGif" fluid />
+        ):(
+          <p>.</p>
+        )}
       </Row>
 
-        <Row className="staffPageContainerRow mainRow2">
+      <Row className="">
+        {this.state.appointments && (
+          <Col md={12} className="">
 
-          {this.state.appointments && (
-            <Col md={12} className="staffPageContainerCol specialCol2">
+          {this.state.startFilter === true && (
+            <Col>
+              <FilterAppointmentForm
+                onCancel={this.toggleFilter}
+                onConfirm={this.submitFilterForm}
+              />
+            </Col>
+          )}
 
-            {this.state.startFilter === true && (
-              <Col>
-                <FilterAppointmentForm
-                  onCancel={this.toggleFilter}
-                  onConfirm={this.submitFilterForm}
-                />
-              </Col>
-            )}
-
-            {this.state.menuSelect === 'list' && (
-              <Row className="tabRow tabRowAppt">
+          {this.state.menuSelect === 'list' && (
+            <Row className="tabRow tabRowAppt">
               <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                 <Tab eventKey="1" title="list">
-                <Row className="displayPaneHeadRow">
-                  <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
-                  <Button variant="warning" onClick={this.resetFilter}>Reset</Button>
-                </Row>
+                  <Row className="">
+                    <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                    <Button variant="warning" onClick={this.resetFilter}>Reset</Button>
+                  </Row>
                   <AppointmentList
                     filter={this.state.filter}
                     appointments={this.state.appointments}
@@ -942,23 +955,24 @@ render() {
                   />
                 </Tab>
               </Tabs>
-              </Row>
-            )}
-            {this.state.menuSelect === 'search' && (
-              <Row className="tabRow">
-              <Col className="userSearchCol">
+            </Row>
+          )}
+          {this.state.menuSelect === 'search' && (
+            <Row className="tabRow">
+              <Col className="">
                 <h3>Search Appointment</h3>
-                <Row className="userSearchRow searchForm">
+                <Row className="">
                   <AppointmentSearchForm
                     onConfirm={this.searchAppointments}
+                    onCancel={this.clearSearch}
                   />
                 </Row>
                 <Row>
                   {this.state.searchAppointments && (
-                    <Button variant="primary" className="centered_btn" onClick={this.toggleSideCol}>Filter</Button>
+                    <Button variant="primary" className="centered_btn" onClick={this.toggleFilter}>Filter</Button>
                   )}
                 </Row>
-                <Row className="userSearchRow results">
+                <Row className="">
                   {this.state.searchAppointments && (
                     <AppointmentList
                       filter={this.state.filter}
@@ -969,10 +983,10 @@ render() {
                   )}
                 </Row>
               </Col>
-              </Row>
-            )}
-            {this.state.menuSelect === 'detail' && (
-              <Row className="tabRow">
+            </Row>
+          )}
+          {this.state.menuSelect === 'detail' && (
+            <Row className="tabRow">
               {this.state.showDetails === false &&
                 !this.state.selectedAppointment &&(
                 <h3>Select a Appointment to see details</h3>
@@ -985,61 +999,59 @@ render() {
                   subMenu={this.state.subMenu}
                 />
               )}
-              </Row>
-            )}
-            {this.state.menuSelect === 'new' && (
-              <Row className="tabRow">
-              {this.state.creatingAppointment === false && (
-                <Button variant="secondary" className="filterFormBtn" onClick={this.onStartCreateNewAppointment}>Create New</Button>
-              )}
-              {this.state.creatingAppointment === true &&
-                this.state.patients &&
-                !this.state.selectedPatient && (
-                <Col className="patientSubListCol">
-                <Row className="patientSubListRow">
-                <Button variant="success" className="patientSublistSearchBtn" onClick={this.startSublistSearch}>Search</Button>
-                </Row>
-                <Row className="patientSubListRow">
-                {this.state.sublistSearch === true && (
-                  <PatientSearchForm
-                    onCancel={this.cancelSublistSearch}
-                    onConfirm={this.submitSublistSearchForm}
-                  />
-                )}
-                </Row>
-                <Row className="patientSubListRow">
-                <PatientList
-                  filter={this.state.filter}
-                  patients={this.state.patients}
-                  authId={this.context.activityId}
-                  onSelect={this.selectPatient}
-                  appointmentPage={true}
-                />
-                </Row>
-
-                </Col>
-              )}
-              {this.state.creatingAppointment === true &&
-                this.state.selectedPatient && (
-                <Row>
-                  <CreateAppointmentForm
-                    onConfirm={this.submitCreateNewAppointmentForm}
-                    onCancel={this.cancelCreateNewAppointment}
-                    patient={this.state.selectedPatient}
-                  />
-                </Row>
-              )}
-              {this.state.newAppointment && (
-                <Row>
-                  <h3>Review New Appointment {this.state.newAppointment._id}</h3>
-                </Row>
-              )}
-              </Row>
-            )}
-
-            </Col>
+            </Row>
           )}
-        </Row>
+          {this.state.menuSelect === 'new' && (
+            <Row className="tabRow">
+            {this.state.creatingAppointment === false && (
+              <Button variant="secondary" className="filterFormBtn" onClick={this.onStartCreateNewAppointment}>Create New</Button>
+            )}
+            {this.state.creatingAppointment === true &&
+              this.state.patients &&
+              !this.state.selectedPatient && (
+              <Col className="">
+              <Row className="">
+              <Button variant="success" className="patientSublistSearchBtn" onClick={this.startSublistSearch}>Search</Button>
+              </Row>
+              <Row className="">
+              {this.state.sublistSearch === true && (
+                <PatientSearchForm
+                  onCancel={this.cancelSublistSearch}
+                  onConfirm={this.submitSublistSearchForm}
+                />
+              )}
+              </Row>
+              <Row className="">
+              <PatientList
+                filter={this.state.filter}
+                patients={this.state.patients}
+                authId={this.context.activityId}
+                onSelect={this.selectPatient}
+                appointmentPage={true}
+              />
+              </Row>
+              </Col>
+            )}
+            {this.state.creatingAppointment === true &&
+              this.state.selectedPatient && (
+              <Row>
+                <CreateAppointmentForm
+                  onConfirm={this.submitCreateNewAppointmentForm}
+                  onCancel={this.cancelCreateNewAppointment}
+                  patient={this.state.selectedPatient}
+                />
+              </Row>
+            )}
+            {this.state.newAppointment && (
+              <Row>
+                <h3>Review New Appointment {this.state.newAppointment._id}</h3>
+              </Row>
+            )}
+            </Row>
+          )}
+          </Col>
+        )}
+      </Row>
     </Container>
     </React.Fragment>
   );

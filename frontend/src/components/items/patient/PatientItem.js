@@ -57,7 +57,7 @@ const PatientItem = (props) => {
           </Card.Text>
 
           <OverlayTrigger
-            key={'top'}
+
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -73,7 +73,7 @@ const PatientItem = (props) => {
           {props.appointmentPage !== true &&
             props.showDetails && (
               <OverlayTrigger
-                key={'top'}
+
                 placement={'top'}
                 overlay={
                   <Popover id={`popover-positioned-${'top'}`}>
@@ -96,7 +96,7 @@ const PatientItem = (props) => {
               }}
             >
             <OverlayTrigger
-              key={'top'}
+
               placement={'top'}
               overlay={
                 <Popover id={`popover-positioned-${'top'}`}>
@@ -114,7 +114,7 @@ const PatientItem = (props) => {
 
           {props.appointmentPage === true && (
             <OverlayTrigger
-              key={'top'}
+
               placement={'top'}
               overlay={
                 <Popover id={`popover-positioned-${'top'}`}>
@@ -131,7 +131,7 @@ const PatientItem = (props) => {
 
           {props.canDelete && (
             <OverlayTrigger
-              key={'top'}
+
               placement={'top'}
               overlay={
                 <Popover id={`popover-positioned-${'top'}`}>

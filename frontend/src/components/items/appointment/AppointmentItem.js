@@ -69,7 +69,7 @@ const AppointmentItem = (props) => {
           )}
 
           <OverlayTrigger
-            key={'top'}
+
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -85,7 +85,7 @@ const AppointmentItem = (props) => {
           {props.visitPage !== true &&
             props.showDetails && (
               <OverlayTrigger
-                key={'top'}
+
                 placement={'top'}
                 overlay={
                   <Popover id={`popover-positioned-${'top'}`}>
@@ -108,7 +108,7 @@ const AppointmentItem = (props) => {
               }}
             >
             <OverlayTrigger
-              key={'top'}
+
               placement={'top'}
               overlay={
                 <Popover id={`popover-positioned-${'top'}`}>
@@ -126,7 +126,7 @@ const AppointmentItem = (props) => {
 
           {props.visitPage === true && (
             <OverlayTrigger
-              key={'top'}
+              
               placement={'top'}
               overlay={
                 <Popover id={`popover-positioned-${'top'}`}>
@@ -143,7 +143,7 @@ const AppointmentItem = (props) => {
 
           {props.canDelete && (
             <OverlayTrigger
-              key={'top'}
+
               placement={'top'}
               overlay={
                 <Popover id={`popover-positioned-${'top'}`}>

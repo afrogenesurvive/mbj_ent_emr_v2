@@ -66,7 +66,7 @@ const UserList = props => {
 
     return (
       <UserItem
-        key={count}
+        count={count}
         user={user}
         canDelete={props.canDelete}
         onDelete={props.onDelete}

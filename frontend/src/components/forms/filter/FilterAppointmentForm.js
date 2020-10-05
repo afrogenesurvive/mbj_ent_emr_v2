@@ -12,7 +12,7 @@ return (
   <Form onSubmit={props.onConfirm}>
     <Form.Row>
       <Form.Group as={Col} controlId="field">
-        <Form.Control type="text" hidden='true' value="appointment"/>
+        <Form.Control type="text" hidden={true} readOnly value="appointment"/>
       </Form.Group>
     </Form.Row>
 

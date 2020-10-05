@@ -496,12 +496,16 @@ resetFilter = () => {
     }
   })
 }
+clearSearch = () => {
+  this.setState({
+    searchUsers: null
+  })
+}
 
 render() {
 
   return (
     <React.Fragment>
-
     <FloatMenu
       state={this.state.sideCol}
       menuSelect={this.menuSelect}
@@ -511,51 +515,44 @@ render() {
       page='staff'
       role={this.context.role}
     />
-
     {this.state.overlay === true && (
       <LoadingOverlay
         status={this.state.overlayStatus}
       />
     )}
 
-    <Container className="staffPageContainer">
-      <Row className="staffPageContainerRow headRow">
-        <Col md={9} className="staffPageContainerCol">
+    <Container className="topContainer">
+      <Row className="">
         <h1>Staff:
         {this.state.showDetails === true &&
           this.state.selectedUser &&
           this.state.tabKey === 'detail' && (
             this.state.selectedUser.name
           )}</h1>
-        </Col>
-        <Col md={3} className="staffPageContainerCol">
+      </Row>
+      <Row className="">
           {this.state.isLoading ? (
             <Image src={loadingGif} className="loadingGif" fluid />
           ):(
             <p>.</p>
           )}
-        </Col>
       </Row>
 
+      <Row className="">
+        {this.state.users && (
+          <Col md={12} className="">
 
-
-        <Row className="staffPageContainerRow mainRow2">
-
-          {this.state.users && (
-            <Col md={12} className="staffPageContainerCol specialCol2">
-
-            {this.state.startFilter === true && (
-              <Col>
-                <FilterUserForm
-                  onCancel={this.toggleFilter}
-                  onConfirm={this.submitFilterForm}
-                />
-              </Col>
-            )}
-
-            {this.state.menuSelect === 'list' && (
-              <Row className="tabRow">
-              <Row className="displayPaneHeadRow">
+          {this.state.startFilter === true && (
+            <Col>
+              <FilterUserForm
+                onCancel={this.toggleFilter}
+                onConfirm={this.submitFilterForm}
+              />
+            </Col>
+          )}
+          {this.state.menuSelect === 'list' && (
+            <Row className="tabRow">
+              <Row className="">
                 <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
                 <Button variant="warning" onClick={this.resetFilter}>Reset Filter</Button>
               </Row>
@@ -567,15 +564,16 @@ render() {
                 showDetails={this.showDetails}
                 onDelete={this.deleteUser}
               />
-              </Row>
-            )}
-            {this.state.menuSelect === 'search' && (
-              <Row className="tabRow">
-              <Col className="userSearchCol">
+            </Row>
+          )}
+          {this.state.menuSelect === 'search' && (
+            <Row className="tabRow">
+              <Col className="">
                 <h3>Search Staff</h3>
-                <Row className="userSearchRow">
+                <Row className="">
                   <UserSearchForm
                     onConfirm={this.searchUsers}
+                    onCancel={this.clearSearch}
                   />
                 </Row>
                 <Row>
@@ -583,7 +581,7 @@ render() {
                     <Button variant="primary" className="centered_btn" onClick={this.toggleFilter}>Filter</Button>
                   )}
                 </Row>
-                <Row className="userSearchRow results">
+                <Row className="">
                   {this.state.searchUsers && (
                     <SearchUserList
                       filter={this.state.filter}
@@ -594,10 +592,10 @@ render() {
                   )}
                 </Row>
               </Col>
-              </Row>
-            )}
-            {this.state.menuSelect === 'detail' && (
-              <Row className="tabRow">
+            </Row>
+          )}
+          {this.state.menuSelect === 'detail' && (
+            <Row className="tabRow">
               {this.state.showDetails === false &&
                 !this.state.selectedUser &&(
                 <h3>Select a Staff Member to see details</h3>
@@ -610,14 +608,12 @@ render() {
                     subMenu={this.state.subMenu}
                   />
               )}
-
-              </Row>
-            )}
-
-            </Col>
+            </Row>
           )}
-        </Row>
 
+          </Col>
+        )}
+      </Row>
     </Container>
     </React.Fragment>
   );

@@ -59,7 +59,7 @@ const VisitItem = props => {
           </Card.Text>
 
           <OverlayTrigger
-            key={'top'}
+
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -74,7 +74,7 @@ const VisitItem = props => {
 
           {!props.patientPage && (
             <OverlayTrigger
-              key={'top'}
+
               placement={'top'}
               overlay={
                 <Popover id={`popover-positioned-${'top'}`}>
@@ -97,7 +97,7 @@ const VisitItem = props => {
               }}
             >
             <OverlayTrigger
-              key={'top'}
+
               placement={'top'}
               overlay={
                 <Popover id={`popover-positioned-${'top'}`}>
@@ -115,7 +115,7 @@ const VisitItem = props => {
 
           {props.canDelete && (
             <OverlayTrigger
-              key={'top'}
+
               placement={'top'}
               overlay={
                 <Popover id={`popover-positioned-${'top'}`}>

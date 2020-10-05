@@ -62,7 +62,7 @@ const AppointmentList = props => {
 
   const appointments = propsAppointments.map(appointment=> {
 
-    count = propsAppointments.indexOf(appointment+1);
+    count = propsAppointments.indexOf(appointment);
 
     return (
       <AppointmentItem

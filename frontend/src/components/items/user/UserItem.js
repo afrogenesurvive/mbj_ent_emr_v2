@@ -47,7 +47,7 @@ const UserItem = (props) => {
    }
 
   return (
-    <li key={props.key} className="userItemLi">
+    <li key={props.count} className="userItemLi">
       <Card>
         <Card.Body className="cardBody">
           <Card.Text className="cardText">
@@ -58,7 +58,7 @@ const UserItem = (props) => {
           </Card.Text>
 
           <OverlayTrigger
-            key={'top'}
+
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -76,7 +76,7 @@ const UserItem = (props) => {
             !props.visitPage &&
             props.showDetails && (
               <OverlayTrigger
-                key={'top'}
+
                 placement={'top'}
                 overlay={
                   <Popover id={`popover-positioned-${'top'}`}>
@@ -99,7 +99,7 @@ const UserItem = (props) => {
               }}
             >
             <OverlayTrigger
-              key={'top'}
+
               placement={'top'}
               overlay={
                 <Popover id={`popover-positioned-${'top'}`}>
@@ -123,7 +123,7 @@ const UserItem = (props) => {
               }}
             >
             <OverlayTrigger
-              key={'top'}
+
               placement={'top'}
               overlay={
                 <Popover id={`popover-positioned-${'top'}`}>
@@ -141,7 +141,7 @@ const UserItem = (props) => {
 
           {props.selectUser && (
             <OverlayTrigger
-              key={'top'}
+
               placement={'top'}
               overlay={
                 <Popover id={`popover-positioned-${'top'}`}>
@@ -158,7 +158,7 @@ const UserItem = (props) => {
 
           {props.canDelete && (
             <OverlayTrigger
-              key={'top'}
+
               placement={'top'}
               overlay={
                 <Popover id={`popover-positioned-${'top'}`}>

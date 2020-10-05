@@ -95,6 +95,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  
+  border: 1px solid green;
 }
 .tabRowSubMenu {
   margin: 0 auto;
@@ -106,4 +108,15 @@
 }
 .tabRowAppt {
   width: 85%;
+}
+
+
+
+.topContainer {
+  margin: 7vh auto 0;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }

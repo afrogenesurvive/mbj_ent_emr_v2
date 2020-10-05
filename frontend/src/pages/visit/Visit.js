@@ -187,7 +187,6 @@ getAllVisits (args) {
       this.setState({isLoading: false })
     });
 };
-
 getAllAppointments (args) {
   console.log('...retrieving all appointments...');
   this.context.setUserAlert('...retrieving all appointments...')
@@ -246,7 +245,6 @@ getAllAppointments (args) {
       this.setState({isLoading: false })
     });
 };
-
 getAllPatients (args) {
   console.log('...retrieving all patients...');
   this.context.setUserAlert('...retrieving all patients...')
@@ -589,6 +587,11 @@ toggleSideCol = () => {
   }
 
 }
+toggleFilter = () => {
+  this.setState({
+    startFilter: !this.state.startFilter
+  })
+}
 menuSelect = (args) => {
   this.setState({
     menuSelect: args,
@@ -923,7 +926,11 @@ resetFilter = () => {
     }
   })
 }
-
+clearSearch = () => {
+  this.setState({
+    searchVisits: null
+  })
+}
 
 render() {
 
@@ -948,47 +955,46 @@ render() {
       />
     )}
 
-    <Container className="staffPageContainer">
-      <Row className="staffPageContainerRow headRow">
-        <Col md={9} className="staffPageContainerCol">
-          <h1>Visits:
-          {this.state.showDetails === true &&
-            this.state.selectedVisit &&
-            this.state.tabKey === 'detail' && (
-                this.state.selectedVisit.title
-            )}</h1>
-        </Col>
-        <Col md={3} className="staffPageContainerCol">
-          {this.state.isLoading ? (
-            <Image src={loadingGif} className="loadingGif" fluid />
-          ):(
-            <p>.</p>
+    <Container className="topContainer">
+      <Row className="">
+        <h1>Visits:
+        {this.state.showDetails === true &&
+          this.state.selectedVisit &&
+          this.state.tabKey === 'detail' && (
+              this.state.selectedVisit.title
           )}
-        </Col>
+        </h1>
+      </Row>
+      <Row className="">
+        {this.state.isLoading ? (
+          <Image src={loadingGif} className="loadingGif" fluid />
+        ):(
+          <p>.</p>
+        )}
       </Row>
 
-        <Row className="staffPageContainerRow mainRow2">
+      <Row className="">
 
-          {this.state.visits && (
-            <Col md={12} className="staffPageContainerCol specialCol2">
+        {this.state.visits && (
+          <Col md={12} className="">
 
-            {this.state.sideCol === 'filter' && (
-              <Col>
-                <FilterVisitForm
-                  onCancel={this.toggleFilter}
-                  onConfirm={this.submitFilterForm}
-                />
-              </Col>
-            )}
+          {this.state.startFilter === true && (
+            <Col>
+              <FilterVisitForm
+                onCancel={this.toggleFilter}
+                onConfirm={this.submitFilterForm}
+              />
+            </Col>
+          )}
 
-            {this.state.menuSelect === 'list' && (
-              <Row className="tabRow tabRowAppt">
+          {this.state.menuSelect === 'list' && (
+            <Row className="tabRow tabRowAppt">
               <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                 <Tab eventKey="1" title="list">
-                <Row className="displayPaneHeadRow">
-                  <Button variant="secondary" onClick={this.toggleFilter}>Filter</Button>
-                  <Button variant="warning" onClick={this.resetFilter}>Reset</Button>
-                </Row>
+                  <Row className="">
+                    <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                    <Button variant="warning" onClick={this.resetFilter}>Reset</Button>
+                  </Row>
                   <VisitList
                     filter={this.state.filter}
                     visits={this.state.visits}
@@ -1008,23 +1014,24 @@ render() {
                   />
                 </Tab>
               </Tabs>
-              </Row>
-            )}
-            {this.state.menuSelect === 'search' && (
-              <Row className="tabRow">
-              <Col className="userSearchCol">
-                <h3>Search Visit</h3>
-                <Row className="userSearchRow">
+            </Row>
+          )}
+          {this.state.menuSelect === 'search' && (
+            <Row className="tabRow">
+              <Col className="">
+                <h3>Search Visits</h3>
+                <Row className="">
                   <VisitSearchForm
                     onConfirm={this.searchVisits}
+                    onCancel={this.clearSearch}
                   />
                 </Row>
                 <Row>
                   {this.state.searchVisits && (
-                    <Button variant="primary" onClick={this.toggleSideCol} className="centered_btn">Filter</Button>
+                    <Button variant="primary" onClick={this.toggleFilter} className="centered_btn">Filter</Button>
                   )}
                 </Row>
-                <Row className="userSearchRow results">
+                <Row className="">
                   {this.state.searchVisits && (
                     <VisitList
                       filter={this.state.filter}
@@ -1035,10 +1042,10 @@ render() {
                   )}
                 </Row>
               </Col>
-              </Row>
-            )}
-            {this.state.menuSelect === 'detail' && (
-              <Row className="tabRow">
+            </Row>
+          )}
+          {this.state.menuSelect === 'detail' && (
+            <Row className="tabRow">
               {this.state.showDetails === false &&
                 !this.state.selectedVisit &&(
                 <h3>Select a Visit to see details</h3>
@@ -1051,24 +1058,24 @@ render() {
                     subMenu={this.state.subMenu}
                   />
               )}
-              </Row>
-            )}
-            {this.state.menuSelect === 'new' && (
-              <Row className="tabRow">
+            </Row>
+          )}
+          {this.state.menuSelect === 'new' && (
+            <Row className="tabRow">
               {this.state.creatingVisit === false && (
                 <Button variant="secondary" className="filterFormBtn" onClick={this.onStartCreateNewVisit}>Create New</Button>
               )}
               {this.state.creatingVisit === true &&
                 this.state.appointments &&
                 !this.state.selectedAppointment && (
-                <Col className="patientSubListCol">
-                <Row className="patientSubListRow">
+                <Col className="">
+                <Row className="">
                 <h3>
                 Choose an Appointment
                 </h3>
                 <Button variant="secondary" className="patientSublistSearchBtn" onClick={this.startSublistSearch}>Search</Button>
                 </Row>
-                <Row className="patientSubListRow">
+                <Row className="">
                 {this.state.sublistSearch === true && (
                   <AppointmentSearchForm
                     onCancel={this.cancelSublistSearch}
@@ -1076,8 +1083,7 @@ render() {
                   />
                 )}
                 </Row>
-                <Row className="patientSubListRow">
-
+                <Row className="">
                 <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                   <Tab eventKey="1" title="list">
                     <AppointmentList
@@ -1098,10 +1104,7 @@ render() {
                     />
                   </Tab>
                 </Tabs>
-
-
                 </Row>
-
                 </Col>
               )}
               {this.state.creatingVisit === true &&
@@ -1119,12 +1122,11 @@ render() {
                   <h3>Review New Visit {this.state.newVisit._id}</h3>
                 </Row>
               )}
-              </Row>
-            )}
-
-            </Col>
+            </Row>
           )}
-        </Row>
+          </Col>
+        )}
+      </Row>
     </Container>
     </React.Fragment>
   );
