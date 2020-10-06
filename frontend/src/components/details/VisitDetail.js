@@ -5360,9 +5360,9 @@ render() {
               <Row className="tabRowDetails">
                 <h3>Systematic Inquiries:</h3>
                 <Row className="">
-                  <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                  <Button variant="outline-primary" className="searchBtn" onClick={this.toggleSideCol}>Filter</Button>
                   {this.context.role !== 'Staff' && (
-                    <Button variant="outline-success" onClick={this.startAdd.bind(this, 'systematicInquiry')}>Add</Button>
+                    <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'systematicInquiry')}>Add</Button>
                   )}
                 </Row>
                 {this.state.adding.state === true &&
@@ -5391,11 +5391,11 @@ render() {
             )}
             {this.props.subMenu === 'vitals' && (
               <Row className="tabRowDetails">
-              <Row className="displayPaneHeadRow">
-                <p className="displayPaneTitle">Visit Vitals List:</p>
-                <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+              <h3>Vitals:</h3>
+              <Row className="">
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleSideCol}>Filter</Button>
                 {this.context.role !== 'Staff' && (
-                  <Button variant="outline-success" onClick={this.startAdd.bind(this, 'vitals')}>Add</Button>
+                  <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'vitals')}>Add</Button>
                 )}
               </Row>
               {this.state.adding.state === true &&
@@ -5416,11 +5416,11 @@ render() {
             )}
             {this.props.subMenu === 'examination' && (
               <Row className="tabRowDetails">
-              <Row className="displayPaneHeadRow">
-                <p className="displayPaneTitle">Visit Examination List:</p>
-                <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+              <h3>Examinations:</h3>
+              <Row className="">
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleSideCol}>Filter</Button>
                 {this.context.role !== 'Staff' && (
-                  <Button variant="outline-success" onClick={this.startAdd.bind(this, 'examination')}>Add</Button>
+                  <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'examination')}>Add</Button>
                 )}
               </Row>
               {this.state.adding.state === true &&
@@ -5449,11 +5449,11 @@ render() {
             )}
             {this.props.subMenu === 'investigation' && (
               <Row className="tabRowDetails">
-              <Row className="displayPaneHeadRow">
-                <p className="displayPaneTitle">Visit Investigation List:</p>
-                <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+              <h3>Invenstigations:</h3>
+              <Row className="">
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleSideCol}>Filter</Button>
                 {this.context.role !== 'Staff' && (
-                  <Button variant="outline-success" onClick={this.startAdd.bind(this, 'investigation')}>Add</Button>
+                  <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'investigation')}>Add</Button>
                 )}
               </Row>
               {this.state.adding.state === true &&
@@ -5482,11 +5482,11 @@ render() {
             )}
             {this.props.subMenu === 'diagnosis' && (
               <Row className="tabRowDetails">
-              <Row className="displayPaneHeadRow">
-                <p className="displayPaneTitle">Visit Diagnosis List:</p>
-                <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+              <h3>Diagnoses:</h3>
+              <Row className="">
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleSideCol}>Filter</Button>
                 {this.context.role !== 'Staff' && (
-                  <Button variant="outline-success" onClick={this.startAdd.bind(this, 'diagnosis')}>Add</Button>
+                  <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'diagnosis')}>Add</Button>
                 )}
               </Row>
               {this.state.adding.state === true &&
@@ -5515,11 +5515,11 @@ render() {
             )}
             {this.props.subMenu === 'treatment' && (
               <Row className="tabRowDetails">
-              <Row className="displayPaneHeadRow">
-                <p className="displayPaneTitle">Visit Treatment List:</p>
-                <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+              <h3>Treatments:</h3>
+              <Row className="">
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleSideCol}>Filter</Button>
                 {this.context.role !== 'Staff' && (
-                  <Button variant="outline-success" onClick={this.startAdd.bind(this, 'treatment')}>Add</Button>
+                  <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'treatment')}>Add</Button>
                 )}
               </Row>
               {this.state.adding.state === true &&
@@ -5548,13 +5548,11 @@ render() {
             )}
             {this.props.subMenu === 'billing' && (
               <Row className="tabRowDetails">
-              <Row className="displayPaneHeadRow">
-                <p className="displayPaneTitle">Visit Billing List:</p>
-                <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
-
-                  <Button variant="outline-success" onClick={this.startAdd.bind(this, 'billing')}>Add</Button>
-                  <Button variant="outline-primary" size="sm" onClick={this.completeVisit}>Complete Visit</Button>
-
+              <h3>Billing:</h3>
+              <Row className="">
+                <Button className="searchBtn" variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                <Button className="searchBtn" variant="outline-success" onClick={this.startAdd.bind(this, 'billing')}>Add</Button>
+                <Button className="searchBtn" variant="outline-primary" size="sm" onClick={this.completeVisit}>Complete Visit</Button>
               </Row>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'billing' && (
@@ -5583,11 +5581,11 @@ render() {
             )}
             {this.props.subMenu === 'vigilance' && (
               <Row className="tabRowDetails">
-              <Row className="displayPaneHeadRow">
-                <p className="displayPaneTitle">Visit Vigilance List:</p>
-                <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+              <h3>Vigilance:</h3>
+              <Row className="">
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleSideCol}>Filter</Button>
                 {this.context.role !== 'Staff' && (
-                  <Button variant="outline-success" onClick={this.startAdd.bind(this, 'vigilance')}>Add</Button>
+                  <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'vigilance')}>Add</Button>
                 )}
               </Row>
               {this.state.adding.state === true &&
@@ -5608,11 +5606,11 @@ render() {
             )}
             {this.props.subMenu === 'image' && (
               <Row className="tabRowDetails">
-              <Row className="displayPaneHeadRow">
-                <p className="displayPaneTitle">Visit Image List:</p>
-                <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+              <h3>Images:</h3>
+              <Row className="">
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleSideCol}>Filter</Button>
                 {this.context.role !== 'Staff' && (
-                  <Button variant="outline-success" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
+                  <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
                 )}
               </Row>
               {this.state.adding.state === true &&
@@ -5633,11 +5631,11 @@ render() {
             )}
             {this.props.subMenu === 'file' && (
               <Row className="tabRowDetails">
-              <Row className="displayPaneHeadRow">
-                <p className="displayPaneTitle">Visit File List:</p>
-                <Button variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+              <h3>Files:</h3>
+              <Row className="">
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleSideCol}>Filter</Button>
                 {this.context.role !== 'Staff' && (
-                  <Button variant="outline-success" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
+                  <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
                 )}
               </Row>
               {this.state.adding.state === true &&
