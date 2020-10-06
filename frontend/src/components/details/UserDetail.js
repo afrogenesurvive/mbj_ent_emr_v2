@@ -1788,14 +1788,10 @@ render() {
               <Row className="tabRowAll">
               <ul className="summaryList">
               <li className="summaryListItem">
-              </li>
-              </ul>
-              </Row>
-            )}
-
-            {this.props.subMenu === 'basic' && (
-              <Row className="tabRowDetails">
-              <h3>Basic Info:</h3>
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Basic Info:</h3>
+              </Col>
                 <ListGroup className="profileBasicListGroup">
 
                   <ListGroup.Item>
@@ -1862,11 +1858,207 @@ render() {
                     <p></p>
                   </ListGroup.Item>
                 </ListGroup>
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Addresses:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                {this.state.canDelete === true && (
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
+                )}
+              </Col>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'address' && (
+                    <AddAddressForm
+                      onConfirm={this.submitAddAddressForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                <UserAddressList
+                  filter={this.state.filter}
+                  addresses={this.props.user.addresses}
+                  authId={this.context.activityId}
+                  onDelete={this.deleteAddress}
+                  canDelete={this.state.canDelete}
+                  makePrimary={this.setAddressPrimary}
+                />
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Addresses:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                {this.state.canDelete === true && (
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
+                )}
+              </Col>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'address' && (
+                    <AddAddressForm
+                      onConfirm={this.submitAddAddressForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                <UserAddressList
+                  filter={this.state.filter}
+                  addresses={this.props.user.addresses}
+                  authId={this.context.activityId}
+                  onDelete={this.deleteAddress}
+                  canDelete={this.state.canDelete}
+                  makePrimary={this.setAddressPrimary}
+                />
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Addresses:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                {this.state.canDelete === true && (
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
+                )}
+              </Col>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'address' && (
+                    <AddAddressForm
+                      onConfirm={this.submitAddAddressForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                <UserAddressList
+                  filter={this.state.filter}
+                  addresses={this.props.user.addresses}
+                  authId={this.context.activityId}
+                  onDelete={this.deleteAddress}
+                  canDelete={this.state.canDelete}
+                  makePrimary={this.setAddressPrimary}
+                />
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Addresses:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                {this.state.canDelete === true && (
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
+                )}
+              </Col>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'address' && (
+                    <AddAddressForm
+                      onConfirm={this.submitAddAddressForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                <UserAddressList
+                  filter={this.state.filter}
+                  addresses={this.props.user.addresses}
+                  authId={this.context.activityId}
+                  onDelete={this.deleteAddress}
+                  canDelete={this.state.canDelete}
+                  makePrimary={this.setAddressPrimary}
+                />
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              c
+              </Col>
+              </li>
+              </ul>
               </Row>
             )}
+
+            {this.props.subMenu === 'basic' && (
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Basic Info:</h3>
+              </Col>
+                <ListGroup className="profileBasicListGroup">
+
+                  <ListGroup.Item>
+                    <p className="listGroupText">Title:</p>
+                    <p className="listGroupText bold">{this.props.user.title}</p>
+                    {this.state.canDelete === true && (
+                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
+                    )}
+                    <p className="listGroupText">Name:</p>
+                    <p className="listGroupText bold">{this.props.user.name}</p>
+                    {this.state.canDelete === true && (
+                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'name')}>Edit</Button>
+                    )}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Username:</p>
+                    <p className="listGroupText bold">{this.props.user.username}</p>
+                    {this.state.canDelete === true && (
+                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'username')}>Edit</Button>
+                    )}
+                    <p className="listGroupText">Role:</p>
+                    <p className="listGroupText bold">{this.props.user.role}</p>
+                    {this.context.role === 'Admin' && (
+                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'role')}>Edit</Button>
+                    )}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">DOB:</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                    {this.state.canDelete === true && (
+                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
+                    )}
+                    <p className="listGroupText">Age:</p>
+                    <p className="listGroupText bold">{this.props.user.age}</p>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Gender:</p>
+                    <p className="listGroupText bold">{this.props.user.gender}</p>
+                    {this.state.canDelete === true && (
+                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'gender')}>Edit</Button>
+                    )}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Email:</p>
+                    <p className="listGroupText bold">{this.props.user.contact.email}</p>
+                    {this.state.canDelete === true && (
+                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.email')}>Edit</Button>
+                    )}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Phone:</p>
+                    <p className="listGroupText bold">{this.props.user.contact.phone}</p>
+                    {this.state.canDelete === true && (
+                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone')}>Edit</Button>
+                    )}
+                    <p className="listGroupText">Phone 2:</p>
+                    <p className="listGroupText bold">{this.props.user.contact.phone2}</p>
+                    {this.state.canDelete === true && (
+                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone2')}>Edit</Button>
+                    )}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p></p>
+                    <p></p>
+                  </ListGroup.Item>
+                </ListGroup>
+              </Col>
+            )}
             {this.props.subMenu === 'admin' && (
-              <Row className="tabRowDetails">
-                <h3>Admin Info:</h3>
+              <Col className="tabCol">
+                <Col className="subTabCol">
+                  <h3 className="">Admin Info:</h3>
+                </Col>
                 <ListGroup className="profileBasicListGroup">
                   <ListGroup.Item>
                     <p className="listGroupText">Reg No:</p>
@@ -1902,17 +2094,19 @@ render() {
                     <p className="listGroupText bold">{this.props.user.verification.code}</p>
                   </ListGroup.Item>
                 </ListGroup>
-              </Row>
+              </Col>
             )}
             {this.props.subMenu === 'address' && (
-              <Row className="tabRowDetails">
-              <h3>Addresses:</h3>
-                <Row className="">
-                  <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
-                  {this.state.canDelete === true && (
-                    <Button variant="success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
-                  )}
-                </Row>
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Addresses:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                {this.state.canDelete === true && (
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
+                )}
+              </Col>
                 {this.state.adding.state === true &&
                   this.state.adding.field === 'address' && (
                     <AddAddressForm
@@ -1928,7 +2122,7 @@ render() {
                   canDelete={this.state.canDelete}
                   makePrimary={this.setAddressPrimary}
                 />
-              </Row>
+              </Col>
             )}
             {this.props.subMenu === 'attendance' && (
               <Row className="tabRowDetails">

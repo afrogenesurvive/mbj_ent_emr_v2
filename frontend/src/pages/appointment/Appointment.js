@@ -929,11 +929,11 @@ render() {
           )}
 
           {this.state.menuSelect === 'list' && (
-            <Row className="tabRow tabRowAppt">
-              <Row className="">
+            <Col className="tabCol tabRowAppt">
+              <Col className="subTabCol">
                 <Button variant="primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 <Button variant="warning" className="searchBtn" onClick={this.resetFilter}>Reset</Button>
-              </Row>
+              </Col>
               <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                 <Tab eventKey="1" title="list">
                   <AppointmentList
@@ -954,11 +954,11 @@ render() {
                   />
                 </Tab>
               </Tabs>
-            </Row>
+            </Col>
           )}
           {this.state.menuSelect === 'search' && (
-            <Row className="tabRow">
-              <Col className="">
+            <Col className="tabCol">
+              <Col className="subTabCol">
                 <h3>Search:</h3>
                 <Row className="">
                   <AppointmentSearchForm
@@ -982,10 +982,10 @@ render() {
                   )}
                 </Row>
               </Col>
-            </Row>
+            </Col>
           )}
           {this.state.menuSelect === 'detail' && (
-            <Row className="tabRow">
+            <Col className="tabCol">
               {this.state.showDetails === false &&
                 !this.state.selectedAppointment &&(
                 <h3>Select a Appointment to see details</h3>
@@ -998,17 +998,18 @@ render() {
                   subMenu={this.state.subMenu}
                 />
               )}
-            </Row>
+            </Col>
           )}
           {this.state.menuSelect === 'new' && (
-            <Row className="tabRow">
+            <Col className="tabCol">
             {this.state.creatingAppointment === false && (
               <Button variant="secondary" className="filterFormBtn" onClick={this.onStartCreateNewAppointment}>Create New</Button>
             )}
             {this.state.creatingAppointment === true &&
               this.state.patients &&
               !this.state.selectedPatient && (
-              <Col className="">
+              <Col className="subTabCol">
+              <h3>Select a Patient</h3>
               <Row className="">
               <Button variant="success" className="patientSublistSearchBtn" onClick={this.startSublistSearch}>Search</Button>
               </Row>
@@ -1046,7 +1047,7 @@ render() {
                 <h3>Review New Appointment {this.state.newAppointment._id}</h3>
               </Row>
             )}
-            </Row>
+            </Col>
           )}
           </Col>
         )}

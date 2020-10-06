@@ -550,11 +550,11 @@ render() {
             </Col>
           )}
           {this.state.menuSelect === 'list' && (
-            <Row className="tabRow">
-              <Row className="">
+            <Col className="tabCol">
+              <Col className="subTabCol">
                 <Button variant="primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 <Button variant="warning" className="searchBtn" onClick={this.resetFilter}>Reset Filter</Button>
-              </Row>
+              </Col>
               <UserList
                 filter={this.state.filter}
                 users={this.state.users}
@@ -563,12 +563,13 @@ render() {
                 showDetails={this.showDetails}
                 onDelete={this.deleteUser}
               />
-            </Row>
+            </Col>
           )}
           {this.state.menuSelect === 'search' && (
-            <Row className="tabRow">
-            <h3>Search</h3>
-              <Col className="">
+            <Col className="tabCol">
+
+              <Col className="subTabCol">
+              <h3>Search</h3>
                 <Row className="">
                   <UserSearchForm
                     onConfirm={this.searchUsers}
@@ -591,10 +592,10 @@ render() {
                   )}
                 </Row>
               </Col>
-            </Row>
+            </Col>
           )}
           {this.state.menuSelect === 'detail' && (
-            <Row className="tabRow">
+            <Col className="tabCol tabColDetail">
               {this.state.showDetails === false &&
                 !this.state.selectedUser &&(
                 <h3>Select a Staff Member to see details</h3>
@@ -607,7 +608,7 @@ render() {
                     subMenu={this.state.subMenu}
                   />
               )}
-            </Row>
+            </Col>
           )}
 
           </Col>

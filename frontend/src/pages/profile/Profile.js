@@ -1848,10 +1848,11 @@ render() {
           {this.state.sideCol === 'menuProfile' && (
             <Col>
             {this.state.menuSelect === 'basic' && (
-            <Row className="tabRow">
-              <h3 className="">Basic:</h3>
+            <Col className="tabCol">
+            <Col className="subTabCol">
+              <h3 className="">Basic Info:</h3>
+            </Col>
               <ListGroup className="profileBasicListGroup">
-
                 <ListGroup.Item>
                   <p className="listGroupText">Title:</p>
                   <p className="listGroupText bold">{this.state.activityUser.title}</p>
@@ -1890,11 +1891,13 @@ render() {
                 <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone2')}>Edit</Button>
                 </ListGroup.Item>
               </ListGroup>
-            </Row>
+            </Col>
             )}
             {this.state.menuSelect === 'admin' && (
-            <Row className="tabRow">
-              <h3 className="">Admin:</h3>
+            <Col className="tabCol">
+            <Col className="subTabCol">
+              <h3 className="">Admin Info:</h3>
+            </Col>
               <ListGroup className="profileBasicListGroup">
                 <ListGroup.Item>
                   <p className="listGroupText">Reg No:</p>
@@ -1931,17 +1934,17 @@ render() {
                   <p className="listGroupText bold">{this.state.activityUser.verification.code}</p>
                 </ListGroup.Item>
               </ListGroup>
-            </Row>
+            </Col>
             )}
             {this.state.menuSelect === 'address' && (
-            <Row className="tabRow">
-              <Row className="">
+            <Col className="tabCol">
+              <Col className="subTabCol">
                 <h3 className="">Addresses:</h3>
-              </Row>
-              <Row className="">
+              </Col>
+              <Col className="subTabCol">
                 <Button variant="primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
-              </Row>
+              </Col>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'address' && (
                   <AddAddressForm
@@ -1957,17 +1960,17 @@ render() {
                 canDelete={this.state.canDelete}
                 makePrimary={this.setAddressPrimary}
               />
-            </Row>
+            </Col>
             )}
             {this.state.menuSelect === 'attendance' && (
-            <Row className="tabRow">
-              <Row className="">
+            <Col className="tabCol">
+              <Col className="subTabCol">
                 <h3 className="">Attendance:</h3>
-              </Row>
-              <Row className="">
+              </Col>
+              <Col className="subTabCol">
                 <Button variant="primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'attendance')}>Add</Button>
-              </Row>
+              </Col>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'attendance' && (
                   <AddAttendanceForm
@@ -1975,10 +1978,9 @@ render() {
                     onCancel={this.cancelAdd}
                   />
               )}
-              <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+              <Tabs defaultActiveKey="1" id="uncontrolled-tab-example"className="subTabs">
                 <Tab eventKey="1" title="list">
-
-                <UserAttendanceList
+                  <UserAttendanceList
                   filter={this.state.filter}
                   attendance={this.state.activityUser.attendance}
                   authId={this.state.activityUser._id}
@@ -1987,7 +1989,6 @@ render() {
                 />
                 </Tab>
                 <Tab eventKey="2" title="calendar" className="calendarTab">
-                  <h3>Calendar</h3>
                   <FullCalendar
                     defaultView="dayGridMonth"
                     plugins={[dayGridPlugin]}
@@ -1996,17 +1997,17 @@ render() {
                   />
                 </Tab>
               </Tabs>
-            </Row>
+            </Col>
             )}
             {this.state.menuSelect === 'leave' && (
-            <Row className="tabRow">
-              <Row className="">
+            <Col className="tabCol">
+              <Col className="subTabCol">
                 <h3 className="">Leave:</h3>
-              </Row>
-              <Row className="">
+              </Col>
+              <Col className="subTabCol">
                 <Button variant="primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'leave')}>Add</Button>
-              </Row>
+              </Col>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'leave' && (
                   <AddLeaveForm
@@ -2034,17 +2035,17 @@ render() {
                   />
                 </Tab>
               </Tabs>
-            </Row>
+            </Col>
             )}
             {this.state.menuSelect === 'image' && (
-            <Row className="tabRow">
-              <Row className="">
+            <Col className="tabCol">
+              <Col className="subTabCol">
                 <h3 className="">Images:</h3>
-              </Row>
-              <Row className="">
+              </Col>
+              <Col className="subTabCol">
                 <Button variant="primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
-              </Row>
+              </Col>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'image' && (
                   <AddImageForm
@@ -2059,17 +2060,17 @@ render() {
                 canDelete={this.state.canDelete}
                 onDelete={this.deleteImage}
               />
-            </Row>
+            </Col>
             )}
             {this.state.menuSelect === 'file' && (
-            <Row className="tabRow">
-              <Row className="">
+            <Col className="tabCol">
+              <Col className="subTabCol">
                 <h3 className="">Files:</h3>
-              </Row>
-              <Row className="">
+              </Col>
+              <Col className="subTabCol">
                 <Button variant="primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
-              </Row>
+              </Col>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'file' && (
                   <AddFileForm
@@ -2084,13 +2085,13 @@ render() {
                 canDelete={this.state.canDelete}
                 onDelete={this.deleteFile}
               />
-            </Row>
+            </Col>
             )}
             {this.state.menuSelect === 'appointment' && (
-            <Row className="tabRow">
-              <Row className="">
+            <Col className="tabCol">
+              <Col className="subTabCol">
                 <p className="">Appointments:</p>
-              </Row>
+              </Col>
               <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                 <Tab eventKey="1" title="list">
                 <UserAppointmentList
@@ -2108,17 +2109,17 @@ render() {
                   />
                 </Tab>
               </Tabs>
-            </Row>
+            </Col>
             )}
             {this.state.menuSelect === 'note' && (
-            <Row className="tabRow">
-              <Row className="">
+            <Col className="tabCol">
+              <Col className="subTabCol">
                 <h3 className="">Notes:</h3>
-              </Row>
-              <Row className="">
+              </Col>
+              <Col className="subTabCol">
                 <Button variant="primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
-              </Row>
+              </Col>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'note' && (
                   <AddNoteForm
@@ -2133,7 +2134,7 @@ render() {
                 canDelete={this.state.canDelete}
                 onDelete={this.deleteNote}
               />
-            </Row>
+            </Col>
             )}
             </Col>
           )}

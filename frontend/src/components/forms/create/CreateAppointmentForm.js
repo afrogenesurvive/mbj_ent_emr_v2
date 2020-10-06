@@ -74,8 +74,8 @@ return (
     </Form.Row>
 
     <Form.Row>
-      <Button variant="success" type="submit" className="loginFormBtn">Create</Button>
-      <Button variant="danger" className="loginFormBtn" onClick={props.onCancel}>Cancel</Button>
+      <Button variant="success" type="submit" className="loginFormBtn searchBtn">Create</Button>
+      <Button variant="danger" className="loginFormBtn searchBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>
 </div>

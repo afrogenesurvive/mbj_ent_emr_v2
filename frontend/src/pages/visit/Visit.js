@@ -988,11 +988,11 @@ render() {
           )}
 
           {this.state.menuSelect === 'list' && (
-            <Row className="tabRow tabRowAppt">
-            <Row className="">
+            <Col className="tabCol tabRowAppt">
+            <Col className="subTabCol">
               <Button variant="primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
               <Button variant="warning" className="searchBtn" onClick={this.resetFilter}>Reset</Button>
-            </Row>
+            </Col>
               <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                 <Tab eventKey="1" title="list">
                   <VisitList
@@ -1005,7 +1005,6 @@ render() {
                   />
                 </Tab>
                 <Tab eventKey="2" title="calendar" className="calendarTab">
-                  <h3>Calendar</h3>
                   <FullCalendar
                     plugins={[dayGridPlugin]}
                     intitialView="dayGridMonth"
@@ -1014,12 +1013,12 @@ render() {
                   />
                 </Tab>
               </Tabs>
-            </Row>
+            </Col>
           )}
           {this.state.menuSelect === 'search' && (
-            <Row className="tabRow">
-              <Col className="">
-                <h3>Search Visits</h3>
+            <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3>Search</h3>
                 <Row className="">
                   <VisitSearchForm
                     onConfirm={this.searchVisits}
@@ -1042,10 +1041,10 @@ render() {
                   )}
                 </Row>
               </Col>
-            </Row>
+            </Col>
           )}
           {this.state.menuSelect === 'detail' && (
-            <Row className="tabRow">
+            <Col className="tabCol">
               {this.state.showDetails === false &&
                 !this.state.selectedVisit &&(
                 <h3>Select a Visit to see details</h3>
@@ -1058,10 +1057,10 @@ render() {
                     subMenu={this.state.subMenu}
                   />
               )}
-            </Row>
+            </Col>
           )}
           {this.state.menuSelect === 'new' && (
-            <Row className="tabRow">
+            <Col className="tabCol">
               {this.state.creatingVisit === false && (
                 <Button variant="secondary" className="filterFormBtn" onClick={this.onStartCreateNewVisit}>Create New</Button>
               )}
@@ -1069,12 +1068,12 @@ render() {
                 this.state.appointments &&
                 !this.state.selectedAppointment && (
                 <Col className="">
-                <Row className="">
+                <Col className="subTabCol">
                 <h3>
                 Choose an Appointment
                 </h3>
                 <Button variant="secondary" className="patientSublistSearchBtn" onClick={this.startSublistSearch}>Search</Button>
-                </Row>
+                </Col>
                 <Row className="">
                 {this.state.sublistSearch === true && (
                   <AppointmentSearchForm
@@ -1083,7 +1082,7 @@ render() {
                   />
                 )}
                 </Row>
-                <Row className="">
+                <Col className="subTabCol">
                 <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                   <Tab eventKey="1" title="list">
                     <AppointmentList
@@ -1104,7 +1103,7 @@ render() {
                     />
                   </Tab>
                 </Tabs>
-                </Row>
+                </Col>
                 </Col>
               )}
               {this.state.creatingVisit === true &&
@@ -1122,7 +1121,7 @@ render() {
                   <h3>Review New Visit {this.state.newVisit._id}</h3>
                 </Row>
               )}
-            </Row>
+            </Col>
           )}
           </Col>
         )}

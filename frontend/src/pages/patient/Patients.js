@@ -729,11 +729,11 @@ render() {
           )}
 
           {this.state.menuSelect === 'list' && (
-            <Row className="tabRow">
-              <Row className="">
+            <Col className="tabCol">
+              <Col className="subTabCol">
                 <Button variant="primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 <Button variant="warning" className="searchBtn" onClick={this.resetFilter}>Reset</Button>
-              </Row>
+              </Col>
               <PatientList
                 filter={this.state.filter}
                 patients={this.state.patients}
@@ -742,12 +742,12 @@ render() {
                 showDetails={this.showDetails}
                 onDelete={this.deletePatient}
               />
-            </Row>
+            </Col>
           )}
 
           {this.state.menuSelect === 'search' && (
-            <Row className="tabRow">
-              <Col className="">
+            <Col className="tabCol">
+              <Col className="subTabCol">
                 <h3>Search Patient</h3>
                 <Row className="">
                   <PatientSearchForm
@@ -771,10 +771,10 @@ render() {
                   )}
                 </Row>
               </Col>
-            </Row>
+            </Col>
           )}
           {this.state.menuSelect === 'detail' && (
-            <Row className="tabRow">
+            <Col className="tabCol">
             {this.state.showDetails === false &&
               !this.state.selectedPatient &&(
               <h3>Select a Patient to see details</h3>
@@ -787,10 +787,10 @@ render() {
                 subMenu={this.state.subMenu}
               />
             )}
-            </Row>
+            </Col>
           )}
           {this.state.menuSelect === 'new' && (
-            <Row className="tabRow">
+            <Col className="tabCol">
               {this.state.creatingPatient === false && (
                 <Button variant="secondary" className="filterFormBtn" onClick={this.onStartCreateNewPatient}>Create New</Button>
               )}
@@ -806,7 +806,7 @@ render() {
                   {this.state.newPatient.username}
                 </Row>
               )}
-            </Row>
+            </Col>
           )}
           </Col>
         )}

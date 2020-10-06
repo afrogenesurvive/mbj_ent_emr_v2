@@ -5094,61 +5094,61 @@ render() {
             <Col>
               {this.props.subMenu === 'consultant' && (
                 <FilterUserForm
-                  onCancel={this.toggleSideCol}
+                  onCancel={this.toggleFilter}
                   onConfirm={this.submitFilterForm}
                 />
               )}
               {this.props.subMenu === 'complaint' && (
                 <FilterComplaintForm
-                  onCancel={this.toggleSideCol}
+                  onCancel={this.toggleFilter}
                   onConfirm={this.submitFilterForm}
                 />
               )}
               {this.props.subMenu === 'survey' && (
                 <FilterSurveyForm
-                  onCancel={this.toggleSideCol}
+                  onCancel={this.toggleFilter}
                   onConfirm={this.submitFilterForm}
                 />
               )}
               {this.props.subMenu === 'systematicInquiry' && (
                 <FilterSystematicInquiryForm
-                  onCancel={this.toggleSideCol}
+                  onCancel={this.toggleFilter}
                   onConfirm={this.submitFilterForm}
                 />
               )}
               {this.props.subMenu === 'vitals' && (
                 <FilterVitalsForm
-                  onCancel={this.toggleSideCol}
+                  onCancel={this.toggleFilter}
                   onConfirm={this.submitFilterForm}
                 />
               )}
               {this.props.subMenu === 'examination' && (
                 <FilterExaminationForm
-                  onCancel={this.toggleSideCol}
+                  onCancel={this.toggleFilter}
                   onConfirm={this.submitFilterForm}
                 />
               )}
               {this.props.subMenu === 'investigation' && (
                 <FilterInvestigationForm
-                  onCancel={this.toggleSideCol}
+                  onCancel={this.toggleFilter}
                   onConfirm={this.submitFilterForm}
                 />
               )}
               {this.props.subMenu === 'diagnosis' && (
                 <FilterDiagnosisForm
-                  onCancel={this.toggleSideCol}
+                  onCancel={this.toggleFilter}
                   onConfirm={this.submitFilterForm}
                 />
               )}
               {this.props.subMenu === 'treatment' && (
                 <FilterTreatmentForm
-                  onCancel={this.toggleSideCol}
+                  onCancel={this.toggleFilter}
                   onConfirm={this.submitFilterForm}
                 />
               )}
               {this.props.subMenu === 'billing' && (
                 <FilterBillingForm
-                  onCancel={this.toggleSideCol}
+                  onCancel={this.toggleFilter}
                   onConfirm={this.submitFilterForm}
                 />
               )}
@@ -5157,13 +5157,13 @@ render() {
               )}
               {this.props.subMenu === 'image' && (
                 <FilterImageForm
-                  onCancel={this.toggleSideCol}
+                  onCancel={this.toggleFilter}
                   onConfirm={this.submitFilterForm}
                 />
               )}
               {this.props.subMenu === 'file' && (
                 <FilterFileForm
-                  onCancel={this.toggleSideCol}
+                  onCancel={this.toggleFilter}
                   onConfirm={this.submitFilterForm}
                 />
               )}
@@ -5265,7 +5265,7 @@ render() {
               <Row className="tabRowDetails">
               <h3>Consultants:</h3>
               <Row className="">
-                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleSideCol}>Filter</Button>
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 {this.context.role !== 'Staff' && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'consultant')}>Add</Button>
                 )}
@@ -5294,7 +5294,7 @@ render() {
               <Row className="tabRowDetails">
                 <h3>Complaints:</h3>
                 <Row className="">
-                  <Button variant="outline-primary" className="searchBtn" onClick={this.toggleSideCol}>Filter</Button>
+                  <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                   {this.context.role !== 'Staff' && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'complaint')}>Add</Button>
                   )}
@@ -5327,7 +5327,7 @@ render() {
               <Row className="tabRowDetails">
               <h3>Surveys:</h3>
               <Row className="">
-                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleSideCol}>Filter</Button>
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 {this.context.role !== 'Staff' && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'survey')}>Add</Button>
                 )}
@@ -5360,7 +5360,7 @@ render() {
               <Row className="tabRowDetails">
                 <h3>Systematic Inquiries:</h3>
                 <Row className="">
-                  <Button variant="outline-primary" className="searchBtn" onClick={this.toggleSideCol}>Filter</Button>
+                  <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                   {this.context.role !== 'Staff' && (
                     <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'systematicInquiry')}>Add</Button>
                   )}
@@ -5393,7 +5393,7 @@ render() {
               <Row className="tabRowDetails">
               <h3>Vitals:</h3>
               <Row className="">
-                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleSideCol}>Filter</Button>
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 {this.context.role !== 'Staff' && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'vitals')}>Add</Button>
                 )}
@@ -5418,7 +5418,7 @@ render() {
               <Row className="tabRowDetails">
               <h3>Examinations:</h3>
               <Row className="">
-                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleSideCol}>Filter</Button>
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 {this.context.role !== 'Staff' && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'examination')}>Add</Button>
                 )}
@@ -5451,7 +5451,7 @@ render() {
               <Row className="tabRowDetails">
               <h3>Invenstigations:</h3>
               <Row className="">
-                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleSideCol}>Filter</Button>
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 {this.context.role !== 'Staff' && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'investigation')}>Add</Button>
                 )}
@@ -5484,7 +5484,7 @@ render() {
               <Row className="tabRowDetails">
               <h3>Diagnoses:</h3>
               <Row className="">
-                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleSideCol}>Filter</Button>
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 {this.context.role !== 'Staff' && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'diagnosis')}>Add</Button>
                 )}
@@ -5517,7 +5517,7 @@ render() {
               <Row className="tabRowDetails">
               <h3>Treatments:</h3>
               <Row className="">
-                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleSideCol}>Filter</Button>
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 {this.context.role !== 'Staff' && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'treatment')}>Add</Button>
                 )}
@@ -5550,7 +5550,7 @@ render() {
               <Row className="tabRowDetails">
               <h3>Billing:</h3>
               <Row className="">
-                <Button className="searchBtn" variant="outline-primary" onClick={this.toggleSideCol}>Filter</Button>
+                <Button className="searchBtn" variant="outline-primary" onClick={this.toggleFilter}>Filter</Button>
                 <Button className="searchBtn" variant="outline-success" onClick={this.startAdd.bind(this, 'billing')}>Add</Button>
                 <Button className="searchBtn" variant="outline-primary" size="sm" onClick={this.completeVisit}>Complete Visit</Button>
               </Row>
@@ -5583,7 +5583,7 @@ render() {
               <Row className="tabRowDetails">
               <h3>Vigilance:</h3>
               <Row className="">
-                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleSideCol}>Filter</Button>
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 {this.context.role !== 'Staff' && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'vigilance')}>Add</Button>
                 )}
@@ -5608,7 +5608,7 @@ render() {
               <Row className="tabRowDetails">
               <h3>Images:</h3>
               <Row className="">
-                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleSideCol}>Filter</Button>
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 {this.context.role !== 'Staff' && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
                 )}
@@ -5633,7 +5633,7 @@ render() {
               <Row className="tabRowDetails">
               <h3>Files:</h3>
               <Row className="">
-                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleSideCol}>Filter</Button>
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 {this.context.role !== 'Staff' && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
                 )}
