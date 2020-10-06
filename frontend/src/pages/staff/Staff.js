@@ -427,7 +427,6 @@ updateUser = (args) => {
   })
   this.props.selectUser(args);
 }
-
 deleteUser = (args) => {
   console.log('...deleteing user...',args);
   this.context.setUserAlert('...deleteing user...')
@@ -553,8 +552,8 @@ render() {
           {this.state.menuSelect === 'list' && (
             <Row className="tabRow">
               <Row className="">
-                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
-                <Button variant="warning" onClick={this.resetFilter}>Reset Filter</Button>
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
+                <Button variant="warning" className="searchBtn" onClick={this.resetFilter}>Reset Filter</Button>
               </Row>
               <UserList
                 filter={this.state.filter}
@@ -568,8 +567,8 @@ render() {
           )}
           {this.state.menuSelect === 'search' && (
             <Row className="tabRow">
+            <h3>Search</h3>
               <Col className="">
-                <h3>Search Staff</h3>
                 <Row className="">
                   <UserSearchForm
                     onConfirm={this.searchUsers}

@@ -1,6 +1,8 @@
 .loginFormTopDiv {
   margin: 0 auto;
-  background-image: linear-gradient(rgba(42,157,143, .6),rgba(233, 196, 106,.6));
+  /* background-image: linear-gradient(rgba(42,157,143, .6),rgba(233, 196, 106,.6)); */
   padding: 1rem;
-  border-radius:  15px;
+  border-radius:  3px;
+  border: 1px solid black;
+  box-shadow: 0px 7px 10px rgba(20,33,61,.4);
 }

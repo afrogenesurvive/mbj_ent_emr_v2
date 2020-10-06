@@ -45,6 +45,9 @@ const AttendanceItem = props => {
           <Card.Text className="cardText">
           Date: <span className="bold">{moment.unix(props.attendance.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
           </Card.Text>
+          <Card.Text className="cardText">
+            Status: <span className="bold">{props.attendance.status}</span>
+          </Card.Text>
 
           <OverlayTrigger
             key={'right'}

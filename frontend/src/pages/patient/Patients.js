@@ -717,7 +717,7 @@ render() {
 
       <Row className="">
         {this.state.patients && (
-          <Col lg={12} className="staffPageContainerCol specialCol2">
+          <Col lg={12} className="">
 
           {this.state.startFilter === true && (
             <Col>
@@ -731,8 +731,8 @@ render() {
           {this.state.menuSelect === 'list' && (
             <Row className="tabRow">
               <Row className="">
-                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
-                <Button variant="warning" onClick={this.resetFilter}>Reset</Button>
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
+                <Button variant="warning" className="searchBtn" onClick={this.resetFilter}>Reset</Button>
               </Row>
               <PatientList
                 filter={this.state.filter}

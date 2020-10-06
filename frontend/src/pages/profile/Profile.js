@@ -1849,7 +1849,7 @@ render() {
             <Col>
             {this.state.menuSelect === 'basic' && (
             <Row className="tabRow">
-              <p className="">Basic:</p>
+              <h3 className="">Basic:</h3>
               <ListGroup className="profileBasicListGroup">
 
                 <ListGroup.Item>
@@ -1894,7 +1894,7 @@ render() {
             )}
             {this.state.menuSelect === 'admin' && (
             <Row className="tabRow">
-              <p className="">Admin:</p>
+              <h3 className="">Admin:</h3>
               <ListGroup className="profileBasicListGroup">
                 <ListGroup.Item>
                   <p className="listGroupText">Reg No:</p>
@@ -1936,9 +1936,11 @@ render() {
             {this.state.menuSelect === 'address' && (
             <Row className="tabRow">
               <Row className="">
-                <p className="">Addresses:</p>
-                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
-                <Button variant="success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
+                <h3 className="">Addresses:</h3>
+              </Row>
+              <Row className="">
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
+                <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
               </Row>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'address' && (
@@ -1960,9 +1962,11 @@ render() {
             {this.state.menuSelect === 'attendance' && (
             <Row className="tabRow">
               <Row className="">
-                <p className="">Attendance:</p>
-                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
-                <Button variant="success" onClick={this.startAdd.bind(this, 'attendance')}>Add</Button>
+                <h3 className="">Attendance:</h3>
+              </Row>
+              <Row className="">
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
+                <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'attendance')}>Add</Button>
               </Row>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'attendance' && (
@@ -1973,6 +1977,7 @@ render() {
               )}
               <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
                 <Tab eventKey="1" title="list">
+
                 <UserAttendanceList
                   filter={this.state.filter}
                   attendance={this.state.activityUser.attendance}
@@ -1996,9 +2001,11 @@ render() {
             {this.state.menuSelect === 'leave' && (
             <Row className="tabRow">
               <Row className="">
-                <p className="">Leave:</p>
-                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
-                <Button variant="success" onClick={this.startAdd.bind(this, 'leave')}>Add</Button>
+                <h3 className="">Leave:</h3>
+              </Row>
+              <Row className="">
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
+                <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'leave')}>Add</Button>
               </Row>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'leave' && (
@@ -2032,9 +2039,11 @@ render() {
             {this.state.menuSelect === 'image' && (
             <Row className="tabRow">
               <Row className="">
-                <p className="">Images:</p>
-                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
-                <Button variant="success" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
+                <h3 className="">Images:</h3>
+              </Row>
+              <Row className="">
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
+                <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
               </Row>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'image' && (
@@ -2055,9 +2064,11 @@ render() {
             {this.state.menuSelect === 'file' && (
             <Row className="tabRow">
               <Row className="">
-                <p className="">Files:</p>
-                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
-                <Button variant="success" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
+                <h3 className="">Files:</h3>
+              </Row>
+              <Row className="">
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
+                <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
               </Row>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'file' && (
@@ -2089,7 +2100,6 @@ render() {
                 />
                 </Tab>
                 <Tab eventKey="2" title="calendar" className="calendarTab">
-                  <h3>Calendar</h3>
                   <FullCalendar
                     defaultView="dayGridMonth"
                     plugins={[dayGridPlugin]}
@@ -2103,9 +2113,11 @@ render() {
             {this.state.menuSelect === 'note' && (
             <Row className="tabRow">
               <Row className="">
-                <p className="">Notes:</p>
-                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
-                <Button variant="success" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
+                <h3 className="">Notes:</h3>
+              </Row>
+              <Row className="">
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
+                <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
               </Row>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'note' && (

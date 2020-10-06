@@ -44,8 +44,8 @@ return (
     </Form.Row>
 
     <Form.Row>
-      <Button variant="success" type="submit" className="filterFormBtn">Filter</Button>
-      <Button variant="secondary" className="filterFormBtn" onClick={props.onCancel}>Cancel</Button>
+      <Button variant="success" type="submit" className="filterFormBtn searchBtn">Filter</Button>
+      <Button variant="secondary" className="filterFormBtn searchBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>
 </div>

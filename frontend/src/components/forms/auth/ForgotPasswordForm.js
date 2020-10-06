@@ -27,8 +27,8 @@ return (
   </Form.Row>
 
   <Form.Row>
-    <Button variant="danger" className="formButton" onClick={props.onCancel}>Cancel</Button>
-    <Button variant="primary" className="formButton" type="submit">Request New Password</Button>
+    <Button variant="danger" className="formButton searchBtn" onClick={props.onCancel}>Cancel</Button>
+    <Button variant="primary" className="formButton searchBtn" type="submit">Request New Password</Button>
   </Form.Row>
 </Form>
 </div>

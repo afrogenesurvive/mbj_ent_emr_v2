@@ -2702,6 +2702,11 @@ toggleSideCol = () => {
   }
 
 }
+toggleFilter = () => {
+  this.setState({
+    startFilter: !this.state.startFilter
+  })
+}
 menuSelect = (args) => {
   this.setState({menuSelect: args})
 }
@@ -2857,281 +2862,268 @@ render() {
       />
     )}
 
-    <Container className="detailPageContainer">
+    <Container className="topContainer">
 
-      <Row className="detailPageContainerRow mainRow">
-        <Col md={2} className="detailPageContainerCol">
-
-        </Col>
-        <Col md={10} className="detailPageContainerCol">
-          {!this.props.patient && (
-            <h3>...</h3>
-          )}
-        </Col>
+      <Row className="">
+        {!this.props.patient && (
+          <h3>...</h3>
+        )}
       </Row>
 
-        <Row className="detailPageContainerRow mainRow2">
+      <Row className="">
+        {this.props.patient && (
+          <Col md={12} className="">
+            {this.state.startFilter === true && (
+              <Col>
+                {this.props.subMenu === 'address' && (
+                  <FilterAddressForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                {this.props.subMenu === 'nextOfKin' && (
+                  <FilterNextOfKinForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                {this.props.subMenu === 'allergy' && (
+                  <FilterAllergyForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                {this.props.subMenu === 'medication' && (
+                  <FilterMedicationForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                {this.props.subMenu === 'comorbidities' && (
+                  <FilterComorbidityForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                {this.props.subMenu === 'image' && (
+                  <FilterImageForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                {this.props.subMenu === 'file' && (
+                  <FilterFileForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                {this.props.subMenu === 'appointment' && (
+                  <FilterAppointmentForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                {this.props.subMenu === 'visit' && (
+                  <FilterVisitForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                {this.props.subMenu === 'note' && (
+                  <FilterNoteForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                {this.props.subMenu === 'tag' && (
+                  <FilterTagForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+              </Col>
 
-          {this.props.patient && (
-            <Col md={12} className="detailPageContainerCol specialCol2">
+            )}
 
-              {this.state.sideCol === 'filter' && (
-                <Col>
-                  {this.props.subMenu === 'address' && (
-                    <FilterAddressForm
-                      onCancel={this.toggleSideCol}
-                      onConfirm={this.submitFilterForm}
-                    />
+            {this.state.updateSingleField.state === true && (
+              <UpdatePatientSingleFieldForm
+                field={this.state.updateSingleField.field}
+                onConfirm={this.submitUpdateSingleFieldForm}
+                onCancel={this.cancelUpdateSingleField}
+              />
+            )}
+            {this.props.subMenu === 'basic' && (
+              <Row className="tabRowDetails">
+              <h3>Basic Info:</h3>
+              <ListGroup className="profileBasicListGroup">
+                <ListGroup.Item>
+                  <p className="listGroupText">Title:</p>
+                  <p className="listGroupText bold">{this.props.patient.title}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
+                  <p className="listGroupText">Fisrt Name:</p>
+                  <p className="listGroupText bold">{this.props.patient.name}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'name')}>Edit</Button>
+                  <p className="listGroupText">Last Name:</p>
+                  <p className="listGroupText bold">{this.props.patient.lastName}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'lastName')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Title:</p>
+                  <p className="listGroupText">Username:</p>
+                  <p className="listGroupText bold">{this.props.patient.username}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'username')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">DOB:</p>
+                  <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
+                  <p className="listGroupText">Age:</p>
+                  <p className="listGroupText bold">{this.props.patient.age}</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">DOB:</p>
+                  <p className="listGroupText">Gender:</p>
+                  <p className="listGroupText bold">{this.props.patient.gender}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'gender')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Email:</p>
+                  <p className="listGroupText bold">{this.props.patient.contact.email}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.email')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Phone:</p>
+                  <p className="listGroupText bold">{this.props.patient.contact.phone}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone')}>Edit</Button>
+                  <p className="listGroupText">Phone 2:</p>
+                  <p className="listGroupText bold">{this.props.patient.contact.phone2}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone2')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Role:</p>
+                  <p className="listGroupText bold">{this.props.patient.role}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'role')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Registration:</p>
+                  <p className="listGroupText">Date:</p>
+                  <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  <p className="listGroupText">Number:</p>
+                  <p className="listGroupText bold">{this.props.patient.registration.number}</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Referral:</p>
+                  <p className="listGroupText">Date:</p>
+                  {this.props.patient.referral.date && (
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
                   )}
-                  {this.props.subMenu === 'nextOfKin' && (
-                    <FilterNextOfKinForm
-                      onCancel={this.toggleSideCol}
-                      onConfirm={this.submitFilterForm}
-                    />
-                  )}
-                  {this.props.subMenu === 'allergy' && (
-                    <FilterAllergyForm
-                      onCancel={this.toggleSideCol}
-                      onConfirm={this.submitFilterForm}
-                    />
-                  )}
-                  {this.props.subMenu === 'medication' && (
-                    <FilterMedicationForm
-                      onCancel={this.toggleSideCol}
-                      onConfirm={this.submitFilterForm}
-                    />
-                  )}
-                  {this.props.subMenu === 'comorbidity' && (
-                    <FilterComorbidityForm
-                      onCancel={this.toggleSideCol}
-                      onConfirm={this.submitFilterForm}
-                    />
-                  )}
-                  {this.props.subMenu === 'image' && (
-                    <FilterImageForm
-                      onCancel={this.toggleSideCol}
-                      onConfirm={this.submitFilterForm}
-                    />
-                  )}
-                  {this.props.subMenu === 'file' && (
-                    <FilterFileForm
-                      onCancel={this.toggleSideCol}
-                      onConfirm={this.submitFilterForm}
-                    />
-                  )}
-                  {this.props.subMenu === 'appointment' && (
-                    <FilterAppointmentForm
-                      onCancel={this.toggleSideCol}
-                      onConfirm={this.submitFilterForm}
-                    />
-                  )}
-                  {this.props.subMenu === 'visit' && (
-                    <FilterVisitForm
-                      onCancel={this.toggleSideCol}
-                      onConfirm={this.submitFilterForm}
-                    />
-                  )}
-                  {this.props.subMenu === 'note' && (
-                    <FilterNoteForm
-                      onCancel={this.toggleSideCol}
-                      onConfirm={this.submitFilterForm}
-                    />
-                  )}
-                  {this.props.subMenu === 'tag' && (
-                    <FilterTagForm
-                      onCancel={this.toggleSideCol}
-                      onConfirm={this.submitFilterForm}
-                    />
-                  )}
-                </Col>
-
-              )}
-
-              {this.state.updateSingleField.state === true && (
-                <UpdatePatientSingleFieldForm
-                  field={this.state.updateSingleField.field}
-                  onConfirm={this.submitUpdateSingleFieldForm}
-                  onCancel={this.cancelUpdateSingleField}
-                />
-              )}
-
-              {this.props.subMenu === 'basic' && (
-                <Row className="tabRowDetails">
-                Patient Basic:
-                <ListGroup className="profileBasicListGroup">
-                  <ListGroup.Item>
-                    <p className="listGroupText">Title:</p>
-                    <p className="listGroupText bold">{this.props.patient.title}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
-                    <p className="listGroupText">Fisrt Name:</p>
-                    <p className="listGroupText bold">{this.props.patient.name}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'name')}>Edit</Button>
-                    <p className="listGroupText">Last Name:</p>
-                    <p className="listGroupText bold">{this.props.patient.lastName}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'lastName')}>Edit</Button>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <p className="listGroupText">Title:</p>
-                    <p className="listGroupText">Username:</p>
-                    <p className="listGroupText bold">{this.props.patient.username}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'username')}>Edit</Button>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <p className="listGroupText">DOB:</p>
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
-                    <p className="listGroupText">Age:</p>
-                    <p className="listGroupText bold">{this.props.patient.age}</p>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <p className="listGroupText">DOB:</p>
-                    <p className="listGroupText">Gender:</p>
-                    <p className="listGroupText bold">{this.props.patient.gender}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'gender')}>Edit</Button>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <p className="listGroupText">Email:</p>
-                    <p className="listGroupText bold">{this.props.patient.contact.email}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.email')}>Edit</Button>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <p className="listGroupText">Phone:</p>
-                    <p className="listGroupText bold">{this.props.patient.contact.phone}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone')}>Edit</Button>
-                    <p className="listGroupText">Phone 2:</p>
-                    <p className="listGroupText bold">{this.props.patient.contact.phone2}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone2')}>Edit</Button>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <p className="listGroupText">Role:</p>
-                    <p className="listGroupText bold">{this.props.patient.role}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'role')}>Edit</Button>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <p className="listGroupText">Registration:</p>
-                    <p className="listGroupText">Date:</p>
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
-                    <p className="listGroupText">Number:</p>
-                    <p className="listGroupText bold">{this.props.patient.registration.number}</p>
-                  </ListGroup.Item>
-
-                  <ListGroup.Item>
-                    <p className="listGroupText">Referral:</p>
-                    <p className="listGroupText">Date:</p>
-                    {this.props.patient.referral.date && (
-                      <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
-                    )}
-
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.date')}>Edit</Button>
-                    <p className="listGroupText">Reason:</p>
-                    <p className="listGroupText bold">{this.props.patient.referral.reason}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.reason')}>Edit</Button>
-                    <p className="listGroupText">Referral Physician:</p>
-                    <p className="listGroupText bold">{this.props.patient.referral.physician.name}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.physician.name')}>Edit</Button>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <p className="listGroupText">Referral Physician:</p>
-                    <p className="listGroupText">Email:</p>
-                    <p className="listGroupText bold">{this.props.patient.referral.physician.email}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.physician.email')}>Edit</Button>
-                    <p className="listGroupText">Phone:</p>
-                    <p className="listGroupText bold">{this.props.patient.referral.physician.phone}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.physician.phone')}>Edit</Button>
-                  </ListGroup.Item>
-
-                  <ListGroup.Item>
-                  <p className="listGroupText">Attending Physician:</p>
-                  <p className="listGroupText bold">{this.props.patient.attendingPhysician}</p>
-                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'attendingPhysician')}>Edit</Button>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                  <p className="listGroupText">Occupation:</p>
-                  <p className="listGroupText bold">{this.props.patient.occupation.role}</p>
-                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.role')}>Edit</Button>
-                  <p className="listGroupText">Employer:</p>
-                  <p className="listGroupText bold">{this.props.patient.occupation.employer.name}</p>
-                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.name')}>Edit</Button>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <p className="listGroupText">Contact:</p>
-                    <p className="listGroupText">Phone:</p>
-                    <p className="listGroupText bold">{this.props.patient.occupation.employer.phone}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.phone')}>Edit</Button>
-                    <p className="listGroupText">Email:</p>
-                    <p className="listGroupText bold">{this.props.patient.occupation.employer.email}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.email')}>Edit</Button>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                  <p className="listGroupText">Address:</p>
-                  <p className="listGroupText bold">{this.props.patient.occupation.employer.address}</p>
-                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.address')}>Edit</Button>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <p className="listGroupText">Insurance:</p>
-                    <p className="listGroupText bold">{this.props.patient.insurance.company}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.company')}>Edit</Button>
-                    <p className="listGroupText bold">{this.props.patient.insurance.policyNumber}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.policyNumber')}>Edit</Button>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                  <p className="listGroupText bold">{this.props.patient.insurance.description}</p>
-                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.description')}>Edit</Button>
-                  {this.props.patient.insurance.expiryDate && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
-                  )}
-                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.expiryDate')}>Edit</Button>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                  <p className="listGroupText">Subscriber:</p>
-                  <p className="listGroupText bold">{this.props.patient.insurance.subscriber.company}</p>
-                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.subscriber.company')}>Edit</Button>
-                  <p className="listGroupText bold">{this.props.patient.insurance.subscriber.description}</p>
-                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.subscriber.description')}>Edit</Button>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <p className="listGroupText">Date of Death:</p>
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'expiryDate')}>Edit</Button>
-                  </ListGroup.Item>
-                </ListGroup>
-                </Row>
-              )}
-              {this.props.subMenu === 'admin' && (
-                <Row className="tabRowDetails">
-                Patient Admin
-                <ListGroup className="profileBasicListGroup">
-                  <ListGroup.Item>
-                    <p className="listGroupText">Id:</p>
-                    <p className="listGroupText bold">{this.props.patient._id}</p>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <p className="listGroupText">LoggedIn:</p>
-                    <p className="listGroupText bold">{this.props.patient.loggedIn.toString()}</p>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <p className="listGroupText">ClientConnected:</p>
-                    <p className="listGroupText bold">{this.props.patient.clientConnected.toString()}</p>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <p className="listGroupText">Verified:</p>
-                    <p className="listGroupText bold">{this.props.patient.verification.verified.toString()}</p>
-                    <p className="listGroupText">Type:</p>
-                    <p className="listGroupText bold">{this.props.patient.verification.type}</p>
-                    <p className="listGroupText">Code:</p>
-                    <p className="listGroupText bold">{this.props.patient.verification.code}</p>
-                  </ListGroup.Item>
-                </ListGroup>
-                </Row>
-              )}
-              {this.props.subMenu === 'address' && (
-                <Row className="tabRowDetails">
-                <Row className="displayPaneHeadRow">
-                  <p className="displayPaneTitle">Patient Address List:</p>
-                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-
-                    <Button variant="success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
-
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.date')}>Edit</Button>
+                  <p className="listGroupText">Reason:</p>
+                  <p className="listGroupText bold">{this.props.patient.referral.reason}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.reason')}>Edit</Button>
+                  <p className="listGroupText">Referral Physician:</p>
+                  <p className="listGroupText bold">{this.props.patient.referral.physician.name}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.physician.name')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Referral Physician:</p>
+                  <p className="listGroupText">Email:</p>
+                  <p className="listGroupText bold">{this.props.patient.referral.physician.email}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.physician.email')}>Edit</Button>
+                  <p className="listGroupText">Phone:</p>
+                  <p className="listGroupText bold">{this.props.patient.referral.physician.phone}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.physician.phone')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                <p className="listGroupText">Attending Physician:</p>
+                <p className="listGroupText bold">{this.props.patient.attendingPhysician}</p>
+                <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'attendingPhysician')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                <p className="listGroupText">Occupation:</p>
+                <p className="listGroupText bold">{this.props.patient.occupation.role}</p>
+                <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.role')}>Edit</Button>
+                <p className="listGroupText">Employer:</p>
+                <p className="listGroupText bold">{this.props.patient.occupation.employer.name}</p>
+                <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.name')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Contact:</p>
+                  <p className="listGroupText">Phone:</p>
+                  <p className="listGroupText bold">{this.props.patient.occupation.employer.phone}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.phone')}>Edit</Button>
+                  <p className="listGroupText">Email:</p>
+                  <p className="listGroupText bold">{this.props.patient.occupation.employer.email}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.email')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                <p className="listGroupText">Address:</p>
+                <p className="listGroupText bold">{this.props.patient.occupation.employer.address}</p>
+                <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.address')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Insurance:</p>
+                  <p className="listGroupText bold">{this.props.patient.insurance.company}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.company')}>Edit</Button>
+                  <p className="listGroupText bold">{this.props.patient.insurance.policyNumber}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.policyNumber')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                <p className="listGroupText bold">{this.props.patient.insurance.description}</p>
+                <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.description')}>Edit</Button>
+                {this.props.patient.insurance.expiryDate && (
+                  <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                )}
+                <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.expiryDate')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                <p className="listGroupText">Subscriber:</p>
+                <p className="listGroupText bold">{this.props.patient.insurance.subscriber.company}</p>
+                <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.subscriber.company')}>Edit</Button>
+                <p className="listGroupText bold">{this.props.patient.insurance.subscriber.description}</p>
+                <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.subscriber.description')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Date of Death:</p>
+                  <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'expiryDate')}>Edit</Button>
+                </ListGroup.Item>
+              </ListGroup>
+              </Row>
+            )}
+            {this.props.subMenu === 'admin' && (
+              <Row className="tabRowDetails">
+              <h3>Admin Info:</h3>
+              <ListGroup className="profileBasicListGroup">
+                <ListGroup.Item>
+                  <p className="listGroupText">Id:</p>
+                  <p className="listGroupText bold">{this.props.patient._id}</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">LoggedIn:</p>
+                  <p className="listGroupText bold">{this.props.patient.loggedIn.toString()}</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">ClientConnected:</p>
+                  <p className="listGroupText bold">{this.props.patient.clientConnected.toString()}</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Verified:</p>
+                  <p className="listGroupText bold">{this.props.patient.verification.verified.toString()}</p>
+                  <p className="listGroupText">Type:</p>
+                  <p className="listGroupText bold">{this.props.patient.verification.type}</p>
+                  <p className="listGroupText">Code:</p>
+                  <p className="listGroupText bold">{this.props.patient.verification.code}</p>
+                </ListGroup.Item>
+              </ListGroup>
+              </Row>
+            )}
+            {this.props.subMenu === 'address' && (
+              <Row className="tabRowDetails">
+                <h3>Addresses:</h3>
+                <Row className="">
+                  <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
                 </Row>
                 {this.state.adding.state === true &&
                   this.state.adding.field === 'address' && (
@@ -3148,16 +3140,14 @@ render() {
                   canDelete={this.state.canDelete}
                   makePrimary={this.setAddressPrimary}
                 />
-                </Row>
-              )}
-              {this.props.subMenu === 'nextOfKin' && (
-                <Row className="tabRowDetails">
-                <Row className="displayPaneHeadRow">
-                  <p className="displayPaneTitle">Patient Next of Kin List:</p>
-                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-
-                    <Button variant="success" onClick={this.startAdd.bind(this, 'nextOfKin')}>Add</Button>
-
+              </Row>
+            )}
+            {this.props.subMenu === 'nextOfKin' && (
+              <Row className="tabRowDetails">
+                <h3>Next-Of-Kin:</h3>
+                <Row className="">
+                  <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'nextOfKin')}>Add</Button>
                 </Row>
                 {this.state.adding.state === true &&
                   this.state.adding.field === 'nextOfKin' && (
@@ -3173,16 +3163,14 @@ render() {
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteNextOfKin}
                 />
-                </Row>
-              )}
-              {this.props.subMenu === 'allergy' && (
-                <Row className="tabRowDetails">
-                <Row className="displayPaneHeadRow">
-                  <p className="displayPaneTitle">Patient Allergies List:</p>
-                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-
-                    <Button variant="success" onClick={this.startAdd.bind(this, 'allergy')}>Add</Button>
-
+              </Row>
+            )}
+            {this.props.subMenu === 'allergy' && (
+              <Row className="tabRowDetails">
+                <h3>Allergies:</h3>
+                <Row className="">
+                  <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'allergy')}>Add</Button>
                 </Row>
                 {this.state.adding.state === true &&
                   this.state.adding.field === 'allergy' && (
@@ -3206,16 +3194,14 @@ render() {
                   onAddAttachment={this.startAddAttachment}
                   deleteAttachment={this.deleteAttachment}
                 />
-                </Row>
-              )}
-              {this.props.subMenu === 'medication' && (
-                <Row className="tabRowDetails">
-                <Row className="displayPaneHeadRow">
-                  <p className="displayPaneTitle">Patient Medication List:</p>
-                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-
-                    <Button variant="success" onClick={this.startAdd.bind(this, 'medication')}>Add</Button>
-
+              </Row>
+            )}
+            {this.props.subMenu === 'medication' && (
+              <Row className="tabRowDetails">
+                <h3>Medication:</h3>
+                <Row className="">
+                  <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'medication')}>Add</Button>
                 </Row>
                 {this.state.adding.state === true &&
                   this.state.adding.field === 'medication' && (
@@ -3239,16 +3225,14 @@ render() {
                   onAddAttachment={this.startAddAttachment}
                   deleteAttachment={this.deleteAttachment}
                 />
-                </Row>
-              )}
-              {this.props.subMenu === 'comorbidities' && (
-                <Row className="tabRowDetails">
-                <Row className="displayPaneHeadRow">
-                  <p className="displayPaneTitle">Patient Comorbidity List:</p>
-                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-
-                    <Button variant="success" onClick={this.startAdd.bind(this, 'comorbidity')}>Add</Button>
-
+              </Row>
+            )}
+            {this.props.subMenu === 'comorbidities' && (
+              <Row className="tabRowDetails">
+                <h3>Comorbidities:</h3>
+                <Row className="">
+                  <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'comorbidity')}>Add</Button>
                 </Row>
                 {this.state.adding.state === true &&
                   this.state.adding.field === 'comorbidity' && (
@@ -3264,16 +3248,14 @@ render() {
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteComorbidity}
                 />
-                </Row>
-              )}
-              {this.props.subMenu === 'image' && (
-                <Row className="tabRowDetails">
-                <Row className="displayPaneHeadRow">
-                  <p className="displayPaneTitle">Patient Image List:</p>
-                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-
-                    <Button variant="success" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
-
+              </Row>
+            )}
+            {this.props.subMenu === 'image' && (
+              <Row className="tabRowDetails">
+                <h3>Images:</h3>
+                <Row className="">
+                  <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
                 </Row>
                 {this.state.adding.state === true &&
                   this.state.adding.field === 'image' && (
@@ -3289,16 +3271,14 @@ render() {
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteImage}
                 />
-                </Row>
-              )}
-              {this.props.subMenu === 'file' && (
-                <Row className="tabRowDetails">
-                <Row className="displayPaneHeadRow">
-                  <p className="displayPaneTitle">Patient File List:</p>
-                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-
-                    <Button variant="success" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
-
+              </Row>
+            )}
+            {this.props.subMenu === 'file' && (
+              <Row className="tabRowDetails">
+                <h3>Files:</h3>
+                <Row className="">
+                  <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
                 </Row>
                 {this.state.adding.state === true &&
                   this.state.adding.field === 'file' && (
@@ -3314,13 +3294,13 @@ render() {
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteFile}
                 />
-                </Row>
-              )}
-              {this.props.subMenu === 'appointment' && (
-                <Row className="tabRowDetails">
-                <Row className="displayPaneHeadRow">
-                  <p className="displayPaneTitle">Patient Appointment List:</p>
-                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+              </Row>
+            )}
+            {this.props.subMenu === 'appointment' && (
+              <Row className="tabRowDetails">
+                <h3>Appointments:</h3>
+                <Row className="">
+                  <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
                 </Row>
                 <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
                   <Tab eventKey="1" title="list">
@@ -3331,7 +3311,6 @@ render() {
                   />
                   </Tab>
                   <Tab eventKey="2" title="calendar" className="calendarTab">
-                    <h3>Calendar</h3>
                     <FullCalendar
                       defaultView="dayGridMonth"
                       plugins={[dayGridPlugin]}
@@ -3340,13 +3319,13 @@ render() {
                     />
                   </Tab>
                 </Tabs>
-                </Row>
-              )}
-              {this.props.subMenu === 'visit' && (
-                <Row className="tabRowDetails">
-                <Row className="displayPaneHeadRow">
-                  <p className="displayPaneTitle">Patient Visit List:</p>
-                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+              </Row>
+            )}
+            {this.props.subMenu === 'visit' && (
+              <Row className="tabRowDetails">
+                <h3>Visits:</h3>
+                <Row className="">
+                  <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
                 </Row>
                 <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
                   <Tab eventKey="1" title="list">
@@ -3358,7 +3337,6 @@ render() {
                   />
                   </Tab>
                   <Tab eventKey="2" title="calendar" className="calendarTab">
-                    <h3>Calendar</h3>
                     <FullCalendar
                       defaultView="dayGridMonth"
                       plugins={[dayGridPlugin]}
@@ -3367,13 +3345,13 @@ render() {
                     />
                   </Tab>
                 </Tabs>
-                </Row>
-              )}
-              {this.props.subMenu === 'note' && (
-                <Row className="tabRowDetails">
-                <Row className="displayPaneHeadRow">
-                  <p className="displayPaneTitle">Patient Notes:</p>
-                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+              </Row>
+            )}
+            {this.props.subMenu === 'note' && (
+              <Row className="tabRowDetails">
+                <h3>Notes:</h3>
+                <Row className="">
+                  <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
                   {this.context.role === 'Admin' && (
                     <Button variant="success" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
                   )}
@@ -3392,15 +3370,14 @@ render() {
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteNote}
                 />
-                </Row>
-              )}
-              {this.props.subMenu === 'tag' && (
-                <Row className="tabRowDetails">
-                <Row className="displayPaneHeadRow">
-                  <p className="displayPaneTitle">Patient Tags:</p>
-                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
+              </Row>
+            )}
+            {this.props.subMenu === 'tag' && (
+              <Row className="tabRowDetails">
+                <h3>Tags:</h3>
+                <Row className="">
+                  <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
                   <Button variant="success" onClick={this.startAdd.bind(this, 'tag')}>Add</Button>
-
                 </Row>
                 {this.state.adding.state === true &&
                   this.state.adding.field === 'tag' && (
@@ -3416,14 +3393,11 @@ render() {
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteTag}
                 />
-                </Row>
-              )}
-              {this.props.subMenu === 'doc' && (
-                <Row className="tabRowDetails">
-                <Row className="displayPaneHeadRow">
-                  <p className="displayPaneTitle">Docu-Gen:</p>
-
-                </Row>
+              </Row>
+            )}
+            {this.props.subMenu === 'doc' && (
+              <Row className="tabRowDetails">
+                <h3>Document Generator</h3>
                 <Row className="displayPaneHeadRow">
                   <ListGroup className="profileBasicListGroup">
                     <ListGroup.Item>
@@ -3475,492 +3449,12 @@ render() {
                     patient={this.props.patient}
                   />
                 )}
-                </Row>
-              )}
+              </Row>
+            )}
+          </Col>
+        )}
 
-                {
-                  // <Tab.Content className="tabContent">
-                  // <Tab.Pane eventKey="1">
-                  //   Patient Basic:
-                  //   <ListGroup className="profileBasicListGroup">
-                  //     <ListGroup.Item>
-                  //       <p className="listGroupText">Title:</p>
-                  //       <p className="listGroupText bold">{this.props.patient.title}</p>
-                  //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
-                  //       <p className="listGroupText">Fisrt Name:</p>
-                  //       <p className="listGroupText bold">{this.props.patient.name}</p>
-                  //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'name')}>Edit</Button>
-                  //       <p className="listGroupText">Last Name:</p>
-                  //       <p className="listGroupText bold">{this.props.patient.lastName}</p>
-                  //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'lastName')}>Edit</Button>
-                  //     </ListGroup.Item>
-                  //     <ListGroup.Item>
-                  //       <p className="listGroupText">Title:</p>
-                  //       <p className="listGroupText">Username:</p>
-                  //       <p className="listGroupText bold">{this.props.patient.username}</p>
-                  //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'username')}>Edit</Button>
-                  //     </ListGroup.Item>
-                  //     <ListGroup.Item>
-                  //       <p className="listGroupText">DOB:</p>
-                  //       <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
-                  //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
-                  //       <p className="listGroupText">Age:</p>
-                  //       <p className="listGroupText bold">{this.props.patient.age}</p>
-                  //     </ListGroup.Item>
-                  //     <ListGroup.Item>
-                  //       <p className="listGroupText">DOB:</p>
-                  //       <p className="listGroupText">Gender:</p>
-                  //       <p className="listGroupText bold">{this.props.patient.gender}</p>
-                  //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'gender')}>Edit</Button>
-                  //     </ListGroup.Item>
-                  //     <ListGroup.Item>
-                  //       <p className="listGroupText">Email:</p>
-                  //       <p className="listGroupText bold">{this.props.patient.contact.email}</p>
-                  //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.email')}>Edit</Button>
-                  //     </ListGroup.Item>
-                  //     <ListGroup.Item>
-                  //       <p className="listGroupText">Phone:</p>
-                  //       <p className="listGroupText bold">{this.props.patient.contact.phone}</p>
-                  //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone')}>Edit</Button>
-                  //       <p className="listGroupText">Phone 2:</p>
-                  //       <p className="listGroupText bold">{this.props.patient.contact.phone2}</p>
-                  //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone2')}>Edit</Button>
-                  //     </ListGroup.Item>
-                  //     <ListGroup.Item>
-                  //       <p className="listGroupText">Role:</p>
-                  //       <p className="listGroupText bold">{this.props.patient.role}</p>
-                  //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'role')}>Edit</Button>
-                  //     </ListGroup.Item>
-                  //     <ListGroup.Item>
-                  //       <p className="listGroupText">Registration:</p>
-                  //       <p className="listGroupText">Date:</p>
-                  //       <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
-                  //       <p className="listGroupText">Number:</p>
-                  //       <p className="listGroupText bold">{this.props.patient.registration.number}</p>
-                  //     </ListGroup.Item>
-                  //
-                  //     <ListGroup.Item>
-                  //       <p className="listGroupText">Referral:</p>
-                  //       <p className="listGroupText">Date:</p>
-                  //       {this.props.patient.referral.date && (
-                  //         <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
-                  //       )}
-                  //
-                  //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.date')}>Edit</Button>
-                  //       <p className="listGroupText">Reason:</p>
-                  //       <p className="listGroupText bold">{this.props.patient.referral.reason}</p>
-                  //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.reason')}>Edit</Button>
-                  //       <p className="listGroupText">Referral Physician:</p>
-                  //       <p className="listGroupText bold">{this.props.patient.referral.physician.name}</p>
-                  //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.physician.name')}>Edit</Button>
-                  //     </ListGroup.Item>
-                  //     <ListGroup.Item>
-                  //       <p className="listGroupText">Referral Physician:</p>
-                  //       <p className="listGroupText">Email:</p>
-                  //       <p className="listGroupText bold">{this.props.patient.referral.physician.email}</p>
-                  //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.physician.email')}>Edit</Button>
-                  //       <p className="listGroupText">Phone:</p>
-                  //       <p className="listGroupText bold">{this.props.patient.referral.physician.phone}</p>
-                  //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.physician.phone')}>Edit</Button>
-                  //     </ListGroup.Item>
-                  //
-                  //     <ListGroup.Item>
-                  //     <p className="listGroupText">Attending Physician:</p>
-                  //     <p className="listGroupText bold">{this.props.patient.attendingPhysician}</p>
-                  //     <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'attendingPhysician')}>Edit</Button>
-                  //     </ListGroup.Item>
-                  //     <ListGroup.Item>
-                  //     <p className="listGroupText">Occupation:</p>
-                  //     <p className="listGroupText bold">{this.props.patient.occupation.role}</p>
-                  //     <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.role')}>Edit</Button>
-                  //     <p className="listGroupText">Employer:</p>
-                  //     <p className="listGroupText bold">{this.props.patient.occupation.employer.name}</p>
-                  //     <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.name')}>Edit</Button>
-                  //     </ListGroup.Item>
-                  //     <ListGroup.Item>
-                  //       <p className="listGroupText">Contact:</p>
-                  //       <p className="listGroupText">Phone:</p>
-                  //       <p className="listGroupText bold">{this.props.patient.occupation.employer.phone}</p>
-                  //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.phone')}>Edit</Button>
-                  //       <p className="listGroupText">Email:</p>
-                  //       <p className="listGroupText bold">{this.props.patient.occupation.employer.email}</p>
-                  //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.email')}>Edit</Button>
-                  //     </ListGroup.Item>
-                  //     <ListGroup.Item>
-                  //     <p className="listGroupText">Address:</p>
-                  //     <p className="listGroupText bold">{this.props.patient.occupation.employer.address}</p>
-                  //     <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.address')}>Edit</Button>
-                  //     </ListGroup.Item>
-                  //     <ListGroup.Item>
-                  //       <p className="listGroupText">Insurance:</p>
-                  //       <p className="listGroupText bold">{this.props.patient.insurance.company}</p>
-                  //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.company')}>Edit</Button>
-                  //       <p className="listGroupText bold">{this.props.patient.insurance.policyNumber}</p>
-                  //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.policyNumber')}>Edit</Button>
-                  //     </ListGroup.Item>
-                  //     <ListGroup.Item>
-                  //     <p className="listGroupText bold">{this.props.patient.insurance.description}</p>
-                  //     <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.description')}>Edit</Button>
-                  //     {this.props.patient.insurance.expiryDate && (
-                  //       <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
-                  //     )}
-                  //     <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.expiryDate')}>Edit</Button>
-                  //     </ListGroup.Item>
-                  //     <ListGroup.Item>
-                  //     <p className="listGroupText">Subscriber:</p>
-                  //     <p className="listGroupText bold">{this.props.patient.insurance.subscriber.company}</p>
-                  //     <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.subscriber.company')}>Edit</Button>
-                  //     <p className="listGroupText bold">{this.props.patient.insurance.subscriber.description}</p>
-                  //     <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.subscriber.description')}>Edit</Button>
-                  //     </ListGroup.Item>
-                  //     <ListGroup.Item>
-                  //       <p className="listGroupText">Date of Death:</p>
-                  //       <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
-                  //       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'expiryDate')}>Edit</Button>
-                  //     </ListGroup.Item>
-                  //   </ListGroup>
-                  // </Tab.Pane>
-                  // <Tab.Pane eventKey="2">
-                  //
-                  // </Tab.Pane>
-                  // <Tab.Pane eventKey="3">
-                  //   <Row className="displayPaneHeadRow">
-                  //     <p className="displayPaneTitle">Patient Address List:</p>
-                  //     <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                  //
-                  //       <Button variant="success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
-                  //
-                  //   </Row>
-                  //   {this.state.adding.state === true &&
-                  //     this.state.adding.field === 'address' && (
-                  //       <AddAddressForm
-                  //         onConfirm={this.submitAddAddressForm}
-                  //         onCancel={this.cancelAdd}
-                  //       />
-                  //   )}
-                  //   <PatientAddressList
-                  //     filter={this.state.filter}
-                  //     addresses={this.props.patient.addresses}
-                  //     authId={this.context.activityId}
-                  //     onDelete={this.deleteAddress}
-                  //     canDelete={this.state.canDelete}
-                  //     makePrimary={this.setAddressPrimary}
-                  //   />
-                  // </Tab.Pane>
-                  // <Tab.Pane eventKey="4">
-                  //   <Row className="displayPaneHeadRow">
-                  //     <p className="displayPaneTitle">Patient Next of Kin List:</p>
-                  //     <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                  //
-                  //       <Button variant="success" onClick={this.startAdd.bind(this, 'nextOfKin')}>Add</Button>
-                  //
-                  //   </Row>
-                  //   {this.state.adding.state === true &&
-                  //     this.state.adding.field === 'nextOfKin' && (
-                  //       <AddNextOfKinForm
-                  //         onConfirm={this.submitAddNextOfKinForm}
-                  //         onCancel={this.cancelAdd}
-                  //       />
-                  //   )}
-                  //   <PatientNextOfKinList
-                  //     filter={this.state.filter}
-                  //     nextOfKin={this.props.patient.nextOfKin}
-                  //     authId={this.context.activityId}
-                  //     canDelete={this.state.canDelete}
-                  //     onDelete={this.deleteNextOfKin}
-                  //   />
-                  // </Tab.Pane>
-                  // <Tab.Pane eventKey="5">
-                  //   <Row className="displayPaneHeadRow">
-                  //     <p className="displayPaneTitle">Patient Allergies List:</p>
-                  //     <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                  //
-                  //       <Button variant="success" onClick={this.startAdd.bind(this, 'allergy')}>Add</Button>
-                  //
-                  //   </Row>
-                  //   {this.state.adding.state === true &&
-                  //     this.state.adding.field === 'allergy' && (
-                  //       <AddAllergyForm
-                  //         onConfirm={this.submitAddAllergyForm}
-                  //         onCancel={this.cancelAdd}
-                  //       />
-                  //   )}
-                  //   {this.state.addAttachmentForm === true && (
-                  //     <AddAttachmentForm
-                  //       onCancel={this.cancelAddAttachment}
-                  //       onConfirm={this.addAttachment}
-                  //     />
-                  //   )}
-                  //   <PatientAllergyList
-                  //     filter={this.state.filter}
-                  //     allergies={this.props.patient.allergies}
-                  //     authId={this.context.activityId}
-                  //     canDelete={this.state.canDelete}
-                  //     onDelete={this.deleteAllergy}
-                  //     onAddAttachment={this.startAddAttachment}
-                  //     deleteAttachment={this.deleteAttachment}
-                  //   />
-                  // </Tab.Pane>
-                  // <Tab.Pane eventKey="6">
-                  //   <Row className="displayPaneHeadRow">
-                  //     <p className="displayPaneTitle">Patient Medication List:</p>
-                  //     <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                  //
-                  //       <Button variant="success" onClick={this.startAdd.bind(this, 'medication')}>Add</Button>
-                  //
-                  //   </Row>
-                  //   {this.state.adding.state === true &&
-                  //     this.state.adding.field === 'medication' && (
-                  //       <AddMedicationForm
-                  //         onConfirm={this.submitAddMedicationForm}
-                  //         onCancel={this.cancelAdd}
-                  //       />
-                  //   )}
-                  //   {this.state.addAttachmentForm === true && (
-                  //     <AddAttachmentForm
-                  //       onCancel={this.cancelAddAttachment}
-                  //       onConfirm={this.addAttachment}
-                  //     />
-                  //   )}
-                  //   <PatientMedicationList
-                  //     filter={this.state.filter}
-                  //     medication={this.props.patient.medication}
-                  //     authId={this.context.activityId}
-                  //     canDelete={this.state.canDelete}
-                  //     onDelete={this.deleteMedication}
-                  //     onAddAttachment={this.startAddAttachment}
-                  //     deleteAttachment={this.deleteAttachment}
-                  //   />
-                  // </Tab.Pane>
-                  // <Tab.Pane eventKey="7">
-                  //   <Row className="displayPaneHeadRow">
-                  //     <p className="displayPaneTitle">Patient Comorbidity List:</p>
-                  //     <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                  //
-                  //       <Button variant="success" onClick={this.startAdd.bind(this, 'comorbidity')}>Add</Button>
-                  //
-                  //   </Row>
-                  //   {this.state.adding.state === true &&
-                  //     this.state.adding.field === 'comorbidity' && (
-                  //       <AddComorbidityForm
-                  //         onConfirm={this.submitAddComorbidityForm}
-                  //         onCancel={this.cancelAdd}
-                  //       />
-                  //   )}
-                  //   <PatientComorbidityList
-                  //     filter={this.state.filter}
-                  //     comorbidities={this.props.patient.comorbidities}
-                  //     authId={this.context.activityId}
-                  //     canDelete={this.state.canDelete}
-                  //     onDelete={this.deleteComorbidity}
-                  //   />
-                  // </Tab.Pane>
-                  // <Tab.Pane eventKey="8">
-                  //   <Row className="displayPaneHeadRow">
-                  //     <p className="displayPaneTitle">Patient Image List:</p>
-                  //     <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                  //
-                  //       <Button variant="success" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
-                  //
-                  //   </Row>
-                  //   {this.state.adding.state === true &&
-                  //     this.state.adding.field === 'image' && (
-                  //       <AddImageForm
-                  //         onConfirm={this.submitAddImageForm}
-                  //         onCancel={this.cancelAdd}
-                  //       />
-                  //   )}
-                  //   <PatientImageList
-                  //     filter={this.state.filter}
-                  //     images={this.props.patient.images}
-                  //     authId={this.context.activityId}
-                  //     canDelete={this.state.canDelete}
-                  //     onDelete={this.deleteImage}
-                  //   />
-                  // </Tab.Pane>
-                  // <Tab.Pane eventKey="9">
-                  //   <Row className="displayPaneHeadRow">
-                  //     <p className="displayPaneTitle">Patient File List:</p>
-                  //     <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                  //
-                  //       <Button variant="success" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
-                  //
-                  //   </Row>
-                  //   {this.state.adding.state === true &&
-                  //     this.state.adding.field === 'file' && (
-                  //       <AddFileForm
-                  //         onConfirm={this.submitAddFileForm}
-                  //         onCancel={this.cancelAdd}
-                  //       />
-                  //   )}
-                  //   <PatientFileList
-                  //     filter={this.state.filter}
-                  //     files={this.props.patient.files}
-                  //     authId={this.context.activityId}
-                  //     canDelete={this.state.canDelete}
-                  //     onDelete={this.deleteFile}
-                  //   />
-                  // </Tab.Pane>
-                  // <Tab.Pane eventKey="10">
-                  //   <Row className="displayPaneHeadRow">
-                  //     <p className="displayPaneTitle">Patient Appointment List:</p>
-                  //     <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                  //   </Row>
-                  //   <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
-                  //     <Tab eventKey="1" title="list">
-                  //     <UserAppointmentList
-                  //       filter={this.state.filter}
-                  //       appointments={this.props.patient.appointments}
-                  //       authId={this.context.activityId}
-                  //     />
-                  //     </Tab>
-                  //     <Tab eventKey="2" title="calendar" className="calendarTab">
-                  //       <h3>Calendar</h3>
-                  //       <FullCalendar
-                  //         defaultView="dayGridMonth"
-                  //         plugins={[dayGridPlugin]}
-                  //         events={this.state.calendarAppointments}
-                  //         eventClick={this.viewCalendarEvent}
-                  //       />
-                  //     </Tab>
-                  //   </Tabs>
-                  //
-                  // </Tab.Pane>
-                  // <Tab.Pane eventKey="11">
-                  //   <Row className="displayPaneHeadRow">
-                  //     <p className="displayPaneTitle">Patient Visit List:</p>
-                  //     <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                  //   </Row>
-                  //   <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
-                  //     <Tab eventKey="1" title="list">
-                  //     <VisitList
-                  //       filter={this.state.filter}
-                  //       visits={this.props.patient.visits}
-                  //       authId={this.context.activityId}
-                  //       patientPage={true}
-                  //     />
-                  //     </Tab>
-                  //     <Tab eventKey="2" title="calendar" className="calendarTab">
-                  //       <h3>Calendar</h3>
-                  //       <FullCalendar
-                  //         defaultView="dayGridMonth"
-                  //         plugins={[dayGridPlugin]}
-                  //         events={this.state.calendarVisits}
-                  //         eventClick={this.viewCalendarEvent}
-                  //       />
-                  //     </Tab>
-                  //   </Tabs>
-                  //
-                  // </Tab.Pane>
-                  // <Tab.Pane eventKey="12">
-                  //   <Row className="displayPaneHeadRow">
-                  //     <p className="displayPaneTitle">Patient Notes:</p>
-                  //     <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                  //     {this.context.role === 'Admin' && (
-                  //       <Button variant="success" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
-                  //     )}
-                  //   </Row>
-                  //   {this.state.adding.state === true &&
-                  //     this.state.adding.field === 'note' && (
-                  //       <AddNoteForm
-                  //         onConfirm={this.submitAddNoteForm}
-                  //         onCancel={this.cancelAdd}
-                  //       />
-                  //   )}
-                  //   <PatientNoteList
-                  //     filter={this.state.filter}
-                  //     notes={this.props.patient.notes}
-                  //     authId={this.context.activityId}
-                  //     canDelete={this.state.canDelete}
-                  //     onDelete={this.deleteNote}
-                  //   />
-                  // </Tab.Pane>
-                  // <Tab.Pane eventKey="13">
-                  //   <Row className="displayPaneHeadRow">
-                  //     <p className="displayPaneTitle">Patient Tags:</p>
-                  //     <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                  //     <Button variant="success" onClick={this.startAdd.bind(this, 'tag')}>Add</Button>
-                  //
-                  //   </Row>
-                  //   {this.state.adding.state === true &&
-                  //     this.state.adding.field === 'tag' && (
-                  //       <AddTagForm
-                  //         onConfirm={this.submitAddTagForm}
-                  //         onCancel={this.cancelAdd}
-                  //       />
-                  //   )}
-                  //   <PatientTagList
-                  //     filter={this.state.filter}
-                  //     tags={this.props.patient.tags}
-                  //     authId={this.context.activityId}
-                  //     canDelete={this.state.canDelete}
-                  //     onDelete={this.deleteTag}
-                  //   />
-                  // </Tab.Pane>
-                  // <Tab.Pane eventKey="14">
-                  //   <Row className="displayPaneHeadRow">
-                  //     <p className="displayPaneTitle">Docu-Gen:</p>
-                  //
-                  //   </Row>
-                  //   <Row className="displayPaneHeadRow">
-                  //     <ListGroup className="profileBasicListGroup">
-                  //       <ListGroup.Item>
-                  //         <p className="listGroupText">Test</p>
-                  //         <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'test', data: 'abc_xyz'})}>Create</Button>
-                  //       </ListGroup.Item>
-                  //       <ListGroup.Item>
-                  //         <p className="listGroupText">Referral</p>
-                  //         <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'referral', data: 'abc_xyz'})}>Create</Button>
-                  //       </ListGroup.Item>
-                  //       <ListGroup.Item>
-                  //         <p className="listGroupText">admissionReminder</p>
-                  //         <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'admissionReminder', data: 'abc_xyz'})}>Create</Button>
-                  //       </ListGroup.Item>
-                  //       <ListGroup.Item>
-                  //         <p className="listGroupText">sickNote</p>
-                  //         <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'sickNote', data: 'abc_xyz'})}>Create</Button>
-                  //       </ListGroup.Item>
-                  //       <ListGroup.Item>
-                  //         <p className="listGroupText">insurance</p>
-                  //         <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'insurance', data: 'abc_xyz'})}>Create</Button>
-                  //       </ListGroup.Item>
-                  //       <ListGroup.Item>
-                  //         <p className="listGroupText">diagnosisTesting</p>
-                  //         <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'diagnosisTesting', data: 'abc_xyz'})}>Create</Button>
-                  //       </ListGroup.Item>
-                  //       <ListGroup.Item>
-                  //         <p className="listGroupText">prescription</p>
-                  //         <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'prescription', data: 'abc_xyz'})}>Create</Button>
-                  //       </ListGroup.Item>
-                  //       <ListGroup.Item>
-                  //         <p className="listGroupText">treatmentConsent</p>
-                  //         <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'treatmentConsent', data: 'abc_xyz'})}>Create</Button>
-                  //       </ListGroup.Item>
-                  //       <ListGroup.Item>
-                  //         <p className="listGroupText">treatmentInstructions</p>
-                  //         <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'treatmentInstructions', data: 'abc_xyz'})}>Create</Button>
-                  //       </ListGroup.Item>
-                  //       <ListGroup.Item>
-                  //         <p className="listGroupText">unfitToFly</p>
-                  //         <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'unfitToFly', data: 'abc_xyz'})}>Create</Button>
-                  //       </ListGroup.Item>
-                  //     </ListGroup>
-                  //   </Row>
-                  //   {this.state.showPdfView === true && (
-                  //     <PdfView
-                  //       pdfViewData={this.state.showPdfData}
-                  //       close={this.closePdfView}
-                  //       patient={this.props.patient}
-                  //     />
-                  //   )}
-                  // </Tab.Pane>
-                  // </Tab.Content>
-                }
-
-            </Col>
-          )}
-
-        </Row>
+      </Row>
     </Container>
     </React.Fragment>
   );

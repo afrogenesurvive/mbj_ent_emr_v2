@@ -43,6 +43,9 @@ const AllergyItem = props => {
           <Card.Text className="cardText">
             Title: <span className="bold">{props.allergy.title}</span>
           </Card.Text>
+          <Card.Text className="cardText">
+            Type: <span className="bold">{props.allergy.type}</span>
+          </Card.Text>
 
           <OverlayTrigger
             key={'top'}

@@ -10,7 +10,7 @@ const CreateAppointmentForm = (props) => {
 return (
 <div className="loginFormTopDiv">
   <Form onSubmit={props.onConfirm}>
-    <h1>Create Appointment Form</h1>
+    <h1>Create New</h1>
 
     <Form.Row>
       <Form.Group as={Col} controlId="patientId">

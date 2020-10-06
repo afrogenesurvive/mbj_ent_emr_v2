@@ -13,12 +13,6 @@ return (
   <Form onSubmit={props.onConfirm}>
     <h1>Create Patient Form</h1>
     <p> " * " indicates required fields...</p>
-    <Form.Row>
-      <Form.Group as={Col} controlId="active">
-        <Form.Label>Active</Form.Label>
-        <Form.Control type="checkbox" />
-      </Form.Group>
-    </Form.Row>
 
     <Form.Row>
       <Form.Group as={Col} controlId="title">
@@ -242,11 +236,15 @@ return (
         <Form.Label className="formLabel">insuranceSubscriberDescription</Form.Label>
         <Form.Control as="textarea" rows="3" placeholder="insuranceSubscriberDescription"/>
       </Form.Group>
+      <Form.Group as={Col} controlId="active">
+        <Form.Label>Active</Form.Label>
+        <Form.Control type="checkbox" />
+      </Form.Group>
     </Form.Row>
 
     <Form.Row>
-      <Button variant="success" type="submit" className="loginFormBtn">Create</Button>
-      <Button variant="danger" className="loginFormBtn" onClick={props.onCancel}>Cancel</Button>
+      <Button variant="success" type="submit" className="loginFormBtn searchBtn">Create</Button>
+      <Button variant="danger" className="loginFormBtn searchBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>
 </div>

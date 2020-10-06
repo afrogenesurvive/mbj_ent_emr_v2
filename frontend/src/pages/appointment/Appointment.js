@@ -930,12 +930,12 @@ render() {
 
           {this.state.menuSelect === 'list' && (
             <Row className="tabRow tabRowAppt">
+              <Row className="">
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
+                <Button variant="warning" className="searchBtn" onClick={this.resetFilter}>Reset</Button>
+              </Row>
               <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                 <Tab eventKey="1" title="list">
-                  <Row className="">
-                    <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
-                    <Button variant="warning" onClick={this.resetFilter}>Reset</Button>
-                  </Row>
                   <AppointmentList
                     filter={this.state.filter}
                     appointments={this.state.appointments}
@@ -946,7 +946,6 @@ render() {
                   />
                 </Tab>
                 <Tab eventKey="2" title="calendar" className="calendarTab">
-                  <h3>Calendar</h3>
                   <FullCalendar
                     defaultView="dayGridMonth"
                     plugins={[dayGridPlugin]}
@@ -960,7 +959,7 @@ render() {
           {this.state.menuSelect === 'search' && (
             <Row className="tabRow">
               <Col className="">
-                <h3>Search Appointment</h3>
+                <h3>Search:</h3>
                 <Row className="">
                   <AppointmentSearchForm
                     onConfirm={this.searchAppointments}

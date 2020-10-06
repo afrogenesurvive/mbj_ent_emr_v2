@@ -989,12 +989,12 @@ render() {
 
           {this.state.menuSelect === 'list' && (
             <Row className="tabRow tabRowAppt">
+            <Row className="">
+              <Button variant="primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
+              <Button variant="warning" className="searchBtn" onClick={this.resetFilter}>Reset</Button>
+            </Row>
               <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                 <Tab eventKey="1" title="list">
-                  <Row className="">
-                    <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
-                    <Button variant="warning" onClick={this.resetFilter}>Reset</Button>
-                  </Row>
                   <VisitList
                     filter={this.state.filter}
                     visits={this.state.visits}
