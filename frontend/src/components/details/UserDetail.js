@@ -1862,58 +1862,44 @@ render() {
               </li>
               <li className="summaryListItem">
               <Col className="tabCol">
-              <Col className="subTabCol">
-                <h3 className="">Addresses:</h3>
-              </Col>
-              <Col className="subTabCol">
-                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
-                {this.state.canDelete === true && (
-                  <Button variant="success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
-                )}
-              </Col>
-                {this.state.adding.state === true &&
-                  this.state.adding.field === 'address' && (
-                    <AddAddressForm
-                      onConfirm={this.submitAddAddressForm}
-                      onCancel={this.cancelAdd}
-                    />
-                )}
-                <UserAddressList
-                  filter={this.state.filter}
-                  addresses={this.props.user.addresses}
-                  authId={this.context.activityId}
-                  onDelete={this.deleteAddress}
-                  canDelete={this.state.canDelete}
-                  makePrimary={this.setAddressPrimary}
-                />
-              </Col>
-              </li>
-              <li className="summaryListItem">
-              <Col className="tabCol">
-              <Col className="subTabCol">
-                <h3 className="">Addresses:</h3>
-              </Col>
-              <Col className="subTabCol">
-                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
-                {this.state.canDelete === true && (
-                  <Button variant="success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
-                )}
-              </Col>
-                {this.state.adding.state === true &&
-                  this.state.adding.field === 'address' && (
-                    <AddAddressForm
-                      onConfirm={this.submitAddAddressForm}
-                      onCancel={this.cancelAdd}
-                    />
-                )}
-                <UserAddressList
-                  filter={this.state.filter}
-                  addresses={this.props.user.addresses}
-                  authId={this.context.activityId}
-                  onDelete={this.deleteAddress}
-                  canDelete={this.state.canDelete}
-                  makePrimary={this.setAddressPrimary}
-                />
+                <Col className="subTabCol">
+                  <h3 className="">Admin Info:</h3>
+                </Col>
+                <ListGroup className="profileBasicListGroup">
+                  <ListGroup.Item>
+                    <p className="listGroupText">Reg No:</p>
+                    <p className="listGroupText bold">{this.props.user.registrationNumber}</p>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Employment Date:</p>
+                    {this.props.user.employmentDate && (
+                      <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                    )}
+                    {this.context.role === 'Admin' && (
+                      <Button variant="primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'employmentDate')}>Edit</Button>
+                    )}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Id:</p>
+                    <p className="listGroupText bold">{this.props.user._id}</p>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">LoggedIn:</p>
+                    <p className="listGroupText bold">{this.props.user.loggedIn.toString()}</p>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">ClientConnected:</p>
+                    <p className="listGroupText bold">{this.props.user.clientConnected.toString()}</p>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <p className="listGroupText">Verified:</p>
+                    <p className="listGroupText bold">{this.props.user.verification.verified.toString()}</p>
+                    <p className="listGroupText">Type:</p>
+                    <p className="listGroupText bold">{this.props.user.verification.type}</p>
+                    <p className="listGroupText">Code:</p>
+                    <p className="listGroupText bold">{this.props.user.verification.code}</p>
+                  </ListGroup.Item>
+                </ListGroup>
               </Col>
               </li>
               <li className="summaryListItem">
@@ -1946,35 +1932,192 @@ render() {
               </li>
               <li className="summaryListItem">
               <Col className="tabCol">
+
               <Col className="subTabCol">
-                <h3 className="">Addresses:</h3>
+              <h3>Attendance:</h3>
               </Col>
               <Col className="subTabCol">
                 <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
                 {this.state.canDelete === true && (
-                  <Button variant="success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'attendance')}>Add</Button>
                 )}
               </Col>
-                {this.state.adding.state === true &&
-                  this.state.adding.field === 'address' && (
-                    <AddAddressForm
-                      onConfirm={this.submitAddAddressForm}
-                      onCancel={this.cancelAdd}
-                    />
-                )}
-                <UserAddressList
+              {this.state.adding.state === true &&
+                this.state.adding.field === 'attendance' && (
+                  <AddAttendanceForm
+                    onConfirm={this.submitAddAttendanceForm}
+                    onCancel={this.cancelAdd}
+                  />
+              )}
+              <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+                <Tab eventKey="1" title="list">
+                <UserAttendanceList
                   filter={this.state.filter}
-                  addresses={this.props.user.addresses}
+                  attendance={this.props.user.attendance}
                   authId={this.context.activityId}
-                  onDelete={this.deleteAddress}
                   canDelete={this.state.canDelete}
-                  makePrimary={this.setAddressPrimary}
+                  onDelete={this.deleteAttendance}
                 />
+                </Tab>
+                <Tab eventKey="2" title="calendar" className="calendarTab">
+                  <FullCalendar
+                    defaultView="dayGridMonth"
+                    plugins={[dayGridPlugin]}
+                    events={this.state.calendarAttendance}
+                    eventClick={this.viewCalendarEvent}
+                  />
+                </Tab>
+              </Tabs>
               </Col>
               </li>
               <li className="summaryListItem">
               <Col className="tabCol">
-              c
+              <Col className="subTabCol">
+              <h3>Leave:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                {this.state.canDelete === true && (
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'leave')}>Add</Button>
+                )}
+              </Col>
+              {this.state.adding.state === true &&
+                this.state.adding.field === 'leave' && (
+                  <AddLeaveForm
+                    onConfirm={this.submitAddLeaveForm}
+                    onCancel={this.cancelAdd}
+                  />
+              )}
+              <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+                <Tab eventKey="1" title="list">
+                <UserLeaveList
+                  filter={this.state.filter}
+                  leave={this.props.user.leave}
+                  authId={this.context.activityId}
+                  canDelete={this.state.canDelete}
+                  onDelete={this.deleteLeave}
+                />
+                </Tab>
+                <Tab eventKey="2" title="calendar" className="calendarTab">
+                  <h3>Calendar</h3>
+                  <FullCalendar
+                    defaultView="dayGridMonth"
+                    plugins={[dayGridPlugin]}
+                    events={this.state.calendarLeave}
+                    eventClick={this.viewCalendarEvent}
+                  />
+                </Tab>
+              </Tabs>
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              <Col className="subTabCol">
+              <h3>Images:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                {this.state.canDelete === true && (
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
+                )}
+              </Col>
+              {this.state.adding.state === true &&
+                this.state.adding.field === 'image' && (
+                  <AddImageForm
+                    onConfirm={this.submitAddImageForm}
+                    onCancel={this.cancelAdd}
+                  />
+              )}
+              <UserImageList
+                filter={this.state.filter}
+                images={this.props.user.images}
+                authId={this.context.activityId}
+                showListDetails={this.showListDetails}
+                canDelete={this.state.canDelete}
+                onDelete={this.deleteImage}
+              />
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              <Col className="subTabCol">
+              <h3>Files:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                {this.state.canDelete === true && (
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
+                )}
+              </Col>
+              {this.state.adding.state === true &&
+                this.state.adding.field === 'file' && (
+                  <AddFileForm
+                    onConfirm={this.submitAddFileForm}
+                    onCancel={this.cancelAdd}
+                  />
+              )}
+              <UserFileList
+                filter={this.state.filter}
+                files={this.props.user.files}
+                authId={this.context.activityId}
+                canDelete={this.state.canDelete}
+                onDelete={this.deleteFile}
+              />
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              <Col className="subTabCol">
+              <h3>Appointments:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+              </Col>
+              <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+                <Tab eventKey="1" title="list">
+                <UserAppointmentList
+                  filter={this.state.filter}
+                  appointments={this.props.user.appointments}
+                  authId={this.context.activityId}
+                />
+                </Tab>
+                <Tab eventKey="2" title="calendar" className="calendarTab">
+                  <h3>Calendar</h3>
+                  <FullCalendar
+                    defaultView="dayGridMonth"
+                    plugins={[dayGridPlugin]}
+                    events={this.state.calendarAppointments}
+                    eventClick={this.viewCalendarEvent}
+                  />
+                </Tab>
+              </Tabs>
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              <Col className="subTabCol">
+              <h3>Notes:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                {this.state.canDelete === true && (
+                  <Button variant="success" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
+                )}
+              </Col>
+              {this.state.adding.state === true &&
+                this.state.adding.field === 'note' && (
+                  <AddNoteForm
+                    onConfirm={this.submitAddNoteForm}
+                    onCancel={this.cancelAdd}
+                  />
+              )}
+              <UserNoteList
+                filter={this.state.filter}
+                notes={this.props.user.notes}
+                authId={this.context.activityId}
+                canDelete={this.state.canDelete}
+                onDelete={this.deleteNote}
+              />
               </Col>
               </li>
               </ul>
@@ -2125,14 +2268,17 @@ render() {
               </Col>
             )}
             {this.props.subMenu === 'attendance' && (
-              <Row className="tabRowDetails">
+              <Col className="tabCol">
+
+              <Col className="subTabCol">
               <h3>Attendance:</h3>
-              <Row className="">
+              </Col>
+              <Col className="subTabCol">
                 <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
                 {this.state.canDelete === true && (
                   <Button variant="success" onClick={this.startAdd.bind(this, 'attendance')}>Add</Button>
                 )}
-              </Row>
+              </Col>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'attendance' && (
                   <AddAttendanceForm
@@ -2159,17 +2305,19 @@ render() {
                   />
                 </Tab>
               </Tabs>
-              </Row>
+              </Col>
             )}
             {this.props.subMenu === 'leave' && (
-              <Row className="tabRowDetails">
+              <Col className="tabCol">
+              <Col className="subTabCol">
               <h3>Leave:</h3>
-              <Row className="">
+              </Col>
+              <Col className="subTabCol">
                 <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
                 {this.state.canDelete === true && (
                   <Button variant="success" onClick={this.startAdd.bind(this, 'leave')}>Add</Button>
                 )}
-              </Row>
+              </Col>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'leave' && (
                   <AddLeaveForm
@@ -2197,17 +2345,19 @@ render() {
                   />
                 </Tab>
               </Tabs>
-              </Row>
+              </Col>
             )}
             {this.props.subMenu === 'image' && (
-              <Row className="tabRowDetails">
+              <Col className="tabCol">
+              <Col className="subTabCol">
               <h3>Images:</h3>
-              <Row className="">
+              </Col>
+              <Col className="subTabCol">
                 <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
                 {this.state.canDelete === true && (
                   <Button variant="success" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
                 )}
-              </Row>
+              </Col>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'image' && (
                   <AddImageForm
@@ -2223,17 +2373,19 @@ render() {
                 canDelete={this.state.canDelete}
                 onDelete={this.deleteImage}
               />
-              </Row>
+              </Col>
             )}
             {this.props.subMenu === 'file' && (
-              <Row className="tabRowDetails">
+              <Col className="tabCol">
+              <Col className="subTabCol">
               <h3>Files:</h3>
-              <Row className="">
+              </Col>
+              <Col className="subTabCol">
                 <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
                 {this.state.canDelete === true && (
                   <Button variant="success" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
                 )}
-              </Row>
+              </Col>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'file' && (
                   <AddFileForm
@@ -2248,14 +2400,16 @@ render() {
                 canDelete={this.state.canDelete}
                 onDelete={this.deleteFile}
               />
-              </Row>
+              </Col>
             )}
             {this.props.subMenu === 'appointment' && (
-              <Row className="tabRowDetails">
+              <Col className="tabCol">
+              <Col className="subTabCol">
               <h3>Appointments:</h3>
-              <Row className="">
+              </Col>
+              <Col className="subTabCol">
                 <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
-              </Row>
+              </Col>
               <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
                 <Tab eventKey="1" title="list">
                 <UserAppointmentList
@@ -2274,17 +2428,19 @@ render() {
                   />
                 </Tab>
               </Tabs>
-              </Row>
+              </Col>
             )}
             {this.props.subMenu === 'note' && (
-              <Row className="tabRowDetails">
+              <Col className="tabCol">
+              <Col className="subTabCol">
               <h3>Notes:</h3>
-              <Row className="">
+              </Col>
+              <Col className="subTabCol">
                 <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
                 {this.state.canDelete === true && (
                   <Button variant="success" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
                 )}
-              </Row>
+              </Col>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'note' && (
                   <AddNoteForm
@@ -2299,7 +2455,7 @@ render() {
                 canDelete={this.state.canDelete}
                 onDelete={this.deleteNote}
               />
-              </Row>
+              </Col>
             )}
           </Col>
         )}

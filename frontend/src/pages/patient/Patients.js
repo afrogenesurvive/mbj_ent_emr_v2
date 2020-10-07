@@ -54,7 +54,7 @@ class PatientPage extends Component {
     menuSelected: null,
     menuSelect: 'list',
     subMenuState: false,
-    subMenu: 'basic',
+    subMenu: 'all',
     adding: {
       state: null,
       field: null
@@ -774,7 +774,7 @@ render() {
             </Col>
           )}
           {this.state.menuSelect === 'detail' && (
-            <Col className="tabCol">
+            <Col className="tabCol tabColDetail">
             {this.state.showDetails === false &&
               !this.state.selectedPatient &&(
               <h3>Select a Patient to see details</h3>

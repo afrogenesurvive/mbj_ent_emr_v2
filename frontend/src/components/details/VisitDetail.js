@@ -5177,10 +5177,14 @@ render() {
                 onCancel={this.cancelUpdateSingleField}
               />
             )}
-
-            {this.props.subMenu === 'basic' && (
-              <Row className="tabRowDetails">
-              <h3>Basic Info:</h3>
+            {this.props.subMenu === 'all' && (
+              <Row className="tabRowAll">
+              <ul className="summaryList">
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Basic Info:</h3>
+              </Col>
               <ListGroup className="profileBasicListGroup">
                 <ListGroup.Item>
                   <p className="listGroupText">Title:</p>
@@ -5248,28 +5252,32 @@ render() {
                   </Link>
                 </ListGroup.Item>
               </ListGroup>
-              </Row>
-            )}
-            {this.props.subMenu === 'admin' && (
-              <Row className="tabRowDetails">
-              <h3>Admin Info:</h3>
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Admin Info:</h3>
+              </Col>
               <ListGroup className="profileBasicListGroup">
                 <ListGroup.Item>
                   <p className="listGroupText">Id:</p>
                   <p className="listGroupText bold">{this.props.visit._id}</p>
                 </ListGroup.Item>
               </ListGroup>
-              </Row>
-            )}
-            {this.props.subMenu === 'consultant' && (
-              <Row className="tabRowDetails">
-              <h3>Consultants:</h3>
-              <Row className="">
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Consultants:</h3>
+              </Col>
+              <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 {this.context.role !== 'Staff' && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'consultant')}>Add</Button>
                 )}
-              </Row>
+              </Col>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'consultant' &&
                 this.state.users && (
@@ -5288,17 +5296,19 @@ render() {
                 canDelete={this.state.canDelete}
                 onDelete={this.deleteConsultant}
               />
-              </Row>
-            )}
-            {this.props.subMenu === 'complaint' && (
-              <Row className="tabRowDetails">
-                <h3>Complaints:</h3>
-                <Row className="">
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Complaints:</h3>
+              </Col>
+                <Col className="subTabCol">
                   <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                   {this.context.role !== 'Staff' && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'complaint')}>Add</Button>
                   )}
-                </Row>
+                </Col>
                 {this.state.adding.state === true &&
                   this.state.adding.field === 'complaint' && (
                     <AddComplaintForm
@@ -5321,17 +5331,19 @@ render() {
                   onAddAttachment={this.startAddAttachment}
                   deleteAttachment={this.deleteAttachment}
                 />
-              </Row>
-            )}
-            {this.props.subMenu === 'survey' && (
-              <Row className="tabRowDetails">
-              <h3>Surveys:</h3>
-              <Row className="">
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Surveys:</h3>
+              </Col>
+              <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 {this.context.role !== 'Staff' && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'survey')}>Add</Button>
                 )}
-              </Row>
+              </Col>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'survey' && (
                   <AddSurveyForm
@@ -5354,17 +5366,19 @@ render() {
                 onAddAttachment={this.startAddAttachment}
                 deleteAttachment={this.deleteAttachment}
               />
-              </Row>
-            )}
-            {this.props.subMenu === 'systematicInquiry' && (
-              <Row className="tabRowDetails">
-                <h3>Systematic Inquiries:</h3>
-                <Row className="">
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Systematic Inquiries:</h3>
+              </Col>
+                <Col className="subTabCol">
                   <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                   {this.context.role !== 'Staff' && (
                     <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'systematicInquiry')}>Add</Button>
                   )}
-                </Row>
+                </Col>
                 {this.state.adding.state === true &&
                   this.state.adding.field === 'systematicInquiry' && (
                     <AddSystematicInquiryForm
@@ -5387,17 +5401,19 @@ render() {
                   onAddAttachment={this.startAddAttachment}
                   deleteAttachment={this.deleteAttachment}
                 />
-              </Row>
-            )}
-            {this.props.subMenu === 'vitals' && (
-              <Row className="tabRowDetails">
-              <h3>Vitals:</h3>
-              <Row className="">
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Vitals:</h3>
+              </Col>
+              <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 {this.context.role !== 'Staff' && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'vitals')}>Add</Button>
                 )}
-              </Row>
+              </Col>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'vitals' && (
                   <AddVitalsForm
@@ -5412,17 +5428,19 @@ render() {
                 canDelete={this.state.canDelete}
                 onDelete={this.deleteVitals}
               />
-              </Row>
-            )}
-            {this.props.subMenu === 'examination' && (
-              <Row className="tabRowDetails">
-              <h3>Examinations:</h3>
-              <Row className="">
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Examinations:</h3>
+              </Col>
+              <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 {this.context.role !== 'Staff' && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'examination')}>Add</Button>
                 )}
-              </Row>
+              </Col>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'examination' && (
                   <AddExaminationForm
@@ -5445,17 +5463,19 @@ render() {
                 onAddAttachment={this.startAddAttachment}
                 deleteAttachment={this.deleteAttachment}
               />
-              </Row>
-            )}
-            {this.props.subMenu === 'investigation' && (
-              <Row className="tabRowDetails">
-              <h3>Invenstigations:</h3>
-              <Row className="">
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Investigations:</h3>
+              </Col>
+              <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 {this.context.role !== 'Staff' && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'investigation')}>Add</Button>
                 )}
-              </Row>
+              </Col>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'investigation' && (
                   <AddInvestigationForm
@@ -5478,17 +5498,19 @@ render() {
                 onAddAttachment={this.startAddAttachment}
                 deleteAttachment={this.deleteAttachment}
               />
-              </Row>
-            )}
-            {this.props.subMenu === 'diagnosis' && (
-              <Row className="tabRowDetails">
-              <h3>Diagnoses:</h3>
-              <Row className="">
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Diagnoses:</h3>
+              </Col>
+              <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 {this.context.role !== 'Staff' && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'diagnosis')}>Add</Button>
                 )}
-              </Row>
+              </Col>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'diagnosis' && (
                   <AddDiagnosisForm
@@ -5511,17 +5533,19 @@ render() {
                 onAddAttachment={this.startAddAttachment}
                 deleteAttachment={this.deleteAttachment}
               />
-              </Row>
-            )}
-            {this.props.subMenu === 'treatment' && (
-              <Row className="tabRowDetails">
-              <h3>Treatments:</h3>
-              <Row className="">
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Treatments:</h3>
+              </Col>
+              <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 {this.context.role !== 'Staff' && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'treatment')}>Add</Button>
                 )}
-              </Row>
+              </Col>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'treatment' && (
                   <AddTreatmentForm
@@ -5544,16 +5568,18 @@ render() {
                 onAddAttachment={this.startAddAttachment}
                 deleteAttachment={this.deleteAttachment}
               />
-              </Row>
-            )}
-            {this.props.subMenu === 'billing' && (
-              <Row className="tabRowDetails">
-              <h3>Billing:</h3>
-              <Row className="">
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Billing:</h3>
+              </Col>
+              <Col className="subTabCol">
                 <Button className="searchBtn" variant="outline-primary" onClick={this.toggleFilter}>Filter</Button>
                 <Button className="searchBtn" variant="outline-success" onClick={this.startAdd.bind(this, 'billing')}>Add</Button>
                 <Button className="searchBtn" variant="outline-primary" size="sm" onClick={this.completeVisit}>Complete Visit</Button>
-              </Row>
+              </Col>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'billing' && (
                   <AddBillingForm
@@ -5577,17 +5603,19 @@ render() {
                 deleteAttachment={this.deleteAttachment}
                 updateBillingPaid={this.updateBillingPaid}
               />
-              </Row>
-            )}
-            {this.props.subMenu === 'vigilance' && (
-              <Row className="tabRowDetails">
-              <h3>Vigilance:</h3>
-              <Row className="">
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Vigilance:</h3>
+              </Col>
+              <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 {this.context.role !== 'Staff' && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'vigilance')}>Add</Button>
                 )}
-              </Row>
+              </Col>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'vigilance' && (
                   <AddVigilanceForm
@@ -5602,17 +5630,19 @@ render() {
                 canDelete={this.state.canDelete}
                 onDelete={this.deleteVigilance}
               />
-              </Row>
-            )}
-            {this.props.subMenu === 'image' && (
-              <Row className="tabRowDetails">
-              <h3>Images:</h3>
-              <Row className="">
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Images:</h3>
+              </Col>
+              <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 {this.context.role !== 'Staff' && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
                 )}
-              </Row>
+              </Col>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'image' && (
                   <AddImageForm
@@ -5627,17 +5657,19 @@ render() {
                 canDelete={this.state.canDelete}
                 onDelete={this.deleteImage}
               />
-              </Row>
-            )}
-            {this.props.subMenu === 'file' && (
-              <Row className="tabRowDetails">
-              <h3>Files:</h3>
-              <Row className="">
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Files:</h3>
+              </Col>
+              <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
                 {this.context.role !== 'Staff' && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
                 )}
-              </Row>
+              </Col>
               {this.state.adding.state === true &&
                 this.state.adding.field === 'file' && (
                   <AddFileForm
@@ -5652,7 +5684,516 @@ render() {
                 canDelete={this.state.canDelete}
                 onDelete={this.deleteFile}
               />
+              </Col>
+              </li>
+              </ul>
               </Row>
+            )}
+            {this.props.subMenu === 'basic' && (
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Basic Info:</h3>
+              </Col>
+              <ListGroup className="profileBasicListGroup">
+                <ListGroup.Item>
+                  <p className="listGroupText">Title:</p>
+                  <p className="listGroupText bold">{this.props.visit.title}</p>
+                  {this.context.role !== 'Staff' && (
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
+                  )}
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Type:</p>
+                  <p className="listGroupText bold">{this.props.visit.type}</p>
+                  {this.context.role !== 'Staff' && (
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'type')}>Edit</Button>
+                  )}
+                  <p className="listGroupText">subType:</p>
+                  <p className="listGroupText bold">{this.props.visit.subType}</p>
+                  {this.context.role !== 'Staff' && (
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'subType')}>Edit</Button>
+                  )}
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Date:</p>
+                  <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  <p className="listGroupText">Time:</p>
+                  <p className="listGroupText bold">{this.props.visit.time}</p>
+                  {this.context.role !== 'Staff' && (
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'time')}>Edit</Button>
+                  )}
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Patient:</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Name:</p>
+                  <p className="listGroupText bold">{this.props.visit.patient.title}</p>
+                  <p className="listGroupText bold">{this.props.visit.patient.name}</p>
+                  <Link
+                    to={{
+                      pathname: "/patients",
+                      state: {patient: this.props.visit.patient._id}
+                    }}
+                  >
+                  <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+                  </Link>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                <p className="listGroupText">Attending Physician:</p>
+                <p className="listGroupText bold">{this.props.visit.patient.attendingPhysician}</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Appointment:</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Title:</p>
+                  <p className="listGroupText bold">{this.props.visit.appointment.title}</p>
+                  <p className="listGroupText">Date:</p>
+                  <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  <Link
+                    to={{
+                      pathname: "/appointments",
+                      state: {appointment: this.props.visit.appointment._id}
+                    }}
+                  >
+                  <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+                  </Link>
+                </ListGroup.Item>
+              </ListGroup>
+              </Col>
+            )}
+            {this.props.subMenu === 'admin' && (
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Admin Info:</h3>
+              </Col>
+              <ListGroup className="profileBasicListGroup">
+                <ListGroup.Item>
+                  <p className="listGroupText">Id:</p>
+                  <p className="listGroupText bold">{this.props.visit._id}</p>
+                </ListGroup.Item>
+              </ListGroup>
+              </Col>
+            )}
+            {this.props.subMenu === 'consultant' && (
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Consultants:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
+                {this.context.role !== 'Staff' && (
+                  <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'consultant')}>Add</Button>
+                )}
+              </Col>
+              {this.state.adding.state === true &&
+                this.state.adding.field === 'consultant' &&
+                this.state.users && (
+                  <AddUserForm
+                    onConfirm={this.submitAddUserForm}
+                    onCancel={this.cancelAdd}
+                    filter={this.state.filter}
+                    users={this.state.users}
+                  />
+              )}
+              <UserList
+                filter={this.state.filter}
+                authId={this.context.activityId}
+                users={this.props.visit.consultants}
+                visitPage={true}
+                canDelete={this.state.canDelete}
+                onDelete={this.deleteConsultant}
+              />
+              </Col>
+            )}
+            {this.props.subMenu === 'complaint' && (
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Complaints:</h3>
+              </Col>
+                <Col className="subTabCol">
+                  <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
+                  {this.context.role !== 'Staff' && (
+                  <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'complaint')}>Add</Button>
+                  )}
+                </Col>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'complaint' && (
+                    <AddComplaintForm
+                      onConfirm={this.submitAddComplaintForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                {this.state.addAttachmentForm === true && (
+                  <AddAttachmentForm
+                    onCancel={this.cancelAddAttachment}
+                    onConfirm={this.addAttachment}
+                  />
+                )}
+                <VisitComplaintList
+                  filter={this.state.filter}
+                  complaints={this.props.visit.complaints}
+                  authId={this.context.activityId}
+                  canDelete={this.state.canDelete}
+                  onDelete={this.deleteComplaint}
+                  onAddAttachment={this.startAddAttachment}
+                  deleteAttachment={this.deleteAttachment}
+                />
+              </Col>
+            )}
+            {this.props.subMenu === 'survey' && (
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Surveys:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
+                {this.context.role !== 'Staff' && (
+                  <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'survey')}>Add</Button>
+                )}
+              </Col>
+              {this.state.adding.state === true &&
+                this.state.adding.field === 'survey' && (
+                  <AddSurveyForm
+                    onConfirm={this.submitAddSurveyForm}
+                    onCancel={this.cancelAdd}
+                  />
+              )}
+              {this.state.addAttachmentForm === true && (
+                <AddAttachmentForm
+                  onCancel={this.cancelAddAttachment}
+                  onConfirm={this.addAttachment}
+                />
+              )}
+              <VisitSurveyList
+                filter={this.state.filter}
+                surveys={this.props.visit.surveys}
+                authId={this.context.activityId}
+                canDelete={this.state.canDelete}
+                onDelete={this.deleteSurvey}
+                onAddAttachment={this.startAddAttachment}
+                deleteAttachment={this.deleteAttachment}
+              />
+              </Col>
+            )}
+            {this.props.subMenu === 'systematicInquiry' && (
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Systematic Inquiries:</h3>
+              </Col>
+                <Col className="subTabCol">
+                  <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
+                  {this.context.role !== 'Staff' && (
+                    <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'systematicInquiry')}>Add</Button>
+                  )}
+                </Col>
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'systematicInquiry' && (
+                    <AddSystematicInquiryForm
+                      onConfirm={this.submitAddSystematicInquiryForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                {this.state.addAttachmentForm === true && (
+                  <AddAttachmentForm
+                    onCancel={this.cancelAddAttachment}
+                    onConfirm={this.addAttachment}
+                  />
+                )}
+                <VisitSystematicInquiryList
+                  filter={this.state.filter}
+                  systematicInquiry={this.props.visit.systematicInquiry}
+                  authId={this.context.activityId}
+                  canDelete={this.state.canDelete}
+                  onDelete={this.deleteSystematicInquiry}
+                  onAddAttachment={this.startAddAttachment}
+                  deleteAttachment={this.deleteAttachment}
+                />
+              </Col>
+            )}
+            {this.props.subMenu === 'vitals' && (
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Vitals:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
+                {this.context.role !== 'Staff' && (
+                  <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'vitals')}>Add</Button>
+                )}
+              </Col>
+              {this.state.adding.state === true &&
+                this.state.adding.field === 'vitals' && (
+                  <AddVitalsForm
+                    onConfirm={this.submitAddVitalsForm}
+                    onCancel={this.cancelAdd}
+                  />
+              )}
+              <VisitVitalsList
+                filter={this.state.filter}
+                vitals={this.props.visit.vitals}
+                authId={this.context.activityId}
+                canDelete={this.state.canDelete}
+                onDelete={this.deleteVitals}
+              />
+              </Col>
+            )}
+            {this.props.subMenu === 'examination' && (
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Examinations:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
+                {this.context.role !== 'Staff' && (
+                  <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'examination')}>Add</Button>
+                )}
+              </Col>
+              {this.state.adding.state === true &&
+                this.state.adding.field === 'examination' && (
+                  <AddExaminationForm
+                    onConfirm={this.submitAddExaminationForm}
+                    onCancel={this.cancelAdd}
+                  />
+              )}
+              {this.state.addAttachmentForm === true && (
+                <AddAttachmentForm
+                  onCancel={this.cancelAddAttachment}
+                  onConfirm={this.addAttachment}
+                />
+              )}
+              <VisitExaminationList
+                filter={this.state.filter}
+                examination={this.props.visit.examination}
+                authId={this.context.activityId}
+                canDelete={this.state.canDelete}
+                onDelete={this.deleteExamination}
+                onAddAttachment={this.startAddAttachment}
+                deleteAttachment={this.deleteAttachment}
+              />
+              </Col>
+            )}
+            {this.props.subMenu === 'investigation' && (
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Investigations:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
+                {this.context.role !== 'Staff' && (
+                  <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'investigation')}>Add</Button>
+                )}
+              </Col>
+              {this.state.adding.state === true &&
+                this.state.adding.field === 'investigation' && (
+                  <AddInvestigationForm
+                    onConfirm={this.submitAddInvestigationForm}
+                    onCancel={this.cancelAdd}
+                  />
+              )}
+              {this.state.addAttachmentForm === true && (
+                <AddAttachmentForm
+                  onCancel={this.cancelAddAttachment}
+                  onConfirm={this.addAttachment}
+                />
+              )}
+              <VisitInvestigationList
+                filter={this.state.filter}
+                investigation={this.props.visit.investigation}
+                authId={this.context.activityId}
+                canDelete={this.state.canDelete}
+                onDelete={this.deleteInvestigation}
+                onAddAttachment={this.startAddAttachment}
+                deleteAttachment={this.deleteAttachment}
+              />
+              </Col>
+            )}
+            {this.props.subMenu === 'diagnosis' && (
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Diagnoses:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
+                {this.context.role !== 'Staff' && (
+                  <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'diagnosis')}>Add</Button>
+                )}
+              </Col>
+              {this.state.adding.state === true &&
+                this.state.adding.field === 'diagnosis' && (
+                  <AddDiagnosisForm
+                    onConfirm={this.submitAddDiagnosisForm}
+                    onCancel={this.cancelAdd}
+                  />
+              )}
+              {this.state.addAttachmentForm === true && (
+                <AddAttachmentForm
+                  onCancel={this.cancelAddAttachment}
+                  onConfirm={this.addAttachment}
+                />
+              )}
+              <VisitDiagnosisList
+                filter={this.state.filter}
+                diagnosis={this.props.visit.diagnosis}
+                authId={this.context.activityId}
+                canDelete={this.state.canDelete}
+                onDelete={this.deleteDiagnosis}
+                onAddAttachment={this.startAddAttachment}
+                deleteAttachment={this.deleteAttachment}
+              />
+              </Col>
+            )}
+            {this.props.subMenu === 'treatment' && (
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Treatments:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
+                {this.context.role !== 'Staff' && (
+                  <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'treatment')}>Add</Button>
+                )}
+              </Col>
+              {this.state.adding.state === true &&
+                this.state.adding.field === 'treatment' && (
+                  <AddTreatmentForm
+                    onConfirm={this.submitAddTreatmentForm}
+                    onCancel={this.cancelAdd}
+                  />
+              )}
+              {this.state.addAttachmentForm === true && (
+                <AddAttachmentForm
+                  onCancel={this.cancelAddAttachment}
+                  onConfirm={this.addAttachment}
+                />
+              )}
+              <VisitTreatmentList
+                filter={this.state.filter}
+                treatment={this.props.visit.treatment}
+                authId={this.context.activityId}
+                canDelete={this.state.canDelete}
+                onDelete={this.deleteTreatment}
+                onAddAttachment={this.startAddAttachment}
+                deleteAttachment={this.deleteAttachment}
+              />
+              </Col>
+            )}
+            {this.props.subMenu === 'billing' && (
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Billing:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button className="searchBtn" variant="outline-primary" onClick={this.toggleFilter}>Filter</Button>
+                <Button className="searchBtn" variant="outline-success" onClick={this.startAdd.bind(this, 'billing')}>Add</Button>
+                <Button className="searchBtn" variant="outline-primary" size="sm" onClick={this.completeVisit}>Complete Visit</Button>
+              </Col>
+              {this.state.adding.state === true &&
+                this.state.adding.field === 'billing' && (
+                  <AddBillingForm
+                    onConfirm={this.submitAddBillingForm}
+                    onCancel={this.cancelAdd}
+                  />
+              )}
+              {this.state.addAttachmentForm === true && (
+                <AddAttachmentForm
+                  onCancel={this.cancelAddAttachment}
+                  onConfirm={this.addAttachment}
+                />
+              )}
+              <VisitBillingList
+                filter={this.state.filter}
+                billing={this.props.visit.billing}
+                authId={this.context.activityId}
+                canDelete={this.state.canDelete}
+                onDelete={this.deleteBilling}
+                onAddAttachment={this.startAddAttachment}
+                deleteAttachment={this.deleteAttachment}
+                updateBillingPaid={this.updateBillingPaid}
+              />
+              </Col>
+            )}
+            {this.props.subMenu === 'vigilance' && (
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Vigilance:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
+                {this.context.role !== 'Staff' && (
+                  <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'vigilance')}>Add</Button>
+                )}
+              </Col>
+              {this.state.adding.state === true &&
+                this.state.adding.field === 'vigilance' && (
+                  <AddVigilanceForm
+                    onConfirm={this.submitAddVigilanceForm}
+                    onCancel={this.cancelAdd}
+                  />
+              )}
+              <VisitVigilanceList
+                filter={this.state.filter}
+                vigilance={this.props.visit.vigilance}
+                authId={this.context.activityId}
+                canDelete={this.state.canDelete}
+                onDelete={this.deleteVigilance}
+              />
+              </Col>
+            )}
+            {this.props.subMenu === 'image' && (
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Images:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
+                {this.context.role !== 'Staff' && (
+                  <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
+                )}
+              </Col>
+              {this.state.adding.state === true &&
+                this.state.adding.field === 'image' && (
+                  <AddImageForm
+                    onConfirm={this.submitAddImageForm}
+                    onCancel={this.cancelAdd}
+                  />
+              )}
+              <VisitImageList
+                filter={this.state.filter}
+                images={this.props.visit.images}
+                authId={this.context.activityId}
+                canDelete={this.state.canDelete}
+                onDelete={this.deleteImage}
+              />
+              </Col>
+            )}
+            {this.props.subMenu === 'file' && (
+              <Col className="tabCol">
+              <Col className="subTabCol">
+                <h3 className="">Files:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter}>Filter</Button>
+                {this.context.role !== 'Staff' && (
+                  <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
+                )}
+              </Col>
+              {this.state.adding.state === true &&
+                this.state.adding.field === 'file' && (
+                  <AddFileForm
+                    onConfirm={this.submitAddFileForm}
+                    onCancel={this.cancelAdd}
+                  />
+              )}
+              <VisitFileList
+                filter={this.state.filter}
+                files={this.props.visit.files}
+                authId={this.context.activityId}
+                canDelete={this.state.canDelete}
+                onDelete={this.deleteFile}
+              />
+              </Col>
             )}
           </Col>
         )}

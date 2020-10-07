@@ -34,6 +34,9 @@ return (
   {props.state === 'menuProfile' && (
     <ul className="FloatMenuList">
       <li>
+      <Button variant="light" onClick={props.menuSelect.bind(this, 'all')}>All</Button>
+      </li>
+      <li>
       <Button variant="light" onClick={props.menuSelect.bind(this, 'basic')}>Basic</Button>
       </li>
       <li>
@@ -135,6 +138,9 @@ return (
     props.page === 'patient' && (
     <ul className="FloatSubMenuList">
     <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
+    </li>
+    <li>
     <Button variant="light" onClick={props.subMenuSelect.bind(this, 'basic')}>Basic</Button>
     </li>
     <li>
@@ -182,6 +188,9 @@ return (
     props.page === 'staff' && (
     <ul className="FloatSubMenuList">
     <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
+    </li>
+    <li>
     <Button variant="light" onClick={props.subMenuSelect.bind(this, 'basic')}>Basic</Button>
     </li>
     <li>
@@ -208,14 +217,14 @@ return (
     <li>
     <Button variant="light" onClick={props.subMenuSelect.bind(this, 'note')}>Note</Button>
     </li>
-    <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
-    </li>
     </ul>
   )}
   {props.subMenuState === true &&
     props.page === 'appointment' && (
     <ul className="FloatSubMenuList">
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
+    </li>
     <li>
     <Button variant="light" onClick={props.subMenuSelect.bind(this, 'basic')}>Basic</Button>
     </li>
@@ -236,6 +245,9 @@ return (
   {props.subMenuState === true &&
     props.page === 'visit' && (
     <ul className="FloatSubMenuList">
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
+    </li>
     <li>
     <Button variant="light" onClick={props.subMenuSelect.bind(this, 'basic')}>Basic</Button>
     </li>

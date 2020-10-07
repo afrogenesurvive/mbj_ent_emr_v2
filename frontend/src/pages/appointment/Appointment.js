@@ -64,7 +64,7 @@ class AppointmentPage extends Component {
     menuSelected: null,
     menuSelect: 'list',
     subMenuState: false,
-    subMenu: 'basic',
+    subMenu: 'all',
     adding: {
       state: null,
       field: null
@@ -985,7 +985,7 @@ render() {
             </Col>
           )}
           {this.state.menuSelect === 'detail' && (
-            <Col className="tabCol">
+            <Col className="tabCol tabColDetail">
               {this.state.showDetails === false &&
                 !this.state.selectedAppointment &&(
                 <h3>Select a Appointment to see details</h3>

@@ -51,7 +51,7 @@ class StaffPage extends Component {
     menuSelected: null,
     menuSelect: 'list',
     subMenuState: false,
-    subMenu: 'basic',
+    subMenu: 'all',
     adding: {
       state: null,
       field: null

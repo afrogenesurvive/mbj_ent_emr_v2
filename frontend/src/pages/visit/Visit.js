@@ -65,7 +65,7 @@ class VisitPage extends Component {
     menuSelected: null,
     menuSelect: 'list',
     subMenuState: false,
-    subMenu: 'basic',
+    subMenu: 'all',
     adding: {
       state: null,
       field: null
@@ -1044,7 +1044,7 @@ render() {
             </Col>
           )}
           {this.state.menuSelect === 'detail' && (
-            <Col className="tabCol">
+            <Col className="tabCol tabColDetail">
               {this.state.showDetails === false &&
                 !this.state.selectedVisit &&(
                 <h3>Select a Visit to see details</h3>
