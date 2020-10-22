@@ -28,8 +28,9 @@ import VisitSearchForm from '../../components/forms/search/VisitSearchForm';
 import AppointmentSearchForm from '../../components/forms/search/AppointmentSearchForm';
 
 import FullCalendar from '@fullcalendar/react';
+import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
-// import bootstrapPlugin from '@fullcalendar/bootstrap';
+import bootstrapPlugin from '@fullcalendar/bootstrap';
 import '../../calendar.scss'
 
 import FloatMenu from '../../components/floatMenu/FloatMenu';
@@ -781,6 +782,13 @@ viewCalendarEvent = (args) => {
     overlayStatus: {type: 'calendarVisit', data: visit}
   })
 }
+dateClick = (args) => {
+  console.log('dateClick',args)
+  // this.setState({
+  //   overlay: true,
+  //   overlayStatus: {type: 'calendarAppointment', data: appointment}
+  // })
+}
 toggleOverlay = () => {
   this.setState({
     overlay: false
@@ -1006,10 +1014,11 @@ render() {
                 </Tab>
                 <Tab eventKey="2" title="calendar" className="calendarTab">
                   <FullCalendar
-                    plugins={[dayGridPlugin]}
-                    intitialView="dayGridMonth"
+                    initialView="dayGridMonth"
+                    plugins={[dayGridPlugin, interactionPlugin]}
                     events={this.state.calendarVisits}
                     eventClick={this.viewCalendarEvent}
+                    dateClick={this.dateClick}
                   />
                 </Tab>
               </Tabs>
@@ -1100,6 +1109,7 @@ render() {
                       plugins={[dayGridPlugin]}
                       events={this.state.calendarAppointments}
                       eventClick={this.selectCalendarAppointment}
+                      dateClick={this.dateClick}
                     />
                   </Tab>
                 </Tabs>

@@ -10,9 +10,11 @@ import Nav from 'react-bootstrap/Nav';
 import { NavLink } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
 import moment from 'moment';
+
 import FullCalendar from '@fullcalendar/react';
+import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
-// import bootstrapPlugin from '@fullcalendar/bootstrap';
+import bootstrapPlugin from '@fullcalendar/bootstrap';
 import '../../calendar.scss'
 import S3 from 'react-aws-s3';
 
@@ -1640,7 +1642,8 @@ parseForCalendar = (args) => {
         location: x.location,
         description: x.description,
         important: x.important,
-        field: 'appointments'
+        field: 'appointments',
+        patient: x.patient,
       }
     }))
     this.setState({
@@ -1687,6 +1690,7 @@ viewCalendarEvent = (args) => {
       location: input.location,
       description: input.description,
       important: input.important,
+      patient: input.patient,
     }
     this.setState({
       overlay: true,
@@ -1694,6 +1698,13 @@ viewCalendarEvent = (args) => {
     })
   }
 
+}
+dateClick = (args) => {
+  console.log('dateClick',args)
+  // this.setState({
+  //   overlay: true,
+  //   overlayStatus: {type: 'calendarAppointment', data: appointment}
+  // })
 }
 
 toggleOverlay = () => {
@@ -1949,7 +1960,7 @@ render() {
                     onCancel={this.cancelAdd}
                   />
               )}
-              <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+              <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                 <Tab eventKey="1" title="list">
                 <UserAttendanceList
                   filter={this.state.filter}
@@ -1961,10 +1972,11 @@ render() {
                 </Tab>
                 <Tab eventKey="2" title="calendar" className="calendarTab">
                   <FullCalendar
-                    defaultView="dayGridMonth"
-                    plugins={[dayGridPlugin]}
+                    initialView="dayGridMonth"
+                    plugins={[dayGridPlugin, interactionPlugin]}
                     events={this.state.calendarAttendance}
                     eventClick={this.viewCalendarEvent}
+                    dateClick={this.dateClick}
                   />
                 </Tab>
               </Tabs>
@@ -1988,7 +2000,7 @@ render() {
                     onCancel={this.cancelAdd}
                   />
               )}
-              <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+              <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                 <Tab eventKey="1" title="list">
                 <UserLeaveList
                   filter={this.state.filter}
@@ -2001,10 +2013,11 @@ render() {
                 <Tab eventKey="2" title="calendar" className="calendarTab">
                   <h3>Calendar</h3>
                   <FullCalendar
-                    defaultView="dayGridMonth"
-                    plugins={[dayGridPlugin]}
+                    initialView="dayGridMonth"
+                    plugins={[dayGridPlugin, interactionPlugin]}
                     events={this.state.calendarLeave}
                     eventClick={this.viewCalendarEvent}
+                    dateClick={this.dateClick}
                   />
                 </Tab>
               </Tabs>
@@ -2073,7 +2086,7 @@ render() {
               <Col className="subTabCol">
                 <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
               </Col>
-              <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+              <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                 <Tab eventKey="1" title="list">
                 <UserAppointmentList
                   filter={this.state.filter}
@@ -2084,10 +2097,11 @@ render() {
                 <Tab eventKey="2" title="calendar" className="calendarTab">
                   <h3>Calendar</h3>
                   <FullCalendar
-                    defaultView="dayGridMonth"
-                    plugins={[dayGridPlugin]}
+                    initialView="dayGridMonth"
+                    plugins={[dayGridPlugin, interactionPlugin]}
                     events={this.state.calendarAppointments}
                     eventClick={this.viewCalendarEvent}
+                    dateClick={this.dateClick}
                   />
                 </Tab>
               </Tabs>
@@ -2286,7 +2300,7 @@ render() {
                     onCancel={this.cancelAdd}
                   />
               )}
-              <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+              <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                 <Tab eventKey="1" title="list">
                 <UserAttendanceList
                   filter={this.state.filter}
@@ -2298,10 +2312,11 @@ render() {
                 </Tab>
                 <Tab eventKey="2" title="calendar" className="calendarTab">
                   <FullCalendar
-                    defaultView="dayGridMonth"
-                    plugins={[dayGridPlugin]}
+                    initialView="dayGridMonth"
+                    plugins={[dayGridPlugin, interactionPlugin]}
                     events={this.state.calendarAttendance}
                     eventClick={this.viewCalendarEvent}
+                    dateClick={this.dateClick}
                   />
                 </Tab>
               </Tabs>
@@ -2325,7 +2340,7 @@ render() {
                     onCancel={this.cancelAdd}
                   />
               )}
-              <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+              <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                 <Tab eventKey="1" title="list">
                 <UserLeaveList
                   filter={this.state.filter}
@@ -2338,10 +2353,11 @@ render() {
                 <Tab eventKey="2" title="calendar" className="calendarTab">
                   <h3>Calendar</h3>
                   <FullCalendar
-                    defaultView="dayGridMonth"
-                    plugins={[dayGridPlugin]}
+                    initialView="dayGridMonth"
+                    plugins={[dayGridPlugin, interactionPlugin]}
                     events={this.state.calendarLeave}
                     eventClick={this.viewCalendarEvent}
+                    dateClick={this.dateClick}
                   />
                 </Tab>
               </Tabs>
@@ -2410,7 +2426,7 @@ render() {
               <Col className="subTabCol">
                 <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
               </Col>
-              <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+              <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                 <Tab eventKey="1" title="list">
                 <UserAppointmentList
                   filter={this.state.filter}
@@ -2421,10 +2437,11 @@ render() {
                 <Tab eventKey="2" title="calendar" className="calendarTab">
                   <h3>Calendar</h3>
                   <FullCalendar
-                    defaultView="dayGridMonth"
-                    plugins={[dayGridPlugin]}
+                    initialView="dayGridMonth"
+                    plugins={[dayGridPlugin, interactionPlugin]}
                     events={this.state.calendarAppointments}
                     eventClick={this.viewCalendarEvent}
+                    dateClick={this.dateClick}
                   />
                 </Tab>
               </Tabs>

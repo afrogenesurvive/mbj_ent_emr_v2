@@ -150,6 +150,13 @@ module.exports = {
     try {
       const users = await User.find({})
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
       .populate('reminders');
       return users.map(user => {
         return transformUser(user,);

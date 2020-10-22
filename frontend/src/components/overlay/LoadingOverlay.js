@@ -41,10 +41,10 @@ return (
     //   props.status && (
     //   <h5 className="attachmentViewerTitle">... {props.status.type} ...</h5>
     // )
-  }
-
+    }
 
       <Container className="overlayContainer">
+
         {props.status.type === 'calendarAppointment' && (
           <React.Fragment>
             <Row className="overlayRow">
@@ -203,7 +203,7 @@ return (
           <Row className="overlayRow">
             <ListGroup className="overlayListGroup">
               <ListGroup.Item className="overlayListGroupItem">
-              <p>Type: <span className="bold">{moment.unix(props.status.data.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span></p>
+              <p>Type: <span className="bold">{props.status.data.type}</span></p>
               </ListGroup.Item>
               <ListGroup.Item className="overlayListGroupItem">
               <p>startDate: <span className="bold">{moment.unix(props.status.data.startDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span></p>
@@ -236,6 +236,9 @@ return (
           </React.Fragment>
         )}
 
+        {props.status.type === 'dateClickAppointment' && (
+          <h3>Create new Appt?</h3>
+        )}
 
       </Container>
 

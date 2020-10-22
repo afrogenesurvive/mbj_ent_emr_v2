@@ -12,9 +12,11 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Popover from 'react-bootstrap/Popover';
 import moment from 'moment';
+
 import FullCalendar from '@fullcalendar/react';
+import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
-// import bootstrapPlugin from '@fullcalendar/bootstrap';
+import bootstrapPlugin from '@fullcalendar/bootstrap';
 import '../../calendar.scss'
 import S3 from 'react-aws-s3';
 
@@ -2800,6 +2802,7 @@ viewCalendarEvent = (args) => {
       location: input.location,
       description: input.description,
       important: input.important,
+      patient: this.props.patient,
     }
     this.setState({
       overlay: true,
@@ -2814,6 +2817,7 @@ viewCalendarEvent = (args) => {
       type: input.type,
       subType: input.subType,
       time: input.time,
+      patient: this.props.patient,
     }
     this.setState({
       overlay: true,
@@ -2821,6 +2825,13 @@ viewCalendarEvent = (args) => {
     })
   }
 
+}
+dateClick = (args) => {
+  console.log('dateClick',args)
+  // this.setState({
+  //   overlay: true,
+  //   overlayStatus: {type: 'calendarAppointment', data: appointment}
+  // })
 }
 
 toggleOverlay = () => {
@@ -2846,6 +2857,17 @@ closePdfView = () => {
       data: null
     }
   })
+}
+new = (args) => {
+
+
+  // <Link
+  //   to={{
+  //     pathname: "/appointments",
+  //     state: {appointment: props.appointment._id}
+  //   }}
+  // >
+  // </Link>
 }
 
 render() {
@@ -2956,6 +2978,12 @@ render() {
               <Row className="tabRowAll">
               <ul className="summaryList">
               <li className="summaryListItem">
+              <Col className="subTabCol">
+              <Button variant="primary" className="searchBtn" onClick={this.new.bind(this, 'appointment')}>New Appointment</Button>
+              <Button variant="secondary" className="searchBtn" onClick={this.new.bind(this, 'visit')}>New Visit</Button>
+              </Col>
+              </li>
+              <li className="summaryListItem">
               <Col className="tabCol">
               <Col className="subTabCol">
                 <h3 className="">Basic Info:</h3>
@@ -2986,7 +3014,6 @@ render() {
                   <p className="listGroupText bold">{this.props.patient.age}</p>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <p className="listGroupText">DOB:</p>
                   <p className="listGroupText">Gender:</p>
                   <p className="listGroupText bold">{this.props.patient.gender}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'gender')}>Edit</Button>
@@ -3130,10 +3157,10 @@ render() {
               <Col className="subTabCol">
                 <h3 className="">Addresses:</h3>
               </Col>
-                <Row className="">
+                <Col className="subTabCol">
                   <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
                   <Button variant="success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
-                </Row>
+                </Col>
                 {this.state.adding.state === true &&
                   this.state.adding.field === 'address' && (
                     <AddAddressForm
@@ -3324,7 +3351,7 @@ render() {
               <Col className="subTabCol">
                 <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
               </Col>
-                <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+                <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                   <Tab eventKey="1" title="list">
                   <UserAppointmentList
                     filter={this.state.filter}
@@ -3334,10 +3361,11 @@ render() {
                   </Tab>
                   <Tab eventKey="2" title="calendar" className="calendarTab">
                     <FullCalendar
-                      defaultView="dayGridMonth"
-                      plugins={[dayGridPlugin]}
+                      initialView="dayGridMonth"
+                      plugins={[dayGridPlugin, interactionPlugin]}
                       events={this.state.calendarAppointments}
                       eventClick={this.viewCalendarEvent}
+                      dateClick={this.dateClick}
                     />
                   </Tab>
                 </Tabs>
@@ -3350,7 +3378,7 @@ render() {
                 <Col className="subTabCol">
                   <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
                 </Col>
-                <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+                <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                   <Tab eventKey="1" title="list">
                   <VisitList
                     filter={this.state.filter}
@@ -3361,10 +3389,11 @@ render() {
                   </Tab>
                   <Tab eventKey="2" title="calendar" className="calendarTab">
                     <FullCalendar
-                      defaultView="dayGridMonth"
-                      plugins={[dayGridPlugin]}
+                      initialView="dayGridMonth"
+                      plugins={[dayGridPlugin, interactionPlugin]}
                       events={this.state.calendarVisits}
                       eventClick={this.viewCalendarEvent}
+                      dateClick={this.dateClick}
                     />
                   </Tab>
                 </Tabs>
@@ -3601,10 +3630,10 @@ render() {
               <Col className="subTabCol">
                 <h3 className="">Addresses:</h3>
               </Col>
-                <Row className="">
+                <Col className="subTabCol">
                   <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
                   <Button variant="success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
-                </Row>
+                </Col>
                 {this.state.adding.state === true &&
                   this.state.adding.field === 'address' && (
                     <AddAddressForm
@@ -3796,7 +3825,7 @@ render() {
               <Col className="subTabCol">
                 <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
               </Col>
-                <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+                <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                   <Tab eventKey="1" title="list">
                   <UserAppointmentList
                     filter={this.state.filter}
@@ -3806,10 +3835,11 @@ render() {
                   </Tab>
                   <Tab eventKey="2" title="calendar" className="calendarTab">
                     <FullCalendar
-                      defaultView="dayGridMonth"
-                      plugins={[dayGridPlugin]}
+                      initialView="dayGridMonth"
+                      plugins={[dayGridPlugin, interactionPlugin]}
                       events={this.state.calendarAppointments}
                       eventClick={this.viewCalendarEvent}
+                      dateClick={this.dateClick}
                     />
                   </Tab>
                 </Tabs>
@@ -3823,7 +3853,7 @@ render() {
                 <Col className="subTabCol">
                   <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
                 </Col>
-                <Tabs defaultActiveKey="1" id="uncontrolled-tab-example">
+                <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                   <Tab eventKey="1" title="list">
                   <VisitList
                     filter={this.state.filter}
@@ -3834,10 +3864,11 @@ render() {
                   </Tab>
                   <Tab eventKey="2" title="calendar" className="calendarTab">
                     <FullCalendar
-                      defaultView="dayGridMonth"
-                      plugins={[dayGridPlugin]}
+                      initialView="dayGridMonth"
+                      plugins={[dayGridPlugin, interactionPlugin]}
                       events={this.state.calendarVisits}
                       eventClick={this.viewCalendarEvent}
+                      dateClick={this.dateClick}
                     />
                   </Tab>
                 </Tabs>
