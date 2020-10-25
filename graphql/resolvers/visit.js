@@ -1952,6 +1952,7 @@ module.exports = {
       const patient = appointment.patient;
       // console.log('appointment',appointment);
       // console.log('foo', patient);
+      // console.log('consultants',consultants)
       const today = moment();
       const dateTime = moment(appointment.date).format('YYYY-MM-DD')+'T'+appointment.time+'';
       console.log('a',moment(appointment.date).add(1,'days').format('YYYY-MM-DD'));

@@ -59,267 +59,346 @@ const VigilanceItem = (props) => {
 
           {state === true && (
             <Row className="listItemHiddenRow">
-              <h3>chronicIllness:</h3>
+            <ul>
+              <li>
+              <h5>chronicIllness:</h5>
+              </li>
+              <li>
               <p>Diabetes</p>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                Medication: <span className="bold">{props.vigilance.chronicIllness.diabetes.medication}</span>
+                Medication: <span className="bold">{props.vigilance.chronicIllness.diabetes.medication.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Testing: <span className="bold">{props.vigilance.chronicIllness.diabetes.testing}</span>
+                Testing: <span className="bold">{props.vigilance.chronicIllness.diabetes.testing.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Comment: <span className="bold">{props.vigilance.chronicIllness.diabetes.comment}</span>
               </Card.Text>
-
+              </li>
+              <li>
               <p>High BloodPressure</p>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                Medication: <span className="bold">{props.vigilance.chronicIllness.hbp.medication}</span>
+                Medication: <span className="bold">{props.vigilance.chronicIllness.hbp.medication.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Testing: <span className="bold">{props.vigilance.chronicIllness.hbp.testing}</span>
+                Testing: <span className="bold">{props.vigilance.chronicIllness.hbp.testing.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Comment: <span className="bold">{props.vigilance.chronicIllness.hbp.comment}</span>
               </Card.Text>
-
+              </li>
+              <li>
               <p>Dyslipidemia</p>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                Medication: <span className="bold">{props.vigilance.chronicIllness.dyslipidemia.medication}</span>
+                Medication: <span className="bold">{props.vigilance.chronicIllness.dyslipidemia.medication.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Testing: <span className="bold">{props.vigilance.chronicIllness.dyslipidemia.testing}</span>
+                Testing: <span className="bold">{props.vigilance.chronicIllness.dyslipidemia.testing.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Comment: <span className="bold">{props.vigilance.chronicIllness.dyslipidemia.comment}</span>
               </Card.Text>
-
+              </li>
+              <li>
               <p>Cad</p>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                Medication: <span className="bold">{props.vigilance.chronicIllness.cad.medication}</span>
+                Medication: <span className="bold">{props.vigilance.chronicIllness.cad.medication.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Testing: <span className="bold">{props.vigilance.chronicIllness.cad.testing}</span>
+                Testing: <span className="bold">{props.vigilance.chronicIllness.cad.testing.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Comment: <span className="bold">{props.vigilance.chronicIllness.cad.comment}</span>
               </Card.Text>
-
-              <h3>lifestyle</h3>
+              </li>
+              <li>
+              <h5>Lifestyle</h5>
+              </li>
+              <li>
               <p>Weight</p>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                Medication: <span className="bold">{props.vigilance.lifestyle.weight.medication}</span>
+                Medication: <span className="bold">{props.vigilance.lifestyle.weight.medication.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Testing: <span className="bold">{props.vigilance.lifestyle.weight.testing}</span>
+                Testing: <span className="bold">{props.vigilance.lifestyle.weight.testing.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Comment: <span className="bold">{props.vigilance.lifestyle.weight.comment}</span>
               </Card.Text>
-
+              </li>
+              <li>
               <p>Diet</p>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                Medication: <span className="bold">{props.vigilance.lifestyle.diet.medication}</span>
+                Medication: <span className="bold">{props.vigilance.lifestyle.diet.medication.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Testing: <span className="bold">{props.vigilance.lifestyle.diet.testing}</span>
+                Testing: <span className="bold">{props.vigilance.lifestyle.diet.testing.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Comment: <span className="bold">{props.vigilance.lifestyle.diet.comment}</span>
               </Card.Text>
-
+              </li>
+              <li>
               <p>Smoking</p>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                Medication: <span className="bold">{props.vigilance.lifestyle.smoking.medication}</span>
+                Medication: <span className="bold">{props.vigilance.lifestyle.smoking.medication.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Testing: <span className="bold">{props.vigilance.lifestyle.smoking.testing}</span>
+                Testing: <span className="bold">{props.vigilance.lifestyle.smoking.testing.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Comment: <span className="bold">{props.vigilance.lifestyle.smoking.comment}</span>
               </Card.Text>
-
+              </li>
+              <li>
               <p>SubstanceAbuse</p>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                Medication: <span className="bold">{props.vigilance.lifestyle.substanceAbuse.medication}</span>
+                Medication: <span className="bold">{props.vigilance.lifestyle.substanceAbuse.medication.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Testing: <span className="bold">{props.vigilance.lifestyle.substanceAbuse.testing}</span>
+                Testing: <span className="bold">{props.vigilance.lifestyle.substanceAbuse.testing.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Comment: <span className="bold">{props.vigilance.lifestyle.substanceAbuse.comment}</span>
               </Card.Text>
-
-              <p>exercise</p>
+              </li>
+              <li>
+              <p>Exercise</p>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                Medication: <span className="bold">{props.vigilance.lifestyle.exercise.medication}</span>
+                Medication: <span className="bold">{props.vigilance.lifestyle.exercise.medication.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Testing: <span className="bold">{props.vigilance.lifestyle.exercise.testing}</span>
+                Testing: <span className="bold">{props.vigilance.lifestyle.exercise.testing.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Comment: <span className="bold">{props.vigilance.lifestyle.exercise.comment}</span>
               </Card.Text>
-
-              <p>allergies</p>
+              </li>
+              <li>
+              <p>Allergies</p>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                Medication: <span className="bold">{props.vigilance.lifestyle.allergies.medication}</span>
+                Medication: <span className="bold">{props.vigilance.lifestyle.allergies.medication.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Testing: <span className="bold">{props.vigilance.lifestyle.allergies.testing}</span>
+                Testing: <span className="bold">{props.vigilance.lifestyle.allergies.testing.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Comment: <span className="bold">{props.vigilance.lifestyle.allergies.comment}</span>
               </Card.Text>
-
-              <p>asthma</p>
+              </li>
+              <li>
+              <p>Asthma</p>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                Medication: <span className="bold">{props.vigilance.lifestyle.asthma.medication}</span>
+                Medication: <span className="bold">{props.vigilance.lifestyle.asthma.medication.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Testing: <span className="bold">{props.vigilance.lifestyle.asthma.testing}</span>
+                Testing: <span className="bold">{props.vigilance.lifestyle.asthma.testing.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Comment: <span className="bold">{props.vigilance.lifestyle.asthma.comment}</span>
               </Card.Text>
-
-              <h3>Screening</h3>
-              <p>breast</p>
+              </li>
+              <li>
+              <h5>Screening :</h5>
+              </li>
+              <li>
+              <p>Breast</p>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                Medication: <span className="bold">{props.vigilance.screening.breast.medication}</span>
+                Medication: <span className="bold">{props.vigilance.screening.breast.medication.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Testing: <span className="bold">{props.vigilance.screening.breast.testing}</span>
+                Testing: <span className="bold">{props.vigilance.screening.breast.testing.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Comment: <span className="bold">{props.vigilance.screening.breast.comment}</span>
               </Card.Text>
-
-              <p>prostate</p>
+              </li>
+              <li>
+              <p>Prostate</p>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                Medication: <span className="bold">{props.vigilance.screening.prostate.medication}</span>
+                Medication: <span className="bold">{props.vigilance.screening.prostate.medication.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Testing: <span className="bold">{props.vigilance.screening.prostate.testing}</span>
+                Testing: <span className="bold">{props.vigilance.screening.prostate.testing.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Comment: <span className="bold">{props.vigilance.screening.prostate.comment}</span>
               </Card.Text>
-
-              <p>cervix</p>
+              </li>
+              <li>
+              <p>Cervix</p>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                Medication: <span className="bold">{props.vigilance.screening.cervix.medication}</span>
+                Medication: <span className="bold">{props.vigilance.screening.cervix.medication.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Testing: <span className="bold">{props.vigilance.screening.cervix.testing}</span>
+                Testing: <span className="bold">{props.vigilance.screening.cervix.testing.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Comment: <span className="bold">{props.vigilance.screening.cervix.comment}</span>
               </Card.Text>
-
-              <p>colon</p>
+              </li>
+              <li>
+              <p>Colon</p>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                Medication: <span className="bold">{props.vigilance.screening.colon.medication}</span>
+                Medication: <span className="bold">{props.vigilance.screening.colon.medication.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Testing: <span className="bold">{props.vigilance.screening.colon.testing}</span>
+                Testing: <span className="bold">{props.vigilance.screening.colon.testing.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Comment: <span className="bold">{props.vigilance.screening.colon.comment}</span>
               </Card.Text>
-
-              <p>dental</p>
+              </li>
+              <li>
+              <p>Dental</p>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                Medication: <span className="bold">{props.vigilance.screening.dental.medication}</span>
+                Medication: <span className="bold">{props.vigilance.screening.dental.medication.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Testing: <span className="bold">{props.vigilance.screening.dental.testing}</span>
+                Testing: <span className="bold">{props.vigilance.screening.dental.testing.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Comment: <span className="bold">{props.vigilance.screening.dental.comment}</span>
               </Card.Text>
-
-              <h3>Vaccines</h3>
+              </li>
+              <li>
+              <h5>Vaccines :</h5>
+              </li>
+              <li>
               <p>Influenza</p>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                Medication: <span className="bold">{props.vigilance.vaccines.influenza.medication}</span>
+                Medication: <span className="bold">{props.vigilance.vaccines.influenza.medication.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Testing: <span className="bold">{props.vigilance.vaccines.influenza.testing}</span>
+                Testing: <span className="bold">{props.vigilance.vaccines.influenza.testing.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Comment: <span className="bold">{props.vigilance.vaccines.influenza.comment}</span>
               </Card.Text>
-
-              <p>varicella</p>
+              </li>
+              <li>
+              <p>Varicella</p>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                Medication: <span className="bold">{props.vigilance.vaccines.varicella.medication}</span>
+                Medication: <span className="bold">{props.vigilance.vaccines.varicella.medication.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Testing: <span className="bold">{props.vigilance.vaccines.varicella.testing}</span>
+                Testing: <span className="bold">{props.vigilance.vaccines.varicella.testing.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Comment: <span className="bold">{props.vigilance.vaccines.varicella.comment}</span>
               </Card.Text>
-
-              <p>hpv</p>
+              </li>
+              <li>
+              <p>HPV</p>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                Medication: <span className="bold">{props.vigilance.vaccines.hpv.medication}</span>
+                Medication: <span className="bold">{props.vigilance.vaccines.hpv.medication.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Testing: <span className="bold">{props.vigilance.vaccines.hpv.testing}</span>
+                Testing: <span className="bold">{props.vigilance.vaccines.hpv.testing.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Comment: <span className="bold">{props.vigilance.vaccines.hpv.comment}</span>
               </Card.Text>
-
-              <p>mmr</p>
+              </li>
+              <li>
+              <p>MMR</p>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                Medication: <span className="bold">{props.vigilance.vaccines.mmr.medication}</span>
+                Medication: <span className="bold">{props.vigilance.vaccines.mmr.medication.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Testing: <span className="bold">{props.vigilance.vaccines.mmr.testing}</span>
+                Testing: <span className="bold">{props.vigilance.vaccines.mmr.testing.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Comment: <span className="bold">{props.vigilance.vaccines.mmr.comment}</span>
               </Card.Text>
-
-              <p>tetanus</p>
+              </li>
+              <li>
+              <p>Tetanus</p>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                Medication: <span className="bold">{props.vigilance.vaccines.tetanus.medication}</span>
+                Medication: <span className="bold">{props.vigilance.vaccines.tetanus.medication.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Testing: <span className="bold">{props.vigilance.vaccines.tetanus.testing}</span>
+                Testing: <span className="bold">{props.vigilance.vaccines.tetanus.testing.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Comment: <span className="bold">{props.vigilance.vaccines.tetanus.comment}</span>
               </Card.Text>
-
-              <p>pneumovax</p>
+              </li>
+              <li>
+              <p>Pneumovax</p>
+              </li>
+              <li>
               <Card.Text className="cardText">
-                Medication: <span className="bold">{props.vigilance.vaccines.pneumovax.medication}</span>
+                Medication: <span className="bold">{props.vigilance.vaccines.pneumovax.medication.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Testing: <span className="bold">{props.vigilance.vaccines.pneumovax.testing}</span>
+                Testing: <span className="bold">{props.vigilance.vaccines.pneumovax.testing.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Comment: <span className="bold">{props.vigilance.vaccines.pneumovax.comment}</span>
               </Card.Text>
-
-              <p>other</p>
+              </li>
+              <li>
+              <p>Other</p>
+              </li>
+              <li>
               <Card.Text className="cardText">
                 Other: <span className="bold">{props.vigilance.vaccines.other.name}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Medication: <span className="bold">{props.vigilance.vaccines.other.medication}</span>
+                Medication: <span className="bold">{props.vigilance.vaccines.other.medication.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
-                Testing: <span className="bold">{props.vigilance.vaccines.other.testing}</span>
+                Testing: <span className="bold">{props.vigilance.vaccines.other.testing.toString()}</span>
               </Card.Text>
               <Card.Text className="cardText">
                 Comment: <span className="bold">{props.vigilance.vaccines.other.comment}</span>
               </Card.Text>
-
+              </li>
               {props.canDelete === true && (
+                <li>
                 <OverlayTrigger
                   key={'top'}
                   placement={'top'}
@@ -333,11 +412,14 @@ const VigilanceItem = (props) => {
                 >
                   <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
                 </OverlayTrigger>
-
+                </li>
               )}
               {deleteState === true && (
+                <li>
                 <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.vigilance)}>Delete</Button>
+                </li>
               )}
+            </ul>
             </Row>
           )}
         </Card.Body>

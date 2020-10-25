@@ -7,7 +7,7 @@ import Container from 'react-bootstrap/Container';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Popover from 'react-bootstrap/Popover';
@@ -2859,7 +2859,7 @@ closePdfView = () => {
   })
 }
 new = (args) => {
-
+  console.log('new: ',args)
 
   // <Link
   //   to={{
@@ -2979,8 +2979,22 @@ render() {
               <ul className="summaryList">
               <li className="summaryListItem">
               <Col className="subTabCol">
+              <Link
+                to={{
+                  pathname: "/appointments",
+                  state: {newAppointment: this.props.patient}
+                }}
+              >
               <Button variant="primary" className="searchBtn" onClick={this.new.bind(this, 'appointment')}>New Appointment</Button>
-              <Button variant="secondary" className="searchBtn" onClick={this.new.bind(this, 'visit')}>New Visit</Button>
+              </Link>
+              <Link
+                to={{
+                  pathname: "/visits",
+                  state: {newVisit: this.props.patient}
+                }}
+              >
+              <Button variant="primary" className="searchBtn" onClick={this.new.bind(this, 'visit')}>New Visit</Button>
+              </Link>
               </Col>
               </li>
               <li className="summaryListItem">

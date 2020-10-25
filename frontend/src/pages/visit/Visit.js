@@ -84,6 +84,7 @@ class VisitPage extends Component {
     goLinkId: null,
     sublistSearch: false,
     tabKey: 'list',
+    newVisitPatient: false,
   };
   static contextType = AuthContext;
 
@@ -113,6 +114,10 @@ componentDidMount () {
         selectedVisit: this.props.selectedVisit
       })
     }
+    // if (this.props.location.state &&
+    //     this.props.location.state.newVisit ) {
+    //     this.newVisitPatient();
+    // }
   }
 }
 componentWillUnmount() {
@@ -239,6 +244,11 @@ getAllAppointments (args) {
       });
       this.logUserActivity({activityId: activityId,token: token});
       this.parseForCalendarAppts(resData.data.getAllAppointments)
+
+      if (this.props.location.state &&
+          this.props.location.state.newVisit ) {
+          this.newVisitPatient();
+      }
     })
     .catch(err => {
       console.log(err);
@@ -462,6 +472,87 @@ searchVisits = (event) => {
 
 }
 
+newVisitPatient = () => {
+  console.log('...new Visit from patient details...');
+  this.context.setUserAlert('...creating new appointment...')
+  this.setState({isLoading: true});
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patient = this.props.location.state.newVisit;
+  const today = moment().format('YYYY-MM-DD,h:mm a')
+
+  const title = patient.name+'appt'+today;
+  const type = 'new_unreferred';
+  const subType = '';
+  const date = today.split(',')[0];
+  const time = today.split(',')[1];
+  const location = '';
+  const description = 'visit on-the-fly';
+  const important = false;
+
+  let requestBody = {
+    query: `
+      mutation {createAppointment(
+        activityId:"${activityId}",
+        patientId:"${patient._id}",
+        appointmentInput:{
+          title:"${title}",
+          type:"${type}",
+          subType:"${subType}",
+          date:"${date}",
+          time:"${time}",
+          location:"${location}",
+          description:"${description}",
+          important:${important}
+        })
+        {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,reminders{_id},creator{_id}}}
+    `};
+  fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.createAppointment);
+      let responseAlert = '...create appointment success!...';
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.setState({
+        isLoading: false,
+        activityA: `createAppointment?activityId:${activityId},appointmentId:${resData.data.createAppointment._id}`,
+        creatingVisit: true,
+        selectedAppointment: resData.data.createAppointment,
+        menuSelect: 'new',
+      });
+      this.logUserActivity({activityId: activityId,token: token});
+
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+
+}
 onStartCreateNewVisit = () => {
   this.setState({
     creatingVisit: true
@@ -475,7 +566,7 @@ cancelCreateNewVisit = () => {
 }
 submitCreateNewVisitForm = (event) => {
   event.preventDefault();
-  console.log('...creating new visit...');
+  console.log('...creating new visit...',this.state.selectedAppointment);
   this.context.setUserAlert('...creating new visit...')
   this.setState({isLoading: true});
 
@@ -483,12 +574,12 @@ submitCreateNewVisitForm = (event) => {
   const activityId = this.context.activityId;
   const appointmentId = this.state.selectedAppointment._id;
 
-  const title = '';
+  const title = this.state.selectedAppointment.patient._id+'visit'+this.state.selectedAppointment.date;
   const type = event.target.type.value;
   const subType = '';
 
   if (
-      title.trim().length === 0 ||
+      // title.trim().length === 0 ||
       type.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
@@ -538,7 +629,7 @@ submitCreateNewVisitForm = (event) => {
       return res.json();
     })
     .then(resData => {
-      console.log('...resData...',resData.data.createVisit);
+      // console.log('...resData...',resData.data.createVisit);
       let responseAlert = '...create visit success!...';
       let error = null;
 
@@ -559,6 +650,7 @@ submitCreateNewVisitForm = (event) => {
         selectedVisit: resData.data.createVisit,
         newVisit: resData.data.createVisit,
         tabKey: 'detail',
+        menuSelect: 'detail',
         activityA: `createAppointment?activityId:${activityId},visitId:${resData.data.createVisit._id}`
       });
       this.logUserActivity({activityId: activityId,token: token});
@@ -940,6 +1032,7 @@ clearSearch = () => {
   })
 }
 
+
 render() {
 
   return (
@@ -1105,8 +1198,8 @@ render() {
                   <Tab eventKey="2" title="calendar" className="calendarTab">
                     <h3>Calendar</h3>
                     <FullCalendar
-                      defaultView="dayGridMonth"
-                      plugins={[dayGridPlugin]}
+                      initialView="dayGridMonth"
+                      plugins={[dayGridPlugin, interactionPlugin]}
                       events={this.state.calendarAppointments}
                       eventClick={this.selectCalendarAppointment}
                       dateClick={this.dateClick}

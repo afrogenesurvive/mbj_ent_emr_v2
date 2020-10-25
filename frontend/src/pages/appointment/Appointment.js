@@ -93,6 +93,7 @@ componentDidMount () {
       this.setState({canDelete:true})
     }
 
+
     this.getAllPatients(seshStore);
     if (this.props.location.state) {
       if (this.props.location.state.appointment) {
@@ -110,6 +111,17 @@ componentDidMount () {
         selectedAppointment: this.props.selectedAppointment
       })
     }
+    if (
+      this.props.location.state &&
+      this.props.location.state.newAppointment) {
+      console.log('...creating a new appt from patient detail...')
+      this.setState({
+        creatingAppointment: true,
+        selectedPatient: this.props.location.state.newAppointment,
+        menuSelect: 'new'
+      })
+    }
+
   }
 }
 componentWillUnmount() {
