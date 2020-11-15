@@ -50,10 +50,19 @@ return (
     </Form.Row>
 
     <Form.Row>
-      <Form.Group as={Col} controlId="date">
-        <Form.Label className="formLabel">Date</Form.Label>
-        <Form.Control type="date" placeholder="YYYY-MM-DD"/>
-      </Form.Group>
+      { !props.preFillDate && (
+        <Form.Group as={Col} controlId="date">
+          <Form.Label className="formLabel">Date</Form.Label>
+          <Form.Control type="date" placeholder="YYYY-MM-DD"/>
+        </Form.Group>
+      )}
+
+      { props.preFillDate && (
+        <Form.Group as={Col} controlId="date">
+          <Form.Label className="formLabel">Date</Form.Label>
+          <Form.Control type="date" placeholder="YYYY-MM-DD" value={props.preFillDate}/>
+        </Form.Group>
+      )}
 
       <Form.Group as={Col} controlId="time">
         <Form.Label className="formLabel">Time</Form.Label>

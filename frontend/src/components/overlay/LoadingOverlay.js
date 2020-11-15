@@ -237,8 +237,104 @@ return (
         )}
 
         {props.status.type === 'dateClickAppointment' && (
-          <h3>Create new Appt?</h3>
+
+          <React.Fragment>
+          <Row className="overlayRow">
+            <ListGroup className="overlayListGroup">
+              <ListGroup.Item className="overlayListGroupItem">
+              <h5>Create new Appointment for {props.status.data} ?</h5>
+              </ListGroup.Item>
+              <ListGroup.Item className="overlayListGroupItem">
+              <Button variant="primary" type="button" className="loginFormBtn searchBtn" onClick={props.startCreateDateClickAppt}>Create</Button>
+              <Button variant="danger" type="button" className="loginFormBtn searchBtn" onClick={props.toggleOverlay}>Cancel</Button>
+              </ListGroup.Item>
+            </ListGroup>
+          </Row>
+          </React.Fragment>
         )}
+
+        {props.status.type === 'dateClickVisit' && (
+
+          <React.Fragment>
+          <Row className="overlayRow">
+            <ListGroup className="overlayListGroup">
+              <ListGroup.Item className="overlayListGroupItem">
+              <h5>To create new Visit for {props.status.data}, you must select a Patient!</h5>
+              </ListGroup.Item>
+              <ListGroup.Item className="overlayListGroupItem">
+              <Link
+                to={{
+                  pathname: "/patients",
+                  state: {selectPatient: ''}
+                }}
+              >
+              <Button variant="success" type="button" className="loginFormBtn searchBtn">Select Patient</Button>
+              </Link>
+              <Button variant="danger" type="button" className="loginFormBtn searchBtn" onClick={props.toggleOverlay}>Cancel</Button>
+              </ListGroup.Item>
+            </ListGroup>
+          </Row>
+          </React.Fragment>
+        )}
+
+        {props.status.type === 'dateClickAppointmentPatient' && (
+
+          <React.Fragment>
+          <Row className="overlayRow">
+            <ListGroup className="overlayListGroup">
+              <ListGroup.Item className="overlayListGroupItem">
+              <h5>Create new Appointment for </h5>
+              <p>{props.status.data.patient.name} ( {props.status.data.patient._id} ) </p>
+              <p>on {props.status.data.date} ?</p>
+              </ListGroup.Item>
+              <ListGroup.Item className="overlayListGroupItem">
+              <Link
+                to={{
+                  pathname: "/appointments",
+                  state: {newAppointmentDate: {
+                    date: props.status.data.date,
+                    patient: props.status.data.patient}}
+                }}
+              >
+              <Button variant="primary" className="searchBtn">Create</Button>
+              </Link>
+              <Button variant="danger" type="button" className="loginFormBtn searchBtn" onClick={props.toggleOverlay}>Cancel</Button>
+              </ListGroup.Item>
+            </ListGroup>
+          </Row>
+          </React.Fragment>
+        )}
+
+        {
+        //   props.status.type === 'dateClickVisitPatient' && (
+        //
+        //   <React.Fragment>
+        //   <Row className="overlayRow">
+        //     <ListGroup className="overlayListGroup">
+        //       <ListGroup.Item className="overlayListGroupItem">
+        //       <h5>Create new Visit for </h5>
+        //       <p>{props.status.data.patient.name} ( {props.status.data.patient._id} ) </p>
+        //       <p>on {props.status.data.date} ?</p>
+        //       </ListGroup.Item>
+        //       <ListGroup.Item className="overlayListGroupItem">
+        //       <Link
+        //         to={{
+        //           pathname: "/visits",
+        //           state: {newVisitDate: {
+        //             date: props.status.data.date,
+        //             patient: props.status.data.patient,
+        //           }}
+        //         }}
+        //       >
+        //       <Button variant="primary" className="searchBtn">Create</Button>
+        //       </Link>
+        //       <Button variant="danger" type="button" className="loginFormBtn searchBtn" onClick={props.toggleOverlay}>Cancel</Button>
+        //       </ListGroup.Item>
+        //     </ListGroup>
+        //   </Row>
+        //   </React.Fragment>
+        // )
+      }
 
       </Container>
 

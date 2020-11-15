@@ -29,3 +29,13 @@
   list-style-type: none;
   padding: 0;
 }
+
+.fc-col-header  {
+  width: 100% !important!
+}
+.fc-daygrid-body .fc-daygrid-body-unbalanced {
+  width: 100% !important!
+}
+.fc-daygrid-body .fc-daygrid-body-unbalanced > table {
+  width: 100% !important!
+}

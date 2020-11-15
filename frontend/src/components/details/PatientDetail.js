@@ -2828,10 +2828,25 @@ viewCalendarEvent = (args) => {
 }
 dateClick = (args) => {
   console.log('dateClick',args)
-  // this.setState({
-  //   overlay: true,
-  //   overlayStatus: {type: 'calendarAppointment', data: appointment}
-  // })
+  if (this.props.subMenu === 'appointment') {
+    this.setState({
+      overlay: true,
+      overlayStatus: {type: 'dateClickAppointmentPatient', data: {
+        date: args.dateStr,
+        patient: this.props.patient,
+      }}
+    })
+  }
+  // if (this.props.subMenu === 'visit') {
+  //   this.setState({
+  //     overlay: true,
+  //     overlayStatus: {type: 'dateClickVisitPatient', data: {
+  //       date: args.dateStr,
+  //       patient: this.props.patient,
+  //     }}
+  //   })
+  // }
+
 }
 
 toggleOverlay = () => {
@@ -2884,7 +2899,7 @@ render() {
       />
     )}
 
-    <Container className="detailContainer">
+    <div className="detailContainer">
 
       <Row className="">
         {!this.props.patient && (
@@ -2998,7 +3013,7 @@ render() {
               </Col>
               </li>
               <li className="summaryListItem">
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Basic Info:</h3>
               </Col>
@@ -3138,7 +3153,7 @@ render() {
               </Col>
               </li>
               <li className="summaryListItem">
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Admin Info:</h3>
               </Col>
@@ -3167,7 +3182,7 @@ render() {
               </Col>
               </li>
               <li className="summaryListItem">
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Addresses:</h3>
               </Col>
@@ -3193,7 +3208,7 @@ render() {
               </Col>
               </li>
               <li className="summaryListItem">
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Next of Kin:</h3>
               </Col>
@@ -3218,7 +3233,7 @@ render() {
               </Col>
               </li>
               <li className="summaryListItem">
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Allergies:</h3>
               </Col>
@@ -3251,7 +3266,7 @@ render() {
               </Col>
               </li>
               <li className="summaryListItem">
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Medication:</h3>
               </Col>
@@ -3284,7 +3299,7 @@ render() {
               </Col>
               </li>
               <li className="summaryListItem">
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Comorbidities:</h3>
               </Col>
@@ -3309,7 +3324,7 @@ render() {
               </Col>
               </li>
               <li className="summaryListItem">
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Images:</h3>
               </Col>
@@ -3334,7 +3349,7 @@ render() {
               </Col>
               </li>
               <li className="summaryListItem">
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Files:</h3>
               </Col>
@@ -3358,7 +3373,7 @@ render() {
                 />
               </Col>
               </li>
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Appointments:</h3>
               </Col>
@@ -3385,7 +3400,7 @@ render() {
                 </Tabs>
               </Col>
               <li className="summaryListItem">
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Visits:</h3>
               </Col>
@@ -3414,7 +3429,7 @@ render() {
               </Col>
               </li>
               <li className="summaryListItem">
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Notes:</h3>
               </Col>
@@ -3441,7 +3456,7 @@ render() {
               </Col>
               </li>
               <li className="summaryListItem">
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Tags:</h3>
               </Col>
@@ -3470,7 +3485,7 @@ render() {
             )}
 
             {this.props.subMenu === 'basic' && (
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Basic Info:</h3>
               </Col>
@@ -3611,7 +3626,7 @@ render() {
               </Col>
             )}
             {this.props.subMenu === 'admin' && (
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Admin Info:</h3>
               </Col>
@@ -3640,7 +3655,7 @@ render() {
               </Col>
             )}
             {this.props.subMenu === 'address' && (
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Addresses:</h3>
               </Col>
@@ -3666,7 +3681,7 @@ render() {
               </Col>
             )}
             {this.props.subMenu === 'nextOfKin' && (
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Next of Kin:</h3>
             </Col>
@@ -3691,7 +3706,7 @@ render() {
               </Col>
             )}
             {this.props.subMenu === 'allergy' && (
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Allergies:</h3>
               </Col>
@@ -3724,7 +3739,7 @@ render() {
               </Col>
             )}
             {this.props.subMenu === 'medication' && (
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Medication:</h3>
               </Col>
@@ -3757,7 +3772,7 @@ render() {
               </Col>
             )}
             {this.props.subMenu === 'comorbidities' && (
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Comorbidities:</h3>
               </Col>
@@ -3782,7 +3797,7 @@ render() {
               </Col>
             )}
             {this.props.subMenu === 'image' && (
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Images:</h3>
               </Col>
@@ -3807,7 +3822,7 @@ render() {
               </Col>
             )}
             {this.props.subMenu === 'file' && (
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Files:</h3>
               </Col>
@@ -3832,7 +3847,7 @@ render() {
               </Col>
             )}
             {this.props.subMenu === 'appointment' && (
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Appointments:</h3>
               </Col>
@@ -3860,7 +3875,7 @@ render() {
               </Col>
             )}
             {this.props.subMenu === 'visit' && (
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Visits:</h3>
               </Col>
@@ -3889,7 +3904,7 @@ render() {
               </Col>
             )}
             {this.props.subMenu === 'note' && (
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Notes:</h3>
               </Col>
@@ -3916,7 +3931,7 @@ render() {
               </Col>
             )}
             {this.props.subMenu === 'tag' && (
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Tags:</h3>
               </Col>
@@ -3941,7 +3956,7 @@ render() {
               </Col>
             )}
             {this.props.subMenu === 'doc' && (
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Document Generator:</h3>
               </Col>
@@ -4002,7 +4017,7 @@ render() {
         )}
 
       </Row>
-    </Container>
+    </div>
     </React.Fragment>
   );
 }

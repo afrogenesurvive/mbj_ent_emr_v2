@@ -355,15 +355,15 @@ menuSelect = (args) => {
     menuSelect: args,
     tabKey: args
   })
-  // if (args === 'detail') {
-  //   this.setState({
-  //     subMenuState: true
-  //   })
-  // } else {
-  //   this.setState({
-  //     subMenuState: false
-  //   })
-  // }
+  if (args === 'detail' && this.state.selectedUser) {
+    this.setState({
+      subMenuState: true
+    })
+  } else {
+    this.setState({
+      subMenuState: false
+    })
+  }
 }
 subMenuSelect = (args) => {
   this.setState({
@@ -520,7 +520,7 @@ render() {
       />
     )}
 
-    <Container className="topContainer">
+    <div className="topContainer">
       <Row className="">
         <h1>Staff:
         {this.state.showDetails === true &&
@@ -614,7 +614,7 @@ render() {
           </Col>
         )}
       </Row>
-    </Container>
+    </div>
     </React.Fragment>
   );
 

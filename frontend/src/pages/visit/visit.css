@@ -1,0 +1,18 @@
+.fc-view {
+  /* width: 25rem; */
+}
+.fc-day {
+  /* width: 5rem; */
+}
+/* .fulCal {
+  width: 10rem;
+} */
+.fc-col-header  {
+  width: 100% !important!
+}
+.fc-daygrid-body .fc-daygrid-body-unbalanced {
+  width: 100% !important!
+}
+.fc-daygrid-body .fc-daygrid-body-unbalanced > table {
+  width: 100% !important!
+}

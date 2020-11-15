@@ -829,7 +829,7 @@ render() {
       />
     )}
 
-    <Container className="topContainer">
+    <div className="topContainer">
 
       <Row className="">
         {!this.props.appointment && (
@@ -874,7 +874,7 @@ render() {
               <Row className="tabRowAll">
               <ul className="summaryList">
               <li className="summaryListItem">
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Basic Info:</h3>
               </Col>
@@ -954,7 +954,7 @@ render() {
               </Col>
               </li>
               <li className="summaryListItem">
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Admin Info:</h3>
               </Col>
@@ -971,7 +971,7 @@ render() {
               </Col>
               </li>
               <li className="summaryListItem">
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Consultants:</h3>
               </Col>
@@ -1000,7 +1000,7 @@ render() {
               </Col>
               </li>
               <li className="summaryListItem">
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Notes:</h3>
               </Col>
@@ -1025,7 +1025,7 @@ render() {
               </Col>
               </li>
               <li className="summaryListItem">
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Tags:</h3>
               </Col>
@@ -1053,7 +1053,7 @@ render() {
               </Row>
             )}
             {this.props.subMenu === 'basic' && (
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Basic Info:</h3>
               </Col>
@@ -1133,7 +1133,7 @@ render() {
               </Col>
             )}
             {this.props.subMenu === 'admin' && (
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Admin Info:</h3>
               </Col>
@@ -1150,7 +1150,7 @@ render() {
               </Col>
             )}
             {this.props.subMenu === 'consultant' && (
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Consultants:</h3>
               </Col>
@@ -1179,7 +1179,7 @@ render() {
               </Col>
             )}
             {this.props.subMenu === 'note' && (
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Notes:</h3>
               </Col>
@@ -1204,7 +1204,7 @@ render() {
               </Col>
             )}
             {this.props.subMenu === 'tag' && (
-              <Col className="tabCol">
+              <Col className="tabCol2">
               <Col className="subTabCol">
                 <h3 className="">Tags:</h3>
               </Col>
@@ -1231,7 +1231,7 @@ render() {
           </Col>
         )}
       </Row>
-    </Container>
+    </div>
     </React.Fragment>
   );
 }

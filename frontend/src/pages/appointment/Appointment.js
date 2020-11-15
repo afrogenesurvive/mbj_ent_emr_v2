@@ -81,6 +81,7 @@ class AppointmentPage extends Component {
     goLinkId: null,
     sublistSearch: false,
     tabKey: 'list',
+    preFillDate: null,
   };
   static contextType = AuthContext;
 
@@ -118,6 +119,17 @@ componentDidMount () {
       this.setState({
         creatingAppointment: true,
         selectedPatient: this.props.location.state.newAppointment,
+        menuSelect: 'new'
+      })
+    }
+    if (
+      this.props.location.state &&
+      this.props.location.state.newAppointmentDate) {
+      console.log('...creating a new appt from patient date click...')
+      this.setState({
+        creatingAppointment: true,
+        selectedPatient: this.props.location.state.newAppointmentDate.patient,
+        preFillDate: this.props.location.state.newAppointmentDate.date,
         menuSelect: 'new'
       })
     }
@@ -566,6 +578,15 @@ menuSelect = (args) => {
     menuSelect: args,
     tabKey: args
   })
+  if (args === 'detail' && this.state.selectedAppointment) {
+    this.setState({
+      subMenuState: true
+    })
+  } else {
+    this.setState({
+      subMenuState: false
+    })
+  }
 }
 subMenuSelect = (args) => {
   this.setState({
@@ -721,7 +742,7 @@ parseForCalendar = (args) => {
 
 }
 viewCalendarEvent = (args) => {
-  console.log('...viewing calendar appointment...',args.event.extendedProps.props);
+  console.log('...viewing calendar appointment...');
   const appointment = this.state.appointments.filter(x => x._id === args.event.extendedProps.props._id)[0];
   this.setState({
     overlay: true,
@@ -729,12 +750,22 @@ viewCalendarEvent = (args) => {
   })
 }
 dateClick = (args) => {
-  console.log('dateClick',args)
-  // this.setState({
-  //   overlay: true,
-  //   overlayStatus: {type: 'calendarAppointment', data: appointment}
-  // })
+  console.log('dateClick')
+  this.setState({
+    overlay: true,
+    overlayStatus: {type: 'dateClickAppointment', data: args.dateStr}
+  })
 }
+
+startCreateDateClickAppt = () => {
+  this.setState({
+    overlay: false,
+    menuSelect: 'new',
+    creatingAppointment: true,
+    preFillDate: this.state.overlayStatus.data
+  })
+}
+
 toggleOverlay = () => {
   this.setState({
     overlay: false
@@ -913,10 +944,11 @@ render() {
         status={this.state.overlayStatus}
         selectCalendarDetails={this.showDetails}
         toggleOverlay={this.toggleOverlay}
+        startCreateDateClickAppt={this.startCreateDateClickAppt}
       />
     )}
 
-    <Container className="topContainer">
+    <div className="topContainer">
       <Row className="">
         <h1>Appointments:
         {
@@ -1061,6 +1093,7 @@ render() {
                   onConfirm={this.submitCreateNewAppointmentForm}
                   onCancel={this.cancelCreateNewAppointment}
                   patient={this.state.selectedPatient}
+                  preFillDate={this.state.preFillDate}
                 />
               </Row>
             )}
@@ -1074,7 +1107,7 @@ render() {
           </Col>
         )}
       </Row>
-    </Container>
+    </div>
     </React.Fragment>
   );
 

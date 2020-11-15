@@ -30,8 +30,10 @@ import AppointmentSearchForm from '../../components/forms/search/AppointmentSear
 import FullCalendar from '@fullcalendar/react';
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
+// import "@fullcalendar/core/main.css";
+import "@fullcalendar/daygrid/main.css";
 import bootstrapPlugin from '@fullcalendar/bootstrap';
-import '../../calendar.scss'
+// import '../../calendar.scss'
 
 import FloatMenu from '../../components/floatMenu/FloatMenu';
 import loadingGif from '../../assets/loading.gif';
@@ -85,6 +87,7 @@ class VisitPage extends Component {
     sublistSearch: false,
     tabKey: 'list',
     newVisitPatient: false,
+    otfAppt: false,
   };
   static contextType = AuthContext;
 
@@ -247,8 +250,15 @@ getAllAppointments (args) {
 
       if (this.props.location.state &&
           this.props.location.state.newVisit ) {
-          this.newVisitPatient();
+            console.log('foo')
+          this.newVisitPatient({dateClick: false});
       }
+      if (this.props.location.state &&
+          this.props.location.state.newVisitDate ) {
+            console.log('bar')
+          this.newVisitPatient({dateClick: true});
+      }
+
     })
     .catch(err => {
       console.log(err);
@@ -472,10 +482,13 @@ searchVisits = (event) => {
 
 }
 
-newVisitPatient = () => {
+newVisitPatient = (args) => {
   console.log('...new Visit from patient details...');
   this.context.setUserAlert('...creating new appointment...')
-  this.setState({isLoading: true});
+  this.setState({
+    isLoading: true,
+    otfAppt: true
+  });
   const token = this.context.token;
   const activityId = this.context.activityId;
   const patient = this.props.location.state.newVisit;
@@ -487,7 +500,7 @@ newVisitPatient = () => {
   const date = today.split(',')[0];
   const time = today.split(',')[1];
   const location = '';
-  const description = 'visit on-the-fly';
+  const description = 'appointment on-the-fly';
   const important = false;
 
   let requestBody = {
@@ -505,7 +518,7 @@ newVisitPatient = () => {
           description:"${description}",
           important:${important}
         })
-        {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,reminders{_id},creator{_id}}}
+        {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id,name},inProgress,attended,important,notes,tags,reminders{_id},creator{_id}}}
     `};
   fetch('http://localhost:8088/graphql', {
       method: 'POST',
@@ -563,10 +576,14 @@ cancelCreateNewVisit = () => {
     creatingVisit: false,
     selectedAppointment: null
   })
+  if (this.state.otfAppt === true) {
+    console.log('...cleaning up on the fly appointment...');
+    this.deleteOtfAppointment()
+  }
 }
 submitCreateNewVisitForm = (event) => {
   event.preventDefault();
-  console.log('...creating new visit...',this.state.selectedAppointment);
+  console.log('...creating new visit...',this.state.selectedAppointment.patient);
   this.context.setUserAlert('...creating new visit...')
   this.setState({isLoading: true});
 
@@ -574,7 +591,7 @@ submitCreateNewVisitForm = (event) => {
   const activityId = this.context.activityId;
   const appointmentId = this.state.selectedAppointment._id;
 
-  const title = this.state.selectedAppointment.patient._id+'visit'+this.state.selectedAppointment.date;
+  const title = this.state.selectedAppointment.patient.name+'visit'+this.state.selectedAppointment.date;
   const type = event.target.type.value;
   const subType = '';
 
@@ -649,9 +666,10 @@ submitCreateNewVisitForm = (event) => {
         creatingVisit: false,
         selectedVisit: resData.data.createVisit,
         newVisit: resData.data.createVisit,
-        tabKey: 'detail',
+        otfAppt: false,
+        // tabKey: 'detail',
         menuSelect: 'detail',
-        activityA: `createAppointment?activityId:${activityId},visitId:${resData.data.createVisit._id}`
+        activityA: `createVisit?activityId:${activityId},visitId:${resData.data.createVisit._id}`
       });
       this.logUserActivity({activityId: activityId,token: token});
       const seshStore = JSON.parse(sessionStorage.getItem('logInfo'))
@@ -664,7 +682,66 @@ submitCreateNewVisitForm = (event) => {
     });
 
 }
+deleteOtfAppointment = () => {
+  console.log('...deleting otf appointment...');
+  this.context.setUserAlert('...deleting otf appointment...')
+  this.setState({isLoading: true});
 
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const appointmentId = this.state.selectedAppointment._id;
+  // console.log('foo',appointmentId);
+
+  let requestBody = {
+    query: `
+      mutation {deleteAppointmentById(
+        activityId:"${activityId}",
+        appointmentId:"${appointmentId}"
+      )
+      {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
+    `};
+  fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.deleteAppointmentById);
+      let responseAlert = '...delete appointment success!...';
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.setState({
+        isLoading: false,
+        activityA: `deleteAppointment?activityId:${activityId},visitId:${resData.data.deleteAppointmentById._id}`
+      });
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+
+}
 toggleSideCol = () => {
   if (this.state.sideCol === 'menu') {
     this.setState({sideCol: 'filter'})
@@ -690,6 +767,15 @@ menuSelect = (args) => {
     menuSelect: args,
     tabKey: args
   })
+  if (args === 'detail' && this.state.selectedVisit) {
+    this.setState({
+      subMenuState: true
+    })
+  } else {
+    this.setState({
+      subMenuState: false
+    })
+  }
 }
 subMenuSelect = (args) => {
   this.setState({
@@ -878,7 +964,7 @@ dateClick = (args) => {
   console.log('dateClick',args)
   // this.setState({
   //   overlay: true,
-  //   overlayStatus: {type: 'calendarAppointment', data: appointment}
+  //   overlayStatus: {type: 'dateClickVisit', data: args.dateStr}
   // })
 }
 toggleOverlay = () => {
@@ -1056,7 +1142,7 @@ render() {
       />
     )}
 
-    <Container className="topContainer">
+    <div className="topContainer">
       <Row className="">
         <h1>Visits:
         {this.state.showDetails === true &&
@@ -1107,8 +1193,9 @@ render() {
                 </Tab>
                 <Tab eventKey="2" title="calendar" className="calendarTab">
                   <FullCalendar
+                    className="fulCal"
                     initialView="dayGridMonth"
-                    plugins={[dayGridPlugin, interactionPlugin]}
+                    plugins={[dayGridPlugin, interactionPlugin, bootstrapPlugin]}
                     events={this.state.calendarVisits}
                     eventClick={this.viewCalendarEvent}
                     dateClick={this.dateClick}
@@ -1229,7 +1316,7 @@ render() {
           </Col>
         )}
       </Row>
-    </Container>
+    </div>
     </React.Fragment>
   );
 

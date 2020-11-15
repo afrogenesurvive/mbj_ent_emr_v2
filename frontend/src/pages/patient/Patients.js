@@ -67,6 +67,7 @@ class PatientPage extends Component {
     fromGoLink: null,
     goLinkId: null,
     tabKey: 'list',
+    dateClickPatientSelect: false,
   };
   static contextType = AuthContext;
 
@@ -84,6 +85,13 @@ componentDidMount () {
           fromGoLink: true,
           goLinkId: this.props.location.state.patient
         })
+        if (this.props.location.state) {
+          if (this.props.location.state.selectPatient) {
+            this.setState({
+              dateClickPatientSelect: true
+            })
+          }
+        }
       }
     }
     this.getAllPatients(seshStore);
@@ -91,6 +99,7 @@ componentDidMount () {
       console.log('...found existing Patient selection... loading...');
       this.setState({
         showDetails: true,
+        // subMenuState: true,
         selectedPatient: this.props.selectedPatient
       })
     }
@@ -144,6 +153,17 @@ getAllPatients (args) {
         error = resData.data.error;
         responseAlert = error;
       }
+
+
+
+      this.context.setUserAlert(responseAlert)
+      this.setState({
+        isLoading: false,
+        patients: resData.data.getAllPatients,
+        activityA: `getAllPatients?activityId:${activityId},userId:${userId}`
+      });
+      this.logUserActivity({activityId: activityId,token: token});
+
       if (this.state.fromGoLink === true) {
         let goLinkPatient = resData.data.getAllPatients.filter(x => x._id === this.state.goLinkId)[0];
         this.setState({
@@ -153,13 +173,13 @@ getAllPatients (args) {
         })
         this.context.setUserAlert('...Check the details tab...')
       }
-      this.context.setUserAlert(responseAlert)
-      this.setState({
-        isLoading: false,
-        patients: resData.data.getAllPatients,
-        activityA: `getAllPatients?activityId:${activityId},userId:${userId}`
-      });
-      this.logUserActivity({activityId: activityId,token: token});
+      if (this.state.dateClickPatientSelect.true) {
+        this.setState({
+          menuSelect: 'list',
+          dateClickPatientSelect: false
+        })
+      }
+
     })
     .catch(err => {
       console.log(err);
@@ -532,15 +552,15 @@ menuSelect = (args) => {
     menuSelect: args,
     tabKey: args
   })
-  // if (args === 'detail') {
-  //   this.setState({
-  //     subMenuState: true
-  //   })
-  // } else {
-  //   this.setState({
-  //     subMenuState: false
-  //   })
-  // }
+  if (args === 'detail' && this.state.selectedPatient) {
+    this.setState({
+      subMenuState: true
+    })
+  } else {
+    this.setState({
+      subMenuState: false
+    })
+  }
 }
 subMenuSelect = (args) => {
   this.setState({
@@ -697,7 +717,7 @@ render() {
       />
     )}
 
-    <Container className="topContainer">
+    <div className="topContainer">
       <Row className="">
         <h1>Patients:
         {this.state.showDetails === true &&
@@ -811,7 +831,7 @@ render() {
           </Col>
         )}
       </Row>
-    </Container>
+    </div>
     </React.Fragment>
   );
 

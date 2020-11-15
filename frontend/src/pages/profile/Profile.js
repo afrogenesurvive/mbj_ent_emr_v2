@@ -1781,7 +1781,7 @@ render() {
       />
     )}
 
-    <Container className="topContainer">
+    <div className="topContainer">
       <Row className="">
           <h1 className="">My Profile</h1>
       </Row>
@@ -2455,7 +2455,7 @@ render() {
         )}
       </Row>
 
-    </Container>
+    </div>
     </React.Fragment>
   );
 

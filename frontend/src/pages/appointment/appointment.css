@@ -23,3 +23,23 @@
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   background-color: rgba(255,255,255,0) !important;
 }
+
+/* .fulCal {
+  width: 10rem;
+} */
+.fc-col-header  {
+  width: 100% !important!
+}
+.fc-daygrid-body .fc-daygrid-body-unbalanced {
+  width: 100% !important!
+}
+.fc-daygrid-body .fc-daygrid-body-unbalanced > table {
+  width: 100% !important!
+}
+
+.detailContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
