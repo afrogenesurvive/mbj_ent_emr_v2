@@ -1868,14 +1868,19 @@ render() {
                     <ListGroup.Item>
                       <p className="listGroupText">Title:</p>
                       <p className="listGroupText bold">{this.state.activityUser.title}</p>
+                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
+                    </ListGroup.Item>
+                    <ListGroup.Item>
                       <p className="listGroupText">Name:</p>
                       <p className="listGroupText bold">{this.state.activityUser.name}</p>
-                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
+                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'name')}>Edit</Button>
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <p className="listGroupText">Username:</p>
                       <p className="listGroupText bold">{this.state.activityUser.username}</p>
                       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'username')}>Edit</Button>
+                    </ListGroup.Item>
+                    <ListGroup.Item>
                       <p className="listGroupText">Role:</p>
                       <p className="listGroupText bold">{this.state.activityUser.role}</p>
                     </ListGroup.Item>
@@ -1883,24 +1888,30 @@ render() {
                       <p className="listGroupText">DOB:</p>
                       <p className="listGroupText bold">{moment.unix(this.state.activityUser.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
                       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
+                    </ListGroup.Item>
+                    <ListGroup.Item>
                       <p className="listGroupText">Age:</p>
                       <p className="listGroupText bold">{this.state.activityUser.age}</p>
-                      <p className="listGroupText">Gender:</p>
-                      <p className="listGroupText bold">{this.state.activityUser.gender}</p>
-                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'gender')}>Edit</Button>
                     </ListGroup.Item>
                     <ListGroup.Item>
-                    <p className="listGroupText">Email:</p>
-                    <p className="listGroupText bold">{this.state.activityUser.contact.email}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.email')}>Edit</Button>
+                        <p className="listGroupText">Gender:</p>
+                        <p className="listGroupText bold">{this.state.activityUser.gender}</p>
+                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'gender')}>Edit</Button>
                     </ListGroup.Item>
                     <ListGroup.Item>
-                    <p className="listGroupText">Phone:</p>
-                    <p className="listGroupText bold">{this.state.activityUser.contact.phone}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone')}>Edit</Button>
-                    <p className="listGroupText">Phone 2:</p>
-                    <p className="listGroupText bold">{this.state.activityUser.contact.phone2}</p>
-                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone2')}>Edit</Button>
+                      <p className="listGroupText">Email:</p>
+                      <p className="listGroupText bold">{this.state.activityUser.contact.email}</p>
+                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.email')}>Edit</Button>
+                    </ListGroup.Item>
+                    <ListGroup.Item>
+                      <p className="listGroupText">Phone:</p>
+                      <p className="listGroupText bold">{this.state.activityUser.contact.phone}</p>
+                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone')}>Edit</Button>
+                    </ListGroup.Item>
+                    <ListGroup.Item>
+                      <p className="listGroupText">Phone 2:</p>
+                      <p className="listGroupText bold">{this.state.activityUser.contact.phone2}</p>
+                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone2')}>Edit</Button>
                     </ListGroup.Item>
                   </ListGroup>
                 </Col>
@@ -2162,45 +2173,56 @@ render() {
             <Col className="subTabCol">
               <h3 className="">Basic Info:</h3>
             </Col>
-              <ListGroup className="profileBasicListGroup">
-                <ListGroup.Item>
-                  <p className="listGroupText">Title:</p>
-                  <p className="listGroupText bold">{this.state.activityUser.title}</p>
-                  <p className="listGroupText">Name:</p>
-                  <p className="listGroupText bold">{this.state.activityUser.name}</p>
-                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <p className="listGroupText">Username:</p>
-                  <p className="listGroupText bold">{this.state.activityUser.username}</p>
-                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'username')}>Edit</Button>
-                  <p className="listGroupText">Role:</p>
-                  <p className="listGroupText bold">{this.state.activityUser.role}</p>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <p className="listGroupText">DOB:</p>
-                  <p className="listGroupText bold">{moment.unix(this.state.activityUser.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
-                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
-                  <p className="listGroupText">Age:</p>
-                  <p className="listGroupText bold">{this.state.activityUser.age}</p>
+            <ListGroup className="profileBasicListGroup">
+              <ListGroup.Item>
+                <p className="listGroupText">Title:</p>
+                <p className="listGroupText bold">{this.state.activityUser.title}</p>
+                <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <p className="listGroupText">Name:</p>
+                <p className="listGroupText bold">{this.state.activityUser.name}</p>
+                <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'name')}>Edit</Button>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <p className="listGroupText">Username:</p>
+                <p className="listGroupText bold">{this.state.activityUser.username}</p>
+                <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'username')}>Edit</Button>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <p className="listGroupText">Role:</p>
+                <p className="listGroupText bold">{this.state.activityUser.role}</p>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <p className="listGroupText">DOB:</p>
+                <p className="listGroupText bold">{moment.unix(this.state.activityUser.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <p className="listGroupText">Age:</p>
+                <p className="listGroupText bold">{this.state.activityUser.age}</p>
+              </ListGroup.Item>
+              <ListGroup.Item>
                   <p className="listGroupText">Gender:</p>
                   <p className="listGroupText bold">{this.state.activityUser.gender}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'gender')}>Edit</Button>
-                </ListGroup.Item>
-                <ListGroup.Item>
+              </ListGroup.Item>
+              <ListGroup.Item>
                 <p className="listGroupText">Email:</p>
                 <p className="listGroupText bold">{this.state.activityUser.contact.email}</p>
                 <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.email')}>Edit</Button>
-                </ListGroup.Item>
-                <ListGroup.Item>
+              </ListGroup.Item>
+              <ListGroup.Item>
                 <p className="listGroupText">Phone:</p>
                 <p className="listGroupText bold">{this.state.activityUser.contact.phone}</p>
                 <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone')}>Edit</Button>
+              </ListGroup.Item>
+              <ListGroup.Item>
                 <p className="listGroupText">Phone 2:</p>
                 <p className="listGroupText bold">{this.state.activityUser.contact.phone2}</p>
                 <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone2')}>Edit</Button>
-                </ListGroup.Item>
-              </ListGroup>
+              </ListGroup.Item>
+            </ListGroup>
             </Col>
             )}
             {this.state.menuSelect === 'admin' && (

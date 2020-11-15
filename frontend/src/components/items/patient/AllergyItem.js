@@ -105,7 +105,7 @@ const AllergyItem = props => {
                 type="allergy"
               />
               </li>
-              <li>
+
               {props.canDelete === true && (
                 <li>
                 <OverlayTrigger
@@ -124,7 +124,7 @@ const AllergyItem = props => {
 
                 </li>
               )}
-              </li>
+
               {deleteState === true && (
                 <li>
                 <Row className="listItemHiddenRow">

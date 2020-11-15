@@ -888,6 +888,8 @@ render() {
                   <p className="listGroupText">Type:</p>
                   <p className="listGroupText bold">{this.props.appointment.type}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'type')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">subType:</p>
                   <p className="listGroupText bold">{this.props.appointment.subType}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'subType')}>Edit</Button>
@@ -895,6 +897,8 @@ render() {
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
                   <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Time:</p>
                   <p className="listGroupText bold">{this.props.appointment.time}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'time')}>Edit</Button>
@@ -913,15 +917,19 @@ render() {
                   <p className="listGroupText">Important:</p>
                   <p className="listGroupText bold">{this.props.appointment.important.toString()}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'important')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">In Progress:</p>
                   <p className="listGroupText bold">{this.props.appointment.inProgress.toString()}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'inProgress')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Attended:</p>
                   <p className="listGroupText bold">{this.props.appointment.attended.toString()}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'attended')}>Edit</Button>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <p className="listGroupText">Patient:</p>
+                  <p className="listGroupText underlined">Patient:</p>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Name:</p>
@@ -947,7 +955,6 @@ render() {
                   </ListGroup.Item>
                 )}
                 <ListGroup.Item>
-                  <p className="listGroupText">Export:</p>
                   <AddToCalendar event={this.state.calEvent} />
                 </ListGroup.Item>
               </ListGroup>
@@ -1067,6 +1074,8 @@ render() {
                   <p className="listGroupText">Type:</p>
                   <p className="listGroupText bold">{this.props.appointment.type}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'type')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">subType:</p>
                   <p className="listGroupText bold">{this.props.appointment.subType}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'subType')}>Edit</Button>
@@ -1074,6 +1083,8 @@ render() {
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
                   <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Time:</p>
                   <p className="listGroupText bold">{this.props.appointment.time}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'time')}>Edit</Button>
@@ -1092,15 +1103,19 @@ render() {
                   <p className="listGroupText">Important:</p>
                   <p className="listGroupText bold">{this.props.appointment.important.toString()}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'important')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">In Progress:</p>
                   <p className="listGroupText bold">{this.props.appointment.inProgress.toString()}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'inProgress')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Attended:</p>
                   <p className="listGroupText bold">{this.props.appointment.attended.toString()}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'attended')}>Edit</Button>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <p className="listGroupText">Patient:</p>
+                  <p className="listGroupText underlined">Patient:</p>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Name:</p>
@@ -1126,7 +1141,6 @@ render() {
                   </ListGroup.Item>
                 )}
                 <ListGroup.Item>
-                  <p className="listGroupText">Export:</p>
                   <AddToCalendar event={this.state.calEvent} />
                 </ListGroup.Item>
               </ListGroup>

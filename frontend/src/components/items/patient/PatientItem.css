@@ -14,11 +14,15 @@
 }
 .listItemHiddenRow {
   margin: 1rem 1rem;
-  max-height: 11rem;
+  max-height: fit-content !important;
+  /* max-height: 11rem; */
   overflow: scroll;
   border: 1px dashed black;
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
+}
+.listItemHiddenRow > ul > li {
+  margin: .5rem 0;
 }
 .listItemHiddenRow::-webkit-scrollbar {
   display: none;

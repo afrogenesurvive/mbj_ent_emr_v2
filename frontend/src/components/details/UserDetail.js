@@ -1811,6 +1811,8 @@ render() {
                     {this.state.canDelete === true && (
                         <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
                     )}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
                     <p className="listGroupText">Name:</p>
                     <p className="listGroupText bold">{this.props.user.name}</p>
                     {this.state.canDelete === true && (
@@ -1823,6 +1825,8 @@ render() {
                     {this.state.canDelete === true && (
                       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'username')}>Edit</Button>
                     )}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
                     <p className="listGroupText">Role:</p>
                     <p className="listGroupText bold">{this.props.user.role}</p>
                     {this.context.role === 'Admin' && (
@@ -1835,6 +1839,8 @@ render() {
                     {this.state.canDelete === true && (
                       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
                     )}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
                     <p className="listGroupText">Age:</p>
                     <p className="listGroupText bold">{this.props.user.age}</p>
                   </ListGroup.Item>
@@ -1858,15 +1864,13 @@ render() {
                     {this.state.canDelete === true && (
                       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone')}>Edit</Button>
                     )}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
                     <p className="listGroupText">Phone 2:</p>
                     <p className="listGroupText bold">{this.props.user.contact.phone2}</p>
                     {this.state.canDelete === true && (
                       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone2')}>Edit</Button>
                     )}
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <p></p>
-                    <p></p>
                   </ListGroup.Item>
                 </ListGroup>
               </Col>
@@ -2143,72 +2147,76 @@ render() {
               <Col className="subTabCol">
                 <h3 className="">Basic Info:</h3>
               </Col>
-                <ListGroup className="profileBasicListGroup">
+              <ListGroup className="profileBasicListGroup">
 
-                  <ListGroup.Item>
-                    <p className="listGroupText">Title:</p>
-                    <p className="listGroupText bold">{this.props.user.title}</p>
-                    {this.state.canDelete === true && (
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
-                    )}
-                    <p className="listGroupText">Name:</p>
-                    <p className="listGroupText bold">{this.props.user.name}</p>
-                    {this.state.canDelete === true && (
-                        <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'name')}>Edit</Button>
-                    )}
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <p className="listGroupText">Username:</p>
-                    <p className="listGroupText bold">{this.props.user.username}</p>
-                    {this.state.canDelete === true && (
-                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'username')}>Edit</Button>
-                    )}
-                    <p className="listGroupText">Role:</p>
-                    <p className="listGroupText bold">{this.props.user.role}</p>
-                    {this.context.role === 'Admin' && (
-                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'role')}>Edit</Button>
-                    )}
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <p className="listGroupText">DOB:</p>
-                    <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
-                    {this.state.canDelete === true && (
-                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
-                    )}
-                    <p className="listGroupText">Age:</p>
-                    <p className="listGroupText bold">{this.props.user.age}</p>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <p className="listGroupText">Gender:</p>
-                    <p className="listGroupText bold">{this.props.user.gender}</p>
-                    {this.state.canDelete === true && (
-                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'gender')}>Edit</Button>
-                    )}
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <p className="listGroupText">Email:</p>
-                    <p className="listGroupText bold">{this.props.user.contact.email}</p>
-                    {this.state.canDelete === true && (
-                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.email')}>Edit</Button>
-                    )}
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <p className="listGroupText">Phone:</p>
-                    <p className="listGroupText bold">{this.props.user.contact.phone}</p>
-                    {this.state.canDelete === true && (
-                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone')}>Edit</Button>
-                    )}
-                    <p className="listGroupText">Phone 2:</p>
-                    <p className="listGroupText bold">{this.props.user.contact.phone2}</p>
-                    {this.state.canDelete === true && (
-                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone2')}>Edit</Button>
-                    )}
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <p></p>
-                    <p></p>
-                  </ListGroup.Item>
-                </ListGroup>
+                <ListGroup.Item>
+                  <p className="listGroupText">Title:</p>
+                  <p className="listGroupText bold">{this.props.user.title}</p>
+                  {this.state.canDelete === true && (
+                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
+                  )}
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Name:</p>
+                  <p className="listGroupText bold">{this.props.user.name}</p>
+                  {this.state.canDelete === true && (
+                      <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'name')}>Edit</Button>
+                  )}
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Username:</p>
+                  <p className="listGroupText bold">{this.props.user.username}</p>
+                  {this.state.canDelete === true && (
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'username')}>Edit</Button>
+                  )}
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Role:</p>
+                  <p className="listGroupText bold">{this.props.user.role}</p>
+                  {this.context.role === 'Admin' && (
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'role')}>Edit</Button>
+                  )}
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">DOB:</p>
+                  <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  {this.state.canDelete === true && (
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
+                  )}
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Age:</p>
+                  <p className="listGroupText bold">{this.props.user.age}</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Gender:</p>
+                  <p className="listGroupText bold">{this.props.user.gender}</p>
+                  {this.state.canDelete === true && (
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'gender')}>Edit</Button>
+                  )}
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Email:</p>
+                  <p className="listGroupText bold">{this.props.user.contact.email}</p>
+                  {this.state.canDelete === true && (
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.email')}>Edit</Button>
+                  )}
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Phone:</p>
+                  <p className="listGroupText bold">{this.props.user.contact.phone}</p>
+                  {this.state.canDelete === true && (
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone')}>Edit</Button>
+                  )}
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Phone 2:</p>
+                  <p className="listGroupText bold">{this.props.user.contact.phone2}</p>
+                  {this.state.canDelete === true && (
+                    <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone2')}>Edit</Button>
+                  )}
+                </ListGroup.Item>
+              </ListGroup>
               </Col>
             )}
             {this.props.subMenu === 'admin' && (

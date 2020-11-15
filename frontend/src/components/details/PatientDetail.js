@@ -3022,15 +3022,18 @@ render() {
                   <p className="listGroupText">Title:</p>
                   <p className="listGroupText bold">{this.props.patient.title}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Fisrt Name:</p>
                   <p className="listGroupText bold">{this.props.patient.name}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'name')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Last Name:</p>
                   <p className="listGroupText bold">{this.props.patient.lastName}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'lastName')}>Edit</Button>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <p className="listGroupText">Title:</p>
                   <p className="listGroupText">Username:</p>
                   <p className="listGroupText bold">{this.props.patient.username}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'username')}>Edit</Button>
@@ -3039,6 +3042,8 @@ render() {
                   <p className="listGroupText">DOB:</p>
                   <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Age:</p>
                   <p className="listGroupText bold">{this.props.patient.age}</p>
                 </ListGroup.Item>
@@ -3056,6 +3061,8 @@ render() {
                   <p className="listGroupText">Phone:</p>
                   <p className="listGroupText bold">{this.props.patient.contact.phone}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Phone 2:</p>
                   <p className="listGroupText bold">{this.props.patient.contact.phone2}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone2')}>Edit</Button>
@@ -3066,31 +3073,45 @@ render() {
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'role')}>Edit</Button>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <p className="listGroupText">Registration:</p>
+                  <p className="listGroupText underlined">Registration:</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
                   <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Number:</p>
                   <p className="listGroupText bold">{this.props.patient.registration.number}</p>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <p className="listGroupText">Referral:</p>
+                  <p className="listGroupText underlined">Referral:</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
                   {this.props.patient.referral.date && (
                     <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
                   )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.date')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Reason:</p>
                   <p className="listGroupText bold">{this.props.patient.referral.reason}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.reason')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Referral Physician:</p>
                   <p className="listGroupText bold">{this.props.patient.referral.physician.name}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.physician.name')}>Edit</Button>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <p className="listGroupText">Referral Physician:</p>
+                  <p className="listGroupText">Referral Physician Contact:</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Email:</p>
                   <p className="listGroupText bold">{this.props.patient.referral.physician.email}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.physician.email')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Phone:</p>
                   <p className="listGroupText bold">{this.props.patient.referral.physician.phone}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.physician.phone')}>Edit</Button>
@@ -3104,15 +3125,21 @@ render() {
                 <p className="listGroupText">Occupation:</p>
                 <p className="listGroupText bold">{this.props.patient.occupation.role}</p>
                 <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.role')}>Edit</Button>
-                <p className="listGroupText">Employer:</p>
-                <p className="listGroupText bold">{this.props.patient.occupation.employer.name}</p>
-                <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.name')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Employer:</p>
+                  <p className="listGroupText bold">{this.props.patient.occupation.employer.name}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.name')}>Edit</Button>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Contact:</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Phone:</p>
                   <p className="listGroupText bold">{this.props.patient.occupation.employer.phone}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.phone')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Email:</p>
                   <p className="listGroupText bold">{this.props.patient.occupation.employer.email}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.email')}>Edit</Button>
@@ -3123,24 +3150,38 @@ render() {
                 <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.address')}>Edit</Button>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <p className="listGroupText">Insurance:</p>
+                  <p className="listGroupText underlined">Insurance:</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Company:</p>
                   <p className="listGroupText bold">{this.props.patient.insurance.company}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.company')}>Edit</Button>
+                  <p className="listGroupText">Number:</p>
                   <p className="listGroupText bold">{this.props.patient.insurance.policyNumber}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.policyNumber')}>Edit</Button>
                 </ListGroup.Item>
                 <ListGroup.Item>
+                <p className="listGroupText">Description:</p>
                 <p className="listGroupText bold">{this.props.patient.insurance.description}</p>
                 <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.description')}>Edit</Button>
+                </ListGroup.Item>
                 {this.props.patient.insurance.expiryDate && (
+                  <ListGroup.Item>
+                  <p className="listGroupText">Expiry:</p>
                   <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.expiryDate')}>Edit</Button>
+                  </ListGroup.Item>
                 )}
-                <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.expiryDate')}>Edit</Button>
+                <ListGroup.Item>
+                <p className="listGroupText underlined">Subscriber:</p>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                <p className="listGroupText">Subscriber:</p>
+                <p className="listGroupText">Company:</p>
                 <p className="listGroupText bold">{this.props.patient.insurance.subscriber.company}</p>
                 <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.subscriber.company')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                <p className="listGroupText">Description:</p>
                 <p className="listGroupText bold">{this.props.patient.insurance.subscriber.description}</p>
                 <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.subscriber.description')}>Edit</Button>
                 </ListGroup.Item>
@@ -3494,15 +3535,18 @@ render() {
                   <p className="listGroupText">Title:</p>
                   <p className="listGroupText bold">{this.props.patient.title}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Fisrt Name:</p>
                   <p className="listGroupText bold">{this.props.patient.name}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'name')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Last Name:</p>
                   <p className="listGroupText bold">{this.props.patient.lastName}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'lastName')}>Edit</Button>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <p className="listGroupText">Title:</p>
                   <p className="listGroupText">Username:</p>
                   <p className="listGroupText bold">{this.props.patient.username}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'username')}>Edit</Button>
@@ -3511,11 +3555,12 @@ render() {
                   <p className="listGroupText">DOB:</p>
                   <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Age:</p>
                   <p className="listGroupText bold">{this.props.patient.age}</p>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <p className="listGroupText">DOB:</p>
                   <p className="listGroupText">Gender:</p>
                   <p className="listGroupText bold">{this.props.patient.gender}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'gender')}>Edit</Button>
@@ -3529,6 +3574,8 @@ render() {
                   <p className="listGroupText">Phone:</p>
                   <p className="listGroupText bold">{this.props.patient.contact.phone}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Phone 2:</p>
                   <p className="listGroupText bold">{this.props.patient.contact.phone2}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'contact.phone2')}>Edit</Button>
@@ -3539,31 +3586,45 @@ render() {
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'role')}>Edit</Button>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <p className="listGroupText">Registration:</p>
+                  <p className="listGroupText underlined">Registration:</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
                   <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Number:</p>
                   <p className="listGroupText bold">{this.props.patient.registration.number}</p>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <p className="listGroupText">Referral:</p>
+                  <p className="listGroupText underlined">Referral:</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
                   {this.props.patient.referral.date && (
                     <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
                   )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.date')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Reason:</p>
                   <p className="listGroupText bold">{this.props.patient.referral.reason}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.reason')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Referral Physician:</p>
                   <p className="listGroupText bold">{this.props.patient.referral.physician.name}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.physician.name')}>Edit</Button>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <p className="listGroupText">Referral Physician:</p>
+                  <p className="listGroupText">Referral Physician Contact:</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Email:</p>
                   <p className="listGroupText bold">{this.props.patient.referral.physician.email}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.physician.email')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Phone:</p>
                   <p className="listGroupText bold">{this.props.patient.referral.physician.phone}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.physician.phone')}>Edit</Button>
@@ -3577,15 +3638,21 @@ render() {
                 <p className="listGroupText">Occupation:</p>
                 <p className="listGroupText bold">{this.props.patient.occupation.role}</p>
                 <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.role')}>Edit</Button>
-                <p className="listGroupText">Employer:</p>
-                <p className="listGroupText bold">{this.props.patient.occupation.employer.name}</p>
-                <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.name')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Employer:</p>
+                  <p className="listGroupText bold">{this.props.patient.occupation.employer.name}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.name')}>Edit</Button>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Contact:</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Phone:</p>
                   <p className="listGroupText bold">{this.props.patient.occupation.employer.phone}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.phone')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Email:</p>
                   <p className="listGroupText bold">{this.props.patient.occupation.employer.email}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.email')}>Edit</Button>
@@ -3596,24 +3663,38 @@ render() {
                 <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'occupation.employer.address')}>Edit</Button>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <p className="listGroupText">Insurance:</p>
+                  <p className="listGroupText underlined">Insurance:</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p className="listGroupText">Company:</p>
                   <p className="listGroupText bold">{this.props.patient.insurance.company}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.company')}>Edit</Button>
+                  <p className="listGroupText">Number:</p>
                   <p className="listGroupText bold">{this.props.patient.insurance.policyNumber}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.policyNumber')}>Edit</Button>
                 </ListGroup.Item>
                 <ListGroup.Item>
+                <p className="listGroupText">Description:</p>
                 <p className="listGroupText bold">{this.props.patient.insurance.description}</p>
                 <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.description')}>Edit</Button>
+                </ListGroup.Item>
                 {this.props.patient.insurance.expiryDate && (
+                  <ListGroup.Item>
+                  <p className="listGroupText">Expiry:</p>
                   <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.expiryDate')}>Edit</Button>
+                  </ListGroup.Item>
                 )}
-                <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.expiryDate')}>Edit</Button>
+                <ListGroup.Item>
+                <p className="listGroupText underlined">Subscriber:</p>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                <p className="listGroupText">Subscriber:</p>
+                <p className="listGroupText">Company:</p>
                 <p className="listGroupText bold">{this.props.patient.insurance.subscriber.company}</p>
                 <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.subscriber.company')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                <p className="listGroupText">Description:</p>
                 <p className="listGroupText bold">{this.props.patient.insurance.subscriber.description}</p>
                 <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.subscriber.description')}>Edit</Button>
                 </ListGroup.Item>

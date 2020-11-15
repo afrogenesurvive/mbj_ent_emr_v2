@@ -5199,6 +5199,8 @@ render() {
                   {this.context.role !== 'Staff' && (
                     <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'type')}>Edit</Button>
                   )}
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">subType:</p>
                   <p className="listGroupText bold">{this.props.visit.subType}</p>
                   {this.context.role !== 'Staff' && (
@@ -5208,6 +5210,8 @@ render() {
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
                   <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Time:</p>
                   <p className="listGroupText bold">{this.props.visit.time}</p>
                   {this.context.role !== 'Staff' && (
@@ -5215,7 +5219,7 @@ render() {
                   )}
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <p className="listGroupText">Patient:</p>
+                  <p className="listGroupText underlined">Patient:</p>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Name:</p>
@@ -5235,13 +5239,11 @@ render() {
                 <p className="listGroupText bold">{this.props.visit.patient.attendingPhysician}</p>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <p className="listGroupText">Appointment:</p>
+                  <p className="listGroupText underlined">Appointment:</p>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Title:</p>
                   <p className="listGroupText bold">{this.props.visit.appointment.title}</p>
-                  <p className="listGroupText">Date:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
                   <Link
                     to={{
                       pathname: "/appointments",
@@ -5250,6 +5252,11 @@ render() {
                   >
                   <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
                   </Link>
+                </ListGroup.Item>
+                <p className="listGroupText">Date:</p>
+                <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                <ListGroup.Item>
+
                 </ListGroup.Item>
               </ListGroup>
               </Col>
