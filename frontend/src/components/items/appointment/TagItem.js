@@ -28,6 +28,8 @@ const TagItem = props => {
           <Card.Text className="cardText">
             Tag: <span className="bold">{props.tag}</span>
           </Card.Text>
+
+          {props.canDelete === true && (
           <OverlayTrigger
             key={'top'}
             placement={'top'}
@@ -41,6 +43,7 @@ const TagItem = props => {
           >
             <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleStateChange}/>
           </OverlayTrigger>
+          )}
 
           {state === true && (
             <Row className="listItemHiddenRow">

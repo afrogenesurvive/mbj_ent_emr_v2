@@ -39,7 +39,7 @@ return (
 
     <Form.Row>
       <Button variant="success" type="submit" className="filterFormBtn searchBtn">Filter</Button>
-      <Button variant="secondary" className="filterFormBtn searchBtn" onClick={props.onCancel}>Cancel</Button>
+      <Button variant="danger" className="filterFormBtn searchBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>
 </div>

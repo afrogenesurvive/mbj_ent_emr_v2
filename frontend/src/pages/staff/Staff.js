@@ -43,6 +43,7 @@ class StaffPage extends Component {
     profileLoaded: false,
     sideCol: 'menuStaff',
     startFilter: false,
+    selectFilter: null,
     filter: {
       field: null,
       key: null,
@@ -347,7 +348,7 @@ toggleSideCol = () => {
 }
 toggleFilter = () => {
   this.setState({
-    startFilter: !this.state.startFilter
+    startFilter: !this.state.startFilter,
   })
 }
 menuSelect = (args) => {

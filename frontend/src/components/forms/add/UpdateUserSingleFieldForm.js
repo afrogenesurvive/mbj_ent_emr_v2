@@ -25,8 +25,8 @@ return (
     </Form.Row>
 
     <Form.Row className="formBtnRow">
-      <Button variant="success" type="submit" className="addFormBtn">Add</Button>
-      <Button variant="primary" className="addFormBtn" onClick={props.onCancel}>Cancel</Button>
+      <Button variant="success" type="submit" className="addFormBtn searchBtn">Add</Button>
+      <Button variant="danger" className="addFormBtn searchBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>
 </div>

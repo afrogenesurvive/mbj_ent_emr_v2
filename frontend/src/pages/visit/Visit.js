@@ -1193,7 +1193,6 @@ render() {
                 </Tab>
                 <Tab eventKey="2" title="calendar" className="calendarTab">
                   <FullCalendar
-                    className="fulCal"
                     initialView="dayGridMonth"
                     plugins={[dayGridPlugin, interactionPlugin, bootstrapPlugin]}
                     events={this.state.calendarVisits}

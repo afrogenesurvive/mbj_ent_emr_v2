@@ -64,6 +64,7 @@ class UserDetail extends Component {
     profileLoaded: false,
     sideCol: 'menu',
     startFilter: false,
+    selectFilter: null,
     filter: {
       field: null,
       key: null,
@@ -1555,9 +1556,11 @@ toggleSideCol = () => {
   }
 
 }
-toggleFilter = () => {
+toggleFilter = (args) => {
+
   this.setState({
-    startFilter: !this.state.startFilter
+    startFilter: !this.state.startFilter,
+    selectFilter: args
   })
 }
 menuSelect = (args) => {
@@ -1739,53 +1742,54 @@ render() {
         {this.props.user && (
           <Col md={12} className="">
 
-            {this.state.startFilter === true && (
-            <Col>
-              {this.props.subMenu === 'address' && (
-                <FilterAddressForm
-                  onCancel={this.toggleFilter}
-                  onConfirm={this.submitFilterForm}
-                />
-              )}
-              {this.props.subMenu === 'attendance' && (
-                <FilterAttendanceForm
-                  onCancel={this.toggleFilter}
-                  onConfirm={this.submitFilterForm}
-                />
-              )}
-              {this.props.subMenu === 'leave' && (
-                <FilterLeaveForm
-                  onCancel={this.toggleFilter}
-                  onConfirm={this.submitFilterForm}
-                />
-              )}
-              {this.props.subMenu === 'image' && (
-                <FilterImageForm
-                  onCancel={this.toggleFilter}
-                  onConfirm={this.submitFilterForm}
-                />
-              )}
-              {this.props.subMenu === 'file' && (
-                <FilterFileForm
-                  onCancel={this.toggleFilter}
-                  onConfirm={this.submitFilterForm}
-                />
-              )}
-              {this.props.subMenu === 'appointment' && (
-                <FilterAppointmentForm
-                  onCancel={this.toggleFilter}
-                  onConfirm={this.submitFilterForm}
-                />
-              )}
-              {this.props.subMenu === 'note' && (
-                <FilterNoteForm
-                  onCancel={this.toggleFilter}
-                  onConfirm={this.submitFilterForm}
-                />
-              )}
-            </Col>
-
-          )}
+            {
+          //     this.state.startFilter === true && (
+          //   <Col>
+          //     {this.state.selectFilter === 'address' && (
+          //       <FilterAddressForm
+          //         onCancel={this.toggleFilter}
+          //         onConfirm={this.submitFilterForm}
+          //       />
+          //     )}
+          //     {this.state.selectFilter === 'attendance' && (
+          //       <FilterAttendanceForm
+          //         onCancel={this.toggleFilter}
+          //         onConfirm={this.submitFilterForm}
+          //       />
+          //     )}
+          //     {this.state.selectFilter === 'leave' && (
+          //       <FilterLeaveForm
+          //         onCancel={this.toggleFilter}
+          //         onConfirm={this.submitFilterForm}
+          //       />
+          //     )}
+          //     {this.state.selectFilter === 'image' && (
+          //       <FilterImageForm
+          //         onCancel={this.toggleFilter}
+          //         onConfirm={this.submitFilterForm}
+          //       />
+          //     )}
+          //     {this.state.selectFilter === 'file' && (
+          //       <FilterFileForm
+          //         onCancel={this.toggleFilter}
+          //         onConfirm={this.submitFilterForm}
+          //       />
+          //     )}
+          //     {this.state.selectFilter === 'appointment' && (
+          //       <FilterAppointmentForm
+          //         onCancel={this.toggleFilter}
+          //         onConfirm={this.submitFilterForm}
+          //       />
+          //     )}
+          //     {this.state.selectFilter === 'note' && (
+          //       <FilterNoteForm
+          //         onCancel={this.toggleFilter}
+          //         onConfirm={this.submitFilterForm}
+          //       />
+          //     )}
+          //   </Col>
+          // )
+        }
 
             {this.state.updateSingleField.state === true && (
               <UpdateUserSingleFieldForm
@@ -1923,11 +1927,18 @@ render() {
                 <h3 className="">Addresses:</h3>
               </Col>
               <Col className="subTabCol">
-                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'address')}>Filter</Button>
                 {this.state.canDelete === true && (
-                  <Button variant="success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
+                  <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
                 )}
               </Col>
+              {this.state.startFilter === true &&
+                this.state.selectFilter === 'address' && (
+                <FilterAddressForm
+                  onCancel={this.toggleFilter}
+                  onConfirm={this.submitFilterForm}
+                />
+              )}
                 {this.state.adding.state === true &&
                   this.state.adding.field === 'address' && (
                     <AddAddressForm
@@ -1952,11 +1963,11 @@ render() {
               <h3>Attendance:</h3>
               </Col>
               <Col className="subTabCol">
-                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
                 {this.state.canDelete === true && (
                   <Button variant="success" onClick={this.startAdd.bind(this, 'attendance')}>Add</Button>
                 )}
               </Col>
+
               {this.state.adding.state === true &&
                 this.state.adding.field === 'attendance' && (
                   <AddAttendanceForm
@@ -1966,6 +1977,16 @@ render() {
               )}
               <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                 <Tab eventKey="1" title="list">
+                {this.state.startFilter === true &&
+                  this.state.selectFilter === 'attendance' && (
+                  <FilterAttendanceForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                <Col className="subTabCol">
+                  <Button variant="primary" onClick={this.toggleFilter.bind(this, 'attendance')}>Filter</Button>
+                </Col>
                 <UserAttendanceList
                   filter={this.state.filter}
                   attendance={this.props.user.attendance}
@@ -1992,11 +2013,11 @@ render() {
               <h3>Leave:</h3>
               </Col>
               <Col className="subTabCol">
-                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
                 {this.state.canDelete === true && (
                   <Button variant="success" onClick={this.startAdd.bind(this, 'leave')}>Add</Button>
                 )}
               </Col>
+
               {this.state.adding.state === true &&
                 this.state.adding.field === 'leave' && (
                   <AddLeaveForm
@@ -2006,6 +2027,16 @@ render() {
               )}
               <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                 <Tab eventKey="1" title="list">
+                {this.state.startFilter === true &&
+                  this.state.selectFilter === 'leave' && (
+                  <FilterLeaveForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                <Col className="subTabCol">
+                  <Button variant="primary" onClick={this.toggleFilter.bind(this, 'leave')}>Filter</Button>
+                </Col>
                 <UserLeaveList
                   filter={this.state.filter}
                   leave={this.props.user.leave}
@@ -2033,11 +2064,18 @@ render() {
               <h3>Images:</h3>
               </Col>
               <Col className="subTabCol">
-                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'image')}>Filter</Button>
                 {this.state.canDelete === true && (
-                  <Button variant="success" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
+                  <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
                 )}
               </Col>
+              {this.state.startFilter === true &&
+                this.state.selectFilter === 'image' && (
+                <FilterImageForm
+                  onCancel={this.toggleFilter}
+                  onConfirm={this.submitFilterForm}
+                />
+              )}
               {this.state.adding.state === true &&
                 this.state.adding.field === 'image' && (
                   <AddImageForm
@@ -2061,11 +2099,18 @@ render() {
               <h3>Files:</h3>
               </Col>
               <Col className="subTabCol">
-                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'file')}>Filter</Button>
                 {this.state.canDelete === true && (
-                  <Button variant="success" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
+                  <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
                 )}
               </Col>
+              {this.state.startFilter === true &&
+                this.state.selectFilter === 'file' && (
+                <FilterFileForm
+                  onCancel={this.toggleFilter}
+                  onConfirm={this.submitFilterForm}
+                />
+              )}
               {this.state.adding.state === true &&
                 this.state.adding.field === 'file' && (
                   <AddFileForm
@@ -2087,11 +2132,19 @@ render() {
               <Col className="subTabCol">
               <h3>Appointments:</h3>
               </Col>
-              <Col className="subTabCol">
-                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
-              </Col>
+
               <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                 <Tab eventKey="1" title="list">
+                {this.state.startFilter === true &&
+                  this.state.selectFilter === 'appointment' && (
+                  <FilterAppointmentForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                <Col className="subTabCol">
+                  <Button variant="primary" onClick={this.toggleFilter.bind(this, 'appointment')}>Filter</Button>
+                </Col>
                 <UserAppointmentList
                   filter={this.state.filter}
                   appointments={this.props.user.appointments}
@@ -2117,11 +2170,18 @@ render() {
               <h3>Notes:</h3>
               </Col>
               <Col className="subTabCol">
-                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'note')}>Filter</Button>
                 {this.state.canDelete === true && (
-                  <Button variant="success" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
+                  <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
                 )}
               </Col>
+              {this.state.startFilter === true &&
+                this.state.selectFilter === 'note' && (
+                <FilterNoteForm
+                  onCancel={this.toggleFilter}
+                  onConfirm={this.submitFilterForm}
+                />
+              )}
               {this.state.adding.state === true &&
                 this.state.adding.field === 'note' && (
                   <AddNoteForm
@@ -2267,11 +2327,18 @@ render() {
                 <h3 className="">Addresses:</h3>
               </Col>
               <Col className="subTabCol">
-                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'address')}>Filter</Button>
                 {this.state.canDelete === true && (
-                  <Button variant="success" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
+                  <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'address')}>Add</Button>
                 )}
               </Col>
+              {this.state.startFilter === true &&
+                this.state.selectFilter === 'address' && (
+                <FilterAddressForm
+                  onCancel={this.toggleFilter}
+                  onConfirm={this.submitFilterForm}
+                />
+              )}
                 {this.state.adding.state === true &&
                   this.state.adding.field === 'address' && (
                     <AddAddressForm
@@ -2296,11 +2363,11 @@ render() {
               <h3>Attendance:</h3>
               </Col>
               <Col className="subTabCol">
-                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
                 {this.state.canDelete === true && (
                   <Button variant="success" onClick={this.startAdd.bind(this, 'attendance')}>Add</Button>
                 )}
               </Col>
+
               {this.state.adding.state === true &&
                 this.state.adding.field === 'attendance' && (
                   <AddAttendanceForm
@@ -2310,6 +2377,16 @@ render() {
               )}
               <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                 <Tab eventKey="1" title="list">
+                {this.state.startFilter === true &&
+                  this.state.selectFilter === 'attendance' && (
+                  <FilterAttendanceForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                <Col className="subTabCol">
+                  <Button variant="primary" onClick={this.toggleFilter.bind(this, 'attendance')}>Filter</Button>
+                </Col>
                 <UserAttendanceList
                   filter={this.state.filter}
                   attendance={this.props.user.attendance}
@@ -2336,11 +2413,11 @@ render() {
               <h3>Leave:</h3>
               </Col>
               <Col className="subTabCol">
-                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
                 {this.state.canDelete === true && (
                   <Button variant="success" onClick={this.startAdd.bind(this, 'leave')}>Add</Button>
                 )}
               </Col>
+
               {this.state.adding.state === true &&
                 this.state.adding.field === 'leave' && (
                   <AddLeaveForm
@@ -2350,6 +2427,16 @@ render() {
               )}
               <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                 <Tab eventKey="1" title="list">
+                {this.state.startFilter === true &&
+                  this.state.selectFilter === 'leave' && (
+                  <FilterLeaveForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                <Col className="subTabCol">
+                  <Button variant="primary" onClick={this.toggleFilter.bind(this, 'leave')}>Filter</Button>
+                </Col>
                 <UserLeaveList
                   filter={this.state.filter}
                   leave={this.props.user.leave}
@@ -2377,11 +2464,18 @@ render() {
               <h3>Images:</h3>
               </Col>
               <Col className="subTabCol">
-                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'image')}>Filter</Button>
                 {this.state.canDelete === true && (
-                  <Button variant="success" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
+                  <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
                 )}
               </Col>
+              {this.state.startFilter === true &&
+                this.state.selectFilter === 'image' && (
+                <FilterImageForm
+                  onCancel={this.toggleFilter}
+                  onConfirm={this.submitFilterForm}
+                />
+              )}
               {this.state.adding.state === true &&
                 this.state.adding.field === 'image' && (
                   <AddImageForm
@@ -2405,11 +2499,18 @@ render() {
               <h3>Files:</h3>
               </Col>
               <Col className="subTabCol">
-                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'file')}>Filter</Button>
                 {this.state.canDelete === true && (
-                  <Button variant="success" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
+                  <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
                 )}
               </Col>
+              {this.state.startFilter === true &&
+                this.state.selectFilter === 'file' && (
+                <FilterFileForm
+                  onCancel={this.toggleFilter}
+                  onConfirm={this.submitFilterForm}
+                />
+              )}
               {this.state.adding.state === true &&
                 this.state.adding.field === 'file' && (
                   <AddFileForm
@@ -2436,6 +2537,16 @@ render() {
               </Col>
               <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                 <Tab eventKey="1" title="list">
+                {this.state.startFilter === true &&
+                  this.state.selectFilter === 'appointment' && (
+                  <FilterAppointmentForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                <Col className="subTabCol">
+                  <Button variant="primary" onClick={this.toggleFilter.bind(this, 'appointment')}>Filter</Button>
+                </Col>
                 <UserAppointmentList
                   filter={this.state.filter}
                   appointments={this.props.user.appointments}
@@ -2461,11 +2572,18 @@ render() {
               <h3>Notes:</h3>
               </Col>
               <Col className="subTabCol">
-                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'note')}>Filter</Button>
                 {this.state.canDelete === true && (
-                  <Button variant="success" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
+                  <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
                 )}
               </Col>
+              {this.state.startFilter === true &&
+                this.state.selectFilter === 'note' && (
+                <FilterNoteForm
+                  onCancel={this.toggleFilter}
+                  onConfirm={this.submitFilterForm}
+                />
+              )}
               {this.state.adding.state === true &&
                 this.state.adding.field === 'note' && (
                   <AddNoteForm

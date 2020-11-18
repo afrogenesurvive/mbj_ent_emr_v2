@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -39,7 +39,7 @@ return (
 
     <Form.Row>
       <Button variant="success" type="submit" className="filterFormBtn searchBtn">Filter</Button>
-      <Button variant="secondary" className="filterFormBtn searchBtn" onClick={props.onCancel}>Cancel</Button>
+      <Button variant="danger" className="filterFormBtn searchBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>
 </div>

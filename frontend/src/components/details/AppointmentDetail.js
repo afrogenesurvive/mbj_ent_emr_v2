@@ -73,6 +73,8 @@ class AppointmentDetail extends Component {
       key: null,
       value: null
     },
+    startFilter: false,
+    selectFilter: null,
     menuSelected: null,
     menuSelect: 'basic',
     adding: {
@@ -773,9 +775,10 @@ toggleSideCol = () => {
   }
 
 }
-toggleFilter = () => {
+toggleFilter = (args) => {
   this.setState({
-    startFilter: !this.state.startFilter
+    startFilter: !this.state.startFilter,
+    selectFilter: args
   })
 }
 menuSelect = (args) => {
@@ -840,28 +843,30 @@ render() {
       <Row className="">
         {this.props.appointment && (
           <Col md={12} className="">
-            {this.state.startFilter === true && (
-            <Col>
-              {this.props.subMenu === 'consultant' && (
-                <FilterUserForm
-                  onCancel={this.toggleSideCol}
-                  onConfirm={this.submitFilterForm}
-                />
-              )}
-              {this.props.subMenu === 'note' && (
-                <FilterNoteForm
-                  onCancel={this.toggleSideCol}
-                  onConfirm={this.submitFilterForm}
-                />
-              )}
-              {this.props.subMenu === 'tag' && (
-                <FilterTagForm
-                  onCancel={this.toggleSideCol}
-                  onConfirm={this.submitFilterForm}
-                />
-              )}
-            </Col>
-          )}
+            {
+          //     this.state.startFilter === true && (
+          //   <Col>
+          //     {this.state.selectFilter === 'consultant' && (
+          //       <FilterUserForm
+          //         onCancel={this.toggleSideCol}
+          //         onConfirm={this.submitFilterForm}
+          //       />
+          //     )}
+          //     {this.state.selectFilter === 'note' && (
+          //       <FilterNoteForm
+          //         onCancel={this.toggleSideCol}
+          //         onConfirm={this.submitFilterForm}
+          //       />
+          //     )}
+          //     {this.state.selectFilter === 'tag' && (
+          //       <FilterTagForm
+          //         onCancel={this.toggleSideCol}
+          //         onConfirm={this.submitFilterForm}
+          //       />
+          //     )}
+          //   </Col>
+          // )
+        }
 
             {this.state.updateSingleField.state === true && (
               <UpdatePatientSingleFieldForm
@@ -983,9 +988,16 @@ render() {
                 <h3 className="">Consultants:</h3>
               </Col>
                 <Col className="subTabCol">
-                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                  <Button variant="success" onClick={this.startAdd.bind(this, 'consultant')}>Add</Button>
+                  <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'consultant')}>Filter</Button>
+                  <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'consultant')}>Add</Button>
                 </Col>
+                {this.state.startFilter === true &&
+                  this.state.selectFilter === 'consultant' && (
+                  <FilterUserForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
                 {this.state.adding.state === true &&
                   this.state.adding.field === 'consultant' &&
                   this.state.users && (
@@ -1012,9 +1024,16 @@ render() {
                 <h3 className="">Notes:</h3>
               </Col>
                 <Col className="subTabCol">
-                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                  <Button variant="success" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
+                  <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'note')}>Filter</Button>
+                  <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
                 </Col>
+                {this.state.startFilter === true &&
+                  this.state.selectFilter === 'note' && (
+                  <FilterNoteForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
                 {this.state.adding.state === true &&
                   this.state.adding.field === 'note' && (
                     <AddNoteForm
@@ -1037,9 +1056,16 @@ render() {
                 <h3 className="">Tags:</h3>
               </Col>
                 <Col className="subTabCol">
-                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                  <Button variant="success" onClick={this.startAdd.bind(this, 'tag')}>Add</Button>
+                  <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'tag')}>Filter</Button>
+                  <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'tag')}>Add</Button>
                 </Col>
+                {this.state.startFilter === true &&
+                  this.state.selectFilter === 'tag' && (
+                  <FilterTagForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
                 {this.state.adding.state === true &&
                   this.state.adding.field === 'tag' && (
                     <AddTagForm
@@ -1169,9 +1195,16 @@ render() {
                 <h3 className="">Consultants:</h3>
               </Col>
                 <Col className="subTabCol">
-                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                  <Button variant="success" onClick={this.startAdd.bind(this, 'consultant')}>Add</Button>
+                  <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'consultant')}>Filter</Button>
+                  <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'consultant')}>Add</Button>
                 </Col>
+                {this.state.startFilter === true &&
+                  this.state.selectFilter === 'consultant' && (
+                  <FilterUserForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
                 {this.state.adding.state === true &&
                   this.state.adding.field === 'consultant' &&
                   this.state.users && (
@@ -1198,9 +1231,17 @@ render() {
                 <h3 className="">Notes:</h3>
               </Col>
                 <Col className="subTabCol">
-                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                  <Button variant="success" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
+                  <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'note')}>Filter</Button>
+                  <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'note')}>Add</Button>
                 </Col>
+
+                {this.state.startFilter === true &&
+                  this.state.selectFilter === 'note' && (
+                  <FilterNoteForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
                 {this.state.adding.state === true &&
                   this.state.adding.field === 'note' && (
                     <AddNoteForm
@@ -1223,9 +1264,16 @@ render() {
                 <h3 className="">Tags:</h3>
               </Col>
                 <Col className="subTabCol">
-                  <Button variant="primary" onClick={this.toggleSideCol}>Filter</Button>
-                  <Button variant="success" onClick={this.startAdd.bind(this, 'tag')}>Add</Button>
+                  <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'tag')}>Filter</Button>
+                  <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'tag')}>Add</Button>
                 </Col>
+                {this.state.startFilter === true &&
+                  this.state.selectFilter === 'tag' && (
+                  <FilterTagForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
                 {this.state.adding.state === true &&
                   this.state.adding.field === 'tag' && (
                     <AddTagForm

@@ -139,13 +139,12 @@ return (
     </Form.Row>
 
     <Form.Row>
-      <Button variant="success" type="submit" className="loginFormBtn">Signup</Button>
-    </Form.Row>
-    <Form.Row>
-      <Button variant="warning" className="loginFormBtn">
+      <Button variant="success" type="submit" className="loginFormBtn searchBtn">Signup</Button>
+      <Button variant="warning" className="loginFormBtn searchBtn">
         <NavLink to="/login">Login</NavLink>
       </Button>
     </Form.Row>
+
   </Form>
 </div>
 
