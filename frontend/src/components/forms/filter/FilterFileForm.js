@@ -16,8 +16,8 @@ return (
       </Form.Group>
     </Form.Row>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="key">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="key" className="formGroup">
         <Form.Label className="formLabel">Field to Filter</Form.Label>
         <Form.Control as="select">
           <option>name</option>
@@ -27,8 +27,8 @@ return (
       </Form.Group>
     </Form.Row>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="value">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="value" className="formGroup">
         <Form.Label className="formLabel">Filter Type</Form.Label>
         <Form.Control as="select">
           <option>Ascending</option>
@@ -37,9 +37,9 @@ return (
       </Form.Group>
     </Form.Row>
 
-    <Form.Row>
+    <Form.Row className="formBtnRow">
       <Button variant="success" type="submit" className="filterFormBtn searchBtn">Filter</Button>
-      <Button variant="danger" className="filterFormBtn searchBtn" onClick={props.onCancel}>Cancel</Button>
+      <Button variant="dangers" className="filterFormBtn searchBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>
 </div>

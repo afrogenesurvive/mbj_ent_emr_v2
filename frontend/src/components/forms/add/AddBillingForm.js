@@ -15,37 +15,39 @@ return (
     <h4>Add Billing</h4>
     <p>required feilds are denoted by a ' * '</p>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="type">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="type" className="formGroup">
         <Form.Label className="formLabel">Type * </Form.Label>
         <Form.Control type="text" placeholder="type"/>
       </Form.Group>
     </Form.Row>
-    <Form.Row>
-      <Form.Group as={Col} controlId="description">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="description" className="formGroup">
         <Form.Label className="formLabel">Description * </Form.Label>
         <Form.Control as="textarea" rows="3" placeholder="description"/>
       </Form.Group>
     </Form.Row>
-    <Form.Row>
-      <Form.Group as={Col} controlId="amount">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="amount" className="formGroup">
         <Form.Label className="formLabel">Amount * </Form.Label>
         <Form.Control type="number" step="0.001" placeholder="amount"/>
       </Form.Group>
-      <Form.Group as={Col} controlId="paid">
+    </Form.Row>
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="paid" className="formGroup">
         <Form.Label className="formLabel">Paid ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
       </Form.Group>
     </Form.Row>
-    <Form.Row>
-      <Form.Group as={Col} controlId="notes">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="notes" className="formGroup">
         <Form.Label className="formLabel">Notes</Form.Label>
         <Form.Control as="textarea" rows="3" placeholder="notes"/>
       </Form.Group>
     </Form.Row>
 
-    <Form.Row>
-      <Form.Group as={Col}>
+    <Form.Row className="formRow">
+      <Form.Group as={Col} className="formGroup">
         <Form.Label className="formLabel">File</Form.Label>
         <Form.Control type="file" id="fileInput" placeholder="File" onChange={(e) => {AuthContext._currentValue.file = e.target.files[0]}}/>
       </Form.Group>

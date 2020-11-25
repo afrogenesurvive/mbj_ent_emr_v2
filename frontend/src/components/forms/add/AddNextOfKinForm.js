@@ -13,12 +13,15 @@ return (
   <Form onSubmit={props.onConfirm}>
     <h4>Add Next of Kin</h4>
     <p>Required fields are denoted by a ' * '</p>
-    <Form.Row>
-      <Form.Group as={Col} controlId="name">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="name" className="formGroup">
         <Form.Label className="formLabel">Name * </Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
-      <Form.Group as={Col} controlId="relation">
+    </Form.Row>
+
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="relation" className="formGroup">
         <Form.Label className="formLabel">Relation (select) * </Form.Label>
         <Form.Control as="select">
           <option>Mother</option>
@@ -36,19 +39,22 @@ return (
       </Form.Group>
     </Form.Row>
 
-    <Form.Row>
-    <Form.Group as={Col} controlId="email">
-      <Form.Label className="formLabel">Email</Form.Label>
-      <Form.Control type="email" placeholder=""/>
-    </Form.Group>
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="email" className="formGroup">
+        <Form.Label className="formLabel">Email</Form.Label>
+        <Form.Control type="email" placeholder=""/>
+      </Form.Group>
     </Form.Row>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="phone">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="phone" className="formGroup">
         <Form.Label className="formLabel">Phone * </Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
-      <Form.Group as={Col} controlId="phone2">
+    </Form.Row>
+
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="phone2" className="formGroup">
         <Form.Label className="formLabel">Phone #2</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>

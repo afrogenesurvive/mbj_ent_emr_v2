@@ -11,19 +11,21 @@ return (
 <div className="loginFormTopDiv">
   <Form onSubmit={props.onConfirm}>
     <h1>Signup</h1>
-    <Form.Row>
+    <Form.Row className="formRow">
       <Form.Group as={Col} controlId="email">
         <Form.Label className="formLabel">Email Address</Form.Label>
         <Form.Control type="email" placeholder="alpha@beta.omega"/>
       </Form.Group>
+    </Form.Row>
 
+    <Form.Row className="formRow">
       <Form.Group as={Col} controlId="password">
         <Form.Label className="formLabel">Password</Form.Label>
         <Form.Control type="password" placeholder="password"/>
       </Form.Group>
     </Form.Row>
 
-    <Form.Row>
+    <Form.Row className="formRow">
       <Form.Group as={Col} controlId="role">
         <Form.Label className="formLabel">Role</Form.Label>
         <Form.Control as="select">
@@ -43,7 +45,9 @@ return (
           <option>Dr</option>
         </Form.Control>
       </Form.Group>
+    </Form.Row>
 
+    <Form.Row className="formRow">
       <Form.Group as={Col} controlId="name">
         <Form.Label className="formLabel">Name</Form.Label>
         <Form.Control type="text" placeholder="name"/>
@@ -55,7 +59,7 @@ return (
       </Form.Group>
     </Form.Row>
 
-    <Form.Row>
+    <Form.Row className="formRow">
       <Form.Group as={Col} controlId="dob">
         <Form.Label className="formLabel">D.O.B</Form.Label>
         <Form.Control type="date" placeholder="YYYY-MM-DD"/>
@@ -71,7 +75,7 @@ return (
       </Form.Group>
     </Form.Row>
 
-    <Form.Row>
+    <Form.Row className="formRow">
       <Form.Group as={Col} controlId="phone">
         <Form.Label className="formLabel">Phone</Form.Label>
         <Form.Control type="text" placeholder="+18760001234"/>
@@ -83,7 +87,7 @@ return (
       </Form.Group>
     </Form.Row>
 
-    <Form.Row>
+    <Form.Row className="formRow">
       <Form.Group as={Col} controlId="addressNumber">
         <Form.Label className="formLabel">Address Number</Form.Label>
         <Form.Control type="number" placeholder=""/>
@@ -93,19 +97,21 @@ return (
         <Form.Label className="formLabel">Address Street</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
+    </Form.Row>
 
+    <Form.Row className="formRow">
       <Form.Group as={Col} controlId="addressTown">
         <Form.Label className="formLabel">Address Town</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
-    </Form.Row>
 
-    <Form.Row>
       <Form.Group as={Col} controlId="addressCity">
         <Form.Label className="formLabel">Address City</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
+    </Form.Row>
 
+    <Form.Row className="formRow">
       <Form.Group as={Col} controlId="addressParish">
         <Form.Label className="formLabel">Address Parish</Form.Label>
         <Form.Control as="select">
@@ -131,14 +137,16 @@ return (
         <Form.Label className="formLabel">Address Country</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
+    </Form.Row>
 
+    <Form.Row className="formRow">
       <Form.Group as={Col} controlId="addressPostalCode">
         <Form.Label className="formLabel">Address Postalcode</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
     </Form.Row>
 
-    <Form.Row>
+    <Form.Row className="formBtnRow">
       <Button variant="success" type="submit" className="loginFormBtn searchBtn">Signup</Button>
       <Button variant="warning" className="loginFormBtn searchBtn">
         <NavLink to="/login">Login</NavLink>

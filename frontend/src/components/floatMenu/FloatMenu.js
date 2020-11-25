@@ -144,6 +144,9 @@ return (
     <Button variant="light" onClick={props.subMenuSelect.bind(this, 'basic')}>Basic</Button>
     </li>
     <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'comorbidities')}>Comorbidities</Button>
+    </li>
+    <li>
     <Button variant="light" onClick={props.subMenuSelect.bind(this, 'admin')}>Admin</Button>
     </li>
     <li>
@@ -158,9 +161,7 @@ return (
     <li>
     <Button variant="light" onClick={props.subMenuSelect.bind(this, 'medication')}>Medication</Button>
     </li>
-    <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'comorbidities')}>Comorbidities</Button>
-    </li>
+
     <li>
     <Button variant="light" onClick={props.subMenuSelect.bind(this, 'image')}>Image</Button>
     </li>
@@ -250,6 +251,15 @@ return (
     </li>
     <li>
     <Button variant="light" onClick={props.subMenuSelect.bind(this, 'basic')}>Basic</Button>
+    </li>
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'comorbidities')}>Comorbidities</Button>
+    </li>
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'allergy')}>Allergy</Button>
+    </li>
+    <li>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'medication')}>Medication</Button>
     </li>
     <li>
     <Button variant="light" onClick={props.subMenuSelect.bind(this, 'admin')}>Admin</Button>

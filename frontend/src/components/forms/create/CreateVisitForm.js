@@ -12,14 +12,14 @@ return (
   <Form onSubmit={props.onConfirm}>
     <h1>Create Visit Form</h1>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="appointmentId">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="appointmentId" className="formGroup">
         <Form.Label className="formLabel">Appointment: {props.appointment.title}</Form.Label>
         <Form.Control type="text" value={props.appointment._id}/>
       </Form.Group>
     </Form.Row>
 
-    <Form.Row>
+    <Form.Row className="formRow">
     {
       // <Form.Group as={Col} controlId="title">
       //   <Form.Label className="formLabel">Title</Form.Label>
@@ -27,14 +27,14 @@ return (
       // </Form.Group>
     }
 
-      <Form.Group as={Col} controlId="type">
+      <Form.Group as={Col} controlId="type" className="formGroup">
         <Form.Label className="formLabel">Type</Form.Label>
         <Form.Control type="text" placeholder="type"/>
       </Form.Group>
 
     </Form.Row>
 
-    <Form.Row>
+    <Form.Row className="formRow">
       <Button variant="success" type="submit" className="loginFormBtn">Create</Button>
       <Button variant="danger" className="loginFormBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>

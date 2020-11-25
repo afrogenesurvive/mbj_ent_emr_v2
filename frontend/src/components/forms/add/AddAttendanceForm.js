@@ -22,8 +22,8 @@ return (
   <Form onSubmit={props.onConfirm}>
     <h4>Add Attendance</h4>
     <p>required feilds are denoted by a ' * '</p>
-    <Form.Row>
-      <Form.Group as={Col} controlId="date">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="date" className="formGroup">
         <Form.Label className="formLabel">Date * </Form.Label>
         <Form.Control type="date" placeholder="date"/>
       </Form.Group>
@@ -43,23 +43,21 @@ return (
         //   />
         // </Form.Group>
       }
-      <Form.Group as={Col} controlId="status">
-        <Form.Label className="formLabel">Status * </Form.Label>
-        <Form.Control type="text" placeholder="present/absent"/>
-      </Form.Group>
-
-      <Form.Group as={Col} controlId="description">
-        <Form.Label className="formLabel">Description</Form.Label>
-        <Form.Control as="textarea" rows="3" placeholder=""/>
-      </Form.Group>
-    </Form.Row>
-
-    <Form.Row>
 
     </Form.Row>
 
-    <Form.Row>
+    <Form.Row className="formRow">
+    <Form.Group as={Col} controlId="status" className="formGroup">
+      <Form.Label className="formLabel">Status * </Form.Label>
+      <Form.Control type="text" placeholder="present/absent"/>
+    </Form.Group>
+    </Form.Row>
 
+    <Form.Row className="formRow">
+    <Form.Group as={Col} controlId="description" className="formGroup">
+      <Form.Label className="formLabel">Description</Form.Label>
+      <Form.Control as="textarea" rows="3" placeholder=""/>
+    </Form.Group>
     </Form.Row>
 
     <Form.Row className="formBtnRow">

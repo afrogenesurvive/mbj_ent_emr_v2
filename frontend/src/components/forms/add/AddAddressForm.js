@@ -12,35 +12,35 @@ return (
   <Form onSubmit={props.onConfirm}>
     <h4>Add Address</h4>
     <p>required feilds are denoted by a ' * '</p>
-    <Form.Row>
-      <Form.Group as={Col} controlId="number">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="number" className="formGroup">
         <Form.Label className="formLabel">Address Number * </Form.Label>
         <Form.Control type="number" placeholder=""/>
       </Form.Group>
 
-      <Form.Group as={Col} controlId="street">
+      <Form.Group as={Col} controlId="street" className="formGroup">
         <Form.Label className="formLabel">Address Street * </Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
 
     </Form.Row>
 
-    <Form.Row>
+    <Form.Row className="formRow">
 
-      <Form.Group as={Col} controlId="town">
+      <Form.Group as={Col} controlId="town" className="formGroup">
         <Form.Label className="formLabel">Address Town</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
 
-      <Form.Group as={Col} controlId="city">
+      <Form.Group as={Col} controlId="city" className="formGroup">
         <Form.Label className="formLabel">Address City * </Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
 
     </Form.Row>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="parish">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="parish" className="formGroup">
         <Form.Label className="formLabel">Address Parish</Form.Label>
         <Form.Control as="select">
           <option>none</option>
@@ -61,12 +61,17 @@ return (
         </Form.Control>
       </Form.Group>
 
-      <Form.Group as={Col} controlId="country">
+      <Form.Group as={Col} controlId="country" className="formGroup">
         <Form.Label className="formLabel">Address Country * </Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
 
-      <Form.Group as={Col} controlId="postalCode">
+
+    </Form.Row>
+
+    <Form.Row className="formRow">
+
+      <Form.Group as={Col} controlId="postalCode" className="formGroup">
         <Form.Label className="formLabel">Address PostalCode</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>

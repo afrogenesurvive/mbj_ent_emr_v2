@@ -19,7 +19,7 @@ return (
   <Form onSubmit={props.onConfirm}>
     <h4>Add Staff</h4>
 
-    <Form.Row>
+    <Form.Row className="formRow">
       <UserList
         users={props.users}
         selectUser={handleSetUser}
@@ -27,8 +27,8 @@ return (
       />
     </Form.Row>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="user">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="user" className="formGroup">
         <Form.Label className="formLabel">User</Form.Label>
         <Form.Control type="text" value={user._id}/>
       </Form.Group>

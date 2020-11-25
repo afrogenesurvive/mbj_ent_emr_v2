@@ -14,8 +14,8 @@ return (
   <Form onSubmit={props.onConfirm}>
     <h4>Add File</h4>
 
-    <Form.Row>
-      <Form.Group as={Col}>
+    <Form.Row className="formRow">
+      <Form.Group as={Col} className="formGroup">
         <Form.Label className="formLabel">File</Form.Label>
         <Form.Control type="file" id="fileInput" placeholder="File" onChange={(e) => {AuthContext._currentValue.file = e.target.files[0]}}/>
       </Form.Group>

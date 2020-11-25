@@ -636,7 +636,7 @@ submitAddAllergyForm = (event) => {
   const token = this.context.token;
   const activityId = this.context.activityId;
   const patientId = this.props.patient._id;
-  const title = event.target.title.value;
+  const title = this.props.patient.name+"_allergy_"+moment().format("YYYY-MM-DD, h:mm:ss a");
   const type = event.target.type.value;
   const description = event.target.description.value.replace(/\n/g, ' ');
 
@@ -934,7 +934,7 @@ submitAddMedicationForm = (event) => {
   const token = this.context.token;
   const activityId = this.context.activityId;
   const patientId = this.props.patient._id;
-  const title = event.target.title.value;
+  const title = this.props.patient.name+"_medication_"+moment().format("YYYY-MM-DD, h:mm:ss a");
   const type = event.target.type.value;
   const description = event.target.description.value.replace(/\n/g, ' ');
 
@@ -1233,7 +1233,7 @@ submitAddComorbidityForm = (event) => {
   const token = this.context.token;
   const activityId = this.context.activityId;
   const patientId = this.props.patient._id;
-  const title = event.target.title.value;
+  const title = this.props.patient.name+"_comorbidity_"+moment().format("YYYY-MM-DD, h:mm:ss a");
   const type = event.target.type.value;
   const description = event.target.description.value.replace(/\n/g, ' ');
 
@@ -3200,6 +3200,38 @@ render() {
               <li className="summaryListItem">
               <Col className="tabCol2">
               <Col className="subTabCol">
+                <h3 className="">Comorbidities:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'comorbidities')}>Filter</Button>
+                <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'comorbidity')}>Add</Button>
+              </Col>
+              {this.state.startFilter &&
+                this.state.selectFilter === 'comorbidities' && (
+                <FilterComorbidityForm
+                  onCancel={this.toggleFilter}
+                  onConfirm={this.submitFilterForm}
+                />
+              )}
+                {this.state.adding.state === true &&
+                  this.state.adding.field === 'comorbidity' && (
+                    <AddComorbidityForm
+                      onConfirm={this.submitAddComorbidityForm}
+                      onCancel={this.cancelAdd}
+                    />
+                )}
+                <PatientComorbidityList
+                  filter={this.state.filter}
+                  comorbidities={this.props.patient.comorbidities}
+                  authId={this.context.activityId}
+                  canDelete={this.state.canDelete}
+                  onDelete={this.deleteComorbidity}
+                />
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol2">
+              <Col className="subTabCol">
                 <h3 className="">Admin Info:</h3>
               </Col>
               <ListGroup className="profileBasicListGroup">
@@ -3372,38 +3404,7 @@ render() {
                 />
               </Col>
               </li>
-              <li className="summaryListItem">
-              <Col className="tabCol2">
-              <Col className="subTabCol">
-                <h3 className="">Comorbidities:</h3>
-              </Col>
-              <Col className="subTabCol">
-                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'comorbidities')}>Filter</Button>
-                <Button variant="success" className="searchBtn" onClick={this.startAdd.bind(this, 'comorbidity')}>Add</Button>
-              </Col>
-              {this.state.startFilter &&
-                this.state.selectFilter === 'comorbidities' && (
-                <FilterComorbidityForm
-                  onCancel={this.toggleFilter}
-                  onConfirm={this.submitFilterForm}
-                />
-              )}
-                {this.state.adding.state === true &&
-                  this.state.adding.field === 'comorbidity' && (
-                    <AddComorbidityForm
-                      onConfirm={this.submitAddComorbidityForm}
-                      onCancel={this.cancelAdd}
-                    />
-                )}
-                <PatientComorbidityList
-                  filter={this.state.filter}
-                  comorbidities={this.props.patient.comorbidities}
-                  authId={this.context.activityId}
-                  canDelete={this.state.canDelete}
-                  onDelete={this.deleteComorbidity}
-                />
-              </Col>
-              </li>
+
               <li className="summaryListItem">
               <Col className="tabCol2">
               <Col className="subTabCol">

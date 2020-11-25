@@ -15,19 +15,22 @@ return (
     <h4>Add Comorbidity</h4>
     <p>Required fields are denoted by a ' * '</p>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="title">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="title" className="formGroup">
         <Form.Label className="formLabel">Name * </Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
-      <Form.Group as={Col} controlId="type">
+    </Form.Row>
+
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="type" className="formGroup">
         <Form.Label className="formLabel">Type * </Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
     </Form.Row>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="description">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="description" className="formGroup">
         <Form.Label className="formLabel">Description</Form.Label>
         <Form.Control as="textarea" rows="3" placeholder=""/>
       </Form.Group>

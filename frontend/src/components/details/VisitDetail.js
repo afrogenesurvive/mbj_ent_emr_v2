@@ -71,6 +71,14 @@ import AddDiagnosisForm from '../forms/add/AddDiagnosisForm';
 import AddTreatmentForm from '../forms/add/AddTreatmentForm';
 import AddBillingForm from '../forms/add/AddBillingForm';
 import AddVigilanceForm from '../forms/add/AddVigilanceForm';
+
+// import PatientAllergyList from '../lists/patient/PatientAllergyList'
+// import PatientMedicationList from '../lists/patient/PatientMedicationList'
+import PatientComorbidityList from '../lists/patient/PatientComorbidityList'
+import FilterAllergyForm from '../forms/filter/FilterAllergyForm';
+import FilterMedicationForm from '../forms/filter/FilterMedicationForm';
+import FilterComorbidityForm from '../forms/filter/FilterComorbidityForm';
+
 import loadingGif from '../../assets/loading.gif';
 import {
   faBatteryThreeQuarters,
@@ -148,7 +156,7 @@ class VisitDetail extends Component {
   }
 
 componentDidMount () {
-  console.log('...visit details component mounted...');
+  console.log('...visit details component mounted...',this.props.visit.patient);
   let seshStore;
   if (sessionStorage.getItem('logInfo')) {
     seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
@@ -324,7 +332,7 @@ submitAddComplaintForm = (event) => {
   const token = this.context.token;
   const activityId = this.context.activityId;
   const visitId = this.props.visit._id;
-  const title = event.target.title.value;
+  const title = this.props.visit.patient.name+'_complaint_'+moment().format('YYYY-MM-DD, h:mm:ss a');
   const description = event.target.description.value.replace(/\n/g, ' ');
   const anamnesis = event.target.anamnesis.value.replace(/\n/g, ' ');
   // const attachment = event.target.attachment.value;
@@ -631,7 +639,7 @@ submitAddSurveyForm = (event) => {
   const activityId = this.context.activityId;
   const visitId = this.props.visit._id;
 
-  const title = event.target.title.value;
+  const title = this.props.visit.patient.name+'_survey_'+moment().format('YYYY-MM-DD, h:mm:ss a');
   const description = event.target.description.value.replace(/\n/g, ' ');
   // const attachment = event.target.attachment.value;
 
@@ -933,7 +941,7 @@ submitAddSystematicInquiryForm = (event) => {
   const activityId = this.context.activityId;
   const visitId = this.props.visit._id;
 
-  const title = event.target.title.value;
+  const title = this.props.visit.patient.name+'_systematicInquiry_'+moment().format('YYYY-MM-DD, h:mm:ss a');
   const description = event.target.description.value.replace(/\n/g, ' ');
 
   // const attachment = event.target.attachment.value;
@@ -1775,7 +1783,7 @@ submitAddInvestigationForm = (event) => {
   const activityId = this.context.activityId;
   const visitId = this.props.visit._id;
 
-  const title = '';
+  const title = this.props.visit.patient.name+'_investigation_'+moment().format('YYYY-MM-DD, h:mm:ss a');
   const type = event.target.type.value;
   const description = event.target.description.value.replace(/\n/g, ' ');
   // const attachment = event.target.attachment.value;
@@ -2082,7 +2090,7 @@ submitAddDiagnosisForm = (event) => {
   const activityId = this.context.activityId;
   const visitId = this.props.visit._id;
 
-  const title = event.target.title.value;
+  const title = this.props.visit.patient.name+'_diagnosis_'+moment().format('YYYY-MM-DD, h:mm:ss a');
   const type = event.target.type.value;
   const description = event.target.description.value.replace(/\n/g, ' ');
   // const attachment = event.target.attachment.value;
@@ -2388,13 +2396,12 @@ submitAddTreatmentForm = (event) => {
   const activityId = this.context.activityId;
   const visitId = this.props.visit._id;
 
-  const title = event.target.title.value;
+  const title = this.props.visit.patient.name+'_treatment_'+moment().format('YYYY-MM-DD, h:mm:ss a');
   const type = event.target.type.value;
   const description = event.target.description.value.replace(/\n/g, ' ');
   const dose = event.target.dose.value;
   const frequency = event.target.frequency.value;
   // const attachment = event.target.attachment.value;
-
 
   if (
       title.trim().length === 0 ||
@@ -2708,7 +2715,7 @@ submitAddBillingForm = (event) => {
   const activityId = this.context.activityId;
   const visitId = this.props.visit._id;
 
-  const title = '';
+  const title = this.props.visit.patient.name+'_billing_'+moment().format('YYYY-MM-DD, h:mm:ss a');
   const type = event.target.type.value;
   const description = event.target.description.value.replace(/\n/g, ' ');
   const amount = event.target.amount.value;
@@ -2720,7 +2727,7 @@ submitAddBillingForm = (event) => {
   if (
       title.trim().length === 0 ||
       description.trim().length === 0 ||
-      amount <= 0
+      parseFloat(amount) <= 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
     this.setState({isLoading: false})
@@ -5174,7 +5181,6 @@ render() {
           //   </Col>
           // )
         }
-
             {this.state.updateSingleField.state === true && (
               <UpdatePatientSingleFieldForm
                 field={this.state.updateSingleField.field}
@@ -5258,14 +5264,81 @@ render() {
                   <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
                   </Link>
                 </ListGroup.Item>
+                <ListGroup.Item>
                 <p className="listGroupText">Date:</p>
                 <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
-                <ListGroup.Item>
-
                 </ListGroup.Item>
               </ListGroup>
               </Col>
               </li>
+
+              <li className="summaryListItem">
+              <Col className="tabCol2">
+              <Col className="subTabCol">
+                <h3 className="">Comorbidities:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'comorbidities')}>Filter</Button>
+              </Col>
+              {this.state.startFilter &&
+                this.state.selectFilter === 'comorbidities' && (
+                <FilterComorbidityForm
+                  onCancel={this.toggleFilter}
+                  onConfirm={this.submitFilterForm}
+                />
+              )}
+                <PatientComorbidityList
+                  filter={this.state.filter}
+                  comorbidities={this.props.visit.patient.comorbidities}
+                  authId={this.context.activityId}
+                />
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol2">
+              <Col className="subTabCol">
+                <h3 className="">Allergies:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'allergy')}>Filter</Button>
+              </Col>
+              {this.state.startFilter &&
+                this.state.selectFilter === 'allergy' && (
+                <FilterAllergyForm
+                  onCancel={this.toggleFilter}
+                  onConfirm={this.submitFilterForm}
+                />
+              )}
+                <PatientAllergyList
+                  filter={this.state.filter}
+                  allergies={this.props.visit.patient.allergies}
+                  authId={this.context.activityId}
+                />
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol2">
+              <Col className="subTabCol">
+                <h3 className="">Medication:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'medication')}>Filter</Button>
+              </Col>
+              {this.state.startFilter &&
+                this.state.selectFilter === 'medication' && (
+                <FilterMedicationForm
+                  onCancel={this.toggleFilter}
+                  onConfirm={this.submitFilterForm}
+                />
+              )}
+                <PatientMedicationList
+                  filter={this.state.filter}
+                  medication={this.props.visit.patient.medication}
+                  authId={this.context.activityId}
+                />
+              </Col>
+              </li>
+
               <li className="summaryListItem">
               <Col className="tabCol2">
               <Col className="subTabCol">
@@ -5863,6 +5936,74 @@ render() {
               </ListGroup>
               </Col>
             )}
+
+            {this.props.subMenu === 'allergy' && (
+              <Col className="tabCol2">
+              <Col className="subTabCol">
+                <h3 className="">Allergies:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'allergy')}>Filter</Button>
+              </Col>
+              {this.state.startFilter &&
+                this.state.selectFilter === 'allergy' && (
+                <FilterAllergyForm
+                  onCancel={this.toggleFilter}
+                  onConfirm={this.submitFilterForm}
+                />
+              )}
+                <PatientAllergyList
+                  filter={this.state.filter}
+                  allergies={this.props.visit.patient.allergies}
+                  authId={this.context.activityId}
+                />
+              </Col>
+            )}
+            {this.props.subMenu === 'medication' && (
+              <Col className="tabCol2">
+              <Col className="subTabCol">
+                <h3 className="">Medication:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'medication')}>Filter</Button>
+              </Col>
+              {this.state.startFilter &&
+                this.state.selectFilter === 'medication' && (
+                <FilterMedicationForm
+                  onCancel={this.toggleFilter}
+                  onConfirm={this.submitFilterForm}
+                />
+              )}
+                <PatientMedicationList
+                  filter={this.state.filter}
+                  medication={this.props.visit.patient.medication}
+                  authId={this.context.activityId}
+                />
+              </Col>
+            )}
+            {this.props.subMenu === 'comorbidities' && (
+              <Col className="tabCol2">
+              <Col className="subTabCol">
+                <h3 className="">Comorbidities:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'comorbidities')}>Filter</Button>
+              </Col>
+              {this.state.startFilter &&
+                this.state.selectFilter === 'comorbidities' && (
+                <FilterComorbidityForm
+                  onCancel={this.toggleFilter}
+                  onConfirm={this.submitFilterForm}
+                />
+              )}
+                <PatientComorbidityList
+                  filter={this.state.filter}
+                  comorbidities={this.props.visit.patient.comorbidities}
+                  authId={this.context.activityId}
+                />
+              </Col>
+            )}
+
             {this.props.subMenu === 'admin' && (
               <Col className="tabCol2">
               <Col className="subTabCol">

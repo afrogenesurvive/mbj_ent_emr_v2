@@ -11,8 +11,8 @@ return (
 <div className="searchFormTopDiv">
   <Form onSubmit={props.onConfirm}>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="field">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="field" className="formGroup">
         <Form.Label className="formLabel">Search Field</Form.Label>
         <Form.Control as="select">
           <option>title</option>
@@ -53,13 +53,18 @@ return (
         </Form.Control>
       </Form.Group>
 
-      <Form.Group as={Col} controlId="query">
-        <Form.Label className="formLabel">Search Query</Form.Label>
-        <Form.Control type="text" placeholder="date format: 'YYYY-MM-DD'"/>
-      </Form.Group>
+
     </Form.Row>
 
-    <Form.Row>
+    <Form.Row className="formRow">
+    <Form.Group as={Col} controlId="query" className="formGroup">
+      <Form.Label className="formLabel">Search Query</Form.Label>
+      <Form.Control type="text" placeholder="date format: 'YYYY-MM-DD'"/>
+    </Form.Group>
+
+    </Form.Row>
+
+    <Form.Row className="formBtnRow">
       <Button variant="success" type="submit" className="filterFormBtn searchBtn">Search</Button>
       <Button variant="danger" className="filterFormBtn searchBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>

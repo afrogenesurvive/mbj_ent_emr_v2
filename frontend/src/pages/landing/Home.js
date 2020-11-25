@@ -1247,7 +1247,7 @@ selectUser = (args) => {
 
       <Row className="landingPageRow">
       <Col md={5}className="landingPageCol">
-        <h3>Weeks important</h3>
+        <h3>Week's important</h3>
         {this.state.weekImportantAppointments && (
           <AppointmentList
             filter={this.state.filter}

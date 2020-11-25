@@ -449,7 +449,7 @@ submitCreateNewAppointmentForm = (event) => {
   const activityId = this.context.activityId;
   const patientId = this.state.selectedPatient._id;
 
-  const title = this.state.selectedPatient.name+'appt'+event.target.date.value;
+  const title = this.state.selectedPatient.name+'_appointment_'+event.target.date.value;
   const type = event.target.type.value;
   const subType = '';
   const date = event.target.date.value;

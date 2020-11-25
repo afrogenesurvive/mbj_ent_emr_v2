@@ -12,13 +12,15 @@ return (
 <div className="addFormTopDiv">
   <Form onSubmit={props.onConfirm}>
     <h4>Update Single Field</h4>
-    <Form.Row>
-      <Form.Group as={Col} controlId="field">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="field" className="formGroup">
         <Form.Label className="formLabel">Field</Form.Label>
         <Form.Control type="text" value={props.field}/>
       </Form.Group>
+    </Form.Row>
 
-      <Form.Group as={Col} controlId="query">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="query" className="formGroup">
         <Form.Label className="formLabel">New Data</Form.Label>
         <Form.Control type="text" placeholder="(Date format = YYYY-MM-DD!!)"/>
       </Form.Group>

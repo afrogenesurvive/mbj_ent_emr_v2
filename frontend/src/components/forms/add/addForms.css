@@ -5,15 +5,26 @@
   box-shadow: 3px 7px 3px rgba(20,33,61,.4);
   padding: .5rem;
   border-radius: 3px;
+  text-align: center;
 }
 .formBtnRow {
   /* text-align: center; */
-  /* margin: 0 auto; */
-  padding-left: 3rem;
+  /* margin: 2rem auto; */
+  margin-bottom: 3rem;
+  /* padding-left: 3rem; */
+  display: inline-block;
 }
 .addFormBtn {
   margin: 0 1rem;
 }
 .formLabel {
   font-weight: bold;
+}
+
+.formRow {
+  margin: 2rem auto;
+}
+.formGroup {
+  margin: 0 3rem;
+  text-align: center;
 }

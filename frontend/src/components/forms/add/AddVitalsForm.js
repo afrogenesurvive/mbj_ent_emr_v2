@@ -38,51 +38,67 @@ return (
     <h4>Add Vitals</h4>
     <p>required feilds are denoted by a ' * '</p>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="pr">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="pr" className="formGroup">
         <Form.Label className="formLabel">Pulse Rate * </Form.Label>
         <Form.Control type="number" step='0.001' placeholder=""/>
       </Form.Group>
-      <Form.Group as={Col} controlId="bp1">
+
+    </Form.Row>
+
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="bp1" className="formGroup">
         <Form.Label className="formLabel">Blood Pressure (top) * </Form.Label>
         <Form.Control type="number" step='0.001' placeholder=""/>
       </Form.Group>
-      <Form.Group as={Col} controlId="bp2">
+      <Form.Group as={Col} controlId="bp2" className="formGroup">
         <Form.Label className="formLabel">Blood Pressure (bottom) * </Form.Label>
         <Form.Control type="number" step='0.001' placeholder=""/>
       </Form.Group>
     </Form.Row>
-    <Form.Row>
-      <Form.Group as={Col} controlId="rr">
+
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="rr" className="formGroup">
         <Form.Label className="formLabel">Respiratory Rate * </Form.Label>
         <Form.Control type="number" step='0.001' placeholder=""/>
       </Form.Group>
-      <Form.Group as={Col} controlId="temp">
-        <Form.Label className="formLabel">Temperature * </Form.Label>
-        <Form.Control type="number" step='0.001' placeholder=""/>
-      </Form.Group>
-      <Form.Group as={Col} controlId="ps02">
-        <Form.Label className="formLabel">PS-02 * </Form.Label>
-        <Form.Control type="number" step='0.001' placeholder=""/>
-      </Form.Group>
     </Form.Row>
-    <Form.Row>
-      <Form.Group as={Col} controlId="heightUnit">
+
+    <Form.Row className="formRow">
+    <Form.Group as={Col} controlId="temp" className="formGroup">
+      <Form.Label className="formLabel">Temperature * </Form.Label>
+      <Form.Control type="number" step='0.001' placeholder=""/>
+    </Form.Group>
+    </Form.Row>
+
+    <Form.Row className="formRow">
+    <Form.Group as={Col} controlId="ps02" className="formGroup">
+      <Form.Label className="formLabel">PS-02 * </Form.Label>
+      <Form.Control type="number" step='0.001' placeholder=""/>
+    </Form.Group>
+    </Form.Row>
+
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="heightUnit" className="formGroup">
         <Form.Label className="formLabel">Height: Unit * </Form.Label>
         <Form.Control as="select" onChange={e => handleStateChange(e.target.value)}>
           <option>In</option>
           <option>M</option>
         </Form.Control>
       </Form.Group>
-      <Form.Group as={Col} controlId="heightValue">
+      <Form.Group as={Col} controlId="heightValue" className="formGroup">
         <Form.Label className="formLabel">Height: Value * </Form.Label>
         <Form.Control type="number" step='0.001' placeholder=""/>
       </Form.Group>
-      <Form.Group as={Col} controlId="weightUnit">
+
+    </Form.Row>
+
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="weightUnit" className="formGroup">
         <Form.Label className="formLabel">Weight: Unit * </Form.Label>
         <Form.Control type="text" value={weightUnit}/>
       </Form.Group>
-      <Form.Group as={Col} controlId="weightValue">
+      <Form.Group as={Col} controlId="weightValue" className="formGroup">
         <Form.Label className="formLabel">Weight: Value * </Form.Label>
         <Form.Control type="number" step='0.001' placeholder=""/>
       </Form.Group>
@@ -96,12 +112,12 @@ return (
       // </Form.Row>
     }
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="urineType">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="urineType" className="formGroup">
         <Form.Label className="formLabel">Urine: Type</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
-      <Form.Group as={Col} controlId="urineValue">
+      <Form.Group as={Col} controlId="urineValue" className="formGroup">
         <Form.Label className="formLabel">Urine: Value</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>

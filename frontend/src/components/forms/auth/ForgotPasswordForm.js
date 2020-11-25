@@ -12,21 +12,21 @@ return (
 <div className="CreateFormContainer">
 <Form onSubmit={props.onConfirm}>
   <h1>Forgot Password</h1>
-  <Form.Row>
-    <Form.Group as={Col} controlId="username">
+  <Form.Row className="formRow">
+    <Form.Group as={Col} controlId="username" className="formGroup">
       <Form.Label className="formLabel">Username</Form.Label>
       <Form.Control type="text" placeholder="username"/>
     </Form.Group>
   </Form.Row>
 
-  <Form.Row>
-    <Form.Group as={Col} controlId="email">
+  <Form.Row className="formRow">
+    <Form.Group as={Col} controlId="email" className="formGroup">
       <Form.Label className="formLabel">Email</Form.Label>
       <Form.Control type="email" placeholder="email"/>
     </Form.Group>
   </Form.Row>
 
-  <Form.Row>
+  <Form.Row className="formBtnRow">
     <Button variant="danger" className="formButton searchBtn" onClick={props.onCancel}>Cancel</Button>
     <Button variant="primary" className="formButton searchBtn" type="submit">Request New Password</Button>
   </Form.Row>

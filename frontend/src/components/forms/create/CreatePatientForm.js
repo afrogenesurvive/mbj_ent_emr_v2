@@ -14,8 +14,8 @@ return (
     <h1>Create Patient Form</h1>
     <p> " * " indicates required fields...</p>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="title">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="title" className="formGroup">
         <Form.Label className="formLabel">Title *</Form.Label>
         <Form.Control as="select">
           <option>Mr</option>
@@ -24,29 +24,35 @@ return (
           <option>Dr</option>
         </Form.Control>
       </Form.Group>
+    </Form.Row>
 
-      <Form.Group as={Col} controlId="name">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="name" className="formGroup">
         <Form.Label className="formLabel">First Name *</Form.Label>
         <Form.Control type="text" placeholder="name"/>
       </Form.Group>
-      <Form.Group as={Col} controlId="lastName">
+      <Form.Group as={Col} controlId="lastName" className="formGroup">
         <Form.Label className="formLabel">Last Name *</Form.Label>
         <Form.Control type="text" placeholder="last name"/>
       </Form.Group>
+    </Form.Row>
 
-      <Form.Group as={Col} controlId="username">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="username" className="formGroup">
         <Form.Label className="formLabel">username *</Form.Label>
         <Form.Control type="text" placeholder="username"/>
       </Form.Group>
     </Form.Row>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="dob">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="dob" className="formGroup">
         <Form.Label className="formLabel">dob *</Form.Label>
         <Form.Control type="date" placeholder="YYYY-MM-DD"/>
       </Form.Group>
+    </Form.Row>
 
-      <Form.Group as={Col} controlId="gender">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="gender" className="formGroup">
         <Form.Label className="formLabel">gender *</Form.Label>
         <Form.Control as="select">
           <option>Female</option>
@@ -54,54 +60,62 @@ return (
           <option>Prefer Not to Say</option>
         </Form.Control>
       </Form.Group>
+    </Form.Row>
 
-      <Form.Group as={Col} controlId="role">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="role" className="formGroup">
         <Form.Label className="formLabel">role </Form.Label>
         <Form.Control type="text" value="standard patient"/>
       </Form.Group>
     </Form.Row>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="contactEmail">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="contactEmail" className="formGroup">
         <Form.Label className="formLabel">email *</Form.Label>
         <Form.Control type="email" placeholder="alpha@beta.omega"/>
       </Form.Group>
-
-      <Form.Group as={Col} controlId="contactPhone">
-        <Form.Label className="formLabel">phone *</Form.Label>
-        <Form.Control type="text" placeholder="+18760001234"/>
-      </Form.Group>
-
-      <Form.Group as={Col} controlId="contactPhone2">
-        <Form.Label className="formLabel">phone2</Form.Label>
-        <Form.Control type="text" placeholder="+18760005678"/>
-      </Form.Group>
     </Form.Row>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="addressNumber">
+    <Form.Row className="formRow">
+    <Form.Group as={Col} controlId="contactPhone" className="formGroup">
+      <Form.Label className="formLabel">phone *</Form.Label>
+      <Form.Control type="text" placeholder="+18760001234"/>
+    </Form.Group>
+    </Form.Row>
+
+    <Form.Row className="formRow">
+    <Form.Group as={Col} controlId="contactPhone2" className="formGroup">
+      <Form.Label className="formLabel">phone2</Form.Label>
+      <Form.Control type="text" placeholder="+18760005678"/>
+    </Form.Group>
+    </Form.Row>
+
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="addressNumber" className="formGroup">
         <Form.Label className="formLabel">addressNumber</Form.Label>
         <Form.Control type="number" placeholder=""/>
       </Form.Group>
 
-      <Form.Group as={Col} controlId="addressStreet">
+      <Form.Group as={Col} controlId="addressStreet" className="formGroup">
         <Form.Label className="formLabel">addressStreet</Form.Label>
-        <Form.Control type="text" placeholder=""/>
-      </Form.Group>
-
-      <Form.Group as={Col} controlId="addressTown">
-        <Form.Label className="formLabel">addressTown</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
     </Form.Row>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="addressCity">
-        <Form.Label className="formLabel">addressCity</Form.Label>
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="addressTown" className="formGroup">
+        <Form.Label className="formLabel">addressTown</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
 
-      <Form.Group as={Col} controlId="addressParish">
+      <Form.Group as={Col} controlId="addressCity" className="formGroup">
+        <Form.Label className="formLabel">addressCity</Form.Label>
+        <Form.Control type="text" placeholder=""/>
+      </Form.Group>
+    </Form.Row>
+
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="addressParish" className="formGroup">
         <Form.Label className="formLabel">addressParish</Form.Label>
         <Form.Control as="select">
           <option>none</option>
@@ -122,127 +136,140 @@ return (
         </Form.Control>
       </Form.Group>
 
-      <Form.Group as={Col} controlId="addressCountry">
+      <Form.Group as={Col} controlId="addressCountry" className="formGroup">
         <Form.Label className="formLabel">addressCountry</Form.Label>
         <Form.Control type="text" placeholder=""/>
       </Form.Group>
 
-      <Form.Group as={Col} controlId="addressPostalCode">
-        <Form.Label className="formLabel">addressPostalCode</Form.Label>
-        <Form.Control type="text" placeholder=""/>
-      </Form.Group>
     </Form.Row>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="referralDate">
+    <Form.Row className="formRow">
+    <Form.Group as={Col} controlId="addressPostalCode" className="formGroup">
+      <Form.Label className="formLabel">addressPostalCode</Form.Label>
+      <Form.Control type="text" placeholder=""/>
+    </Form.Group>
+    </Form.Row>
+
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="referralDate" className="formGroup">
         <Form.Label className="formLabel">referralDate: YYYY-MM-DD</Form.Label>
         <Form.Control type="date" placeholder={today}/>
       </Form.Group>
 
-      <Form.Group as={Col} controlId="referralReason">
+      <Form.Group as={Col} controlId="referralReason" className="formGroup">
         <Form.Label className="formLabel">referralReason</Form.Label>
         <Form.Control as="textarea" rows="3" placeholder="referralReason"/>
       </Form.Group>
     </Form.Row>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="referralPhysicianName">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="referralPhysicianName" className="formGroup">
         <Form.Label className="formLabel">referralPhysicianName</Form.Label>
         <Form.Control type="text" placeholder="referralPhysicianName"/>
       </Form.Group>
-      <Form.Group as={Col} controlId="referralPhysicianPhone">
+
+      <Form.Group as={Col} controlId="referralPhysicianPhone" className="formGroup">
         <Form.Label className="formLabel">referralPhysicianPhone</Form.Label>
         <Form.Control type="text" placeholder="referralPhysicianPhone"/>
       </Form.Group>
-      <Form.Group as={Col} controlId="referralPhysicianEmail">
+    </Form.Row>
+
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="referralPhysicianEmail" className="formGroup">
         <Form.Label className="formLabel">referralPhysicianEmail</Form.Label>
         <Form.Control type="email" placeholder="alpha@beta.omega"/>
       </Form.Group>
-    </Form.Row>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="referralPhysicianAddress">
+      <Form.Group as={Col} controlId="referralPhysicianAddress" className="formGroup">
         <Form.Label className="formLabel">referralPhysicianAddress</Form.Label>
         <Form.Control as="textarea" rows="5" placeholder="referralPhysicianAddress"/>
       </Form.Group>
     </Form.Row>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="attendingPhysician">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="attendingPhysician" className="formGroup">
         <Form.Label className="formLabel">attendingPhysician</Form.Label>
         <Form.Control type="text" placeholder="attendingPhysician"/>
       </Form.Group>
     </Form.Row>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="occupationRole">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="occupationRole" className="formGroup">
         <Form.Label className="formLabel">occupationRole</Form.Label>
         <Form.Control type="text" placeholder="occupationRole"/>
       </Form.Group>
-      <Form.Group as={Col} controlId="occupationEmployerName">
+      <Form.Group as={Col} controlId="occupationEmployerName" className="formGroup">
         <Form.Label className="formLabel">occupationEmployerName</Form.Label>
         <Form.Control type="text" placeholder="occupationEmployerName"/>
       </Form.Group>
     </Form.Row>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="occupationEmployerEmail">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="occupationEmployerEmail" className="formGroup">
         <Form.Label className="formLabel">occupationEmployerEmail</Form.Label>
         <Form.Control type="email" placeholder="alpha@beta.omega"/>
       </Form.Group>
-      <Form.Group as={Col} controlId="occupationEmployerPhone">
+
+      <Form.Group as={Col} controlId="occupationEmployerPhone" className="formGroup">
         <Form.Label className="formLabel">occupationEmployerPhone</Form.Label>
         <Form.Control type="text" placeholder="occupationEmployerPhone"/>
       </Form.Group>
-      <Form.Group as={Col} controlId="occupationEmployerAddress">
-        <Form.Label className="formLabel">occupationEmployerAddress</Form.Label>
-        <Form.Control as="textarea" rows="5" placeholder="occupationEmployerAddress"/>
-      </Form.Group>
     </Form.Row>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="insuranceCompany">
-        <Form.Label className="formLabel">insuranceCompany</Form.Label>
-        <Form.Control as="select">
-          <option>Guardian</option>
-          <option>Sagicor</option>
-          <option>Canopy</option>
-          <option>Other</option>
-        </Form.Control>
-      </Form.Group>
-      <Form.Group as={Col} controlId="insurancePolicyNumber">
+    <Form.Row className="formRow">
+    <Form.Group as={Col} controlId="occupationEmployerAddress" className="formGroup">
+      <Form.Label className="formLabel">occupationEmployerAddress</Form.Label>
+      <Form.Control as="textarea" rows="5" placeholder="occupationEmployerAddress"/>
+    </Form.Group>
+
+    <Form.Group as={Col} controlId="insuranceCompany" className="formGroup">
+      <Form.Label className="formLabel">insuranceCompany</Form.Label>
+      <Form.Control as="select">
+        <option>Guardian</option>
+        <option>Sagicor</option>
+        <option>Canopy</option>
+        <option>Other</option>
+      </Form.Control>
+    </Form.Group>
+    </Form.Row>
+
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="insurancePolicyNumber" className="formGroup">
         <Form.Label className="formLabel">insurancePolicyNumber</Form.Label>
         <Form.Control type="text" placeholder="insurancePolicyNumber"/>
       </Form.Group>
-      <Form.Group as={Col} controlId="insuranceExpiryDate">
+      <Form.Group as={Col} controlId="insuranceExpiryDate" className="formGroup">
         <Form.Label className="formLabel">insuranceExpiryDate</Form.Label>
         <Form.Control type="date" placeholder={today}/>
       </Form.Group>
     </Form.Row>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="insuranceDescription">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="insuranceDescription" className="formGroup">
         <Form.Label className="formLabel">insuranceDescription</Form.Label>
         <Form.Control as="textarea" rows="3" placeholder="insuranceDescription"/>
       </Form.Group>
     </Form.Row>
 
-    <Form.Row>
-      <Form.Group as={Col} controlId="insuranceSubscriberCompany">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="insuranceSubscriberCompany" className="formGroup">
         <Form.Label className="formLabel">insuranceSubscriberCompany</Form.Label>
         <Form.Control type="text" placeholder="insuranceSubscriberCompany"/>
       </Form.Group>
-      <Form.Group as={Col} controlId="insuranceSubscriberDescription">
+      <Form.Group as={Col} controlId="insuranceSubscriberDescription" className="formGroup">
         <Form.Label className="formLabel">insuranceSubscriberDescription</Form.Label>
         <Form.Control as="textarea" rows="3" placeholder="insuranceSubscriberDescription"/>
       </Form.Group>
+    </Form.Row>
+
+    <Form.Row className="formRow">
       <Form.Group as={Col} controlId="active">
         <Form.Label>Active</Form.Label>
         <Form.Control type="checkbox" />
       </Form.Group>
     </Form.Row>
 
-    <Form.Row>
+    <Form.Row className="formBtnRow">
       <Button variant="success" type="submit" className="loginFormBtn searchBtn">Create</Button>
       <Button variant="danger" className="loginFormBtn searchBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>

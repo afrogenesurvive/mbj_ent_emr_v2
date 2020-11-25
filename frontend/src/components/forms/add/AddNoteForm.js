@@ -13,8 +13,8 @@ return (
   <Form onSubmit={props.onConfirm}>
     <h4>Add Notes</h4>
     <p>required feilds are denoted by a ' * '</p>
-    <Form.Row>
-      <Form.Group as={Col} controlId="notes">
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="notes" className="formGroup">
         <Form.Label className="formLabel">Notes * </Form.Label>
         <Form.Control as="textarea" rows="3" placeholder="note,note,note,note"/>
       </Form.Group>
