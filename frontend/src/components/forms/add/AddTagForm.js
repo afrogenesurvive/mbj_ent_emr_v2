@@ -16,7 +16,7 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="tags" className="formGroup">
         <Form.Label className="formLabel">Tags</Form.Label>
-        <Form.Control as="textarea" rows="3" placeholder="tag,tag,tag,tag"/>
+        <Form.Control as="textarea" rows="3" placeholder="...tag,tag,tag..."/>
       </Form.Group>
     </Form.Row>
 

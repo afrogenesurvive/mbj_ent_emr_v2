@@ -28,7 +28,7 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="query" className="formGroup">
         <Form.Label className="formLabel">Search Query</Form.Label>
-        <Form.Control type="text" placeholder="date format: 'YYYY-MM-DD'"/>
+        <Form.Control type="text" placeholder="YYYY-MM-DD"/>
       </Form.Group>
     </Form.Row>
 

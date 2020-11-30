@@ -41,7 +41,7 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="pr" className="formGroup">
         <Form.Label className="formLabel">Pulse Rate * </Form.Label>
-        <Form.Control type="number" step='0.001' placeholder=""/>
+        <Form.Control type="number" step='0.001' placeholder="..."/>
       </Form.Group>
 
     </Form.Row>
@@ -49,32 +49,32 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="bp1" className="formGroup">
         <Form.Label className="formLabel">Blood Pressure (top) * </Form.Label>
-        <Form.Control type="number" step='0.001' placeholder=""/>
+        <Form.Control type="number" step='0.001' placeholder="..."/>
       </Form.Group>
       <Form.Group as={Col} controlId="bp2" className="formGroup">
         <Form.Label className="formLabel">Blood Pressure (bottom) * </Form.Label>
-        <Form.Control type="number" step='0.001' placeholder=""/>
+        <Form.Control type="number" step='0.001' placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="rr" className="formGroup">
         <Form.Label className="formLabel">Respiratory Rate * </Form.Label>
-        <Form.Control type="number" step='0.001' placeholder=""/>
+        <Form.Control type="number" step='0.001' placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row className="formRow">
     <Form.Group as={Col} controlId="temp" className="formGroup">
       <Form.Label className="formLabel">Temperature * </Form.Label>
-      <Form.Control type="number" step='0.001' placeholder=""/>
+      <Form.Control type="number" step='0.001' placeholder="..."/>
     </Form.Group>
     </Form.Row>
 
     <Form.Row className="formRow">
     <Form.Group as={Col} controlId="ps02" className="formGroup">
       <Form.Label className="formLabel">PS-02 * </Form.Label>
-      <Form.Control type="number" step='0.001' placeholder=""/>
+      <Form.Control type="number" step='0.001' placeholder="..."/>
     </Form.Group>
     </Form.Row>
 
@@ -88,7 +88,7 @@ return (
       </Form.Group>
       <Form.Group as={Col} controlId="heightValue" className="formGroup">
         <Form.Label className="formLabel">Height: Value * </Form.Label>
-        <Form.Control type="number" step='0.001' placeholder=""/>
+        <Form.Control type="number" step='0.001' placeholder="..."/>
       </Form.Group>
 
     </Form.Row>
@@ -100,7 +100,7 @@ return (
       </Form.Group>
       <Form.Group as={Col} controlId="weightValue" className="formGroup">
         <Form.Label className="formLabel">Weight: Value * </Form.Label>
-        <Form.Control type="number" step='0.001' placeholder=""/>
+        <Form.Control type="number" step='0.001' placeholder="..."/>
       </Form.Group>
     </Form.Row>
     {
@@ -115,11 +115,11 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="urineType" className="formGroup">
         <Form.Label className="formLabel">Urine: Type</Form.Label>
-        <Form.Control type="text" placeholder=""/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
       <Form.Group as={Col} controlId="urineValue" className="formGroup">
         <Form.Label className="formLabel">Urine: Value</Form.Label>
-        <Form.Control type="text" placeholder=""/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 

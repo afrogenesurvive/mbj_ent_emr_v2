@@ -16,28 +16,28 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="startDate" className="formGroup">
         <Form.Label className="formLabel">Start Date * </Form.Label>
-        <Form.Control type="date" placeholder="startDate"/>
+        <Form.Control type="date" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="endDate" className="formGroup">
         <Form.Label className="formLabel">End Date * </Form.Label>
-        <Form.Control type="date" placeholder="endDate"/>
+        <Form.Control type="date" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="type" className="formGroup">
         <Form.Label className="formLabel">Type * </Form.Label>
-        <Form.Control type="text" placeholder=""/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="description" className="formGroup">
         <Form.Label className="formLabel">Description</Form.Label>
-        <Form.Control as="textarea" rows="3" placeholder=""/>
+        <Form.Control as="textarea" rows="3" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 

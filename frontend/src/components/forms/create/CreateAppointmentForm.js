@@ -47,7 +47,7 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="important" className="formGroup">
         <Form.Label className="formLabel">Important ?</Form.Label>
-        <Form.Control type="checkbox" />
+        <Form.Control type="checkbox"/>
       </Form.Group>
     </Form.Row>
 
@@ -55,14 +55,14 @@ return (
       { !props.preFillDate && (
         <Form.Group as={Col} controlId="date" className="formGroup">
           <Form.Label className="formLabel">Date</Form.Label>
-          <Form.Control type="date" placeholder="YYYY-MM-DD"/>
+          <Form.Control type="date" placeholder="..."/>
         </Form.Group>
       )}
 
       { props.preFillDate && (
         <Form.Group as={Col} controlId="date" className="formGroup">
           <Form.Label className="formLabel">Date</Form.Label>
-          <Form.Control type="date" placeholder="YYYY-MM-DD" value={props.preFillDate}/>
+          <Form.Control type="date" placeholder="..." value={props.preFillDate}/>
         </Form.Group>
       )}
 
@@ -71,21 +71,21 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="time" className="formGroup">
         <Form.Label className="formLabel">Time</Form.Label>
-        <Form.Control type="time" placeholder="time"/>
+        <Form.Control type="time" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="location" className="formGroup">
         <Form.Label className="formLabel">Location</Form.Label>
-        <Form.Control type="text" placeholder="location"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="description" className="formGroup">
         <Form.Label className="formLabel">Description</Form.Label>
-        <Form.Control as="textarea" rows="3" placeholder="description"/>
+        <Form.Control as="textarea" rows="3" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 

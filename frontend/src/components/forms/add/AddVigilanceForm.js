@@ -28,7 +28,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessDiabetesComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="comment"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -47,7 +47,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessHbpComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="comment"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -66,7 +66,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessDyslipidemiaComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="comment"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -85,7 +85,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessCadComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="comment"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -104,7 +104,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceLifestyleWeightComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="comment"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -122,7 +122,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceLifestyleDietComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="comment"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -140,7 +140,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceLifestyleSmokingComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="comment"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -158,7 +158,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceLifestyleSubstanceAbuseComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="comment"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -176,7 +176,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceLifestyleExerciseComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="comment"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -194,7 +194,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceLifestyleAllergiesComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="comment"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -212,7 +212,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceLifestyleAsthmaComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="comment"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -231,7 +231,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceScreeningBreastComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="comment"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -249,7 +249,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceScreeningProstateComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="comment"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -267,7 +267,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceScreeningCervixComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="comment"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -285,7 +285,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceScreeningColonComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="comment"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -303,7 +303,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceScreeningDentalComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="comment"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -322,7 +322,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceVaccinesInfluenzaComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="comment"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -340,7 +340,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceVaccinesVaricellaComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="comment"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -358,7 +358,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceVaccinesHpvComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="comment"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -376,7 +376,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceVaccinesMmrComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="comment"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -394,7 +394,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceVaccinesTetanusComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="comment"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -412,7 +412,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceVaccinesPneumovaxComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="comment"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -420,7 +420,7 @@ return (
     <p>Other</p>
       <Form.Group as={Col} controlId="vigilanceVaccinesOtherName">
         <Form.Label className="formLabel">Name</Form.Label>
-        <Form.Control type="text" placeholder="name"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceVaccinesOtherMedication">
@@ -435,7 +435,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceVaccinesOtherComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="comment"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 

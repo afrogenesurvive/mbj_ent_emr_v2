@@ -16,7 +16,7 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="name" className="formGroup">
         <Form.Label className="formLabel">Name * </Form.Label>
-        <Form.Control type="text" placeholder=""/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -42,21 +42,21 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="email" className="formGroup">
         <Form.Label className="formLabel">Email</Form.Label>
-        <Form.Control type="email" placeholder=""/>
+        <Form.Control type="email" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="phone" className="formGroup">
         <Form.Label className="formLabel">Phone * </Form.Label>
-        <Form.Control type="text" placeholder=""/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="phone2" className="formGroup">
         <Form.Label className="formLabel">Phone #2</Form.Label>
-        <Form.Control type="text" placeholder=""/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 

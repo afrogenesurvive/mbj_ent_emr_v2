@@ -14,7 +14,7 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="username" className="formGroup">
         <Form.Label className="formLabel">Username</Form.Label>
-        <Form.Control type="username" placeholder="Enter username"/>
+        <Form.Control type="username" placeholder="username"/>
       </Form.Group>
     </Form.Row>
 

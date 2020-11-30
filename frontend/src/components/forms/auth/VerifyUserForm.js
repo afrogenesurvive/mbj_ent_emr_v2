@@ -22,21 +22,21 @@ return (
   <Form.Row className="formRow">
     <Form.Group as={Col} controlId="username" className="formGroup">
       <Form.Label className="formLabel">Username</Form.Label>
-      <Form.Control type="text" placeholder="username"/>
+      <Form.Control type="text" placeholder="..."/>
     </Form.Group>
   </Form.Row>
 
   <Form.Row className="formRow">
     <Form.Group as={Col} controlId="email" className="formGroup">
       <Form.Label className="formLabel">Email</Form.Label>
-      <Form.Control type="text" placeholder="email"/>
+      <Form.Control type="text" placeholder="..."/>
     </Form.Group>
   </Form.Row>
 
   <Form.Row className="formRow">
     <Form.Group as={Col} controlId="code" className="formGroup">
       <Form.Label className="formLabel">Code</Form.Label>
-      <Form.Control type="text" placeholder="verification code"/>
+      <Form.Control type="text" placeholder="..."/>
     </Form.Group>
   </Form.Row>
 

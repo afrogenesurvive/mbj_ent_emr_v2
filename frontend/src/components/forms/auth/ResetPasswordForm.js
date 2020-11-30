@@ -21,7 +21,7 @@ return (
   <Form.Row className="formRow">
     <Form.Group as={Col} controlId="password" className="formGroup">
     <Form.Label className="formLabel">Password</Form.Label>
-    <Form.Control type="password" placeholder="password"/>
+    <Form.Control type="password" placeholder="..."/>
   </Form.Group>
   </Form.Row>
 

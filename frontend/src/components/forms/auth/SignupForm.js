@@ -14,14 +14,14 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="email">
         <Form.Label className="formLabel">Email Address</Form.Label>
-        <Form.Control type="email" placeholder="alpha@beta.omega"/>
+        <Form.Control type="email" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="password">
         <Form.Label className="formLabel">Password</Form.Label>
-        <Form.Control type="password" placeholder="password"/>
+        <Form.Control type="password" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -50,19 +50,19 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="name">
         <Form.Label className="formLabel">Name</Form.Label>
-        <Form.Control type="text" placeholder="name"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="username">
         <Form.Label className="formLabel">Username</Form.Label>
-        <Form.Control type="text" placeholder="username"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="dob">
         <Form.Label className="formLabel">D.O.B</Form.Label>
-        <Form.Control type="date" placeholder="YYYY-MM-DD"/>
+        <Form.Control type="date" placeholder="..."/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="gender">
@@ -78,36 +78,36 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="phone">
         <Form.Label className="formLabel">Phone</Form.Label>
-        <Form.Control type="text" placeholder="+18760001234"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="phone2">
         <Form.Label className="formLabel">Phone #2</Form.Label>
-        <Form.Control type="text" placeholder="+18760005678"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="addressNumber">
         <Form.Label className="formLabel">Address Number</Form.Label>
-        <Form.Control type="number" placeholder=""/>
+        <Form.Control type="number" placeholder="..."/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="addressStreet">
         <Form.Label className="formLabel">Address Street</Form.Label>
-        <Form.Control type="text" placeholder=""/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="addressTown">
         <Form.Label className="formLabel">Address Town</Form.Label>
-        <Form.Control type="text" placeholder=""/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="addressCity">
         <Form.Label className="formLabel">Address City</Form.Label>
-        <Form.Control type="text" placeholder=""/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
@@ -135,14 +135,14 @@ return (
 
       <Form.Group as={Col} controlId="addressCountry">
         <Form.Label className="formLabel">Address Country</Form.Label>
-        <Form.Control type="text" placeholder=""/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="addressPostalCode">
         <Form.Label className="formLabel">Address Postalcode</Form.Label>
-        <Form.Control type="text" placeholder=""/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 

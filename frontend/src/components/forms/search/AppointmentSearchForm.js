@@ -48,7 +48,7 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="query" className="formGroup">
         <Form.Label className="formLabel">Search Query</Form.Label>
-        <Form.Control type="text" className="fontAwesome" placeholder="&#xF002;"/>
+        <Form.Control type="text" className="fontAwesome" placeholder="..."/>
       </Form.Group>
 
     </Form.Row>

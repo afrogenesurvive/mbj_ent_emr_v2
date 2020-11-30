@@ -1783,16 +1783,19 @@ render() {
     )}
 
     <div className="topContainer">
-      <Row className="">
-          <h1 className="">My Profile</h1>
-      </Row>
-      <Row className="">
-          {this.state.isLoading ? (
-            <Image src={loadingGif} className="loadingGif" fluid />
-          ):(
-            <p>.</p>
-          )}
-      </Row>
+
+      <div className="headTop">
+        <Row className="">
+            <h1 className="">My Profile</h1>
+        </Row>
+        <Row className="">
+            {this.state.isLoading ? (
+              <Image src={loadingGif} className="loadingGif" fluid />
+            ):(
+              <p>.</p>
+            )}
+        </Row>
+      </div>
 
       <Row className="">
 

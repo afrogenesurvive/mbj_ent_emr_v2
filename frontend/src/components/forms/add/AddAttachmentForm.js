@@ -17,7 +17,7 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="attachment" className="formGroup">
         <Form.Label className="formLabel">Attachment</Form.Label>
-        <Form.Control type="textarea" placeholder="file link address"/>
+        <Form.Control type="textarea" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 

@@ -29,7 +29,7 @@ return (
 
       <Form.Group as={Col} controlId="type" className="formGroup">
         <Form.Label className="formLabel">Type</Form.Label>
-        <Form.Control type="text" placeholder="type"/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
 
     </Form.Row>

@@ -15,12 +15,12 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="number" className="formGroup">
         <Form.Label className="formLabel">Address Number * </Form.Label>
-        <Form.Control type="number" placeholder=""/>
+        <Form.Control type="number" placeholder="..."/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="street" className="formGroup">
         <Form.Label className="formLabel">Address Street * </Form.Label>
-        <Form.Control type="text" placeholder=""/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
 
     </Form.Row>
@@ -29,12 +29,12 @@ return (
 
       <Form.Group as={Col} controlId="town" className="formGroup">
         <Form.Label className="formLabel">Address Town</Form.Label>
-        <Form.Control type="text" placeholder=""/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="city" className="formGroup">
         <Form.Label className="formLabel">Address City * </Form.Label>
-        <Form.Control type="text" placeholder=""/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
 
     </Form.Row>
@@ -63,7 +63,7 @@ return (
 
       <Form.Group as={Col} controlId="country" className="formGroup">
         <Form.Label className="formLabel">Address Country * </Form.Label>
-        <Form.Control type="text" placeholder=""/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
 
 
@@ -73,7 +73,7 @@ return (
 
       <Form.Group as={Col} controlId="postalCode" className="formGroup">
         <Form.Label className="formLabel">Address PostalCode</Form.Label>
-        <Form.Control type="text" placeholder=""/>
+        <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 

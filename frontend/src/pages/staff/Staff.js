@@ -522,21 +522,23 @@ render() {
     )}
 
     <div className="topContainer">
-      <Row className="">
-        <h1>Staff:
-        {this.state.showDetails === true &&
-          this.state.selectedUser &&
-          this.state.tabKey === 'detail' && (
-            this.state.selectedUser.name
-          )}</h1>
-      </Row>
-      <Row className="">
-          {this.state.isLoading ? (
-            <Image src={loadingGif} className="loadingGif" fluid />
-          ):(
-            <p>.</p>
-          )}
-      </Row>
+      <div className="headTop">
+        <Row className="">
+          <h1>Staff:
+          {this.state.showDetails === true &&
+            this.state.selectedUser &&
+            this.state.tabKey === 'detail' && (
+              this.state.selectedUser.name
+            )}</h1>
+        </Row>
+        <Row className="">
+            {this.state.isLoading ? (
+              <Image src={loadingGif} className="loadingGif" fluid />
+            ):(
+              <p>.</p>
+            )}
+        </Row>
+      </div>
 
       <Row className="">
         {this.state.users && (
