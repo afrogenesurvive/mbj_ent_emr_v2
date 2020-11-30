@@ -27,7 +27,9 @@
 
   height: 40vh;
   overflow: scroll;
+  
 }
+
 .summaryList {
   list-style-type: none;
   padding: 0;

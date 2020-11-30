@@ -262,12 +262,14 @@ return (
       </Form.Group>
     </Form.Row>
 
-    <Form.Row className="formRow">
-      <Form.Group as={Col} controlId="active">
-        <Form.Label>Active</Form.Label>
-        <Form.Control type="checkbox" />
-      </Form.Group>
-    </Form.Row>
+    {
+      // <Form.Row className="formRow">
+      //   <Form.Group as={Col} controlId="active">
+      //     <Form.Label>Active</Form.Label>
+      //     <Form.Control type="checkbox" />
+      //   </Form.Group>
+      // </Form.Row>
+    }
 
     <Form.Row className="formBtnRow">
       <Button variant="success" type="submit" className="loginFormBtn searchBtn">Create</Button>

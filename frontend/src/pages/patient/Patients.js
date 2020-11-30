@@ -377,7 +377,8 @@ submitCreateNewPatientForm = (event) => {
   const token = this.context.token;
   const activityId = this.context.activityId;
 
-  const active = event.target.active.checked;
+  const active = false;
+  // const active = event.target.active.checked;
   const title = event.target.title.value;
   const name = event.target.name.value;
   const lastName = event.target.lastName.value;

@@ -128,7 +128,7 @@ getPocketVars (args) {
             query {getPocketVars(
               activityId:"${activityId}")}
           `};
-          // **fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {**
+          // **f*etch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {**
     fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
