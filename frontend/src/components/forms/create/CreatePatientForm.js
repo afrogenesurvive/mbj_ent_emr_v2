@@ -14,6 +14,7 @@ return (
     <h1>Create Patient Form</h1>
     <p> " * " indicates required fields...</p>
 
+    <div className="formDivider1">
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="title" className="formGroup">
         <Form.Label className="formLabel">Title *</Form.Label>
@@ -24,9 +25,7 @@ return (
           <option>Dr</option>
         </Form.Control>
       </Form.Group>
-    </Form.Row>
 
-    <Form.Row className="formRow">
       <Form.Group as={Col} controlId="name" className="formGroup">
         <Form.Label className="formLabel">First Name *</Form.Label>
         <Form.Control type="text" placeholder="..."/>
@@ -42,6 +41,16 @@ return (
         <Form.Label className="formLabel">username *</Form.Label>
         <Form.Control type="text" placeholder="..."/>
       </Form.Group>
+
+      <Form.Group as={Col} controlId="role" className="formGroup">
+        <Form.Label className="formLabel">role </Form.Label>
+        <Form.Control type="text" value="..."/>
+      </Form.Group>
+
+      <Form.Group as={Col} controlId="contactEmail" className="formGroup">
+        <Form.Label className="formLabel">email *</Form.Label>
+        <Form.Control type="email" placeholder="..."/>
+      </Form.Group>
     </Form.Row>
 
     <Form.Row className="formRow">
@@ -49,9 +58,7 @@ return (
         <Form.Label className="formLabel">dob *</Form.Label>
         <Form.Control type="date" placeholder="..."/>
       </Form.Group>
-    </Form.Row>
 
-    <Form.Row className="formRow">
       <Form.Group as={Col} controlId="gender" className="formGroup">
         <Form.Label className="formLabel">gender *</Form.Label>
         <Form.Control as="select">
@@ -63,33 +70,19 @@ return (
     </Form.Row>
 
     <Form.Row className="formRow">
-      <Form.Group as={Col} controlId="role" className="formGroup">
-        <Form.Label className="formLabel">role </Form.Label>
-        <Form.Control type="text" value="..."/>
-      </Form.Group>
-    </Form.Row>
-
-    <Form.Row className="formRow">
-      <Form.Group as={Col} controlId="contactEmail" className="formGroup">
-        <Form.Label className="formLabel">email *</Form.Label>
-        <Form.Control type="email" placeholder="..."/>
-      </Form.Group>
-    </Form.Row>
-
-    <Form.Row className="formRow">
     <Form.Group as={Col} controlId="contactPhone" className="formGroup">
       <Form.Label className="formLabel">phone *</Form.Label>
       <Form.Control type="text" placeholder="..."/>
     </Form.Group>
-    </Form.Row>
 
-    <Form.Row className="formRow">
     <Form.Group as={Col} controlId="contactPhone2" className="formGroup">
       <Form.Label className="formLabel">phone2</Form.Label>
       <Form.Control type="text" placeholder="..."/>
     </Form.Group>
     </Form.Row>
+    </div>
 
+    <div className="formDivider2">
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="addressNumber" className="formGroup">
         <Form.Label className="formLabel">addressNumber</Form.Label>
@@ -149,7 +142,9 @@ return (
       <Form.Control type="text" placeholder="..."/>
     </Form.Group>
     </Form.Row>
+    </div>
 
+    <div className="formDivider3">
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="referralDate" className="formGroup">
         <Form.Label className="formLabel">referralDate: YYYY-MM-DD</Form.Label>
@@ -186,13 +181,16 @@ return (
       </Form.Group>
     </Form.Row>
 
+
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="attendingPhysician" className="formGroup">
         <Form.Label className="formLabel">attendingPhysician</Form.Label>
         <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
+    </div>
 
+    <div className="formDivider1">
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="occupationRole" className="formGroup">
         <Form.Label className="formLabel">occupationRole</Form.Label>
@@ -222,29 +220,34 @@ return (
       <Form.Control as="textarea" rows="5" placeholder="..."/>
     </Form.Group>
 
-    <Form.Group as={Col} controlId="insuranceCompany" className="formGroup">
-      <Form.Label className="formLabel">insuranceCompany</Form.Label>
-      <Form.Control as="select">
-        <option>Guardian</option>
-        <option>Sagicor</option>
-        <option>Canopy</option>
-        <option>Other</option>
-      </Form.Control>
-    </Form.Group>
-    </Form.Row>
 
+    </Form.Row>
+    </div>
+
+    <div className="formDivider2">
     <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="insuranceCompany" className="formGroup">
+        <Form.Label className="formLabel">insuranceCompany</Form.Label>
+        <Form.Control as="select">
+          <option>Guardian</option>
+          <option>Sagicor</option>
+          <option>Canopy</option>
+          <option>Other</option>
+        </Form.Control>
+      </Form.Group>
       <Form.Group as={Col} controlId="insurancePolicyNumber" className="formGroup">
         <Form.Label className="formLabel">insurancePolicyNumber</Form.Label>
         <Form.Control type="text" placeholder="..."/>
       </Form.Group>
+
+    </Form.Row>
+
+    <Form.Row className="formRow">
       <Form.Group as={Col} controlId="insuranceExpiryDate" className="formGroup">
         <Form.Label className="formLabel">insuranceExpiryDate</Form.Label>
         <Form.Control type="date" placeholder={today}/>
       </Form.Group>
-    </Form.Row>
 
-    <Form.Row className="formRow">
       <Form.Group as={Col} controlId="insuranceDescription" className="formGroup">
         <Form.Label className="formLabel">insuranceDescription</Form.Label>
         <Form.Control as="textarea" rows="3" placeholder="..."/>
@@ -261,6 +264,7 @@ return (
         <Form.Control as="textarea" rows="3" placeholder="..."/>
       </Form.Group>
     </Form.Row>
+    </div>
 
     {
       // <Form.Row className="formRow">

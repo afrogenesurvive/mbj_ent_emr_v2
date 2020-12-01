@@ -180,7 +180,7 @@ class App extends Component {
         {_id,loggedIn}}
       `};
 
-    fetch('http://localhost:8088/graphql', {
+    fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -267,7 +267,7 @@ class App extends Component {
             {_id,password,verification{verified}}}
         `};
 
-      fetch('http://localhost:8088/graphql', {
+      fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
         method: 'POST',
         body: JSON.stringify(requestBody),
         headers: {

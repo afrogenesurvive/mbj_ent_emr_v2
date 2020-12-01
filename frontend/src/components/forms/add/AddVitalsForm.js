@@ -38,12 +38,17 @@ return (
     <h4>Add Vitals</h4>
     <p>required feilds are denoted by a ' * '</p>
 
+    <div className="formDivider1">
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="pr" className="formGroup">
         <Form.Label className="formLabel">Pulse Rate * </Form.Label>
         <Form.Control type="number" step='0.001' placeholder="..."/>
       </Form.Group>
 
+      <Form.Group as={Col} controlId="rr" className="formGroup">
+        <Form.Label className="formLabel">Respiratory Rate * </Form.Label>
+        <Form.Control type="number" step='0.001' placeholder="..."/>
+      </Form.Group>
     </Form.Row>
 
     <Form.Row className="formRow">
@@ -58,26 +63,19 @@ return (
     </Form.Row>
 
     <Form.Row className="formRow">
-      <Form.Group as={Col} controlId="rr" className="formGroup">
-        <Form.Label className="formLabel">Respiratory Rate * </Form.Label>
-        <Form.Control type="number" step='0.001' placeholder="..."/>
-      </Form.Group>
-    </Form.Row>
-
-    <Form.Row className="formRow">
     <Form.Group as={Col} controlId="temp" className="formGroup">
       <Form.Label className="formLabel">Temperature * </Form.Label>
       <Form.Control type="number" step='0.001' placeholder="..."/>
     </Form.Group>
-    </Form.Row>
 
-    <Form.Row className="formRow">
     <Form.Group as={Col} controlId="ps02" className="formGroup">
       <Form.Label className="formLabel">PS-02 * </Form.Label>
       <Form.Control type="number" step='0.001' placeholder="..."/>
     </Form.Group>
     </Form.Row>
+    </div>
 
+    <div className="formDivider2">
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="heightUnit" className="formGroup">
         <Form.Label className="formLabel">Height: Unit * </Form.Label>
@@ -86,11 +84,11 @@ return (
           <option>M</option>
         </Form.Control>
       </Form.Group>
+
       <Form.Group as={Col} controlId="heightValue" className="formGroup">
         <Form.Label className="formLabel">Height: Value * </Form.Label>
         <Form.Control type="number" step='0.001' placeholder="..."/>
       </Form.Group>
-
     </Form.Row>
 
     <Form.Row className="formRow">
@@ -122,6 +120,7 @@ return (
         <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
+    </div>
 
     <Form.Row className="formBtnRow">
       <Button variant="success" type="submit" className="addFormBtn">Add</Button>

@@ -11,6 +11,8 @@ return (
 <div className="loginFormTopDiv">
   <Form onSubmit={props.onConfirm}>
     <h1>Signup</h1>
+
+    <div className="formDivider1">
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="email">
         <Form.Label className="formLabel">Email Address</Form.Label>
@@ -24,12 +26,26 @@ return (
         <Form.Control type="password" placeholder="..."/>
       </Form.Group>
     </Form.Row>
+    </div>
 
+    <div className="formDivider2">
     <Form.Row className="formRow">
+
+      {
+        // <Form.Group as={Col} controlId="role">
+        //   <Form.Label className="formLabel">Role</Form.Label>
+        //   <Form.Control as="select">
+        //     <option>Admin</option>
+        //     <option>Staff</option>
+        //     <option>Nurse</option>
+        //     <option>Doctor</option>
+        //   </Form.Control>
+        // </Form.Group>
+      }
+
       <Form.Group as={Col} controlId="role">
         <Form.Label className="formLabel">Role</Form.Label>
         <Form.Control as="select">
-          <option>Admin</option>
           <option>Staff</option>
           <option>Nurse</option>
           <option>Doctor</option>
@@ -86,7 +102,9 @@ return (
         <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
+    </div>
 
+    <div className="formDivider3">
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="addressNumber">
         <Form.Label className="formLabel">Address Number</Form.Label>
@@ -145,6 +163,7 @@ return (
         <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
+    </div>
 
     <Form.Row className="formBtnRow">
       <Button variant="success" type="submit" className="loginFormBtn searchBtn">Signup</Button>
@@ -152,6 +171,7 @@ return (
         <NavLink to="/login">Login</NavLink>
       </Button>
     </Form.Row>
+
 
   </Form>
 </div>

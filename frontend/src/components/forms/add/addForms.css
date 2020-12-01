@@ -28,3 +28,25 @@
   margin: 0 3rem;
   text-align: center;
 }
+
+.formDivider1 {
+  border: 1px solid blue;
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 1rem;
+  box-shadow: 3px 7px 3px rgba(20,33,61,.4);
+}
+.formDivider2 {
+  border: 1px solid red;
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 1rem;
+  box-shadow: 3px 7px 3px rgba(20,33,61,.4);
+}
+.formDivider3 {
+  border: 1px solid green;
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 1rem;
+  box-shadow: 3px 7px 3px rgba(20,33,61,.4);
+}

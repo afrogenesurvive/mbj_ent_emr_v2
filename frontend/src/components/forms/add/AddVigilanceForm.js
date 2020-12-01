@@ -11,11 +11,13 @@ const AddVigilanceForm = (props) => {
 return (
 <div className="addFormTopDiv">
   <Form onSubmit={props.onConfirm}>
-    <h4>Add Vigilance</h4>
+    <h3>Add Vigilance</h3>
 
-    <Form.Row>
+    <div className="formDivider1">
     <h4>Chronic Illness:</h4>
-    <p>Diabetes</p>
+    <p className="underlined">Diabetes</p>
+    <Form.Row>
+
       <Form.Group as={Col} controlId="vigilanceChronicIllnessDiabetesMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
@@ -32,9 +34,9 @@ return (
       </Form.Group>
     </Form.Row>
 
+    <p className="underlined">HBP</p>
     <Form.Row>
-    <h4>Chronic Illness:</h4>
-    <p>HBP</p>
+
       <Form.Group as={Col} controlId="vigilanceChronicIllnessHbpMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
@@ -51,9 +53,9 @@ return (
       </Form.Group>
     </Form.Row>
 
+    <p className="underlined">Dyslipidemia</p>
     <Form.Row>
-    <h4>Chronic Illness:</h4>
-    <p>Dyslipidemia</p>
+
       <Form.Group as={Col} controlId="vigilanceChronicIllnessDyslipidemiaMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
@@ -70,9 +72,8 @@ return (
       </Form.Group>
     </Form.Row>
 
+    <p className="underlined">Cad</p>
     <Form.Row>
-    <h4>Chronic Illness:</h4>
-    <p>Cad</p>
       <Form.Group as={Col} controlId="vigilanceChronicIllnessCadMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
@@ -88,10 +89,12 @@ return (
         <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
+    </div>
 
-    <Form.Row>
+    <div className="formDivider2">
     <h4>Lifestyle:</h4>
-    <p>Weight</p>
+    <p className="underlined">Weight</p>
+    <Form.Row>
       <Form.Group as={Col} controlId="vigilanceLifestyleWeightMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
@@ -108,8 +111,8 @@ return (
       </Form.Group>
     </Form.Row>
 
+    <p className="underlined">Diet</p>
     <Form.Row>
-    <p>Diet</p>
       <Form.Group as={Col} controlId="vigilanceLifestyleDietMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
@@ -126,8 +129,8 @@ return (
       </Form.Group>
     </Form.Row>
 
+    <p className="underlined">Smoking</p>
     <Form.Row>
-    <p>Smoking</p>
       <Form.Group as={Col} controlId="vigilanceLifestyleSmokingMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
@@ -144,8 +147,8 @@ return (
       </Form.Group>
     </Form.Row>
 
+    <p className="underlined">SubstanceAbuse</p>
     <Form.Row>
-    <p>SubstanceAbuse</p>
       <Form.Group as={Col} controlId="vigilanceLifestyleSubstanceAbuseMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
@@ -162,8 +165,8 @@ return (
       </Form.Group>
     </Form.Row>
 
+    <p className="underlined">Exercise</p>
     <Form.Row>
-    <p>Exercise</p>
       <Form.Group as={Col} controlId="vigilanceLifestyleExerciseMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
@@ -180,8 +183,8 @@ return (
       </Form.Group>
     </Form.Row>
 
+    <p className="underlined">Allergies</p>
     <Form.Row>
-    <p>Allergies</p>
       <Form.Group as={Col} controlId="vigilanceLifestyleAllergiesMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
@@ -198,8 +201,8 @@ return (
       </Form.Group>
     </Form.Row>
 
+    <p className="underlined">Asthma</p>
     <Form.Row>
-    <p>Asthma</p>
       <Form.Group as={Col} controlId="vigilanceLifestyleAsthmaMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
@@ -215,10 +218,12 @@ return (
         <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
+    </div>
 
-    <Form.Row>
+    <div className="formDivider3">
     <h4>Screening:</h4>
-    <p>Breast</p>
+    <p className="underlined">Breast</p>
+    <Form.Row>
       <Form.Group as={Col} controlId="vigilanceScreeningBreastMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
@@ -235,8 +240,8 @@ return (
       </Form.Group>
     </Form.Row>
 
+    <p className="underlined">Prostate</p>
     <Form.Row>
-    <p>Prostate</p>
       <Form.Group as={Col} controlId="vigilanceScreeningProstateMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
@@ -253,8 +258,8 @@ return (
       </Form.Group>
     </Form.Row>
 
+    <p className="underlined">Cervix</p>
     <Form.Row>
-    <p>Cervix</p>
       <Form.Group as={Col} controlId="vigilanceScreeningCervixMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
@@ -271,8 +276,8 @@ return (
       </Form.Group>
     </Form.Row>
 
+    <p className="underlined">Colon</p>
     <Form.Row>
-    <p>Colon</p>
       <Form.Group as={Col} controlId="vigilanceScreeningColonMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
@@ -289,8 +294,8 @@ return (
       </Form.Group>
     </Form.Row>
 
+    <p className="underlined">Dental</p>
     <Form.Row>
-    <p>Dental</p>
       <Form.Group as={Col} controlId="vigilanceScreeningDentalMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
@@ -306,10 +311,12 @@ return (
         <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
+    </div>
 
-    <Form.Row>
+    <div className="formDivider1">
     <h4>Vaccines</h4>
-    <p>Influenza</p>
+    <p className="underlined">Influenza</p>
+    <Form.Row>
       <Form.Group as={Col} controlId="vigilanceVaccinesInfluenzaMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
@@ -326,8 +333,8 @@ return (
       </Form.Group>
     </Form.Row>
 
+    <p className="underlined">Varicella</p>
     <Form.Row>
-    <p>Varicella</p>
       <Form.Group as={Col} controlId="vigilanceVaccinesVaricellaMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
@@ -344,8 +351,8 @@ return (
       </Form.Group>
     </Form.Row>
 
+    <p className="underlined">Hpv</p>
     <Form.Row>
-    <p>Hpv</p>
       <Form.Group as={Col} controlId="vigilanceVaccinesHpvMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
@@ -362,8 +369,8 @@ return (
       </Form.Group>
     </Form.Row>
 
+    <p className="underlined">Mmr</p>
     <Form.Row>
-    <p>Mmr</p>
       <Form.Group as={Col} controlId="vigilanceVaccinesMmrMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
@@ -380,8 +387,8 @@ return (
       </Form.Group>
     </Form.Row>
 
+    <p className="underlined">Tetanus</p>
     <Form.Row>
-    <p>Tetanus</p>
       <Form.Group as={Col} controlId="vigilanceVaccinesTetanusMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
@@ -398,8 +405,8 @@ return (
       </Form.Group>
     </Form.Row>
 
+    <p className="underlined">Pneumovax</p>
     <Form.Row>
-    <p>Pneumovax</p>
       <Form.Group as={Col} controlId="vigilanceVaccinesPneumovaxMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
         <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
@@ -416,8 +423,8 @@ return (
       </Form.Group>
     </Form.Row>
 
+    <p className="underlined">Other</p>
     <Form.Row>
-    <p>Other</p>
       <Form.Group as={Col} controlId="vigilanceVaccinesOtherName">
         <Form.Label className="formLabel">Name</Form.Label>
         <Form.Control type="text" placeholder="..."/>
@@ -438,7 +445,7 @@ return (
         <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
-
+    </div>
 
 
     <Form.Row className="formBtnRow">
