@@ -4,7 +4,7 @@ import MedicationItem from '../../items/patient/MedicationItem';
 import './UserList.css';
 
 const PatientMedicationList = props => {
-
+  console.log('foo3',props.visitPage);
   const {...filter} = props.filter;
   let medication2 = props.medication;
   let propsMedication = [];
@@ -41,6 +41,7 @@ const PatientMedicationList = props => {
         canDelete={props.canDelete}
         onAddAttachment={props.onAddAttachment}
         deleteAttachment={props.deleteAttachment}
+        visitPage={props.visitPage}
       />
     );
   });

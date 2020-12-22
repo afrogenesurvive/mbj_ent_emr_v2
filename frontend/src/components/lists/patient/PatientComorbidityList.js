@@ -39,6 +39,7 @@ const PatientComorbidityList = props => {
         comorbidity={comorbidityItem}
         onDelete={props.onDelete}
         canDelete={props.canDelete}
+        visitPage={props.visitPage}
       />
     );
   });

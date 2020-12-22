@@ -38,6 +38,7 @@ const ImageItem = (props) => {
       <Card>
         <Card.Body className="cardBody">
         <Card.Text className="cardText">
+        <img src={props.image.path} className="imgPreview" />
         <a href={props.image.path} target="_blank" rel="noopener noreferrer">{props.image.name}</a>
         </Card.Text>
 

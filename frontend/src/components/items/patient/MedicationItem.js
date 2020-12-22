@@ -15,6 +15,7 @@ import PatientAttachmentList from '../../lists/patient/PatientAttachmentList';
 import './PatientItem.css';
 
 const MedicationItem = props => {
+  console.log('foo',props.visitPage);
   const [state, setState] = useState(false);
   const handleStateChange = () => {
     if (state === true) {
@@ -90,7 +91,10 @@ const MedicationItem = props => {
                     </Popover>
                   }
                 >
+                {props.visitPage === undefined && (
                   <FontAwesomeIcon icon={faPlusSquare} className="listIcon" onClick={props.onAddAttachment.bind(this, {field: 'medication',data:props.medication})}/>
+                )}
+
                 </OverlayTrigger>
 
               </Card.Text>
