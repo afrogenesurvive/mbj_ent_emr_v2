@@ -80,7 +80,7 @@ const VitalsItem = props => {
             </li>
             <li>
             <Card.Text className="cardText">
-              PS02: <span className="bold">{props.vitals.ps02}</span>
+              SP02: <span className="bold">{props.vitals.sp02}</span>
             </Card.Text>
             </li>
             <li>

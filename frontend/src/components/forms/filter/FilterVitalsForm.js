@@ -25,7 +25,7 @@ return (
         <option>bp2</option>
         <option>rr</option>
         <option>temp</option>
-        <option>ps02</option>
+        <option>sp02</option>
         <option>heightUnit</option>
         <option>heightValue</option>
         <option>weightUnit</option>

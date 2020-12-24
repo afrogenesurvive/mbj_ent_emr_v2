@@ -352,7 +352,7 @@ module.exports = buildSchema(`
     bp2: Float
     rr: Float
     temp: Float
-    ps02: Float
+    sp02: Float
     heightUnit: String
     heightValue: Float
     weightUnit: String

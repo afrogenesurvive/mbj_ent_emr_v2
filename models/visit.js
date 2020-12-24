@@ -36,7 +36,7 @@ const visitSchema = new Schema({
       bp2: {type: Number},
       rr: {type: Number},
       temp: {type: Number},
-      ps02: {type: Number},
+      sp02: {type: Number},
       heightUnit: {type: String},
       heightValue: {type: Number},
       weightUnit: {type: String},

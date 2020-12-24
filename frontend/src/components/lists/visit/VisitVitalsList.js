@@ -39,11 +39,11 @@ const VisitVitalsList = props => {
   if (filter.field === 'vitals' && filter.key === 'temp' && filter.value === 'Descending') {
     propsVitals = vitals2.sort((a, b) => (a.temp < b.temp) ? 1 : -1);
   }
-  if (filter.field === 'vitals' && filter.key === 'ps02' && filter.value === 'Ascending') {
-    propsVitals = vitals2.sort((a, b) => (a.ps02 > b.ps02) ? 1 : -1);
+  if (filter.field === 'vitals' && filter.key === 'sp02' && filter.value === 'Ascending') {
+    propsVitals = vitals2.sort((a, b) => (a.sp02 > b.sp02) ? 1 : -1);
   }
-  if (filter.field === 'vitals' && filter.key === 'ps02' && filter.value === 'Descending') {
-    propsVitals = vitals2.sort((a, b) => (a.ps02 < b.ps02) ? 1 : -1);
+  if (filter.field === 'vitals' && filter.key === 'sp02' && filter.value === 'Descending') {
+    propsVitals = vitals2.sort((a, b) => (a.sp02 < b.sp02) ? 1 : -1);
   }
   if (filter.field === 'vitals' && filter.key === 'heightValue' && filter.value === 'Ascending') {
     propsVitals = vitals2.sort((a, b) => (a.heightValue > b.heightValue) ? 1 : -1);

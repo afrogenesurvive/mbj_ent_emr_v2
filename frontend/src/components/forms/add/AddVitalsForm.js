@@ -68,8 +68,8 @@ return (
       <Form.Control type="number" step='0.001' placeholder="..."/>
     </Form.Group>
 
-    <Form.Group as={Col} controlId="ps02" className="formGroup">
-      <Form.Label className="formLabel">PS-02 * </Form.Label>
+    <Form.Group as={Col} controlId="sp02" className="formGroup">
+      <Form.Label className="formLabel">SP-02 * </Form.Label>
       <Form.Control type="number" step='0.001' placeholder="..."/>
     </Form.Group>
     </Form.Row>

@@ -4,7 +4,6 @@ import AllergyItem from '../../items/patient/AllergyItem';
 import './UserList.css';
 
 const PatientAllergyList = props => {
-
   const {...filter} = props.filter;
   let allergies2 = props.allergies;
   let propsAllergies = [];

@@ -289,7 +289,7 @@ return (
     <Button variant="light" onClick={props.subMenuSelect.bind(this, 'diagnosis')}>Diagnosis</Button>
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'treatment')}>Treatment</Button>
+    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'treatment')}>Plan</Button>
     </li>
     <li>
     <Button variant="light" onClick={props.subMenuSelect.bind(this, 'billing')}>Billing</Button>
