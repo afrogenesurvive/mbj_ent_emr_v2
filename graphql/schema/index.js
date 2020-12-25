@@ -33,12 +33,14 @@ module.exports = buildSchema(`
     date: String
     status: String
     description: String
+    highlighted: Boolean
   }
   type UserLeave {
     type: String
     startDate: String
     endDate: String
     description: String
+    highlighted: Boolean
   }
   input UserInput {
     password: String
@@ -70,16 +72,20 @@ module.exports = buildSchema(`
     attendanceDate: String
     attendanceStatus: String
     attendanceDescription: String
+    attendanceHighlighted: Boolean
     leaveType: String
     leaveStartDate: String
     leaveEndDate: String
     leaveDescription: String
+    leaveHighlighted: Boolean
     imageName: String
     imageType: String
     imagePath: String
+    imageHighlighted: Boolean
     fileName: String
     fileType: String
     filePath: String
+    fileHighlighted: Boolean
     notes: String
     note: String
     activityDate: String
@@ -161,6 +167,7 @@ module.exports = buildSchema(`
     name: String
     relation: String
     contact: PatientNextOfKinContact
+    highlighted: Boolean
   }
   type PatientNextOfKinContact {
     email: String
@@ -172,17 +179,21 @@ module.exports = buildSchema(`
     title: String
     description: String
     attachments: [String]
+    highlighted: Boolean
   }
   type PatientMedication {
     type: String
     title: String
     description: String
+    dosage: String
     attachments: [String]
+    highlighted: Boolean
   }
   type PatientComorbidity {
     type: String
     title: String
     description: String
+    highlighted: Boolean
   }
   input PatientInput {
     active: Boolean
@@ -238,25 +249,31 @@ module.exports = buildSchema(`
     nextOfKinContactEmail: String
     nextOfKinContactPhone1: String
     nextOfKinContactPhone2: String
+    nextOfKinHighlighted: Boolean
     allergyType: String
     allergyTitle: String
     allergyDescription: String
     allergyAttachment: String
     allergyAttachments: String
+    allergyHighlighted: Boolean
     medicationTitle: String
     medicationType: String
     medicationDescription: String
     medicationAttachment: String
     medicationAttachments: String
+    medicationHighlighted: Boolean
     comorbidityTitle: String
     comorbidityType: String
     comorbidityDescription: String
+    comorbidityHighlighted: Boolean
     imageName: String
     imageType: String
     imagePath: String
+    imageHighlighted: Boolean
     fileName: String
     fileType: String
     filePath: String
+    fileHighlighted: Boolean
     note: String
     notes: String
     tag: String
@@ -335,16 +352,19 @@ module.exports = buildSchema(`
     description: String
     anamnesis: String
     attachments: [String]
+    highlighted: Boolean
   }
   type VisitSurvey {
     title: String
     description: String
     attachments: [String]
+    highlighted: Boolean
   }
   type VisitSystematicInquiry {
     title: String
     description: String
     attachments: [String]
+    highlighted: Boolean
   }
   type VisitVital {
     pr: Float
@@ -359,6 +379,7 @@ module.exports = buildSchema(`
     weightValue: Float
     bmi: Float
     urine: VitalsUrine
+    highlighted: Boolean
   }
   type VitalsUrine {
     type: String
@@ -373,18 +394,21 @@ module.exports = buildSchema(`
     description: String
     followUp: Boolean
     attachments: [String]
+    highlighted: Boolean
   }
   type VisitInvestigation {
     type: String
     title: String
     description: String
     attachments: [String]
+    highlighted: Boolean
   }
   type VisitDiagnosis {
     type: String
     title: String
     description: String
     attachments: [String]
+    highlighted: Boolean
   }
   type VisitTreatment {
     type: String
@@ -393,6 +417,7 @@ module.exports = buildSchema(`
     dose: String
     frequency: String
     attachments: [String]
+    highlighted: Boolean
   }
   type VisitBilling {
     type: String
@@ -402,12 +427,14 @@ module.exports = buildSchema(`
     paid: Boolean
     attachments: [String]
     notes: String
+    highlighted: Boolean
   }
   type VisitVigilance {
     chronicIllness: VisitVigilanceChronicIllness
     lifestyle: VisitVigilanceLifestyle
     screening: VisitVigilanceScreening
     vaccines: VisitVigilanceVaccines
+    highlighted: Boolean
   }
   type VisitVigilanceChronicIllness {
     diabetes: VisitVigilanceSubObjectA
@@ -462,14 +489,17 @@ module.exports = buildSchema(`
     complaintAnamnesis: String
     complaintAttachment: String
     complaintAttachments: String
+    complaintHighlighted: Boolean
     surveyTitle: String
     surveyDescription: String
     surveyAttachment: String
     surveyAttachments: String
+    surveyHighlighted: Boolean
     systematicInquiryTitle: String
     systematicInquiryDescription: String
     systematicInquiryAttachment: String
     systematicInquiryAttachments: String
+    systematicInquiryHighlighted: Boolean
     vitalsPr: Float
     vitalsBp1: Float
     vitalsBp2: Float
@@ -483,6 +513,7 @@ module.exports = buildSchema(`
     vitalsBmi: Float
     vitalsUrineType: String
     vitalsUrineValue: String
+    vitalsHighlighted: Boolean
     examinationGeneral: String
     examinationArea: String
     examinationType: String
@@ -492,16 +523,19 @@ module.exports = buildSchema(`
     examinationFollowUp: Boolean
     examinationAttachment: String
     examinationAttachments: String
+    examinationHighlighted: Boolean
     investigationType: String
     investigationTitle: String
     investigationDescription: String
     investigationAttachment: String
     investigationAttachments: String
+    investigationHighlighted: Boolean
     diagnosisType: String
     diagnosisTitle: String
     diagnosisDescription: String
     diagnosisAttachment: String
     diagnosisAttachments: String
+    diagnosisHighlighted: Boolean
     treatmentType: String
     treatmentTitle: String
     treatmentDescription: String
@@ -509,6 +543,7 @@ module.exports = buildSchema(`
     treatmentFrequency: String
     treatmentAttachment: String
     treatmentAttachments: String
+    treatmentHighlighted: Boolean
     billingTitle: String
     billingType: String
     billingDescription: String
@@ -517,6 +552,7 @@ module.exports = buildSchema(`
     billingAttachment: String
     billingAttachments: String
     billingNotes: String
+    billingHighlighted: Boolean
     vigilanceChronicIllnessDiabetesMedication: Boolean
     vigilanceChronicIllnessDiabetesTesting: Boolean
     vigilanceChronicIllnessDiabetesComment: String
@@ -587,12 +623,15 @@ module.exports = buildSchema(`
     vigilanceVaccinesOtherMedication: Boolean
     vigilanceVaccinesOtherTesting: Boolean
     vigilanceVaccinesOtherComment: String
+    vigilanceHighlighted: Boolean
     imageName: String
     imageType: String
     imagePath: String
+    imageHighlighted: Boolean
     fileName: String
     fileType: String
     filePath: String
+    fileHighlighted: Boolean
   }
 
 
@@ -685,11 +724,13 @@ module.exports = buildSchema(`
     name: String
     type: String
     path: String
+    highlighted: Boolean
   }
   type File {
     name: String
     type: String
     path: String
+    highlighted: Boolean
   }
   type Activity {
     date: String

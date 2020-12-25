@@ -21,7 +21,7 @@ return (
         <Form.Label className="formLabel">Field to Filter</Form.Label>
         <Form.Control as="select">
         <option>type</option>
-        <option>title</option>
+        <option>name</option>
         </Form.Control>
       </Form.Group>
     </Form.Row>

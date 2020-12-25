@@ -40,23 +40,27 @@ const userSchema = new Schema({
     date: {type: Date},
     status: {type: String},
     description: {type: String},
+    highlighted: {type: Boolean},
   }],
   leave: [{
     type: {type: String},
     startDate: {type:Date},
     endDate: {type:Date},
     description: {type: String},
+    highlighted: {type: Boolean},
   }],
   images: [{
     name: {type:String},
     type: {type: String},
     path: {type: String},
+    highlighted: {type: Boolean},
     _id : false
   }],
   files: [{
     name: {type:String},
     type: {type: String},
     path: {type: String},
+    highlighted: {type: Boolean},
     _id : false
   }],
   notes: [{type: String}],

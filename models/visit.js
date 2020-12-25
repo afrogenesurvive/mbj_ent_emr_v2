@@ -16,18 +16,21 @@ const visitSchema = new Schema({
       description: {type:String},
       anamnesis: {type:String},
       attachments:[{type: String}],
+      highlighted: {type: Boolean},
         _id: false
     }],
   surveys: [{
       title: {type:String},
       description: {type:String},
       attachments:[{type: String}],
+      highlighted: {type: Boolean},
         _id: false
     }],
   systematicInquiry: [{
       title: {type:String},
       description: {type:String},
       attachments:[{type: String}],
+      highlighted: {type: Boolean},
         _id: false
     }],
   vitals:[{
@@ -45,7 +48,8 @@ const visitSchema = new Schema({
       urine:{
         type: {type: String},
         value: {type: String},
-      }
+      },
+      highlighted: {type: Boolean},
     }],
   examination: [{
     general: {type: String},
@@ -56,6 +60,7 @@ const visitSchema = new Schema({
     description: {type:String},
     followUp: {type:Boolean},
     attachments:[{type: String}],
+    highlighted: {type: Boolean},
     _id: false
   }],
   investigation: [{
@@ -63,6 +68,7 @@ const visitSchema = new Schema({
       title: {type: String},
       description: {type: String},
       attachments:[{type: String}],
+      highlighted: {type: Boolean},
         _id: false
     }],
   diagnosis: [{
@@ -70,6 +76,7 @@ const visitSchema = new Schema({
       title: {type: String},
       description: {type: String},
       attachments:[{type: String}],
+      highlighted: {type: Boolean},
         _id: false
     }],
   treatment: [{
@@ -79,6 +86,7 @@ const visitSchema = new Schema({
       dose: {type: String},
       frequency: {type: String},
       attachments:[{type: String}],
+      highlighted: {type: Boolean},
         _id: false
     }
   ],
@@ -90,6 +98,7 @@ const visitSchema = new Schema({
     paid: {type: Boolean},
     attachments:[{type: String}],
     notes: {type: String},
+    highlighted: {type: Boolean},
     _id: false
   }],
   vigilance:[{
@@ -217,18 +226,21 @@ const visitSchema = new Schema({
         comment: {type: String}
       }
     },
+    highlighted: {type: Boolean},
     _id: false
   }],
   images: [{
     name: {type:String},
     type: {type: String},
     path: {type: String},
+    highlighted: {type: Boolean},
     _id : false
   }],
   files: [{
     name: {type:String},
     type: {type: String},
     path: {type: String},
+    highlighted: {type: Boolean},
     _id : false
   }],
 },

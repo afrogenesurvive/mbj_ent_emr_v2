@@ -78,6 +78,7 @@ const patientSchema = new Schema({
       phone1: {type: String},
       phone2: {type: String}
     },
+    highlighted: {type: Boolean},
     _id: false
   }],
   allergies: [{
@@ -85,31 +86,37 @@ const patientSchema = new Schema({
     title: {type:String},
     description: {type:String},
     attachments: [{type: String}],
+    highlighted: {type: Boolean},
       _id: false
   }],
   comorbidities: [{
     type: {type:String},
     title: {type:String},
     description: {type:String},
+    highlighted: {type: Boolean},
       _id: false
   }],
   medication: [{
     title: {type: String},
     type: {type: String},
     description: {type: String},
+    dosage: {type: String},
     attachments: [{type: String}],
+    highlighted: {type: Boolean},
       _id: false
   }],
   images: [{
     name: {type:String},
     type: {type: String},
     path: {type: String},
+    highlighted: {type: Boolean},
     _id : false
   }],
   files: [{
     name: {type:String},
     type: {type: String},
     path: {type: String},
+    highlighted: {type: Boolean},
     _id : false
   }],
   notes: [{type: String}],

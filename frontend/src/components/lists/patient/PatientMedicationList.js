@@ -8,10 +8,10 @@ const PatientMedicationList = props => {
   let medication2 = props.medication;
   let propsMedication = [];
 
-  if (filter.field === 'medication' && filter.key === 'title' && filter.value === 'Ascending') {
+  if (filter.field === 'medication' && filter.key === 'name' && filter.value === 'Ascending') {
     propsMedication = medication2.sort((a, b) => (a.title > b.title) ? 1 : -1);
   }
-  if (filter.field === 'medication' && filter.key === 'title' && filter.value === 'Descending') {
+  if (filter.field === 'medication' && filter.key === 'name' && filter.value === 'Descending') {
     propsMedication = medication2.sort((a, b) => (a.title < b.title) ? 1 : -1);
   }
   if (filter.field === 'medication' && filter.key === 'type' && filter.value === 'Ascending') {

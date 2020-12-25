@@ -41,7 +41,7 @@ const MedicationItem = props => {
       <Card>
         <Card.Body className="cardBody">
           <Card.Text className="cardText">
-            Title: <span className="bold">{props.medication.title}</span>
+            Name : <span className="bold">{props.medication.title}</span>
           </Card.Text>
 
           <OverlayTrigger
@@ -63,7 +63,7 @@ const MedicationItem = props => {
             <ul>
               <li>
               <Card.Text className="cardText">
-                Title: <span className="bold">{props.medication.title}</span>
+                Name: <span className="bold">{props.medication.title}</span>
               </Card.Text>
               </li>
               <li>

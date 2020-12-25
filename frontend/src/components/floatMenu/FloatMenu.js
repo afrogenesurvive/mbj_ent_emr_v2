@@ -274,7 +274,7 @@ return (
       <Button variant="light" onClick={props.subMenuSelect.bind(this, 'comorbidities')}>Comorbidities</Button>
     )}
     {props.hasComorbidities === true && (
-      <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="red" size="md"/>
+      <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="red" size="sm"/>
     )}
     </li>
     <li>
@@ -305,7 +305,7 @@ return (
       <Button variant="light" onClick={props.subMenuSelect.bind(this, 'allergy')}>Allergy</Button>
     )}
     {props.hasAllergies === true && (
-      <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="red" size="md"/>
+      <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="red" size="sm"/>
     )}
     </li>
     <li>
@@ -514,7 +514,7 @@ return (
       <Button variant="light" onClick={props.subMenuSelect.bind(this, 'comorbidities')}>Comorbidities</Button>
     )}
     {props.hasComorbidities === true && (
-        <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="red" size="md"/>
+        <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="red" size="sm"/>
     )}
     </li>
     <li>
@@ -524,7 +524,7 @@ return (
       <Button variant="light" onClick={props.subMenuSelect.bind(this, 'allergy')}>Allergy</Button>
     )}
     {props.hasAllergies === true && (
-      <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="red" size="md"/>
+      <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="red" size="sm"/>
     )}
     </li>
     <li>
