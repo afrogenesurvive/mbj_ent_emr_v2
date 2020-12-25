@@ -21,12 +21,21 @@ import {
   faTrashAlt,
   faBan,
   faCheckSquare,
-  faExternalLinkAlt
+  faExternalLinkAlt,
+  faExclamationTriangle
 } from '@fortawesome/free-solid-svg-icons';
 
 import "./menus.css"
 
 const FloatMenu = (props) =>{
+
+  let highlighted;
+  if (props.subMenuState === true) {
+    highlighted = `${props.page}${props.menu}${props.subMenu}`;
+  } else {
+    highlighted = `${props.page}${props.menu}`;
+  }
+
 
 return (
   <div className="FloatMenuTop">
@@ -34,34 +43,74 @@ return (
   {props.state === 'menuProfile' && (
     <ul className="FloatMenuList">
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'all')}>All</Button>
+      {highlighted === 'profileall' ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'all')}>All</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'all')}>All</Button>
+      )}
       </li>
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'basic')}>Basic</Button>
+      {highlighted === 'profilebasic' ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'basic')}>Basic</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'basic')}>Basic</Button>
+      )}
       </li>
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'admin')}>Admin</Button>
+      {highlighted === 'profileadmin' ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'admin')}>Admin</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'admin')}>Admin</Button>
+      )}
       </li>
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'address')}>Addresses</Button>
+      {highlighted === 'profileaddress' ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'address')}>Addresses</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'address')}>Addresses</Button>
+      )}
       </li>
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'attendance')}>Attendance</Button>
+      {highlighted === 'profileattendance' ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'attendance')}>Attendance</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'attendance')}>Attendance</Button>
+      )}
       </li>
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'leave')}>Leave</Button>
+      {highlighted === 'profileleave' ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'leave')}>Leave</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'leave')}>Leave</Button>
+      )}
       </li>
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'image')}>Images</Button>
+      {highlighted === 'profileimage' ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'image')}>Images</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'image')}>Images</Button>
+      )}
       </li>
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'file')}>Files</Button>
+      {highlighted === 'profilefile' ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'file')}>Files</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'file')}>Files</Button>
+      )}
       </li>
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'appointment')}>Appointments</Button>
+      {highlighted === 'profileappointment' ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'appointment')}>Appointments</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'appointment')}>Appointments</Button>
+      )}
       </li>
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'note')}>Notes</Button>
+      {highlighted === 'profilenote' ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'note')}>Notes</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'note')}>Notes</Button>
+      )}
       </li>
     </ul>
   )}
@@ -69,67 +118,134 @@ return (
   {props.state === 'menuStaff' && (
     <ul className="FloatMenuList">
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'list')}>List</Button>
+      {highlighted === 'stafflist' ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'list')}>List</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'list')}>List</Button>
+      )}
       </li>
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'search')}>Search</Button>
+      {highlighted === 'staffsearch' ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'search')}>Search</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'search')}>Search</Button>
+      )}
       </li>
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'detail')}>Detail</Button>
+      {highlighted.includes('staffdetail') === true ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'detail')}>Detail</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'detail')}>Detail</Button>
+      )}
       </li>
     </ul>
   )}
+
   {props.state === 'menuPatient' && (
     <ul className="FloatMenuList">
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'list')}>List</Button>
+      {highlighted === 'patientlist' ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'list')}>List</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'list')}>List</Button>
+      )}
       </li>
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'search')}>Search</Button>
+      {highlighted === 'patientsearch' ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'search')}>Search</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'search')}>Search</Button>
+      )}
       </li>
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'detail')}>Detail</Button>
+      {highlighted.includes('patientdetail') === true ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'detail')}>Detail</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'detail')}>Detail</Button>
+      )}
       </li>
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'new')}>New</Button>
+      {highlighted === 'patientnew' ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'new')}>New</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'new')}>New</Button>
+      )}
       </li>
     </ul>
   )}
+
   {props.state === 'menuAppointment' && (
     <ul className="FloatMenuList">
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'list')}>List</Button>
+      {highlighted === 'appointmentlist' ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'list')}>List</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'list')}>List</Button>
+      )}
       </li>
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'search')}>Search</Button>
+      {highlighted === 'appointmentsearch' ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'search')}>Search</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'search')}>Search</Button>
+      )}
       </li>
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'detail')}>Detail</Button>
+      {highlighted.includes('appointmentdetail') === true ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'detail')}>Detail</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'detail')}>Detail</Button>
+      )}
       </li>
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'new')}>New</Button>
+      {highlighted === 'appointmentnew' ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'new')}>New</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'new')}>New</Button>
+      )}
       </li>
     </ul>
   )}
+
   {props.state === 'menuVisit' && (
     <ul className="FloatMenuList">
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'list')}>List</Button>
+      {highlighted === 'visitlist' ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'list')}>List</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'list')}>List</Button>
+      )}
       </li>
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'search')}>Search</Button>
+      {highlighted === 'visitsearch' ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'search')}>Search</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'search')}>Search</Button>
+      )}
       </li>
       <li>
-      <Button variant="light" onClick={props.menuSelect.bind(this, 'detail')}>Detail</Button>
+      {highlighted.includes('visitdetail') === true ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'detail')}>Detail</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'detail')}>Detail</Button>
+      )}
       </li>
       {props.role === 'Nurse' && (
         <li>
-        <Button variant="light" onClick={props.menuSelect.bind(this, 'new')}>New</Button>
+        {highlighted === 'visitnew' ? (
+          <Button variant="success" onClick={props.menuSelect.bind(this, 'new')}>New</Button>
+        ):(
+          <Button variant="light" onClick={props.menuSelect.bind(this, 'new')}>New</Button>
+        )}
         </li>
       )}
       {props.role === 'Doctor' && (
         <li>
-        <Button variant="light" onClick={props.menuSelect.bind(this, 'new')}>New</Button>
+        {highlighted === 'visitnew' ? (
+          <Button variant="success" onClick={props.menuSelect.bind(this, 'new')}>New</Button>
+        ):(
+          <Button variant="light" onClick={props.menuSelect.bind(this, 'new')}>New</Button>
+        )}
         </li>
       )}
     </ul>
@@ -138,85 +254,192 @@ return (
     props.page === 'patient' && (
     <ul className="FloatSubMenuList">
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
+    {highlighted === 'patientdetailall' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'basic')}>Basic</Button>
+    {highlighted === 'patientdetailbasic' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'basic')}>Basic</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'basic')}>Basic</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'comorbidities')}>Comorbidities</Button>
+    {highlighted === 'patientdetailcomorbidities' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'comorbidities')}>Comorbidities</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'comorbidities')}>Comorbidities</Button>
+    )}
+    {props.hasComorbidities === true && (
+      <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="red" size="md"/>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'admin')}>Admin</Button>
+    {highlighted === 'patientdetailadmin' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'admin')}>Admin</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'admin')}>Admin</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'address')}>Address</Button>
+    {highlighted === 'patientdetailaddress' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'address')}>Address</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'address')}>Address</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'nextOfKin')}>Next-of-Kin</Button>
+    {highlighted === 'patientdetailnextOfKin' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'nextOfKin')}>Next-of-Kin</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'nextOfKin')}>Next-of-Kin</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'allergy')}>Allergy</Button>
+    {highlighted === 'patientdetailallergy' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'allergy')}>Allergy</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'allergy')}>Allergy</Button>
+    )}
+    {props.hasAllergies === true && (
+      <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="red" size="md"/>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'medication')}>Medication</Button>
+    {highlighted === 'patientdetailmedication' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'medication')}>Medication</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'medication')}>Medication</Button>
+    )}
     </li>
 
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'image')}>Image</Button>
+    {highlighted === 'patientdetailimage' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'image')}>Image</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'image')}>Image</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'file')}>File</Button>
+    {highlighted === 'patientdetailfile' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'file')}>File</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'file')}>File</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'appointment')}>Appointment</Button>
+    {highlighted === 'patientdetailappointment' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'appointment')}>Appointment</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'appointment')}>Appointment</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'visit')}>Visit</Button>
+    {highlighted === 'patientdetailvisit' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'visit')}>Visit</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'visit')}>Visit</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'note')}>Note</Button>
+    {highlighted === 'patientdetailnote' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'note')}>Note</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'note')}>Note</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'tag')}>Tag</Button>
+    {highlighted === 'patientdetailtag' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'tag')}>Tag</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'tag')}>Tag</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'doc')}>Docs</Button>
+    {highlighted === 'patientdetaildoc' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'doc')}>Docs</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'doc')}>Docs</Button>
+    )}
     </li>
     </ul>
   )}
+
   {props.subMenuState === true &&
     props.page === 'staff' && (
     <ul className="FloatSubMenuList">
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
+    {highlighted === 'staffdetailall' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'basic')}>Basic</Button>
+    {highlighted === 'staffdetailbasic' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'basic')}>Basic</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'basic')}>Basic</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'admin')}>Admin</Button>
+    {highlighted === 'staffdetailadmin' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'admin')}>Admin</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'admin')}>Admin</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'address')}>Address</Button>
+    {highlighted === 'staffdetailaddress' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'address')}>Address</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'address')}>Address</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'attendance')}>Attendance</Button>
+    {highlighted === 'staffdetailattendance' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'attendance')}>Attendance</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'attendance')}>Attendance</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'leave')}>Leave</Button>
+    {highlighted === 'staffdetailleave' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'leave')}>Leave</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'leave')}>Leave</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'image')}>Image</Button>
+    {highlighted === 'staffdetailimage' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'image')}>Image</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'image')}>Image</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'file')}>File</Button>
+    {highlighted === 'staffdetailfile' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'file')}>File</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'file')}>File</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'appointment')}>Appointment</Button>
+    {highlighted === 'staffdetailappointment' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'appointment')}>Appointment</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'appointment')}>Appointment</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'note')}>Note</Button>
+    {highlighted === 'staffdetailnote' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'note')}>Note</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'note')}>Note</Button>
+    )}
     </li>
     </ul>
   )}
@@ -224,22 +447,46 @@ return (
     props.page === 'appointment' && (
     <ul className="FloatSubMenuList">
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
+    {highlighted === 'appointmentdetailall' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'basic')}>Basic</Button>
+    {highlighted === 'appointmentdetailbasic' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'basic')}>Basic</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'basic')}>Basic</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'admin')}>Admin</Button>
+    {highlighted === 'appointmentdetailadmin' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'admin')}>Admin</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'admin')}>Admin</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'consultant')}>Consultants</Button>
+    {highlighted === 'appointmentdetailconsultant' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'consultant')}>Consultants</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'consultant')}>Consultants</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'note')}>Note</Button>
+    {highlighted === 'appointmentdetailnote' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'note')}>Note</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'note')}>Note</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'tag')}>Tag</Button>
+    {highlighted === 'appointmentdetailtag' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'tag')}>Tag</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'tag')}>Tag</Button>
+    )}
     </li>
     </ul>
   )}
@@ -247,61 +494,143 @@ return (
     props.page === 'visit' && (
     <ul className="FloatSubMenuList">
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
+    {highlighted === 'visitdetailall' ? (
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'basic')}>Basic</Button>
+    {highlighted === 'visitdetailbasic' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'basic')}>Basic</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'basic')}>Basic</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'comorbidities')}>Comorbidities</Button>
+    {highlighted === 'visitdetailcomorbidities' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'comorbidities')}>Comorbidities</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'comorbidities')}>Comorbidities</Button>
+    )}
+    {props.hasComorbidities === true && (
+        <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="red" size="md"/>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'allergy')}>Allergy</Button>
+    {highlighted === 'visitdetailallergy' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'allergy')}>Allergy</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'allergy')}>Allergy</Button>
+    )}
+    {props.hasAllergies === true && (
+      <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="red" size="md"/>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'medication')}>Medication</Button>
+    {highlighted === 'visitdetailmedication' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'medication')}>Medication</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'medication')}>Medication</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'admin')}>Admin</Button>
+    {highlighted === 'visitdetailadmin' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'admin')}>Admin</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'admin')}>Admin</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'consultant')}>Consultants</Button>
+    {highlighted === 'visitdetailconsultant' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'consultant')}>Consultants</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'consultant')}>Consultants</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'complaint')}>Complaints</Button>
+    {highlighted === 'visitdetailcomplaint' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'complaint')}>Complaints</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'complaint')}>Complaints</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'survey')}>Surveys</Button>
+    {highlighted === 'visitdetailsurvey' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'survey')}>Surveys</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'survey')}>Surveys</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'systematicInquiry')}>Systematic Inquiry</Button>
+    {highlighted === 'visitdetailsystematicInquiry' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'systematicInquiry')}>Systematic Inquiry</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'systematicInquiry')}>Systematic Inquiry</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'vitals')}>Vitals</Button>
+    {highlighted === 'visitdetailvitals' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'vitals')}>Vitals</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'vitals')}>Vitals</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'examination')}>Examination</Button>
+    {highlighted === 'visitdetailexamination' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'examination')}>Examination</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'examination')}>Examination</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'investigation')}>Investigation</Button>
+    {highlighted === 'visitdetailinvestigation' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'investigation')}>Investigation</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'investigation')}>Investigation</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'diagnosis')}>Diagnosis</Button>
+    {highlighted === 'visitdetaildiagnosis' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'diagnosis')}>Diagnosis</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'diagnosis')}>Diagnosis</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'treatment')}>Plan</Button>
+    {highlighted === 'visitdetailtreatment' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'treatment')}>Plan</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'treatment')}>Plan</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'billing')}>Billing</Button>
+    {highlighted === 'visitdetailbilling' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'billing')}>Billing</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'billing')}>Billing</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'vigilance')}>Vigilance</Button>
+    {highlighted === 'visitdetailvigilance' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'vigilance')}>Vigilance</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'vigilance')}>Vigilance</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'image')}>Images</Button>
+    {highlighted === 'visitdetailimage' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'image')}>Images</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'image')}>Images</Button>
+    )}
     </li>
     <li>
-    <Button variant="light" onClick={props.subMenuSelect.bind(this, 'file')}>Files</Button>
+    {highlighted === 'visitdetailfile' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'file')}>Files</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'file')}>Files</Button>
+    )}
     </li>
     </ul>
   )}

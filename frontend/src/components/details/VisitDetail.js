@@ -91,7 +91,8 @@ import {
   faBan,
   faCheckSquare,
   faExternalLinkAlt,
-  faBath
+  faBath,
+  faExclamationTriangle
 } from '@fortawesome/free-solid-svg-icons';
 import './details.css';
 
@@ -148,12 +149,16 @@ class VisitDetail extends Component {
       target: null,
       status: null
     },
+    hasComorbidities: false,
+    hasAllergies: false,
   };
   static contextType = AuthContext;
 
   constructor(props) {
     super(props);
     this.propsVisit = this.props.visit;
+    this.hasComorbidities = false;
+    this.hasAllergies = false;
   }
 
 componentDidMount () {
@@ -173,6 +178,7 @@ componentDidMount () {
   }
 
   this.getAllUsers(seshStore);
+  this.checkAllergies();
 }
 componentWillUnmount() {
 
@@ -5084,6 +5090,24 @@ nullAttachment = (args) => {
   console.log(`can't add or delete attachments ${args.field} for here`);
   this.context.setUserAlert(`can't add or delete attachments ${args.field} for here`)
 }
+checkAllergies = () => {
+  if (this.propsVisit.patient.allergies.length > 0 === true) {
+    this.setState({
+      hasAllergies: true,
+    })
+    this.hasAllergies = true;
+  }
+  if (this.propsVisit.patient.comorbidities.length > 0 === true) {
+    this.setState({
+      hasComorbidities: true,
+    })
+    this.hasComorbidities = true;
+  }
+  this.props.setAllergyCheck({
+    hasAllergies: this.hasAllergies,
+    hasComorbidities: this.hasComorbidities,
+  })
+}
 
 render() {
 
@@ -5201,7 +5225,11 @@ render() {
               <li className="summaryListItem">
               <Col className="tabCol2">
               <Col className="subTabCol">
-                <h3 className="">Comorbidities:</h3>
+                <h3 className="">Comorbidities:
+                {this.hasComorbidities === true && (
+                  <FontAwesomeIcon icon={faExclamationTriangle} className="visitAttentionIcon" color="red" size="md"/>
+                )}
+                </h3>
               </Col>
               <Col className="subTabCol">
                 <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'comorbidities')}>Filter</Button>
@@ -5224,7 +5252,11 @@ render() {
               <li className="summaryListItem">
               <Col className="tabCol2">
               <Col className="subTabCol">
-                <h3 className="">Allergies:</h3>
+                <h3 className="">Allergies:
+                {this.hasAllergies === true && (
+                  <FontAwesomeIcon icon={faExclamationTriangle} className="visitAttentionIcon" color="red" size="sm"/>
+                )}
+                </h3>
               </Col>
               <Col className="subTabCol">
                 <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'allergy')}>Filter</Button>
@@ -5871,7 +5903,11 @@ render() {
             {this.props.subMenu === 'allergy' && (
               <Col className="tabCol2">
               <Col className="subTabCol">
-                <h3 className="">Allergies:</h3>
+                <h3 className="">Allergies:
+                {this.hasAllergies === true && (
+                  <FontAwesomeIcon icon={faExclamationTriangle} className="visitAttentionIcon" color="red" size="sm"/>
+                )}
+                </h3>
               </Col>
               <Col className="subTabCol">
                 <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'allergy')}>Filter</Button>
@@ -5921,7 +5957,11 @@ render() {
             {this.props.subMenu === 'comorbidities' && (
               <Col className="tabCol2">
               <Col className="subTabCol">
-                <h3 className="">Comorbidities:</h3>
+                <h3 className="">Comorbidities:
+                {this.hasComorbidities === true && (
+                  <FontAwesomeIcon icon={faExclamationTriangle} className="visitAttentionIcon" color="red" size="sm"/>
+                )}
+                </h3>
               </Col>
               <Col className="subTabCol">
                 <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'comorbidities')}>Filter</Button>

@@ -88,6 +88,8 @@ class VisitPage extends Component {
     tabKey: 'list',
     newVisitPatient: false,
     otfAppt: false,
+    hasComorbidities: false,
+    hasAllergies: false,
   };
   static contextType = AuthContext;
 
@@ -1124,6 +1126,12 @@ clearSearch = () => {
     searchVisits: null
   })
 }
+setAllergyCheck = (args) => {
+  this.setState({
+    hasAllergies: args.hasAllergies,
+    hasComorbidities: args.hasComorbidities,
+  })
+}
 
 
 render() {
@@ -1135,10 +1143,13 @@ render() {
       state={this.state.sideCol}
       menuSelect={this.menuSelect}
       subMenuState={this.state.subMenuState}
+      menu={this.state.menuSelect}
       subMenu={this.state.subMenu}
       subMenuSelect={this.subMenuSelect}
       page='visit'
       role={this.context.role}
+      hasAllergies={this.state.hasAllergies}
+      hasComorbidities={this.state.hasComorbidities}
     />
 
     {this.state.overlay === true && (
@@ -1252,6 +1263,9 @@ render() {
                     visit={this.state.selectedVisit}
                     updateVisit={this.updateVisit}
                     subMenu={this.state.subMenu}
+                    setAllergyCheck={this.setAllergyCheck}
+                    hasAllergies={this.hasAllergies}
+                    hasComorbidities={this.hasComorbidities}
                   />
               )}
             </Col>

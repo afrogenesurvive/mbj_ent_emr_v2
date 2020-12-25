@@ -126,7 +126,7 @@ const AppointmentItem = (props) => {
 
           {props.visitPage === true && (
             <OverlayTrigger
-              
+
               placement={'top'}
               overlay={
                 <Popover id={`popover-positioned-${'top'}`}>

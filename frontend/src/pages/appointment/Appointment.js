@@ -934,6 +934,7 @@ render() {
       menuSelect={this.menuSelect}
       subMenuState={this.state.subMenuState}
       subMenu={this.state.subMenu}
+      menu={this.state.menuSelect}
       subMenuSelect={this.subMenuSelect}
       page='appointment'
       role={this.context.role}

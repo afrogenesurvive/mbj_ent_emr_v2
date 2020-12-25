@@ -1773,6 +1773,7 @@ render() {
       menuSelect={this.menuSelect}
       role={this.context.role}
       page="profile"
+      menu={this.state.menuSelect}
     />
 
     {this.state.overlay === true && (

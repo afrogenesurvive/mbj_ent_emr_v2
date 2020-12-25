@@ -27,7 +27,7 @@
 
   height: 40vh;
   overflow: scroll;
-  
+
 }
 
 .summaryList {
@@ -43,4 +43,8 @@
 }
 .fc-daygrid-body .fc-daygrid-body-unbalanced > table {
   width: 100% !important!
+}
+
+.visitAttentionIcon {
+  margin: 0 1rem;
 }

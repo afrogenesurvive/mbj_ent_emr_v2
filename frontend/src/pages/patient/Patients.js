@@ -68,6 +68,8 @@ class PatientPage extends Component {
     goLinkId: null,
     tabKey: 'list',
     dateClickPatientSelect: false,
+    hasComorbidities: false,
+    hasAllergies: false,
   };
   static contextType = AuthContext;
 
@@ -700,6 +702,12 @@ clearSearch = () => {
     searchPatients: null
   })
 }
+setAllergyCheck = (args) => {
+  this.setState({
+    hasAllergies: args.hasAllergies,
+    hasComorbidities: args.hasComorbidities,
+  })
+}
 
 render() {
 
@@ -709,10 +717,13 @@ render() {
       state={this.state.sideCol}
       menuSelect={this.menuSelect}
       subMenuState={this.state.subMenuState}
+      menu={this.state.menuSelect}
       subMenu={this.state.subMenu}
       subMenuSelect={this.subMenuSelect}
       page='patient'
       role={this.context.role}
+      hasAllergies={this.state.hasAllergies}
+      hasComorbidities={this.state.hasComorbidities}
     />
     {this.state.overlay === true && (
       <LoadingOverlay
@@ -810,6 +821,7 @@ render() {
                 patient={this.state.selectedPatient}
                 updatePatient={this.updatePatient}
                 subMenu={this.state.subMenu}
+                setAllergyCheck={this.setAllergyCheck}
               />
             )}
             </Col>

@@ -510,8 +510,10 @@ render() {
       state={this.state.sideCol}
       menuSelect={this.menuSelect}
       subMenuState={this.state.subMenuState}
+      menu={this.state.menuSelect}
       subMenu={this.state.subMenu}
       subMenuSelect={this.subMenuSelect}
+      menu={this.state.menuSelect}
       page='staff'
       role={this.context.role}
     />
