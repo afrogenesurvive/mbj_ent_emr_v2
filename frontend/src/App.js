@@ -9,8 +9,8 @@ import MainNavigation from './components/Navigation/MainNavigation';
 import LandingPage from './pages/landing/Landing';
 import HomePage from './pages/landing/Home';
 import MyProfilePage from './pages/profile/Profile';
-import LoginPage from './pages/auth/Login';
-import SignupPage from './pages/auth/Signup';
+import LoginPage from './pages/auth/login';
+import SignupPage from './pages/auth/signup';
 import PasswordResetPage from './pages/auth/PasswordReset';
 import StaffPage from './pages/staff/Staff';
 import PatientPage from './pages/patient/Patients';
@@ -180,7 +180,7 @@ class App extends Component {
         {_id,loggedIn}}
       `};
 
-     fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+     fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -267,7 +267,7 @@ class App extends Component {
             {_id,password,verification{verified}}}
         `};
 
-       fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+       fetch('http://localhost:8088/graphql', {
         method: 'POST',
         body: JSON.stringify(requestBody),
         headers: {
