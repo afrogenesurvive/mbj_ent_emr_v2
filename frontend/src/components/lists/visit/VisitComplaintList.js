@@ -30,6 +30,9 @@ const VisitComplaintList = props => {
   // if (filter.field === 'userMasterList' && filter.key === 'role') {
   //   propsAddresses = addresses2.filter(x => x.role === filter.value);
   // }
+  if (filter.field === 'complaint' && filter.key === 'highlighted') {
+    propsComplaints = complaints2.filter(x => x.highlighted === filter.value);
+  }
   if (filter.field !== 'complaint') {
     propsComplaints = complaints2;
   }
@@ -48,6 +51,7 @@ const VisitComplaintList = props => {
         onDelete={props.onDelete}
         onAddAttachment={props.onAddAttachment}
         deleteAttachment={props.deleteAttachment}
+        toggleVisitComplaintHighlighted={props.toggleVisitComplaintHighlighted}
       />
     );
   });

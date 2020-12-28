@@ -699,7 +699,8 @@ module.exports = {
       const attendance = {
         date: args.userInput.attendanceDate,
         status: args.userInput.attendanceStatus,
-        description: args.userInput.attendanceDescription
+        description: args.userInput.attendanceDescription,
+        highlighted: args.userInput.attendanceHighlighted
       };
 
       const user = await User.findOneAndUpdate(
@@ -728,7 +729,8 @@ module.exports = {
       const attendance = {
         date: args.userInput.attendanceDate,
         status: args.userInput.attendanceStatus,
-        description: args.userInput.attendanceDescription
+        description: args.userInput.attendanceDescription,
+        highlighted: args.userInput.attendanceHighlighted
       };
 
       const user = await User.findOneAndUpdate(
@@ -758,7 +760,8 @@ module.exports = {
         type: args.userInput.leaveType,
         startDate: args.userInput.leaveStartDate,
         endDate: args.userInput.leaveEndDate,
-        description: args.userInput.leaveDescription
+        description: args.userInput.leaveDescription,
+        highlighted: args.userInput.leaveHighlighted
       };
 
       const user = await User.findOneAndUpdate(
@@ -788,7 +791,8 @@ module.exports = {
         type: args.userInput.leaveType,
         startDate: args.userInput.leaveStartDate,
         endDate: args.userInput.leaveEndDate,
-        description: args.userInput.leaveDescription
+        description: args.userInput.leaveDescription,
+        highlighted: args.userInput.leaveHighlighted
       };
 
       const user = await User.findOneAndUpdate(
@@ -817,7 +821,8 @@ module.exports = {
       const image = {
         name: args.userInput.imageName,
         type: args.userInput.imageType,
-        path: args.userInput.imagePath
+        path: args.userInput.imagePath,
+        highlighted: args.userInput.imageHighlighted
       };
 
       const user = await User.findOneAndUpdate(
@@ -846,7 +851,8 @@ module.exports = {
       const image = {
         name: args.userInput.imageName,
         type: args.userInput.imageType,
-        path: args.userInput.imagePath
+        path: args.userInput.imagePath,
+        highlighted: args.userInput.imageHighlighted
       };
 
       const user = await User.findOneAndUpdate(
@@ -875,7 +881,8 @@ module.exports = {
       const file = {
         name: args.userInput.fileName,
         type: args.userInput.fileType,
-        path: args.userInput.filePath
+        path: args.userInput.filePath,
+        highlighted: args.userInput.imageHighlighted
       };
 
       const user = await User.findOneAndUpdate(
@@ -904,7 +911,8 @@ module.exports = {
       const file = {
         name: args.userInput.fileName,
         type: args.userInput.fileType,
-        path: args.userInput.filePath
+        path: args.userInput.filePath,
+        highlighted: args.userInput.imageHighlighted
       };
 
       const user = await User.findOneAndUpdate(

@@ -39,16 +39,20 @@ return (
           <option>attendance.date</option>
           <option>attendance.status</option>
           <option>attendance.description</option>
+          <option>attendance.highlighted</option>
           <option>leave.type</option>
           <option>leave.startDate</option>
           <option>leave.endDate</option>
           <option>leave.description</option>
+          <option>leave.highlighted</option>
           <option>images.name</option>
           <option>images.type</option>
           <option>images.path</option>
+          <option>images.highlighted</option>
           <option>files.name</option>
           <option>files.type</option>
           <option>files.path</option>
+          <option>files.highlighted</option>
           <option>notes</option>
         </Form.Control>
       </Form.Group>

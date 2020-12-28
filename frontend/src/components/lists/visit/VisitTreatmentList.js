@@ -42,6 +42,9 @@ const VisitTreatmentList = props => {
   // if (filter.field === 'userMasterList' && filter.key === 'role') {
   //   propsAddresses = addresses2.filter(x => x.role === filter.value);
   // }
+  if (filter.field === 'treatment' && filter.key === 'highlighted') {
+    propsTreatment = treatment2.filter(x => x.highlighted === filter.value);
+  }
   if (filter.field !== 'treatment') {
     propsTreatment = treatment2;
   }
@@ -60,6 +63,7 @@ const VisitTreatmentList = props => {
         onDelete={props.onDelete}
         onAddAttachment={props.onAddAttachment}
         deleteAttachment={props.deleteAttachment}
+        toggleVisitTreatmentHighlighted={props.toggleVisitTreatmentHighlighted}
       />
     );
   });

@@ -42,6 +42,9 @@ const VisitBillingList = props => {
   if (filter.field === 'billing' && filter.key === 'paid') {
     propsBilling = billing2.filter(x => x.paid === filter.value);
   }
+  if (filter.field === 'billing' && filter.key === 'highlighted') {
+    propsBilling = billing2.filter(x => x.highlighted === filter.value);
+  }
   if (filter.field !== 'billing') {
     propsBilling = billing2;
   }
@@ -61,6 +64,7 @@ const VisitBillingList = props => {
         onAddAttachment={props.onAddAttachment}
         deleteAttachment={props.deleteAttachment}
         updateBillingPaid={props.updateBillingPaid}
+        toggleVisitBillingHighlighted={props.toggleVisitBillingHighlighted}
       />
     );
   });

@@ -15,6 +15,9 @@ const VisitVigilanceList = props => {
   // if (filter.field === 'userMasterList' && filter.key === 'role') {
   //   propsAddresses = addresses2.filter(x => x.role === filter.value);
   // }
+  if (filter.field === 'vigilance' && filter.key === 'highlighted') {
+    propsVigilance = vigilance2.filter(x => x.highlighted === filter.value);
+  }
   if (filter.field !== 'vigilance') {
     propsVigilance = vigilance2;
   }
@@ -31,6 +34,7 @@ const VisitVigilanceList = props => {
         vigilance={vigilance}
         canDelete={props.canDelete}
         onDelete={props.onDelete}
+        toggleVisitVigilanceHighlighted={props.toggleVisitVigilanceHighlighted}
       />
     );
   });

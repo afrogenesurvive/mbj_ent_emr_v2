@@ -24,6 +24,9 @@ const VisitInvestigationList = props => {
   // if (filter.field === 'userMasterList' && filter.key === 'role') {
   //   propsAddresses = addresses2.filter(x => x.role === filter.value);
   // }
+  if (filter.field === 'investigation' && filter.key === 'highlighted') {
+    propsInvestigations = investigations2.filter(x => x.highlighted === filter.value);
+  }
   if (filter.field !== 'investigation') {
     propsInvestigations = investigations2;
   }
@@ -42,6 +45,7 @@ const VisitInvestigationList = props => {
         onDelete={props.onDelete}
         onAddAttachment={props.onAddAttachment}
         deleteAttachment={props.deleteAttachment}
+        toggleVisitInvestigationHighlighted={props.toggleVisitInvestigationHighlighted}
       />
     );
   });

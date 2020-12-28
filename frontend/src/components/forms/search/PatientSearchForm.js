@@ -58,20 +58,25 @@ return (
         <option>nextOfKin.contact.email</option>
         <option>nextOfKin.contact.phone</option>
         <option>nextOfKin.contact.phone2</option>
+        <option>nextOfKin.highlighted</option>
         <option>allergies.type</option>
         <option>allergies.title</option>
         <option>allergies.description</option>
         <option>allergies.attachments</option>
+        <option>allergies.highlighted</option>
         <option>medication.title</option>
         <option>medication.type</option>
         <option>medication.description</option>
         <option>medication.attachments</option>
+        <option>medication.highlighted</option>
         <option>images.name</option>
         <option>images.type</option>
         <option>images.path</option>
+        <option>images.highlighted</option>
         <option>files.name</option>
         <option>files.type</option>
         <option>files.path</option>
+        <option>files.highlighted</option>
         <option>notes</option>
         <option>tags</option>
         <option>loggedIn</option>

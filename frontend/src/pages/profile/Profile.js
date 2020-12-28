@@ -195,7 +195,7 @@ getThisUser (args) {
       return res.json();
     })
     .then(resData => {
-      // console.log('...resData...',resData.data.getUserById);
+      console.log('...resData...',resData.data.getUserById);
       let responseAlert = '...profile retrieval success!...';
       let error = null;
 

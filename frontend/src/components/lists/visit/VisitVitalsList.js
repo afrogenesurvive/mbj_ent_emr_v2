@@ -78,6 +78,9 @@ const VisitVitalsList = props => {
   // if (filter.field === 'vitals' && filter.key === 'role') {
   //   propsVitals = vitals2.filter(x => x.role === filter.value);
   // }
+  if (filter.field === 'vitals' && filter.key === 'highlighted') {
+    propsVitals = vitals2.filter(x => x.highlighted === filter.value);
+  }
   if (filter.field !== 'vitals') {
     propsVitals = vitals2;
   }
@@ -95,6 +98,7 @@ const VisitVitalsList = props => {
         canDelete={props.canDelete}
         onDelete={props.onDelete}
         onAddAttachment={props.onAddAttachment}
+        toggleVisitVitalsHighlighted={props.toggleVisitVitalsHighlighted}
       />
     );
   });

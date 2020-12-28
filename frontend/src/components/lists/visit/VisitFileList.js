@@ -30,6 +30,9 @@ const VisitFileList = props => {
   // if (filter.field === 'userMasterList' && filter.key === 'role') {
   //   propsAddresses = addresses2.filter(x => x.role === filter.value);
   // }
+  if (filter.field === 'file' && filter.key === 'highlighted') {
+    propsFiles = files2.filter(x => x.highlighted === filter.value);
+  }
   if (filter.field !== 'file') {
     propsFiles = files2;
   }
@@ -46,6 +49,7 @@ const VisitFileList = props => {
         file={file}
         canDelete={props.canDelete}
         onDelete={props.onDelete}
+        toggleVisitFileHighlighted={props.toggleVisitFileHighlighted}
       />
     );
   });

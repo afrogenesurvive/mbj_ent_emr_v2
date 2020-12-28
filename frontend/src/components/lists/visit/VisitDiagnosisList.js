@@ -30,6 +30,9 @@ const VisitDiagnosisList = props => {
   // if (filter.field === 'userMasterList' && filter.key === 'role') {
   //   propsAddresses = addresses2.filter(x => x.role === filter.value);
   // }
+  if (filter.field === 'diagnosis' && filter.key === 'highlighted') {
+    propsDiagnosis = diagnosis2.filter(x => x.highlighted === filter.value);
+  }
   if (filter.field !== 'diagnosis') {
     propsDiagnosis = diagnosis2;
   }
@@ -48,6 +51,7 @@ const VisitDiagnosisList = props => {
         onDelete={props.onDelete}
         onAddAttachment={props.onAddAttachment}
         deleteAttachment={props.deleteAttachment}
+        toggleVisitDiagnosisHighlighted={props.toggleVisitDiagnosisHighlighted}
       />
     );
   });

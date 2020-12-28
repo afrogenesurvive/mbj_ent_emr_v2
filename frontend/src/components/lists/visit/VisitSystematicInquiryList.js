@@ -24,6 +24,9 @@ const VisitSystematicInquiryList = props => {
   // if (filter.field === 'userMasterList' && filter.key === 'role') {
   //   propsAddresses = addresses2.filter(x => x.role === filter.value);
   // }
+  if (filter.field === 'systematicInquiry' && filter.key === 'highlighted') {
+    propsSystematicInquirys = systematicInquirys2.filter(x => x.highlighted === filter.value);
+  }
   if (filter.field !== 'systematicInquiry') {
     propsSystematicInquirys = systematicInquirys2;
   }
@@ -42,6 +45,7 @@ const VisitSystematicInquiryList = props => {
         onDelete={props.onDelete}
         onAddAttachment={props.onAddAttachment}
         deleteAttachment={props.deleteAttachment}
+        toggleVisitSysInquiryHighlighted={props.toggleVisitSysInquiryHighlighted}
       />
     );
   });

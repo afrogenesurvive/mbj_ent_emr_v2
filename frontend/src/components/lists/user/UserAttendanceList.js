@@ -24,6 +24,9 @@ const UserAttendanceList = props => {
   // if (filter.field === 'userMasterList' && filter.key === 'role') {
   //   propsAddresses = addresses2.filter(x => x.role === filter.value);
   // }
+  if (filter.field === 'attendance' && filter.key === 'highlighted') {
+    propsAttendance = attendance2.filter(x => x.highlighted === filter.value);
+  }
   if (filter.field !== 'attendance') {
     propsAttendance = attendance2;
   }

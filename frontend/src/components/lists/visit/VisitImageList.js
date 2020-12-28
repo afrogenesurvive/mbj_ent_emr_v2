@@ -27,6 +27,9 @@ const VisitImageList = props => {
   if (filter.field === 'image' && filter.key === 'link' && filter.value === 'Descending') {
     propsImages = images2.sort((a, b) => (a.path < b.path) ? 1 : -1);
   }
+  if (filter.field === 'image' && filter.key === 'highlighted') {
+    propsImages = images2.filter(x => x.highlighted === filter.value);
+  }
   // if (filter.field === 'userMasterList' && filter.key === 'role') {
   //   propsAddresses = addresses2.filter(x => x.role === filter.value);
   // }
@@ -46,6 +49,7 @@ const VisitImageList = props => {
         image={image}
         canDelete={props.canDelete}
         onDelete={props.onDelete}
+        toggleVisitImageHighlighted={props.toggleVisitImageHighlighted}
       />
     );
   });

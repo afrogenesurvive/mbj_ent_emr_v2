@@ -30,6 +30,9 @@ const UserImageList = props => {
   // if (filter.field === 'userMasterList' && filter.key === 'role') {
   //   propsAddresses = addresses2.filter(x => x.role === filter.value);
   // }
+  if (filter.field === 'image' && filter.key === 'highlighted') {
+    propsImages = images2.filter(x => x.highlighted === filter.value);
+  }
   if (filter.field !== 'image') {
     propsImages = images2;
   }

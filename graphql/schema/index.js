@@ -784,6 +784,7 @@ module.exports = buildSchema(`
     getAppointmentsToday(activityId: ID!): [Appointment]
     getAppointmentsImportantNextWeek(activityId: ID!): [Appointment]
 
+    formatNewVisitProps(activityId: ID!): [Visit]
     getAllVisits(activityId: ID!): [Visit]
     getVisitById(activityId: ID!, visitId: ID!): Visit
     getVisitsByField(activityId: ID!, field: String!, query: String!): [Visit]
@@ -897,26 +898,38 @@ module.exports = buildSchema(`
     updateVisitPatient(activityId: ID!, visitId: ID!, patientId: ID!): Visit
     addVisitConsultant(activityId: ID!, visitId: ID!, consultantId: ID!): Visit
     addVisitComplaint(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    toggleVisitComplaintHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitComplaintAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitSurvey(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitSurveyAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    toggleVisitSurveyHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitSysInquiry(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitSysInquiryAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    toggleVisitSysInquiryHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitVitals(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    toggleVisitVitalsHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitExamination(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitExaminationAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    toggleVisitExaminationHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitInvestigation(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitInvestigationAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    toggleVisitInvestigationHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitDiagnosis(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitDiagnosisAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    toggleVisitDiagnosisHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitTreatment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitTreatmentAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    toggleVisitTreatmentHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitBilling(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitBillingAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     updateVisitBillingPaid(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    toggleVisitBillingHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitVigilance(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    toggleVisitVigilanceHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitImage(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    toggleVisitImageHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitFile(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    toggleVisitFileHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     completeVisitById(activityId: ID!, visitId: ID!): Visit
 
     deleteVisitById(activityId: ID!, visitId: ID!): Visit

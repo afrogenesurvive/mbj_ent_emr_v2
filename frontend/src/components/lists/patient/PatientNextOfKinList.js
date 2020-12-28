@@ -24,6 +24,9 @@ const PatientNextOfKinList = props => {
   // if (filter.field === 'nextOfKin' && filter.key === 'primary') {
   //   propsNextOfKin = nextOfKin2.filter(x => x.primary === filter.value);
   // }
+  if (filter.field === 'nextOfKin' && filter.key === 'highlighted') {
+    propsNextOfKin = nextOfKin2.filter(x => x.highlighted === filter.value);
+  }
   if (filter.field !== 'nextOfKin') {
     propsNextOfKin = nextOfKin2;
   }

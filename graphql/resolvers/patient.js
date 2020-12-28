@@ -33,6 +33,7 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
+
       const patients = await Patient.find({})
       .populate('appointments')
       .populate('visits')
@@ -527,7 +528,8 @@ module.exports = {
           email: args.patientInput.nextOfKinContactEmail,
           phone1: args.patientInput.nextOfKinContactPhone1,
           phone2: args.patientInput.nextOfKinContactPhone2
-        }
+        },
+        highlighted: args.patientInput.nextOfKinHighlighted
       };
       const patient = await Patient.findOneAndUpdate(
         {_id:args.patientId},
@@ -560,7 +562,8 @@ module.exports = {
           email: args.patientInput.nextOfKinContactEmail,
           phone1: args.patientInput.nextOfKinContactPhone1,
           phone2: args.patientInput.nextOfKinContactPhone2
-        }
+        },
+        highlighted: args.patientInput.nextOfKinHighlighted
       };
       // console.log(nextOfKin);
       const patient = await Patient.findOneAndUpdate(
@@ -592,6 +595,7 @@ module.exports = {
         title: args.patientInput.allergyTitle,
         description: args.patientInput.allergyDescription,
         attachments: [args.patientInput.allergyAttachment],
+        highlighted: args.patientInput.allergyHighlighted
       };
       const patient = await Patient.findOneAndUpdate(
         {_id:args.patientId},
@@ -623,6 +627,7 @@ module.exports = {
         title: args.patientInput.allergyTitle,
         description: args.patientInput.allergyDescription,
         attachments: args.patientInput.allergyAttachments.split(','),
+        highlighted: args.patientInput.allergyHighlighted
       };
       const patient = await Patient.findOneAndUpdate(
         {_id:args.patientId},
@@ -652,7 +657,9 @@ module.exports = {
         type: args.patientInput.medicationType,
         title: args.patientInput.medicationTitle,
         description: args.patientInput.medicationDescription,
+        dosage: args.patientInput.medicationDosage,
         attachments: [args.patientInput.medicationAttachment],
+        highlighted: args.patientInput.medicationHighlighted
       };
       const patient = await Patient.findOneAndUpdate(
         {_id:args.patientId},
@@ -683,7 +690,9 @@ module.exports = {
         type: args.patientInput.medicationType,
         title: args.patientInput.medicationTitle,
         description: args.patientInput.medicationDescription,
+        dosage: args.patientInput.medicationDosage,
         attachments: args.patientInput.medicationAttachments.split(','),
+        highlighted: args.patientInput.medicationHighlighted
       };
       const patient = await Patient.findOneAndUpdate(
         {_id:args.patientId},
@@ -863,6 +872,7 @@ module.exports = {
         type: args.patientInput.comorbidityType,
         title: args.patientInput.comorbidityTitle,
         description: args.patientInput.comorbidityDescription,
+        highlighted: args.patientInput.comorbidityHighlighted,
       };
       const patient = await Patient.findOneAndUpdate(
         {_id:args.patientId},
@@ -892,6 +902,7 @@ module.exports = {
         type: args.patientInput.comorbidityType,
         title: args.patientInput.comorbidityTitle,
         description: args.patientInput.comorbidityDescription,
+        highlighted: args.patientInput.comorbidityHighlighted,
       };
       const patient = await Patient.findOneAndUpdate(
         {_id:args.patientId},
@@ -920,7 +931,8 @@ module.exports = {
       const image = {
         name: args.patientInput.imageName,
         type: args.patientInput.imageType,
-        path: args.patientInput.imagePath
+        path: args.patientInput.imagePath,
+        highlighted: args.patientInput.imageHighlighted,
       };
 
       const patient = await Patient.findOneAndUpdate(
@@ -950,7 +962,8 @@ module.exports = {
       const image = {
         name: args.patientInput.imageName,
         type: args.patientInput.imageType,
-        path: args.patientInput.imagePath
+        path: args.patientInput.imagePath,
+        highlighted: args.patientInput.imageHighlighted,
       };
 
       const patient = await Patient.findOneAndUpdate(
@@ -980,7 +993,8 @@ module.exports = {
       const file = {
         name: args.patientInput.fileName,
         type: args.patientInput.fileType,
-        path: args.patientInput.filePath
+        path: args.patientInput.filePath,
+        highlighted: args.patientInput.fileHighlighted,
       };
 
       const patient = await Patient.findOneAndUpdate(
@@ -1010,7 +1024,8 @@ module.exports = {
       const file = {
         name: args.patientInput.fileName,
         type: args.patientInput.fileType,
-        path: args.patientInput.filePath
+        path: args.patientInput.filePath,
+        highlighted: args.patientInput.fileHighlighted,
       };
 
       const patient = await Patient.findOneAndUpdate(

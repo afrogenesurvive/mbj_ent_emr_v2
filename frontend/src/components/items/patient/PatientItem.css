@@ -2,10 +2,10 @@
   display: inline-block;
   margin: 0 .5rem;
 }
-.cardBody {
+/* .cardBody {
   padding: .7rem;
   text-align: left;
-}
+} */
 .bold {
   font-weight: bold;
 }

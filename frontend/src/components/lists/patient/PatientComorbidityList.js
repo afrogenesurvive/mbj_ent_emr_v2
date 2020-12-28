@@ -24,6 +24,9 @@ const PatientComorbidityList = props => {
   // if (filter.field === 'nextOfKin' && filter.key === 'primary') {
   //   propsNextOfKin = nextOfKin2.filter(x => x.primary === filter.value);
   // }
+  if (filter.field === 'comorbidity' && filter.key === 'highlighted') {
+    propsComorbidity = comorbidity2.filter(x => x.highlighted === filter.value);
+  }
   if (filter.field !== 'comorbidity') {
     propsComormidity = comorbidity2;
   }

@@ -12,13 +12,21 @@ import {
   faFolderMinus,
   faEye,
   faEraser,
-  faTrashAlt
+  faTrashAlt,
+  faHighlighter,
+  faExclamation
 } from '@fortawesome/free-solid-svg-icons';
 import PatientAttachmentList from '../../lists/patient/PatientAttachmentList';
 
 import './visitItem.css';
 
 const InvestigationItem = props => {
+  let liClass;
+  if (props.investigation.highlighted === false) {
+    liClass = 'cardBody';
+  } else {
+    liClass = 'cardBodyHighlighted';
+  }
   const [state, setState] = useState(false);
   const handleStateChange = () => {
     if (state === true) {
@@ -42,7 +50,7 @@ const InvestigationItem = props => {
   return (
     <li key={props.key} className="">
       <Card>
-        <Card.Body className="cardBody">
+        <Card.Body className={liClass}>
           <Card.Text className="cardText">
             Title: <span className="bold">{props.investigation.title}</span>
           </Card.Text>
@@ -62,6 +70,20 @@ const InvestigationItem = props => {
             }
           >
             <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+          </OverlayTrigger>
+
+          <OverlayTrigger
+            key={'top'}
+            placement={'top'}
+            overlay={
+              <Popover id={`popover-positioned-${'top'}`}>
+                <Popover.Content>
+                  <strong>Toggle Highlight</strong>
+                </Popover.Content>
+              </Popover>
+            }
+          >
+            <FontAwesomeIcon icon={faHighlighter} className="listIcon" onClick={props.toggleVisitInvestigationHighlighted.bind(this, props.investigation)}/>
           </OverlayTrigger>
 
           {state === true && (

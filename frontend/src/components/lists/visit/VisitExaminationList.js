@@ -48,6 +48,9 @@ const VisitExaminationList = props => {
   if (filter.field === 'examination' && filter.key === 'followUp') {
     propsExaminations = examinations2.filter(x => x.followUp === filter.value);
   }
+  if (filter.field === 'examination' && filter.key === 'highlighted') {
+    propsExaminations = examinations2.filter(x => x.highlighted === filter.value);
+  }
   if (filter.field !== 'examination') {
     propsExaminations = examinations2;
   }
@@ -66,6 +69,7 @@ const VisitExaminationList = props => {
         onDelete={props.onDelete}
         onAddAttachment={props.onAddAttachment}
         deleteAttachment={props.deleteAttachment}
+        toggleVisitExaminationHighlighted={props.toggleVisitExaminationHighlighted}
       />
     );
   });

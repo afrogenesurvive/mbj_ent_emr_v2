@@ -27,12 +27,101 @@ const AWS = require('aws-sdk');
 // const stripe = require('stripe')(process.env.STRIPE_B);
 
 module.exports = {
+  formatNewVisitProps: async (args, req) => {
+    console.log("Resolver: formatNewVisitProps...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      let allUserIds2 = [];
+      let allUserIds = await User.find({});
+      allUserIds.map(user => {
+        allUserIds2.push(user._id);
+      })
+      console.log('allUserIds',allUserIds2);
+      for(const value of allUserIds2) {
+        let compUser = await User.findOneAndUpdate(
+          {_id:value},
+          {
+            'attendance.$[].highlighted': false,
+            'leave.$[].highlighted': false,
+            'images.$[].highlighted': false,
+            'files.$[].highlighted': false,
+          },
+          {new: true, useFindAndModify: false}
+        )
+      }
+
+      let allPatientIds2 = [];
+      let allPatientIds = await Patient.find({});
+      allPatientIds.map(patient => {
+        allPatientIds2.push(patient._id);
+      })
+      console.log('allPatientIds',allPatientIds2);
+      for(const value of allPatientIds2) {
+        let compPatient = await Patient.findOneAndUpdate(
+          {_id:value},
+          {
+            'nextOfKin.$[].highlighted': false,
+            'allergies.$[].highlighted': false,
+            'medication.$[].highlighted': false,
+            'medication.$[].dosage': "",
+            'images.$[].highlighted': false,
+            'files.$[].highlighted': false,
+            'comorbidities.$[].highlighted': false,
+          },
+          {new: true, useFindAndModify: false}
+        )
+      }
+
+      let allVisitIds2 = [];
+      let allVisitIds = await Visit.find({});
+      allVisitIds.map(visit => {
+        allVisitIds2.push(visit._id);
+      })
+      console.log('allVisitIds',allVisitIds2);
+      for(const value of allVisitIds2) {
+        // console.log(value);
+        let compVisit = await Visit.findOneAndUpdate(
+          {_id:value},
+          {
+            'complaints.$[].highlighted': false,
+            'surveys.$[].highlighted': false,
+            'systematicInquiry.$[].highlighted': false,
+            'vitals.$[].highlighted': false,
+            'examination.$[].highlighted': false,
+            'investigation.$[].highlighted': false,
+            'diagnosis.$[].highlighted': false,
+            'treatment.$[].highlighted': false,
+            'billing.$[].highlighted': false,
+            'vigilance.$[].highlighted': false,
+            'images.$[].highlighted': false,
+            'files.$[].highlighted': false,
+          },
+          {new: true, useFindAndModify: false}
+        )
+      }
+
+
+      const visits = await Visit.find({})
+      .populate('consultants')
+      .populate('appointment')
+      .populate('patient');
+      return visits.map(visit => {
+        return transformVisit(visit,);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
   getAllVisits: async (args, req) => {
     console.log("Resolver: getAllVisits...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
+
       const visits = await Visit.find({})
       .populate('consultants')
       .populate('appointment')
@@ -280,7 +369,8 @@ module.exports = {
           title: args.visitInput.complaintTitle,
           description: args.visitInput.complaintDescription,
           anamnesis: args.visitInput.complaintAnamnesis,
-          attachments: [args.visitInput.complaintAttachment]
+          attachments: [args.visitInput.complaintAttachment],
+          highlighted: false,
         }
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
@@ -311,11 +401,54 @@ module.exports = {
           title: args.visitInput.complaintTitle,
           description: args.visitInput.complaintDescription,
           anamnesis: args.visitInput.complaintAnamnesis,
-          attachments: complaintAttachments
+          attachments: complaintAttachments,
+          highlighted: args.visitInput.complaintHighlighted,
         }
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$pull: {complaints: complaint}},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  toggleVisitComplaintHighlighted: async (args, req) => {
+    console.log("Resolver: toggleVisitComplaintHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+        const complaintAttachments = args.visitInput.complaintAttachments.split(',');
+        const complaint = {
+          title: args.visitInput.complaintTitle,
+          description: args.visitInput.complaintDescription,
+          anamnesis: args.visitInput.complaintAnamnesis,
+          attachments: complaintAttachments,
+          highlighted: args.visitInput.complaintHighlighted,
+        }
+        let newHighlighted;
+        if (args.visitInput.complaintHighlighted === null) {
+          newHighlighted = false;
+        } else {
+          newHighlighted = !args.visitInput.complaintHighlighted;
+        }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,
+            complaints: complaint
+          },
+          {'complaints.$.highlighted': newHighlighted},
           {new: true, useFindAndModify: false}
         )
         .populate('consultants')
@@ -409,7 +542,8 @@ module.exports = {
         const survey = {
           title: args.visitInput.surveyTitle,
           description: args.visitInput.surveyDescription,
-          attachments: [args.visitInput.surveyAttachment]
+          attachments: [args.visitInput.surveyAttachment],
+          highlighted: false,
         }
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
@@ -439,7 +573,8 @@ module.exports = {
         const survey = {
           title: args.visitInput.surveyTitle,
           description: args.visitInput.surveyDescription,
-          attachments: attachments
+          attachments: attachments,
+          highlighted: args.visitInput.surveyHighlighted,
         }
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
@@ -523,6 +658,47 @@ module.exports = {
       throw err;
     }
   },
+  toggleVisitSurveyHighlighted: async (args, req) => {
+    console.log("Resolver: toggleVisitSurveyHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+        const surveyAttachments = args.visitInput.surveyAttachments.split(',');
+        const survey = {
+          title: args.visitInput.surveyTitle,
+          description: args.visitInput.surveyDescription,
+          attachments: surveyAttachments,
+          highlighted: args.visitInput.surveyHighlighted,
+        }
+        let newHighlighted;
+        if (args.visitInput.surveyHighlighted === null) {
+          newHighlighted = false;
+        } else {
+          newHighlighted = !args.visitInput.surveyHighlighted;
+        }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,
+            surveys: survey
+          },
+          {'surveys.$.highlighted': newHighlighted},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   addVisitSysInquiry: async (args, req) => {
     console.log("Resolver: addVisitSysInquiry...");
     if (!req.isAuth) {
@@ -532,7 +708,8 @@ module.exports = {
         const systematicInquiry = {
           title: args.visitInput.systematicInquiryTitle,
           description: args.visitInput.systematicInquiryDescription,
-          attachments: [args.visitInput.systematicInquiryAttachment]
+          attachments: [args.visitInput.systematicInquiryAttachment],
+          highlighted: false,
         }
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
@@ -562,7 +739,8 @@ module.exports = {
         const systematicInquiry = {
           title: args.visitInput.systematicInquiryTitle,
           description: args.visitInput.systematicInquiryDescription,
-          attachments: attachments
+          attachments: attachments,
+          highlighted: args.visitInput.systematicInquiryHighlighted,
         }
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
@@ -646,6 +824,47 @@ module.exports = {
       throw err;
     }
   },
+  toggleVisitSysInquiryHighlighted: async (args, req) => {
+    console.log("Resolver: toggleVisitSysInquiryHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+        const systematicInquiryAttachments = args.visitInput.systematicInquiryAttachments.split(',');
+        const systematicInquiry = {
+          title: args.visitInput.systematicInquiryTitle,
+          description: args.visitInput.systematicInquiryDescription,
+          attachments: systematicInquiryAttachments,
+          highlighted: args.visitInput.systematicInquiryHighlighted,
+        }
+        let newHighlighted;
+        if (args.visitInput.systematicInquiryHighlighted === null) {
+          newHighlighted = false;
+        } else {
+          newHighlighted = !args.visitInput.systematicInquiryHighlighted;
+        }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,
+            systematicInquiry: systematicInquiry
+          },
+          {'systematicInquiry.$.highlighted': newHighlighted},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   addVisitVitals: async (args, req) => {
     console.log("Resolver: addVisitVitals...");
     if (!req.isAuth) {
@@ -667,7 +886,8 @@ module.exports = {
           urine: {
             type: args.visitInput.vitalsUrineType,
             value: args.visitInput.vitalsUrineValue
-          }
+          },
+          highlighted: false,
         }
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
@@ -708,7 +928,8 @@ module.exports = {
           urine: {
             type: args.visitInput.vitalsUrineType,
             value: args.visitInput.vitalsUrineValue
-          }
+          },
+          highlighted: args.visitInput.vitalsHighlighted,
         }
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
@@ -742,7 +963,8 @@ module.exports = {
           value: args.visitInput.examinationValue,
           description: args.visitInput.examinationDescription,
           followUp: args.visitInput.examinationFollowUp,
-          attachments: [args.visitInput.examinationAttachment]
+          attachments: [args.visitInput.examinationAttachment],
+          highlighted: false,
         }
 
         const visit = await Visit.findOneAndUpdate(
@@ -863,7 +1085,8 @@ module.exports = {
           value: args.visitInput.examinationValue,
           description: args.visitInput.examinationDescription,
           followUp: args.visitInput.examinationFollowUp,
-          attachments: attachments
+          attachments: attachments,
+          highlighted: args.visitInput.examinationHighlighted,
         }
 
         const visit = await Visit.findOneAndUpdate(
@@ -895,6 +1118,7 @@ module.exports = {
           title: args.visitInput.investigationTitle,
           description: args.visitInput.investigationDescription,
           attachments: [args.visitInput.investigationAttachment],
+          highlighted: true,
         }
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
@@ -994,6 +1218,7 @@ module.exports = {
           title: args.visitInput.investigationTitle,
           description: args.visitInput.investigationDescription,
           attachments: attachments,
+          highlighted: args.visitInput.investigationHighlighted,
         }
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
@@ -1024,6 +1249,7 @@ module.exports = {
           title: args.visitInput.diagnosisTitle,
           description: args.visitInput.diagnosisDescription,
           attachments: [args.visitInput.diagnosisAttachment],
+          highlighted: false,
         }
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
@@ -1124,6 +1350,7 @@ module.exports = {
           title: args.visitInput.diagnosisTitle,
           description: args.visitInput.diagnosisDescription,
           attachments: attachments,
+          highlighted: args.visitInput.diagnosisHighlighted,
         }
 
         const visit = await Visit.findOneAndUpdate(
@@ -1157,6 +1384,7 @@ module.exports = {
           dose: args.visitInput.treatmentDose,
           frequency: args.visitInput.treatmentFrequency,
           attachments: [args.visitInput.treatmentAttachment],
+          highlighted: false,
         }
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
@@ -1264,6 +1492,7 @@ module.exports = {
           title: args.visitInput.treatmentTitle,
           description: args.visitInput.treatmentDescription,
           attachments: attachments,
+          highlighted: args.visitInput.treatmentHighlighted,
         }
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
@@ -1296,7 +1525,8 @@ module.exports = {
           amount: args.visitInput.billingAmount,
           paid: args.visitInput.billingPaid,
           attachments: [args.visitInput.billingAttachment],
-          notes: args.visitInput.billingNotes
+          notes: args.visitInput.billingNotes,
+          highlighted: false,
         }
 
         const visit = await Visit.findOneAndUpdate(
@@ -1452,7 +1682,8 @@ module.exports = {
           amount: args.visitInput.billingAmount,
           paid: args.visitInput.billingPaid,
           attachments: attachments,
-          notes: args.visitInput.billingNotes
+          notes: args.visitInput.billingNotes,
+          highlighted: args.visitInput.billingHighlighted,
         }
         console.log('foo',billing);
         const visit = await Visit.findOneAndUpdate(
@@ -1482,7 +1713,8 @@ module.exports = {
         const image = {
           name: args.visitInput.imageName,
           type: args.visitInput.imageType,
-          path: args.visitInput.imagePath
+          path: args.visitInput.imagePath,
+          highlighted: false,
         }
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
@@ -1511,7 +1743,8 @@ module.exports = {
         const image = {
           name: args.visitInput.imageName,
           type: args.visitInput.imageType,
-          path: args.visitInput.imagePath
+          path: args.visitInput.imagePath,
+          highlighted: args.visitInput.imageHighlighted,
         }
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
@@ -1540,7 +1773,8 @@ module.exports = {
         const file = {
           name: args.visitInput.fileName,
           type: args.visitInput.fileType,
-          path: args.visitInput.filePath
+          path: args.visitInput.filePath,
+          highlighted: false,
         }
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
@@ -1569,7 +1803,8 @@ module.exports = {
         const file = {
           name: args.visitInput.fileName,
           type: args.visitInput.fileType,
-          path: args.visitInput.filePath
+          path: args.visitInput.filePath,
+          highlighted: args.visitInput.fileHighlighted,
         }
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
@@ -1719,7 +1954,8 @@ module.exports = {
               testing: args.visitInput.vigilanceVaccinesOtherTesting,
               comment: args.visitInput.vigilanceVaccinesOtherComment
             }
-          }
+          },
+          highlighted: false,
         }
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
@@ -1869,7 +2105,8 @@ module.exports = {
               testing: args.visitInput.vigilanceVaccinesOtherTesting,
               comment: args.visitInput.vigilanceVaccinesOtherComment
             }
-          }
+          },
+          highlighted: args.visitInput.vigilanceHighlighted,
         };
 
         const visit = await Visit.findOneAndUpdate(

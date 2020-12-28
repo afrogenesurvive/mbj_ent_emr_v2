@@ -23,6 +23,9 @@ const PatientAllergyList = props => {
   // if (filter.field === 'nextOfKin' && filter.key === 'primary') {
   //   propsNextOfKin = nextOfKin2.filter(x => x.primary === filter.value);
   // }
+  if (filter.field === 'allergy' && filter.key === 'highlighted') {
+    propsAllergies = allergies2.filter(x => x.highlighted === filter.value);
+  }
   if (filter.field !== 'allergy') {
     propsAllergies = allergies2;
   }

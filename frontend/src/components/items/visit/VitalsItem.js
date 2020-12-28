@@ -9,12 +9,20 @@ import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
 import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
 import {
   faEye,
-  faTrashAlt
+  faTrashAlt,
+  faHighlighter,
+  faExclamation
  } from '@fortawesome/free-solid-svg-icons';
 
 import './visitItem.css';
 
 const VitalsItem = props => {
+  let liClass;
+  if (props.vitals.highlighted === false) {
+    liClass = 'cardBody';
+  } else {
+    liClass = 'cardBodyHighlighted';
+  }
   const [state, setState] = useState(false);
   const handleStateChange = () => {
     if (state === true) {
@@ -38,7 +46,7 @@ const VitalsItem = props => {
   return (
     <li key={props.key} className="">
       <Card>
-        <Card.Body className="cardBody">
+        <Card.Body className={liClass}>
           <Card.Text className="cardText">
             Pulse Rate: <span className="bold">{props.vitals.pr}</span>
           </Card.Text>
@@ -59,6 +67,21 @@ const VitalsItem = props => {
           >
             <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           </OverlayTrigger>
+
+          <OverlayTrigger
+            key={'top'}
+            placement={'top'}
+            overlay={
+              <Popover id={`popover-positioned-${'top'}`}>
+                <Popover.Content>
+                  <strong>Toggle Highlight</strong>
+                </Popover.Content>
+              </Popover>
+            }
+          >
+            <FontAwesomeIcon icon={faHighlighter} className="listIcon" onClick={props.toggleVisitVitalsHighlighted.bind(this, props.vitals)}/>
+          </OverlayTrigger>
+
 
           {state === true && (
             <Row className="listItemHiddenRow">

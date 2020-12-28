@@ -3228,7 +3228,7 @@ render() {
               <Col className="subTabCol">
                 <h3 className="">Comorbidities:
                 {this.hasComorbidities === true && (
-                  <FontAwesomeIcon icon={faExclamationTriangle} className="visitAttentionIcon" color="red" size="md"/>
+                  <FontAwesomeIcon icon={faExclamationTriangle} className="visitAttentionIcon" color="red" size="lg"/>
                 )}
                 </h3>
               </Col>

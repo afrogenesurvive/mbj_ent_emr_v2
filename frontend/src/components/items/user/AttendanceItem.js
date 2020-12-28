@@ -18,6 +18,7 @@ import moment from 'moment';
 import './UserItem.css';
 
 const AttendanceItem = props => {
+  console.log('foo',props.attendance.highlighted);
   const [state, setState] = useState(false);
   const handleStateChange = () => {
     if (state === true) {
