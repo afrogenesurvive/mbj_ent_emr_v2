@@ -659,7 +659,7 @@ module.exports = {
         description: args.patientInput.medicationDescription,
         dosage: args.patientInput.medicationDosage,
         attachments: [args.patientInput.medicationAttachment],
-        highlighted: args.patientInput.medicationHighlighted
+        highlighted: false
       };
       const patient = await Patient.findOneAndUpdate(
         {_id:args.patientId},

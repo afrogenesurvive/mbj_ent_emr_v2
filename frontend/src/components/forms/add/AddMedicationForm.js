@@ -34,6 +34,11 @@ return (
         <Form.Label className="formLabel">Description</Form.Label>
         <Form.Control as="textarea" rows="3" placeholder="..."/>
       </Form.Group>
+
+      <Form.Group as={Col} controlId="dosage" className="formGroup">
+        <Form.Label className="formLabel">Dosage</Form.Label>
+        <Form.Control type="text" placeholder="..."/>
+      </Form.Group>
     </Form.Row>
 
     <Form.Row className="formRow">

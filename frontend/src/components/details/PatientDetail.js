@@ -942,8 +942,10 @@ submitAddMedicationForm = (event) => {
   const token = this.context.token;
   const activityId = this.context.activityId;
   const patientId = this.props.patient._id;
-  const title = this.props.patient.name+"_medication_"+moment().format("YYYY-MM-DD, h:mm:ss a");
+  const title = event.target.title.value;
+  // const title = this.props.patient.name+"_medication_"+moment().format("YYYY-MM-DD, h:mm:ss a");
   const type = event.target.type.value;
+  const dosage = event.target.dosage.value;
   const description = event.target.description.value.replace(/\n/g, ' ');
 
   if (
@@ -1043,6 +1045,7 @@ submitAddMedicationForm = (event) => {
           medicationType:"${type}",
           medicationTitle:"${title}",
           medicationDescription:"${description}",
+          medicationDosage:"${dosage}",
           medicationAttachment:"${file2Path}"
         })
       {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
@@ -1096,7 +1099,7 @@ submitAddMedicationForm = (event) => {
     });
 }
 deleteMedication = (args) => {
-  console.log('...deleting medication...');
+  console.log('...deleting medication...',args);
   this.context.setUserAlert('...deleting medication...')
   this.setState({isLoading: true});
 
@@ -1113,6 +1116,8 @@ deleteMedication = (args) => {
           medicationType:"${args.type}",
           medicationTitle:"${args.title}",
           medicationDescription:"${args.description}",
+          medicationDosage:"${args.dosage}",
+          medicationHighlighted:${args.highlighted},
           medicationAttachments:"${args.attachments}"
         })
       {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}

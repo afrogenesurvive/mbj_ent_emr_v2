@@ -258,6 +258,7 @@ module.exports = buildSchema(`
     allergyHighlighted: Boolean
     medicationTitle: String
     medicationType: String
+    medicationDosage: String
     medicationDescription: String
     medicationAttachment: String
     medicationAttachments: String
