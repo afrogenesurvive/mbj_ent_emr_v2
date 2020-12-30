@@ -1300,7 +1300,7 @@ submitAddVitalsForm = (event) => {
           vitalsBp2:${bp2},
           vitalsRr:${rr},
           vitalsTemp:${temp},
-          vitalsPs02:${sp02},
+          vitalsSp02:${sp02},
           vitalsHeightUnit:"${heightUnit}",
           vitalsHeightValue:${heightValue},
           vitalsWeightUnit:"${weightUnit}",
@@ -5173,7 +5173,7 @@ toggleVisitComplaintHighlighted = (args) => {
       this.props.updateVisit(resData.data.toggleVisitComplaintHighlighted)
       this.setState({
         isLoading: false,
-        selectedVisit: resData.data.addVisitComplaint,
+        selectedVisit: resData.data.toggleVisitComplaintHighlighted,
         activityA: `toggleVisitComplaintHighlighted?activityId:${activityId},visitId:${visitId}`,
         adding: {
           state: null,
@@ -5251,7 +5251,7 @@ toggleVisitSurveyHighlighted = (args) => {
       this.props.updateVisit(resData.data.toggleVisitSurveyHighlighted)
       this.setState({
         isLoading: false,
-        selectedVisit: resData.data.addVisitSurvey,
+        selectedVisit: resData.data.toggleVisitSurveyHighlighted,
         activityA: `toggleVisitSurveyHighlighted?activityId:${activityId},visitId:${visitId}`,
         adding: {
           state: null,
@@ -5270,14 +5270,184 @@ toggleVisitSurveyHighlighted = (args) => {
 
 toggleVisitSysInquiryHighlighted = (args) => {
   console.log('...toggling visit systematicInquiry highlight...');
+  this.context.setUserAlert('...toggling visit systematicInquiry highlight...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const visitId = this.props.visit._id;
+  let requestBody;
+
+  let title = args.title;
+  let description = args.description.replace(/\n/g, ' ');
+  let highlighted = args.highlighted;
+  let attachments = args.attachments.join();
+
+  requestBody = {
+    query: `
+      mutation {toggleVisitSysInquiryHighlighted(
+        activityId:"${activityId}",
+        visitId:"${visitId}",
+        visitInput:{
+          systematicInquiryTitle:"${title}",
+          systematicInquiryDescription:"${description}",
+          systematicInquiryHighlighted:${highlighted},
+          systematicInquiryAttachments:"${attachments}"
+        })
+           {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments,highlighted},surveys{title,description,attachments,highlighted},systematicInquiry{title,description,attachments,highlighted},vitals{pr,bp1,bp2,rr,temp,sp02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value},highlighted},examination{general,area,type,measure,value,description,followUp,attachments,highlighted},investigation{type,title,description,attachments,highlighted},diagnosis{type,title,description,attachments,highlighted},treatment{type,title,description,dose,frequency,attachments,highlighted},billing{title,type,description,amount,paid,attachments,notes,highlighted},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}},highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.toggleVisitSysInquiryHighlighted);
+      let responseAlert = `...systematicInquiry highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updateVisit(resData.data.toggleVisitSysInquiryHighlighted)
+      this.setState({
+        isLoading: false,
+        selectedVisit: resData.data.toggleVisitSysInquiryHighlighted,
+        activityA: `toggleVisitSysInquiryHighlighted?activityId:${activityId},visitId:${visitId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedVisit = resData.data.toggleVisitSysInquiryHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
 
 }
+// toggleVisitVitalsHighlighted = (args) => {
+//   console.log('...toggling visit vitals highlight...');
+//
+// }
 toggleVisitVitalsHighlighted = (args) => {
   console.log('...toggling visit vitals highlight...');
+  this.context.setUserAlert('...toggling visit vitals highlight...')
+  this.setState({isLoading: true});
 
-}
-toggleVisitVitalsHighlighted = (args) => {
-  console.log('...toggling visit vitals highlight...');
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const visitId = this.props.visit._id;
+  let requestBody;
+
+  const pr = args.pr;
+  const bp1 = args.bp1;
+  const bp2 = args.bp2;
+  const rr = args.rr;
+  const temp = args.temp;
+  const sp02 = args.sp02;
+  const heightUnit = args.heightUnit;
+  const heightValue = args.heightValue;
+  const weightUnit = args.weightUnit;
+  const weightValue = args.weightValue;
+  const bmi = args.bmi;
+  const urineType = args.urine.type;
+  const urineValue = args.urine.value;
+  let highlighted = args.highlighted;
+
+  requestBody = {
+    query: `
+      mutation {toggleVisitVitalsHighlighted(
+        activityId:"${activityId}",
+        visitId:"${visitId}",
+        visitInput:{
+          vitalsPr:${pr},
+          vitalsBp1:${bp1},
+          vitalsBp2:${bp2},
+          vitalsRr:${rr},
+          vitalsTemp:${temp},
+          vitalsPs02:${sp02},
+          vitalsHeightUnit:"${heightUnit}",
+          vitalsHeightValue:${heightValue},
+          vitalsWeightUnit:"${weightUnit}",
+          vitalsWeightValue:${weightValue},
+          vitalsBmi:${bmi},
+          vitalsUrineType:"${urineType}",
+          vitalsUrineValue:"${urineValue}",
+          vitalsHighlighted:${highlighted},
+        })
+           {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments,highlighted},surveys{title,description,attachments,highlighted},systematicInquiry{title,description,attachments,highlighted},vitals{pr,bp1,bp2,rr,temp,sp02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value},highlighted},examination{general,area,type,measure,value,description,followUp,attachments,highlighted},investigation{type,title,description,attachments,highlighted},diagnosis{type,title,description,attachments,highlighted},treatment{type,title,description,dose,frequency,attachments,highlighted},billing{title,type,description,amount,paid,attachments,notes,highlighted},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}},highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.toggleVisitVitalsHighlighted);
+      let responseAlert = `...vitals highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updateVisit(resData.data.toggleVisitVitalsHighlighted)
+      this.setState({
+        isLoading: false,
+        selectedVisit: resData.data.toggleVisitVitalsHighlighted,
+        activityA: `toggleVisitVitalsHighlighted?activityId:${activityId},visitId:${visitId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedVisit = resData.data.toggleVisitVitalsHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
 
 }
 toggleVisitExaminationHighlighted = (args) => {

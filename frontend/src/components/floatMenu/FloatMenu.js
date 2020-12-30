@@ -36,7 +36,6 @@ const FloatMenu = (props) =>{
     highlighted = `${props.page}${props.menu}`;
   }
 
-
 return (
   <div className="FloatMenuTop">
 
@@ -495,7 +494,7 @@ return (
     <ul className="FloatSubMenuList">
     <li>
     {highlighted === 'visitdetailall' ? (
-      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
     ):(
       <Button variant="light" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
     )}

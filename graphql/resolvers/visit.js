@@ -877,7 +877,7 @@ module.exports = {
           bp2: args.visitInput.vitalsBp2,
           rr: args.visitInput.vitalsRr,
           temp: args.visitInput.vitalsTemp,
-          sp02: args.visitInput.vitalsPs02,
+          sp02: args.visitInput.vitalsSp02,
           heightUnit: args.visitInput.vitalsHeightUnit,
           heightValue: args.visitInput.vitalsHeightValue,
           weightUnit: args.visitInput.vitalsWeightUnit,
@@ -934,6 +934,59 @@ module.exports = {
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$pull: {vitals: vitals}},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  toggleVisitVitalsHighlighted: async (args, req) => {
+    console.log("Resolver: toggleVisitVitalsHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const vitals = {
+        pr: args.visitInput.vitalsPr,
+        bp1: args.visitInput.vitalsBp1,
+        bp2: args.visitInput.vitalsBp2,
+        rr: args.visitInput.vitalsRr,
+        temp: args.visitInput.vitalsTemp,
+        sp02: args.visitInput.vitalsPs02,
+        heightUnit: args.visitInput.vitalsHeightUnit,
+        heightValue: args.visitInput.vitalsHeightValue,
+        weightUnit: args.visitInput.vitalsWeightUnit,
+        weightValue: args.visitInput.vitalsWeightValue,
+        bmi: args.visitInput.vitalsBmi,
+        urine: {
+          type: args.visitInput.vitalsUrineType,
+          value: args.visitInput.vitalsUrineValue
+        },
+        highlighted: args.visitInput.vitalsHighlighted,
+      }
+
+        let newHighlighted;
+        if (args.visitInput.vitalsHighlighted === null) {
+          newHighlighted = false;
+        } else {
+          newHighlighted = !args.visitInput.vitalsHighlighted;
+        }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,
+            vitals: vitals
+          },
+          {'vitals.$.highlighted': newHighlighted},
           {new: true, useFindAndModify: false}
         )
         .populate('consultants')
@@ -1107,6 +1160,52 @@ module.exports = {
       throw err;
     }
   },
+  toggleVisitExaminationHighlighted: async (args, req) => {
+    console.log("Resolver: toggleVisitExaminationHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+        const attachments = args.visitInput.examinationAttachments.split(',');
+        const examination = {
+          general: args.visitInput.examinationGeneral,
+          area: args.visitInput.examinationArea,
+          type: args.visitInput.examinationType,
+          measure: args.visitInput.examinationMeasure,
+          value: args.visitInput.examinationValue,
+          description: args.visitInput.examinationDescription,
+          followUp: args.visitInput.examinationFollowUp,
+          attachments: attachments,
+          highlighted: args.visitInput.examinationHighlighted,
+        }
+        let newHighlighted;
+        if (args.visitInput.examinationHighlighted === null) {
+          newHighlighted = false;
+        } else {
+          newHighlighted = !args.visitInput.examinationHighlighted;
+        }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,
+            examination: examination
+          },
+          {'examination.$.highlighted': newHighlighted},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   addVisitInvestigation: async (args, req) => {
     console.log("Resolver: addVisitInvestigation...");
     if (!req.isAuth) {
@@ -1223,6 +1322,48 @@ module.exports = {
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$pull: {investigation: investigation}},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  toggleVisitInvestigationHighlighted: async (args, req) => {
+    console.log("Resolver: toggleVisitInvestigationHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+        const attachments = args.visitInput.investigationAttachments.split(',');
+        const investigation = {
+          type: args.visitInput.investigationType,
+          title: args.visitInput.investigationTitle,
+          description: args.visitInput.investigationDescription,
+          attachments: attachments,
+          highlighted: args.visitInput.investigationHighlighted,
+        }
+        let newHighlighted;
+        if (args.visitInput.investigationHighlighted === null) {
+          newHighlighted = false;
+        } else {
+          newHighlighted = !args.visitInput.investigationHighlighted;
+        }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,
+            investigation: investigation
+          },
+          {'investigation.$.highlighted': newHighlighted},
           {new: true, useFindAndModify: false}
         )
         .populate('consultants')
