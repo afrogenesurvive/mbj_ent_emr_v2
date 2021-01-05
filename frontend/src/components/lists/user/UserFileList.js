@@ -1,9 +1,9 @@
 import React from 'react';
 
-import FileItem from '../../items/patient/FileItem';
+import FileItem from '../../items/user/FileItem';
 import './UserList.css';
 
-const PatientFileList = props => {
+const UserFileList = props => {
 
   const {...filter} = props.filter;
   let files2 = props.files;
@@ -49,6 +49,7 @@ const PatientFileList = props => {
         file={file}
         canDelete={props.canDelete}
         onDelete={props.onDelete}
+        toggleStaffFileHighlighted={props.toggleStaffFileHighlighted}
       />
     );
   });
@@ -56,4 +57,4 @@ const PatientFileList = props => {
   return <ul className="fileList">{files}</ul>;
 };
 
-export default PatientFileList;
+export default UserFileList;

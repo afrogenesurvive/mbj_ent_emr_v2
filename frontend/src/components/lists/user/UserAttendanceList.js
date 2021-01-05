@@ -43,6 +43,7 @@ const UserAttendanceList = props => {
         attendance={attendanceItem}
         canDelete={props.canDelete}
         onDelete={props.onDelete}
+        toggleStaffAttendanceHighlighted={props.toggleStaffAttendanceHighlighted}
       />
     );
   });

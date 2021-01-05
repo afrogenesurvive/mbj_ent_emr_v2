@@ -49,6 +49,7 @@ const PatientImageList = props => {
         image={image}
         canDelete={props.canDelete}
         onDelete={props.onDelete}
+        togglePatientImageHighlighted={props.togglePatientImageHighlighted}
       />
     );
   });

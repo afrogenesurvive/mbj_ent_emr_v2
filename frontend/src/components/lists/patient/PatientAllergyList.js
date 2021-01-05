@@ -44,6 +44,7 @@ const PatientAllergyList = props => {
         onAddAttachment={props.onAddAttachment}
         deleteAttachment={props.deleteAttachment}
         visitPage={props.visitPage}
+        togglePatientAllergyHighlighted={props.togglePatientAllergyHighlighted}
       />
     );
   });

@@ -1762,6 +1762,19 @@ toggleOverlay = () => {
   })
 }
 
+toggleStaffImageHighlighted = () => {
+  console.log('toggleStaffImageHighlighted');
+}
+toggleStaffLeaveHighlighted = () => {
+  console.log('toggleStaffLeaveHighlighted');
+}
+toggleStaffAttendanceHighlighted = () => {
+  console.log('toggleStaffAttendanceHighlighted');
+}
+toggleStaffFileHighlighted = () => {
+  console.log('toggleStaffFileHighlighted');
+}
+
 
 render() {
 
@@ -1802,55 +1815,6 @@ render() {
 
         {this.state.activityUser && (
           <Col md={12} className="">
-
-          {
-          //   this.state.startFilter === true && (
-          //   <Col>
-          //     {this.state.selectFilter === 'address' && (
-          //       <FilterAddressForm
-          //         onCancel={this.toggleFilter}
-          //         onConfirm={this.submitFilterForm}
-          //       />
-          //     )}
-          //     {this.state.selectFilter === 'attendance' && (
-          //       <FilterAttendanceForm
-          //         onCancel={this.toggleFilter}
-          //         onConfirm={this.submitFilterForm}
-          //       />
-          //     )}
-          //     {this.state.selectFilter === 'leave' && (
-          //       <FilterLeaveForm
-          //         onCancel={this.toggleFilter}
-          //         onConfirm={this.submitFilterForm}
-          //       />
-          //     )}
-          //     {this.state.selectFilter === 'image' && (
-          //       <FilterImageForm
-          //         onCancel={this.toggleFilter}
-          //         onConfirm={this.submitFilterForm}
-          //       />
-          //     )}
-          //     {this.state.selectFilter === 'file' && (
-          //       <FilterFileForm
-          //         onCancel={this.toggleFilter}
-          //         onConfirm={this.submitFilterForm}
-          //       />
-          //     )}
-          //     {this.state.selectFilter === 'appointment' && (
-          //       <FilterAppointmentForm
-          //         onCancel={this.toggleFilter}
-          //         onConfirm={this.submitFilterForm}
-          //       />
-          //     )}
-          //     {this.state.selectFilter === 'note' && (
-          //       <FilterNoteForm
-          //         onCancel={this.toggleFilter}
-          //         onConfirm={this.submitFilterForm}
-          //       />
-          //     )}
-          //   </Col>
-          // )
-        }
 
           {this.state.updateSingleField.state === true && (
             <UpdateUserSingleFieldForm
@@ -2033,6 +1997,7 @@ render() {
                       authId={this.state.activityUser._id}
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteAttendance}
+                      toggleStaffAttendanceHighlighted={this.toggleStaffAttendanceHighlighted}
                     />
                     </Tab>
                     <Tab eventKey="2" title="calendar" className="calendarTab">
@@ -2080,6 +2045,7 @@ render() {
                       authId={this.state.activityUser._id}
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteLeave}
+                      toggleStaffLeaveHighlighted={this.toggleStaffLeaveHighlighted}
                     />
                     </Tab>
                     <Tab eventKey="2" title="calendar" className="calendarTab">
@@ -2124,6 +2090,7 @@ render() {
                     authId={this.state.activityUser._id}showListDetails={this.showListDetails}
                     canDelete={this.state.canDelete}
                     onDelete={this.deleteImage}
+                    toggleStaffImageHighlighted={this.toggleStaffImageHighlighted}
                   />
                 </Col>
               </li>
@@ -2156,6 +2123,7 @@ render() {
                     authId={this.state.activityUser._id}
                     canDelete={this.state.canDelete}
                     onDelete={this.deleteFile}
+                    toggleStaffFileHighlighted={this.toggleStaffFileHighlighted}
                   />
                 </Col>
               </li>
@@ -2399,6 +2367,7 @@ render() {
                   authId={this.state.activityUser._id}
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteAttendance}
+                  toggleStaffAttendanceHighlighted={this.toggleStaffAttendanceHighlighted}
                 />
                 </Tab>
                 <Tab eventKey="2" title="calendar" className="calendarTab">
@@ -2447,6 +2416,7 @@ render() {
                   authId={this.state.activityUser._id}
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteLeave}
+                  toggleStaffLeaveHighlighted={this.toggleStaffLeaveHighlighted}
                 />
                 </Tab>
                 <Tab eventKey="2" title="calendar" className="calendarTab">
@@ -2491,6 +2461,7 @@ render() {
                 authId={this.state.activityUser._id}showListDetails={this.showListDetails}
                 canDelete={this.state.canDelete}
                 onDelete={this.deleteImage}
+                toggleStaffImageHighlighted={this.toggleStaffImageHighlighted}
               />
             </Col>
             )}
@@ -2523,6 +2494,7 @@ render() {
                 authId={this.state.activityUser._id}
                 canDelete={this.state.canDelete}
                 onDelete={this.deleteFile}
+                toggleStaffFileHighlighted={this.toggleStaffFileHighlighted}
               />
             </Col>
             )}

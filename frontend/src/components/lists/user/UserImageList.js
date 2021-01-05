@@ -49,6 +49,7 @@ const UserImageList = props => {
         image={image}
         canDelete={props.canDelete}
         onDelete={props.onDelete}
+        toggleStaffImageHighlighted={props.toggleStaffImageHighlighted}
       />
     );
   });

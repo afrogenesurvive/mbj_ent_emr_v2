@@ -16,13 +16,16 @@ import {
   faTrashAlt,
   faBan,
   faCheckSquare,
-  faExternalLinkAlt
+  faExternalLinkAlt,
+  faHighlighter,
+  faExclamation
 } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 
 import './UserItem.css';
 
 const AppointmentItem = (props) => {
+
   const [state, setState] = useState(false);
   const handleStateChange = () => {
     if (state === true) {
@@ -82,6 +85,7 @@ const AppointmentItem = (props) => {
           </OverlayTrigger>
 
           </Link>
+
 
           {state === true && (
             <Row className="listItemHiddenRow">

@@ -5,16 +5,28 @@ import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Popover from 'react-bootstrap/Popover';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
-import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBatteryThreeQuarters,
+  faPlusSquare,
+  faBatteryEmpty,
+  faEye,
+  faTrashAlt,
+  faHighlighter,
+  faExclamation
+} from '@fortawesome/free-solid-svg-icons';
 import PatientAttachmentList from '../../lists/patient/PatientAttachmentList';
 
 import './PatientItem.css';
 
 const AllergyItem = props => {
+  
+  let liClass;
+  if (props.allergy.highlighted === false) {
+    liClass = 'cardBody';
+  } else {
+    liClass = 'cardBodyHighlighted';
+  }
+
   const [state, setState] = useState(false);
   const handleStateChange = () => {
     if (state === true) {
@@ -39,7 +51,7 @@ const AllergyItem = props => {
   return (
     <li key={props.key} className="">
       <Card>
-        <Card.Body className="cardBody">
+        <Card.Body className={liClass}>
           <Card.Text className="cardText">
             Title: <span className="bold">{props.allergy.title}</span>
           </Card.Text>
@@ -59,6 +71,20 @@ const AllergyItem = props => {
             }
           >
             <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+          </OverlayTrigger>
+
+          <OverlayTrigger
+            key={'top'}
+            placement={'top'}
+            overlay={
+              <Popover id={`popover-positioned-${'top'}`}>
+                <Popover.Content>
+                  <strong>Toggle Highlight</strong>
+                </Popover.Content>
+              </Popover>
+            }
+          >
+            <FontAwesomeIcon icon={faHighlighter} className="listIcon" onClick={props.togglePatientAllergyHighlighted.bind(this, props.allergy)}/>
           </OverlayTrigger>
 
           {state === true && (

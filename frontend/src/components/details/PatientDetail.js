@@ -2919,6 +2919,25 @@ checkAllergies = () => {
   })
 }
 
+togglePatientComorbidityHighlighted = () => {
+  console.log('togglePatientComorbidityHighlighted');
+}
+togglePatientAllergyHighlighted = () => {
+  console.log('togglePatientAllergyHighlighted');
+}
+togglePatientFileHighlighted = () => {
+  console.log('togglePatientFileHighlighted');
+}
+togglePatientImageHighlighted = () => {
+  console.log('togglePatientImageHighlighted');
+}
+togglePatientMedicationHighlighted = () => {
+  console.log('togglePatientMedicationHighlighted');
+}
+togglePatientNextOfKinHighlighted = () => {
+  console.log('togglePatientNextOfKinHighlighted');
+}
+
 render() {
 
   return (
@@ -2944,78 +2963,6 @@ render() {
       <Row className="">
         {this.props.patient && (
           <Col md={12} className="">
-            {
-            //   this.state.startFilter === true && (
-            //   <Col>
-            //     {this.selectFilter === 'address' && (
-            //       <FilterAddressForm
-            //         onCancel={this.toggleFilter}
-            //         onConfirm={this.submitFilterForm}
-            //       />
-            //     )}
-            //     {this.selectFilter === 'nextOfKin' && (
-            //       <FilterNextOfKinForm
-            //         onCancel={this.toggleFilter}
-            //         onConfirm={this.submitFilterForm}
-            //       />
-            //     )}
-            //     {this.selectFilter === 'allergy' && (
-            //       <FilterAllergyForm
-            //         onCancel={this.toggleFilter}
-            //         onConfirm={this.submitFilterForm}
-            //       />
-            //     )}
-            //     {this.selectFilter === 'medication' && (
-            //       <FilterMedicationForm
-            //         onCancel={this.toggleFilter}
-            //         onConfirm={this.submitFilterForm}
-            //       />
-            //     )}
-            //     {this.selectFilter === 'comorbidities' && (
-            //       <FilterComorbidityForm
-            //         onCancel={this.toggleFilter}
-            //         onConfirm={this.submitFilterForm}
-            //       />
-            //     )}
-            //     {this.selectFilter === 'image' && (
-            //       <FilterImageForm
-            //         onCancel={this.toggleFilter}
-            //         onConfirm={this.submitFilterForm}
-            //       />
-            //     )}
-            //     {this.selectFilter === 'file' && (
-            //       <FilterFileForm
-            //         onCancel={this.toggleFilter}
-            //         onConfirm={this.submitFilterForm}
-            //       />
-            //     )}
-            //     {this.selectFilter === 'appointment' && (
-            //       <FilterAppointmentForm
-            //         onCancel={this.toggleFilter}
-            //         onConfirm={this.submitFilterForm}
-            //       />
-            //     )}
-            //     {this.selectFilter === 'visit' && (
-            //       <FilterVisitForm
-            //         onCancel={this.toggleFilter}
-            //         onConfirm={this.submitFilterForm}
-            //       />
-            //     )}
-            //     {this.selectFilter === 'note' && (
-            //       <FilterNoteForm
-            //         onCancel={this.toggleFilter}
-            //         onConfirm={this.submitFilterForm}
-            //       />
-            //     )}
-            //     {this.selectFilter === 'tag' && (
-            //       <FilterTagForm
-            //         onCancel={this.toggleFilter}
-            //         onConfirm={this.submitFilterForm}
-            //       />
-            //     )}
-            //   </Col>
-            // )
-          }
 
             {this.state.updateSingleField.state === true && (
               <UpdatePatientSingleFieldForm
@@ -3261,6 +3208,7 @@ render() {
                   authId={this.context.activityId}
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteComorbidity}
+                  togglePatientComorbidityHighlighted={this.togglePatientComorbidityHighlighted}
                 />
               </Col>
               </li>
@@ -3355,6 +3303,7 @@ render() {
                   authId={this.context.activityId}
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteNextOfKin}
+                  togglePatientNextOfKinHighlighted={this.togglePatientNextOfKinHighlighted}
                 />
               </Col>
               </li>
@@ -3400,6 +3349,7 @@ render() {
                   onDelete={this.deleteAllergy}
                   onAddAttachment={this.startAddAttachment}
                   deleteAttachment={this.deleteAttachment}
+                  togglePatientAllergyHighlighted={this.togglePatientAllergyHighlighted}
                 />
               </Col>
               </li>
@@ -3440,6 +3390,7 @@ render() {
                   onDelete={this.deleteMedication}
                   onAddAttachment={this.startAddAttachment}
                   deleteAttachment={this.deleteAttachment}
+                  togglePatientMedicationHighlighted={this.togglePatientMedicationHighlighted}
                 />
               </Col>
               </li>
@@ -3473,6 +3424,7 @@ render() {
                   authId={this.context.activityId}
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteImage}
+                  togglePatientImageHighlighted={this.togglePatientImageHighlighted}
                 />
               </Col>
               </li>
@@ -3505,6 +3457,7 @@ render() {
                   authId={this.context.activityId}
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteFile}
+                  togglePatientFileHighlighted={this.togglePatientFileHighlighted}
                 />
               </Col>
               </li>
@@ -3920,6 +3873,7 @@ render() {
                   authId={this.context.activityId}
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteNextOfKin}
+                  togglePatientNextOfKinHighlighted={this.togglePatientNextOfKinHighlighted}
                 />
               </Col>
             )}
@@ -3964,6 +3918,7 @@ render() {
                   onDelete={this.deleteAllergy}
                   onAddAttachment={this.startAddAttachment}
                   deleteAttachment={this.deleteAttachment}
+                  togglePatientAllergyHighlighted={this.togglePatientAllergyHighlighted}
                 />
               </Col>
             )}
@@ -4004,6 +3959,7 @@ render() {
                   onDelete={this.deleteMedication}
                   onAddAttachment={this.startAddAttachment}
                   deleteAttachment={this.deleteAttachment}
+                  togglePatientMedicationHighlighted={this.togglePatientMedicationHighlighted}
                 />
               </Col>
             )}
@@ -4036,6 +3992,7 @@ render() {
                   authId={this.context.activityId}
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteComorbidity}
+                  togglePatientComorbidityHighlighted={this.togglePatientComorbidityHighlighted}
                 />
               </Col>
             )}
@@ -4068,6 +4025,7 @@ render() {
                   authId={this.context.activityId}
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteImage}
+                  togglePatientImageHighlighted={this.togglePatientImageHighlighted}
                 />
               </Col>
             )}
@@ -4100,6 +4058,7 @@ render() {
                   authId={this.context.activityId}
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteFile}
+                  togglePatientFileHighlighted={this.togglePatientFileHighlighted}
                 />
               </Col>
             )}

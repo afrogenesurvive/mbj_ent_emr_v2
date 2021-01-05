@@ -44,6 +44,7 @@ const PatientNextOfKinList = props => {
         onDelete={props.onDelete}
         canDelete={props.canDelete}
         makePrimary={props.makePrimary}
+        togglePatientNextOfKinHighlighted={props.togglePatientNextOfKinHighlighted}
       />
     );
   });

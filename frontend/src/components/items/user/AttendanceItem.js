@@ -9,16 +9,24 @@ import {
   faBatteryThreeQuarters,
   faPlusSquare,
   faBatteryEmpty,
-  faFolderMinus,
   faEye,
-  faTrashAlt
+  faTrashAlt,
+  faHighlighter,
+  faExclamation
 } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 
 import './UserItem.css';
 
 const AttendanceItem = props => {
-  console.log('foo',props.attendance.highlighted);
+
+  let liClass;
+  if (props.attendance.highlighted === false) {
+    liClass = 'cardBody';
+  } else {
+    liClass = 'cardBodyHighlighted';
+  }
+
   const [state, setState] = useState(false);
   const handleStateChange = () => {
     if (state === true) {
@@ -42,7 +50,7 @@ const AttendanceItem = props => {
   return (
     <li key={props.key} className="">
       <Card>
-        <Card.Body className="cardBody">
+        <Card.Body className={liClass}>
           <Card.Text className="cardText">
           Date: <span className="bold">{moment.unix(props.attendance.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
           </Card.Text>
@@ -62,6 +70,21 @@ const AttendanceItem = props => {
             }
           >
             <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+          </OverlayTrigger>
+
+
+          <OverlayTrigger
+            key={'top'}
+            placement={'top'}
+            overlay={
+              <Popover id={`popover-positioned-${'top'}`}>
+                <Popover.Content>
+                  <strong>Toggle Highlight</strong>
+                </Popover.Content>
+              </Popover>
+            }
+          >
+            <FontAwesomeIcon icon={faHighlighter} className="listIcon" onClick={props.toggleStaffAttendanceHighlighted.bind(this, props.attendance)}/>
           </OverlayTrigger>
 
           {state === true && (
