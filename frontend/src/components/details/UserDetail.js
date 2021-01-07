@@ -1612,6 +1612,7 @@ parseForCalendar = (args) => {
         date: x.date,
         status: x.status,
         description: x.description,
+        highlighted: x.highlighted,
         field: 'attendance'
       }
     }))
@@ -1625,13 +1626,57 @@ parseForCalendar = (args) => {
         startDate: x.startDate,
         endDate: x.endDate,
         description: x.description,
+        highlighted: x.highlighted,
         field: 'leave'
       }
     }))
-    this.setState({
-      calendarAttendance: calendarAttendance,
-      calendarLeave: calendarLeave
-    })
+    // this.setState({
+    //   calendarAttendance: calendarAttendance,
+    //   calendarLeave: calendarLeave
+    // })
+  let calendarAttendance2 = [];
+  for (const x of args.attendance) {
+    let color = 'blue';
+    if (x.highlighted === true) {
+      color = 'red'
+    }
+    let evt = {
+      title: x.status,
+      color: color,
+      date: moment.unix(x.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      props: {
+        date: x.date,
+        status: x.status,
+        description: x.description,
+        highlighted: x.highlighted,
+        field: 'attendance'
+      }
+    }
+    calendarAttendance2.push(evt);
+  }
+  let calendarLeave2 = [];
+  for (const x of args.leave) {
+    let color = 'blue';
+    if (x.highlighted === true) {
+      color = 'red'
+    }
+    let evt = {
+      title: x.type,
+      color: color,
+      date: moment.unix(x.startDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      end: moment.unix(x.endDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      props: {
+        date: x.date,
+        type: x.type,
+        startDate: x.startDate,
+        endDate: x.endDate,
+        description: x.description,
+        highlighted: x.highlighted,
+        field: 'leave'
+      }
+    }
+    calendarLeave2.push(evt)
+  }
   let calendarAppointments = args.appointments.map(x => ({
       title: x.title,
       date: moment.unix(x.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
@@ -1650,8 +1695,8 @@ parseForCalendar = (args) => {
       }
     }))
     this.setState({
-      calendarAttendance: calendarAttendance,
-      calendarLeave: calendarLeave,
+      calendarAttendance: calendarAttendance2,
+      calendarLeave: calendarLeave2,
       calendarAppointments: calendarAppointments,
     })
 }

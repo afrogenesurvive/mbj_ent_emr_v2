@@ -40,18 +40,22 @@ module.exports = {
         allUserIds2.push(user._id);
       })
       console.log('allUserIds',allUserIds2);
-      for(const value of allUserIds2) {
-        let compUser = await User.findOneAndUpdate(
-          {_id:value},
-          {
-            'attendance.$[].highlighted': false,
-            'leave.$[].highlighted': false,
-            'images.$[].highlighted': false,
-            'files.$[].highlighted': false,
-          },
-          {new: true, useFindAndModify: false}
-        )
-      }
+      // for(const value of allUserIds2) {
+      //   let compUser = await User.findOneAndUpdate(
+      //     {_id:value},
+      //     {
+      //       'attendance.$[].highlighted': false,
+      //       'leave.$[].highlighted': false,
+      //       'images.$[].highlighted': false,
+      //       'files.$[].highlighted': false,
+      //     },
+      //     // {'notes.$[]': {
+      //     //   note: '',
+      //     //   highlighted: false
+      //     // }},
+      //     {new: true, useFindAndModify: false}
+      //   )
+      // }
 
       let allPatientIds2 = [];
       let allPatientIds = await Patient.find({});
@@ -59,21 +63,25 @@ module.exports = {
         allPatientIds2.push(patient._id);
       })
       console.log('allPatientIds',allPatientIds2);
-      for(const value of allPatientIds2) {
-        let compPatient = await Patient.findOneAndUpdate(
-          {_id:value},
-          {
-            'nextOfKin.$[].highlighted': false,
-            'allergies.$[].highlighted': false,
-            'medication.$[].highlighted': false,
-            'medication.$[].dosage': "",
-            'images.$[].highlighted': false,
-            'files.$[].highlighted': false,
-            'comorbidities.$[].highlighted': false,
-          },
-          {new: true, useFindAndModify: false}
-        )
-      }
+      // for(const value of allPatientIds2) {
+      //   let compPatient = await Patient.findOneAndUpdate(
+      //     {_id:value},
+      //     {
+      //       'nextOfKin.$[].highlighted': false,
+      //       'allergies.$[].highlighted': false,
+      //       'medication.$[].highlighted': false,
+      //       'medication.$[].dosage': "",
+      //       'images.$[].highlighted': false,
+      //       'files.$[].highlighted': false,
+      //       'comorbidities.$[].highlighted': false,
+      //     },
+      //     // {'notes.$[]': {
+      //     //   note: '',
+      //     //   highlighted: false
+      //     // }},
+      //     {new: true, useFindAndModify: false}
+      //   )
+      // }
 
       let allVisitIds2 = [];
       let allVisitIds = await Visit.find({});
@@ -84,22 +92,31 @@ module.exports = {
       for(const value of allVisitIds2) {
         // console.log(value);
         let compVisit = await Visit.findOneAndUpdate(
-          {_id:value},
-          {
-            'complaints.$[].highlighted': false,
-            'surveys.$[].highlighted': false,
-            'systematicInquiry.$[].highlighted': false,
-            'vitals.$[].highlighted': false,
-            'examination.$[].highlighted': false,
-            'investigation.$[].highlighted': false,
-            'diagnosis.$[].highlighted': false,
-            'treatment.$[].highlighted': false,
-            'billing.$[].highlighted': false,
-            'vigilance.$[].highlighted': false,
-            'images.$[].highlighted': false,
-            'files.$[].highlighted': false,
-          },
-          {new: true, useFindAndModify: false}
+          {},
+          // {_id:value},
+          // {
+          //   'complaints.$[].highlighted': false,
+          //   'surveys.$[].highlighted': false,
+          //   'systematicInquiry.$[].highlighted': false,
+          //   'vitals.$[].highlighted': false,
+          //   'examination.$[].highlighted': false,
+          //   'investigation.$[].highlighted': false,
+          //   'diagnosis.$[].highlighted': false,
+          //   'treatment.$[].highlighted': false,
+          //   'billing.$[].highlighted': false,
+          //   'vigilance.$[].highlighted': false,
+          //   'images.$[].highlighted': false,
+          //   'files.$[].highlighted': false,
+          // },
+          // {'notes.$[]': {
+          //   note: '',
+          //   highlighted: false
+          // }},
+          // {
+          //   'vitals.$[].sp02': 0
+          // },
+          {$unset: {"ps02": 1}},
+          // {new: true, useFindAndModify: false}
         )
       }
 
@@ -962,7 +979,7 @@ module.exports = {
         bp2: args.visitInput.vitalsBp2,
         rr: args.visitInput.vitalsRr,
         temp: args.visitInput.vitalsTemp,
-        sp02: args.visitInput.vitalsPs02,
+        sp02: args.visitInput.vitalsSp02,
         heightUnit: args.visitInput.vitalsHeightUnit,
         heightValue: args.visitInput.vitalsHeightValue,
         weightUnit: args.visitInput.vitalsWeightUnit,
@@ -975,29 +992,33 @@ module.exports = {
         highlighted: args.visitInput.vitalsHighlighted,
       }
 
-        let newHighlighted;
-        if (args.visitInput.vitalsHighlighted === null) {
-          newHighlighted = false;
-        } else {
-          newHighlighted = !args.visitInput.vitalsHighlighted;
-        }
+      let newHighlighted;
+      if (args.visitInput.vitalsHighlighted === null) {
+        newHighlighted = false;
+      } else {
+        newHighlighted = !args.visitInput.vitalsHighlighted;
+      }
 
-        const visit = await Visit.findOneAndUpdate(
-          {_id:args.visitId,
-            vitals: vitals
-          },
-          {'vitals.$.highlighted': newHighlighted},
-          {new: true, useFindAndModify: false}
-        )
-        .populate('consultants')
-        .populate('appointment')
-        .populate('patient');
-        return {
-          ...visit._doc,
-          _id: visit.id,
-          title: visit.title,
-          date: visit.date
-        };
+      const visitx = await Visit.find({_id:args.visitId,vitals: vitals});
+      console.log('beep',vitals,visitx);
+
+
+      const visit = await Visit.findOneAndUpdate(
+        {_id:args.visitId,
+          vitals: vitals
+        },
+        {'vitals.$.highlighted': newHighlighted},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('consultants')
+      .populate('appointment')
+      .populate('patient');
+      return {
+        ...visit._doc,
+        _id: visit.id,
+        title: visit.title,
+        date: visit.date
+      };
     } catch (err) {
       throw err;
     }

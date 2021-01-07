@@ -5347,10 +5347,7 @@ toggleVisitSysInquiryHighlighted = (args) => {
     });
 
 }
-// toggleVisitVitalsHighlighted = (args) => {
-//   console.log('...toggling visit vitals highlight...');
-//
-// }
+
 toggleVisitVitalsHighlighted = (args) => {
   console.log('...toggling visit vitals highlight...');
   this.context.setUserAlert('...toggling visit vitals highlight...')
@@ -5376,28 +5373,30 @@ toggleVisitVitalsHighlighted = (args) => {
   const urineValue = args.urine.value;
   let highlighted = args.highlighted;
 
+
   requestBody = {
     query: `
-      mutation {toggleVisitVitalsHighlighted(
-        activityId:"${activityId}",
-        visitId:"${visitId}",
-        visitInput:{
-          vitalsPr:${pr},
-          vitalsBp1:${bp1},
-          vitalsBp2:${bp2},
-          vitalsRr:${rr},
-          vitalsTemp:${temp},
-          vitalsPs02:${sp02},
-          vitalsHeightUnit:"${heightUnit}",
-          vitalsHeightValue:${heightValue},
-          vitalsWeightUnit:"${weightUnit}",
-          vitalsWeightValue:${weightValue},
-          vitalsBmi:${bmi},
-          vitalsUrineType:"${urineType}",
-          vitalsUrineValue:"${urineValue}",
-          vitalsHighlighted:${highlighted},
-        })
-           {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments,highlighted},surveys{title,description,attachments,highlighted},systematicInquiry{title,description,attachments,highlighted},vitals{pr,bp1,bp2,rr,temp,sp02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value},highlighted},examination{general,area,type,measure,value,description,followUp,attachments,highlighted},investigation{type,title,description,attachments,highlighted},diagnosis{type,title,description,attachments,highlighted},treatment{type,title,description,dose,frequency,attachments,highlighted},billing{title,type,description,amount,paid,attachments,notes,highlighted},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}},highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted}}}
+      mutation {
+        toggleVisitVitalsHighlighted(
+          activityId:"${activityId}",
+          visitId:"${visitId}",
+          visitInput:{
+            vitalsPr: ${pr},
+            vitalsBp1: ${bp1},
+            vitalsBp2: ${bp2},
+            vitalsRr: ${rr},
+            vitalsTemp: ${temp},
+            vitalsSp02: ${sp02},
+            vitalsHeightUnit: "${heightUnit}",
+            vitalsHeightValue: ${heightValue},
+            vitalsWeightUnit: "${weightUnit}",
+            vitalsWeightValue: ${weightValue},
+            vitalsBmi: ${bmi},
+            vitalsUrineType: "${urineType}",
+            vitalsUrineValue: "${urineValue}",
+            vitalsHighlighted: ${highlighted},
+          })
+          {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments,highlighted},surveys{title,description,attachments,highlighted},systematicInquiry{title,description,attachments,highlighted},vitals{pr,bp1,bp2,rr,temp,sp02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value},highlighted},examination{general,area,type,measure,value,description,followUp,attachments,highlighted},investigation{type,title,description,attachments,highlighted},diagnosis{type,title,description,attachments,highlighted},treatment{type,title,description,dose,frequency,attachments,highlighted},billing{title,type,description,amount,paid,attachments,notes,highlighted},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}},highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted}}}
     `};
 
 

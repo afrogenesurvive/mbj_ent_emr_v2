@@ -19,7 +19,7 @@ import PatientAttachmentList from '../../lists/patient/PatientAttachmentList';
 import './PatientItem.css';
 
 const AllergyItem = props => {
-  
+
   let liClass;
   if (props.allergy.highlighted === false) {
     liClass = 'cardBody';
@@ -73,19 +73,21 @@ const AllergyItem = props => {
             <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           </OverlayTrigger>
 
-          <OverlayTrigger
-            key={'top'}
-            placement={'top'}
-            overlay={
-              <Popover id={`popover-positioned-${'top'}`}>
-                <Popover.Content>
-                  <strong>Toggle Highlight</strong>
-                </Popover.Content>
-              </Popover>
-            }
-          >
-            <FontAwesomeIcon icon={faHighlighter} className="listIcon" onClick={props.togglePatientAllergyHighlighted.bind(this, props.allergy)}/>
-          </OverlayTrigger>
+          {props.visitPage === true && (
+            <OverlayTrigger
+              key={'top'}
+              placement={'top'}
+              overlay={
+                <Popover id={`popover-positioned-${'top'}`}>
+                  <Popover.Content>
+                    <strong>Toggle Highlight</strong>
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <FontAwesomeIcon icon={faHighlighter} className="listIcon" onClick={props.togglePatientAllergyHighlighted.bind(this, props.allergy)}/>
+            </OverlayTrigger>
+          )}
 
           {state === true && (
             <Row className="listItemHiddenRow">
