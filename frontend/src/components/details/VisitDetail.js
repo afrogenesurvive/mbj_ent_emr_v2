@@ -2406,7 +2406,7 @@ submitAddTreatmentForm = (event) => {
   const title = this.props.visit.patient.name+'_treatment_'+moment().format('YYYY-MM-DD, h:mm:ss a');
   const type = event.target.type.value;
   const description = event.target.description.value.replace(/\n/g, ' ');
-  const dosage = event.target.dosage.value;
+  const dose = event.target.dose.value;
   const frequency = event.target.frequency.value;
   // const attachment = event.target.attachment.value;
 
@@ -2414,7 +2414,7 @@ submitAddTreatmentForm = (event) => {
       title.trim().length === 0 ||
       type.trim().length === 0 ||
       description.trim().length === 0 ||
-      dosage.trim().length === 0 ||
+      dose.trim().length === 0 ||
       frequency.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
@@ -2511,7 +2511,7 @@ submitAddTreatmentForm = (event) => {
             treatmentType:"${type}",
             treatmentTitle:"${title}",
             treatmentDescription:"${description}",
-            treatmentDose:"${dosage}",
+            treatmentDose:"${dose}",
             treatmentFrequency:"${frequency}",
             treatmentAttachment:"${file2Path}"
           })
@@ -2578,7 +2578,7 @@ deleteTreatment = (args) => {
   const title = args.title;
   const type = args.type;
   const description = args.description;
-  const dosage = args.dosage;
+  const dose = args.dose;
   const frequency = args.frequency;
   const attachments = args.attachments;
 
@@ -2591,7 +2591,7 @@ deleteTreatment = (args) => {
             treatmentType:"${type}",
             treatmentTitle:"${title}",
             treatmentDescription:"${description}",
-            treatmentDose:"${dosage}",
+            treatmentDose:"${dose}",
             treatmentFrequency:"${frequency}",
             treatmentAttachments:"${attachments}"
           })
@@ -5267,7 +5267,6 @@ toggleVisitSurveyHighlighted = (args) => {
       this.setState({isLoading: false })
     });
 }
-
 toggleVisitSysInquiryHighlighted = (args) => {
   console.log('...toggling visit systematicInquiry highlight...');
   this.context.setUserAlert('...toggling visit systematicInquiry highlight...')
@@ -5347,7 +5346,6 @@ toggleVisitSysInquiryHighlighted = (args) => {
     });
 
 }
-
 toggleVisitVitalsHighlighted = (args) => {
   console.log('...toggling visit vitals highlight...');
   this.context.setUserAlert('...toggling visit vitals highlight...')
@@ -5451,34 +5449,735 @@ toggleVisitVitalsHighlighted = (args) => {
 }
 toggleVisitExaminationHighlighted = (args) => {
   console.log('...toggling visit examination highlight...');
+  this.context.setUserAlert('...toggling visit examination highlight...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const visitId = this.props.visit._id;
+  let requestBody;
+
+  const general = args.general;
+  const area = args.area;
+  const type = args.type;
+  const measure = args.measure;
+  const value = args.value;
+  const description = args.description.replace(/\n/g, ' ');
+  const followUp = args.followUp;
+  const attachments = args.attachments.join();
+  let highlighted = args.highlighted;
+
+
+  requestBody = {
+    query: `
+      mutation {
+        toggleVisitExaminationHighlighted(
+          activityId:"${activityId}",
+          visitId:"${visitId}",
+          visitInput:{
+            examinationGeneral:"${general}",
+            examinationArea:"${area}",
+            examinationType:"${type}",
+            examinationMeasure:"${measure}",
+            examinationValue:"${value}",
+            examinationDescription:"${description}",
+            examinationFollowUp:${followUp},
+            examinationAttachments:"${attachments}"
+            examinationHighlighted: ${highlighted},
+          })
+          {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments,highlighted},surveys{title,description,attachments,highlighted},systematicInquiry{title,description,attachments,highlighted},vitals{pr,bp1,bp2,rr,temp,sp02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value},highlighted},examination{general,area,type,measure,value,description,followUp,attachments,highlighted},investigation{type,title,description,attachments,highlighted},diagnosis{type,title,description,attachments,highlighted},treatment{type,title,description,dose,frequency,attachments,highlighted},billing{title,type,description,amount,paid,attachments,notes,highlighted},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}},highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.toggleVisitExaminationHighlighted);
+      let responseAlert = `...examination highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updateVisit(resData.data.toggleVisitExaminationHighlighted)
+      this.setState({
+        isLoading: false,
+        selectedVisit: resData.data.toggleVisitExaminationHighlighted,
+        activityA: `toggleVisitExaminationHighlighted?activityId:${activityId},visitId:${visitId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedVisit = resData.data.toggleVisitExaminationHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
 
 }
 toggleVisitInvestigationHighlighted = (args) => {
   console.log('...toggling visit investigation highlight...');
+  this.context.setUserAlert('...toggling visit investigation highlight...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const visitId = this.props.visit._id;
+  let requestBody;
+
+  const title = args.title;
+  const type = args.type;
+  const description = args.description.replace(/\n/g, ' ');
+  const attachments = args.attachments.join();
+  let highlighted = args.highlighted;
+
+  requestBody = {
+    query: `
+      mutation {
+        toggleVisitInvestigationHighlighted(
+          activityId:"${activityId}",
+          visitId:"${visitId}",
+          visitInput:{
+            investigationTitle:"${title}",
+            investigationType:"${type}",
+            investigationDescription:"${description}",
+            investigationAttachments:"${attachments}"
+            investigationHighlighted: ${highlighted},
+          })
+          {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments,highlighted},surveys{title,description,attachments,highlighted},systematicInquiry{title,description,attachments,highlighted},vitals{pr,bp1,bp2,rr,temp,sp02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value},highlighted},examination{general,area,type,measure,value,description,followUp,attachments,highlighted},investigation{type,title,description,attachments,highlighted},diagnosis{type,title,description,attachments,highlighted},treatment{type,title,description,dose,frequency,attachments,highlighted},billing{title,type,description,amount,paid,attachments,notes,highlighted},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}},highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.toggleVisitInvestigationHighlighted);
+      let responseAlert = `...investigation highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updateVisit(resData.data.toggleVisitInvestigationHighlighted)
+      this.setState({
+        isLoading: false,
+        selectedVisit: resData.data.toggleVisitInvestigationHighlighted,
+        activityA: `toggleVisitInvestigationHighlighted?activityId:${activityId},visitId:${visitId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedVisit = resData.data.toggleVisitInvestigationHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
 
 }
 toggleVisitDiagnosisHighlighted = (args) => {
   console.log('...toggling visit diagnosis highlight...');
+  this.context.setUserAlert('...toggling visit diagnosis highlight...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const visitId = this.props.visit._id;
+  let requestBody;
+
+  const title = args.title;
+  const type = args.type;
+  const description = args.description.replace(/\n/g, ' ');
+  const attachments = args.attachments.join();
+  let highlighted = args.highlighted;
+
+  requestBody = {
+    query: `
+      mutation {
+        toggleVisitDiagnosisHighlighted(
+          activityId:"${activityId}",
+          visitId:"${visitId}",
+          visitInput:{
+            diagnosisTitle:"${title}",
+            diagnosisType:"${type}",
+            diagnosisDescription:"${description}",
+            diagnosisAttachments:"${attachments}"
+            diagnosisHighlighted: ${highlighted},
+          })
+          {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments,highlighted},surveys{title,description,attachments,highlighted},systematicInquiry{title,description,attachments,highlighted},vitals{pr,bp1,bp2,rr,temp,sp02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value},highlighted},examination{general,area,type,measure,value,description,followUp,attachments,highlighted},investigation{type,title,description,attachments,highlighted},diagnosis{type,title,description,attachments,highlighted},treatment{type,title,description,dose,frequency,attachments,highlighted},billing{title,type,description,amount,paid,attachments,notes,highlighted},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}},highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.toggleVisitDiagnosisHighlighted);
+      let responseAlert = `...diagnosis highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updateVisit(resData.data.toggleVisitDiagnosisHighlighted)
+      this.setState({
+        isLoading: false,
+        selectedVisit: resData.data.toggleVisitDiagnosisHighlighted,
+        activityA: `toggleVisitDiagnosisHighlighted?activityId:${activityId},visitId:${visitId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedVisit = resData.data.toggleVisitDiagnosisHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
 
 }
 toggleVisitTreatmentHighlighted = (args) => {
   console.log('...toggling visit treatment highlight...');
+  this.context.setUserAlert('...toggling visit treatment highlight...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const visitId = this.props.visit._id;
+  let requestBody;
+
+  const title = args.title;
+  const type = args.type;
+  const description = args.description.replace(/\n/g, ' ');
+  const dose = args.dose;
+  const frequency = args.frequency;
+  const attachments = args.attachments.join();
+  let highlighted = args.highlighted;
+
+  requestBody = {
+    query: `
+      mutation {
+        toggleVisitTreatmentHighlighted(
+          activityId:"${activityId}",
+          visitId:"${visitId}",
+          visitInput:{
+            treatmentType:"${type}",
+            treatmentTitle:"${title}",
+            treatmentDescription:"${description}",
+            treatmentDose:"${dose}",
+            treatmentFrequency:"${frequency}",
+            treatmentAttachments:"${attachments}"
+            treatmentHighlighted: ${highlighted},
+          })
+          {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments,highlighted},surveys{title,description,attachments,highlighted},systematicInquiry{title,description,attachments,highlighted},vitals{pr,bp1,bp2,rr,temp,sp02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value},highlighted},examination{general,area,type,measure,value,description,followUp,attachments,highlighted},investigation{type,title,description,attachments,highlighted},diagnosis{type,title,description,attachments,highlighted},treatment{type,title,description,dose,frequency,attachments,highlighted},billing{title,type,description,amount,paid,attachments,notes,highlighted},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}},highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.toggleVisitTreatmentHighlighted);
+      let responseAlert = `...treatment highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updateVisit(resData.data.toggleVisitTreatmentHighlighted)
+      this.setState({
+        isLoading: false,
+        selectedVisit: resData.data.toggleVisitTreatmentHighlighted,
+        activityA: `toggleVisitTreatmentHighlighted?activityId:${activityId},visitId:${visitId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedVisit = resData.data.toggleVisitTreatmentHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
 
 }
 toggleVisitVigilanceHighlighted = (args) => {
   console.log('...toggling visit vigilance highlight...');
+  this.context.setUserAlert('...toggling visit vigilance highlight...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const visitId = this.props.visit._id;
+  let requestBody;
+
+  console.log('foo',args);
+
+  requestBody = {
+    query: `
+      mutation {
+        toggleVisitVigilanceHighlighted(
+          activityId:"${activityId}",
+          visitId:"${visitId}",
+          visitInput:{
+            vigilanceChronicIllnessDiabetesMedication:${args.chronicIllness.diabetes.medication},
+            vigilanceChronicIllnessDiabetesTesting:${args.chronicIllness.diabetes.testing},
+            vigilanceChronicIllnessDiabetesComment:"${args.chronicIllness.diabetes.comment}",
+            vigilanceChronicIllnessHbpMedication:${args.chronicIllness.hbp.medication},
+            vigilanceChronicIllnessHbpTesting:${args.chronicIllness.hbp.testing},
+            vigilanceChronicIllnessHbpComment:"${args.chronicIllness.hbp.comment}",
+            vigilanceChronicIllnessDyslipidemiaMedication:${args.chronicIllness.dyslipidemia.medication},
+            vigilanceChronicIllnessDyslipidemiaTesting:${args.chronicIllness.dyslipidemia.testing},
+            vigilanceChronicIllnessDyslipidemiaComment:"${args.chronicIllness.dyslipidemia.comment}",
+            vigilanceChronicIllnessCadMedication:${args.chronicIllness.cad.medication},
+            vigilanceChronicIllnessCadTesting:${args.chronicIllness.cad.testing},
+            vigilanceChronicIllnessCadComment:"${args.chronicIllness.cad.comment}",
+            vigilanceLifestyleWeightMedication:${args.lifestyle.weight.medication},
+            vigilanceLifestyleWeightTesting:${args.lifestyle.weight.testing},
+            vigilanceLifestyleWeightComment:"${args.lifestyle.weight.comment}",
+            vigilanceLifestyleDietMedication:${args.lifestyle.diet.medication},
+            vigilanceLifestyleDietTesting:${args.lifestyle.diet.testing},
+            vigilanceLifestyleDietComment:"${args.lifestyle.diet.comment}",
+            vigilanceLifestyleSmokingMedication:${args.lifestyle.smoking.medication},
+            vigilanceLifestyleSmokingTesting:${args.lifestyle.smoking.testing},
+            vigilanceLifestyleSmokingComment:"${args.lifestyle.smoking.comment}",
+            vigilanceLifestyleSubstanceAbuseMedication:${args.lifestyle.substanceAbuse.medication},
+            vigilanceLifestyleSubstanceAbuseTesting:${args.lifestyle.substanceAbuse.testing},
+            vigilanceLifestyleSubstanceAbuseComment:"${args.lifestyle.substanceAbuse.comment}",
+            vigilanceLifestyleExerciseMedication:${args.lifestyle.exercise.medication},
+            vigilanceLifestyleExerciseTesting:${args.lifestyle.exercise.testing},
+            vigilanceLifestyleExerciseComment:"${args.lifestyle.exercise.comment}",
+            vigilanceLifestyleAllergiesMedication:${args.lifestyle.allergies.medication},
+            vigilanceLifestyleAllergiesTesting:${args.lifestyle.allergies.testing},
+            vigilanceLifestyleAllergiesComment:"${args.lifestyle.allergies.comment}",
+            vigilanceLifestyleAsthmaMedication:${args.lifestyle.asthma.medication},
+            vigilanceLifestyleAsthmaTesting:${args.lifestyle.asthma.testing},
+            vigilanceLifestyleAsthmaComment:"${args.lifestyle.asthma.comment}",
+            vigilanceScreeningBreastMedication:${args.screening.breast.medication},
+            vigilanceScreeningBreastTesting:${args.screening.breast.testing},
+            vigilanceScreeningBreastComment:"${args.screening.breast.comment}",
+            vigilanceScreeningProstateMedication:${args.screening.prostate.medication},
+            vigilanceScreeningProstateTesting:${args.screening.prostate.testing},
+            vigilanceScreeningProstateComment:"${args.screening.prostate.comment}",
+            vigilanceScreeningCervixMedication:${args.screening.cervix.medication},
+            vigilanceScreeningCervixTesting:${args.screening.cervix.testing},
+            vigilanceScreeningCervixComment:"${args.screening.cervix.comment}",
+            vigilanceScreeningColonMedication:${args.screening.colon.medication},
+            vigilanceScreeningColonTesting:${args.screening.colon.testing},
+            vigilanceScreeningColonComment:"${args.screening.colon.comment}",
+            vigilanceScreeningDentalMedication:${args.screening.dental.medication},
+            vigilanceScreeningDentalTesting:${args.screening.dental.testing},
+            vigilanceScreeningDentalComment:"${args.screening.dental.comment}",
+            vigilanceVaccinesInfluenzaMedication:${args.vaccines.influenza.medication},
+            vigilanceVaccinesInfluenzaTesting:${args.vaccines.influenza.testing},
+            vigilanceVaccinesInfluenzaComment:"${args.vaccines.influenza.comment}",
+            vigilanceVaccinesVaricellaMedication:${args.vaccines.varicella.medication},
+            vigilanceVaccinesVaricellaTesting:${args.vaccines.varicella.testing},
+            vigilanceVaccinesVaricellaComment:"${args.vaccines.varicella.comment}",
+            vigilanceVaccinesHpvMedication:${args.vaccines.hpv.medication},
+            vigilanceVaccinesHpvTesting:${args.vaccines.hpv.testing},
+            vigilanceVaccinesHpvComment:"${args.vaccines.hpv.comment}",
+            vigilanceVaccinesMmrMedication:${args.vaccines.mmr.medication},
+            vigilanceVaccinesMmrTesting:${args.vaccines.mmr.testing},
+            vigilanceVaccinesMmrComment:"${args.vaccines.mmr.comment}",
+            vigilanceVaccinesTetanusMedication:${args.vaccines.tetanus.medication},
+            vigilanceVaccinesTetanusTesting:${args.vaccines.tetanus.testing},
+            vigilanceVaccinesTetanusComment:"${args.vaccines.tetanus.comment}",
+            vigilanceVaccinesPneumovaxMedication:${args.vaccines.pneumovax.medication},
+            vigilanceVaccinesPneumovaxTesting:${args.vaccines.pneumovax.testing},
+            vigilanceVaccinesPneumovaxComment:"${args.vaccines.pneumovax.comment}",
+            vigilanceVaccinesOtherName:"${args.vaccines.other.name}",
+            vigilanceVaccinesOtherMedication:${args.vaccines.other.medication},
+            vigilanceVaccinesOtherTesting:${args.vaccines.other.testing},
+            vigilanceVaccinesOtherComment:"${args.vaccines.other.comment}",
+            vigilanceHighlighted: ${args.highlighted}
+          })
+          {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments,highlighted},surveys{title,description,attachments,highlighted},systematicInquiry{title,description,attachments,highlighted},vitals{pr,bp1,bp2,rr,temp,sp02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value},highlighted},examination{general,area,type,measure,value,description,followUp,attachments,highlighted},investigation{type,title,description,attachments,highlighted},diagnosis{type,title,description,attachments,highlighted},treatment{type,title,description,dose,frequency,attachments,highlighted},billing{title,type,description,amount,paid,attachments,notes,highlighted},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}},highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.toggleVisitVigilanceHighlighted);
+      let responseAlert = `...vigilance highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updateVisit(resData.data.toggleVisitVigilanceHighlighted)
+      this.setState({
+        isLoading: false,
+        selectedVisit: resData.data.toggleVisitVigilanceHighlighted,
+        activityA: `toggleVisitVigilanceHighlighted?activityId:${activityId},visitId:${visitId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedVisit = resData.data.toggleVisitVigilanceHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
 
 }
 toggleVisitBillingHighlighted = (args) => {
   console.log('...toggling visit billing highlight...');
+  this.context.setUserAlert('...toggling visit billing highlight...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const visitId = this.props.visit._id;
+  let requestBody;
+
+  const title = args.title;
+  const type = args.type;
+  const description = args.description.replace(/\n/g, ' ');
+  const amount = args.amount;
+  const paid = args.paid;
+  const notes = args.notes;
+  const attachments = args.attachments.join();
+  let highlighted = args.highlighted;
+
+  requestBody = {
+    query: `
+      mutation {
+        toggleVisitBillingHighlighted(
+          activityId:"${activityId}",
+          visitId:"${visitId}",
+          visitInput:{
+            billingTitle:"${title}",
+            billingType:"${type}",
+            billingDescription:"${description}",
+            billingAmount:${amount},
+            billingPaid:${paid},
+            billingAttachments:"${attachments}",
+            billingNotes:"${notes}"
+            billingHighlighted: ${highlighted},
+          })
+          {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments,highlighted},surveys{title,description,attachments,highlighted},systematicInquiry{title,description,attachments,highlighted},vitals{pr,bp1,bp2,rr,temp,sp02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value},highlighted},examination{general,area,type,measure,value,description,followUp,attachments,highlighted},investigation{type,title,description,attachments,highlighted},diagnosis{type,title,description,attachments,highlighted},treatment{type,title,description,dose,frequency,attachments,highlighted},billing{title,type,description,amount,paid,attachments,notes,highlighted},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}},highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.toggleVisitBillingHighlighted);
+      let responseAlert = `...billing highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updateVisit(resData.data.toggleVisitBillingHighlighted)
+      this.setState({
+        isLoading: false,
+        selectedVisit: resData.data.toggleVisitBillingHighlighted,
+        activityA: `toggleVisitBillingHighlighted?activityId:${activityId},visitId:${visitId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedVisit = resData.data.toggleVisitBillingHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
 
 }
 toggleVisitImageHighlighted = (args) => {
   console.log('...toggling visit image highlight...');
+  this.context.setUserAlert('...toggling visit image highlight...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const visitId = this.props.visit._id;
+  let requestBody;
+
+  const name = args.name;
+  const type = args.type;
+  const path = args.path;
+  let highlighted = args.highlighted;
+
+  requestBody = {
+    query: `
+      mutation {
+        toggleVisitImageHighlighted(
+          activityId:"${activityId}",
+          visitId:"${visitId}",
+          visitInput:{
+            imageName:"${name}",
+            imageType:"${type}",
+            imagePath:"${path}"
+            imageHighlighted: ${highlighted},
+          })
+          {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments,highlighted},surveys{title,description,attachments,highlighted},systematicInquiry{title,description,attachments,highlighted},vitals{pr,bp1,bp2,rr,temp,sp02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value},highlighted},examination{general,area,type,measure,value,description,followUp,attachments,highlighted},investigation{type,title,description,attachments,highlighted},diagnosis{type,title,description,attachments,highlighted},treatment{type,title,description,dose,frequency,attachments,highlighted},billing{title,type,description,amount,paid,attachments,notes,highlighted},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}},highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.toggleVisitImageHighlighted);
+      let responseAlert = `...image highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updateVisit(resData.data.toggleVisitImageHighlighted)
+      this.setState({
+        isLoading: false,
+        selectedVisit: resData.data.toggleVisitImageHighlighted,
+        activityA: `toggleVisitImageHighlighted?activityId:${activityId},visitId:${visitId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedVisit = resData.data.toggleVisitImageHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
 
 }
 toggleVisitFileHighlighted = (args) => {
   console.log('...toggling visit file highlight...');
+  this.context.setUserAlert('...toggling visit file highlight...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const visitId = this.props.visit._id;
+  let requestBody;
+
+  const name = args.name;
+  const type = args.type;
+  const path = args.path;
+  let highlighted = args.highlighted;
+
+  requestBody = {
+    query: `
+      mutation {
+        toggleVisitFileHighlighted(
+          activityId:"${activityId}",
+          visitId:"${visitId}",
+          visitInput:{
+            fileName:"${name}",
+            fileType:"${type}",
+            filePath:"${path}"
+            fileHighlighted: ${highlighted},
+          })
+          {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description},complaints{title,description,anamnesis,attachments,highlighted},surveys{title,description,attachments,highlighted},systematicInquiry{title,description,attachments,highlighted},vitals{pr,bp1,bp2,rr,temp,sp02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value},highlighted},examination{general,area,type,measure,value,description,followUp,attachments,highlighted},investigation{type,title,description,attachments,highlighted},diagnosis{type,title,description,attachments,highlighted},treatment{type,title,description,dose,frequency,attachments,highlighted},billing{title,type,description,amount,paid,attachments,notes,highlighted},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}},highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.toggleVisitFileHighlighted);
+      let responseAlert = `...file highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updateVisit(resData.data.toggleVisitFileHighlighted)
+      this.setState({
+        isLoading: false,
+        selectedVisit: resData.data.toggleVisitFileHighlighted,
+        activityA: `toggleVisitFileHighlighted?activityId:${activityId},visitId:${visitId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedVisit = resData.data.toggleVisitFileHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
 
 }
 

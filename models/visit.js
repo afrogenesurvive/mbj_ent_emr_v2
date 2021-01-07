@@ -50,6 +50,7 @@ const visitSchema = new Schema({
         value: {type: String},
       },
       highlighted: {type: Boolean},
+      _id: false
     }],
   examination: [{
     general: {type: String},

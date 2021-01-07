@@ -92,8 +92,7 @@ module.exports = {
       for(const value of allVisitIds2) {
         // console.log(value);
         let compVisit = await Visit.findOneAndUpdate(
-          {},
-          // {_id:value},
+          {_id:value},
           // {
           //   'complaints.$[].highlighted': false,
           //   'surveys.$[].highlighted': false,
@@ -115,7 +114,8 @@ module.exports = {
           // {
           //   'vitals.$[].sp02': 0
           // },
-          {$unset: {"ps02": 1}},
+          // {$unset: {"vitals.$[].ps02": 1}},
+          {$unset: {"vitals.$[]._id": 1}},
           // {new: true, useFindAndModify: false}
         )
       }
@@ -936,7 +936,7 @@ module.exports = {
           bp2: args.visitInput.vitalsBp2,
           rr: args.visitInput.vitalsRr,
           temp: args.visitInput.vitalsTemp,
-          sp02: args.visitInput.vitalsPs02,
+          sp02: args.visitInput.vitalsSp02,
           heightUnit: args.visitInput.vitalsHeightUnit,
           heightValue: args.visitInput.vitalsHeightValue,
           weightUnit: args.visitInput.vitalsWeightUnit,
@@ -998,10 +998,6 @@ module.exports = {
       } else {
         newHighlighted = !args.visitInput.vitalsHighlighted;
       }
-
-      const visitx = await Visit.find({_id:args.visitId,vitals: vitals});
-      console.log('beep',vitals,visitx);
-
 
       const visit = await Visit.findOneAndUpdate(
         {_id:args.visitId,
@@ -1533,6 +1529,49 @@ module.exports = {
       throw err;
     }
   },
+  toggleVisitDiagnosisHighlighted: async (args, req) => {
+    console.log("Resolver: toggleVisitDiagnosisHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const attachments = args.visitInput.diagnosisAttachments.split(',');
+      const diagnosis = {
+        type: args.visitInput.diagnosisType,
+        title: args.visitInput.diagnosisTitle,
+        description: args.visitInput.diagnosisDescription,
+        attachments: attachments,
+        highlighted: args.visitInput.diagnosisHighlighted,
+      }
+
+        let newHighlighted;
+        if (args.visitInput.diagnosisHighlighted === null) {
+          newHighlighted = false;
+        } else {
+          newHighlighted = !args.visitInput.diagnosisHighlighted;
+        }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,
+            diagnosis: diagnosis
+          },
+          {'diagnosis.$.highlighted': newHighlighted},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   addVisitTreatment: async (args, req) => {
     console.log("Resolver: addVisitTreatment...");
     if (!req.isAuth) {
@@ -1653,12 +1692,59 @@ module.exports = {
           type: args.visitInput.treatmentType,
           title: args.visitInput.treatmentTitle,
           description: args.visitInput.treatmentDescription,
+          dose: args.visitInput.treatmentDose,
+          frequency: args.visitInput.treatmentFrequency,
           attachments: attachments,
           highlighted: args.visitInput.treatmentHighlighted,
         }
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$pull: {treatment: treatment}},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  toggleVisitTreatmentHighlighted: async (args, req) => {
+    console.log("Resolver: toggleVisitTreatmentHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const attachments = args.visitInput.treatmentAttachments.split(',');
+      const treatment = {
+        type: args.visitInput.treatmentType,
+        title: args.visitInput.treatmentTitle,
+        description: args.visitInput.treatmentDescription,
+        dose: args.visitInput.treatmentDose,
+        frequency: args.visitInput.treatmentFrequency,
+        attachments: attachments,
+        highlighted: args.visitInput.treatmentHighlighted,
+      }
+
+        let newHighlighted;
+        if (args.visitInput.treatmentHighlighted === null) {
+          newHighlighted = false;
+        } else {
+          newHighlighted = !args.visitInput.treatmentHighlighted;
+        }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,
+            treatment: treatment
+          },
+          {'treatment.$.highlighted': newHighlighted},
           {new: true, useFindAndModify: false}
         )
         .populate('consultants')
@@ -1836,7 +1922,7 @@ module.exports = {
     }
     try {
         const attachments = args.visitInput.billingAttachments.split(',');
-        console.log('foo',attachments);
+
         const billing = {
           title: args.visitInput.billingTitle,
           type: args.visitInput.billingType,
@@ -1847,7 +1933,7 @@ module.exports = {
           notes: args.visitInput.billingNotes,
           highlighted: args.visitInput.billingHighlighted,
         }
-        console.log('foo',billing);
+
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$pull: {billing: billing}},
@@ -1862,6 +1948,52 @@ module.exports = {
           title: visit.title,
           date: visit.date
         };
+    } catch (err) {
+      throw err;
+    }
+  },
+  toggleVisitBillingHighlighted: async (args, req) => {
+    console.log("Resolver: toggleVisitBillingHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const attachments = args.visitInput.billingAttachments.split(',');
+      const billing = {
+        title: args.visitInput.billingTitle,
+        type: args.visitInput.billingType,
+        description: args.visitInput.billingDescription,
+        amount: args.visitInput.billingAmount,
+        paid: args.visitInput.billingPaid,
+        attachments: attachments,
+        notes: args.visitInput.billingNotes,
+        highlighted: args.visitInput.billingHighlighted,
+      }
+
+      let newHighlighted;
+      if (args.visitInput.billingHighlighted === null) {
+        newHighlighted = false;
+      } else {
+        newHighlighted = !args.visitInput.billingHighlighted;
+      }
+
+      const visit = await Visit.findOneAndUpdate(
+        {_id:args.visitId,
+          billing: billing
+        },
+        {'billing.$.highlighted': newHighlighted},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('consultants')
+      .populate('appointment')
+      .populate('patient');
+      return {
+        ...visit._doc,
+        _id: visit.id,
+        title: visit.title,
+        date: visit.date
+      };
     } catch (err) {
       throw err;
     }
@@ -1902,6 +2034,7 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
+
         const image = {
           name: args.visitInput.imageName,
           type: args.visitInput.imageType,
@@ -1922,6 +2055,47 @@ module.exports = {
           title: visit.title,
           date: visit.date
         };
+    } catch (err) {
+      throw err;
+    }
+  },
+  toggleVisitImageHighlighted: async (args, req) => {
+    console.log("Resolver: toggleVisitImageHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const image = {
+        name: args.visitInput.imageName,
+        type: args.visitInput.imageType,
+        path: args.visitInput.imagePath,
+        highlighted: args.visitInput.imageHighlighted,
+      }
+
+      let newHighlighted;
+      if (args.visitInput.imageHighlighted === null) {
+        newHighlighted = false;
+      } else {
+        newHighlighted = !args.visitInput.imageHighlighted;
+      }
+
+      const visit = await Visit.findOneAndUpdate(
+        {_id:args.visitId,
+          images: image
+        },
+        {'images.$.highlighted': newHighlighted},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('consultants')
+      .populate('appointment')
+      .populate('patient');
+      return {
+        ...visit._doc,
+        _id: visit.id,
+        title: visit.title,
+        date: visit.date
+      };
     } catch (err) {
       throw err;
     }
@@ -1982,6 +2156,47 @@ module.exports = {
           title: visit.title,
           date: visit.date
         };
+    } catch (err) {
+      throw err;
+    }
+  },
+  toggleVisitFileHighlighted: async (args, req) => {
+    console.log("Resolver: toggleVisitFileHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const file = {
+        name: args.visitInput.fileName,
+        type: args.visitInput.fileType,
+        path: args.visitInput.filePath,
+        highlighted: args.visitInput.fileHighlighted,
+      }
+
+      let newHighlighted;
+      if (args.visitInput.fileHighlighted === null) {
+        newHighlighted = false;
+      } else {
+        newHighlighted = !args.visitInput.fileHighlighted;
+      }
+
+      const visit = await Visit.findOneAndUpdate(
+        {_id:args.visitId,
+          files: file
+        },
+        {'files.$.highlighted': newHighlighted},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('consultants')
+      .populate('appointment')
+      .populate('patient');
+      return {
+        ...visit._doc,
+        _id: visit.id,
+        title: visit.title,
+        date: visit.date
+      };
     } catch (err) {
       throw err;
     }
@@ -2285,6 +2500,168 @@ module.exports = {
           title: visit.title,
           date: visit.date
         };
+    } catch (err) {
+      throw err;
+    }
+  },
+  toggleVisitVigilanceHighlighted: async (args, req) => {
+    console.log("Resolver: toggleVisitVigilanceHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const vigilance = {
+        chronicIllness: {
+          diabetes: {
+            medication: args.visitInput.vigilanceChronicIllnessDiabetesMedication,
+            testing: args.visitInput.vigilanceChronicIllnessDiabetesTesting,
+            comment: args.visitInput.vigilanceChronicIllnessDiabetesComment
+          },
+          hbp: {
+            medication: args.visitInput.vigilanceChronicIllnessHbpMedication,
+            testing: args.visitInput.vigilanceChronicIllnessHbpTesting,
+            comment: args.visitInput.vigilanceChronicIllnessHbpComment
+          },
+          dyslipidemia: {
+            medication: args.visitInput.vigilanceChronicIllnessDyslipidemiaMedication,
+            testing: args.visitInput.vigilanceChronicIllnessDyslipidemiaTesting,
+            comment: args.visitInput.vigilanceChronicIllnessDyslipidemiaComment
+          },
+          cad: {
+            medication: args.visitInput.vigilanceChronicIllnessCadMedication,
+            testing: args.visitInput.vigilanceChronicIllnessCadTesting,
+            comment: args.visitInput.vigilanceChronicIllnessCadComment
+          }
+        },
+        lifestyle: {
+          weight: {
+            medication: args.visitInput.vigilanceLifestyleWeightMedication,
+            testing: args.visitInput.vigilanceLifestyleWeightTesting,
+            comment: args.visitInput.vigilanceLifestyleWeightComment
+          },
+          diet: {
+            medication: args.visitInput.vigilanceLifestyleDietMedication,
+            testing: args.visitInput.vigilanceLifestyleDietTesting,
+            comment: args.visitInput.vigilanceLifestyleDietComment
+          },
+          smoking: {
+            medication: args.visitInput.vigilanceLifestyleSmokingMedication,
+            testing: args.visitInput.vigilanceLifestyleSmokingTesting,
+            comment: args.visitInput.vigilanceLifestyleSmokingComment
+          },
+          substanceAbuse: {
+            medication: args.visitInput.vigilanceLifestyleSubstanceAbuseMedication,
+            testing: args.visitInput.vigilanceLifestyleSubstanceAbuseTesting,
+            comment: args.visitInput.vigilanceLifestyleSubstanceAbuseComment
+          },
+          exercise: {
+            medication: args.visitInput.vigilanceLifestyleExerciseMedication,
+            testing: args.visitInput.vigilanceLifestyleExerciseTesting,
+            comment: args.visitInput.vigilanceLifestyleExerciseComment
+          },
+          allergies: {
+            medication: args.visitInput.vigilanceLifestyleAllergiesMedication,
+            testing: args.visitInput.vigilanceLifestyleAllergiesTesting,
+            comment: args.visitInput.vigilanceLifestyleAllergiesComment
+          },
+          asthma: {
+            medication: args.visitInput.vigilanceLifestyleAsthmaMedication,
+            testing: args.visitInput.vigilanceLifestyleAsthmaTesting,
+            comment: args.visitInput.vigilanceLifestyleAsthmaComment
+          }
+        },
+        screening: {
+          breast: {
+            medication: args.visitInput.vigilanceScreeningBreastMedication,
+            testing: args.visitInput.vigilanceScreeningBreastTesting,
+            comment: args.visitInput.vigilanceScreeningBreastComment
+          },
+          prostate: {
+            medication: args.visitInput.vigilanceScreeningProstateMedication,
+            testing: args.visitInput.vigilanceScreeningProstateTesting,
+            comment: args.visitInput.vigilanceScreeningProstateComment
+          },
+          cervix: {
+            medication: args.visitInput.vigilanceScreeningCervixMedication,
+            testing: args.visitInput.vigilanceScreeningCervixTesting,
+            comment: args.visitInput.vigilanceScreeningCervixComment
+          },
+          colon: {
+            medication: args.visitInput.vigilanceScreeningColonMedication,
+            testing: args.visitInput.vigilanceScreeningColonTesting,
+            comment: args.visitInput.vigilanceScreeningColonComment
+          },
+          dental: {
+            medication: args.visitInput.vigilanceScreeningDentalMedication,
+            testing: args.visitInput.vigilanceScreeningDentalTesting,
+            comment: args.visitInput.vigilanceScreeningDentalComment
+          }
+        },
+        vaccines: {
+          influenza: {
+            medication: args.visitInput.vigilanceVaccinesInfluenzaMedication,
+            testing: args.visitInput.vigilanceVaccinesInfluenzaTesting,
+            comment: args.visitInput.vigilanceVaccinesInfluenzaComment
+          },
+          varicella: {
+            medication: args.visitInput.vigilanceVaccinesVaricellaMedication,
+            testing: args.visitInput.vigilanceVaccinesVaricellaTesting,
+            comment: args.visitInput.vigilanceVaccinesVaricellaComment
+          },
+          hpv: {
+            medication: args.visitInput.vigilanceVaccinesHpvMedication,
+            testing: args.visitInput.vigilanceVaccinesHpvTesting,
+            comment: args.visitInput.vigilanceVaccinesHpvComment
+          },
+          mmr: {
+            medication: args.visitInput.vigilanceVaccinesMmrMedication,
+            testing: args.visitInput.vigilanceVaccinesMmrTesting,
+            comment: args.visitInput.vigilanceVaccinesMmrComment
+          },
+          tetanus: {
+            medication: args.visitInput.vigilanceVaccinesTetanusMedication,
+            testing: args.visitInput.vigilanceVaccinesTetanusTesting,
+            comment: args.visitInput.vigilanceVaccinesTetanusComment
+          },
+          pneumovax: {
+            medication: args.visitInput.vigilanceVaccinesPneumovaxMedication,
+            testing: args.visitInput.vigilanceVaccinesPneumovaxTesting,
+            comment: args.visitInput.vigilanceVaccinesPneumovaxComment
+          },
+          other: {
+            name: args.visitInput.vigilanceVaccinesOtherName,
+            medication: args.visitInput.vigilanceVaccinesOtherMedication,
+            testing: args.visitInput.vigilanceVaccinesOtherTesting,
+            comment: args.visitInput.vigilanceVaccinesOtherComment
+          }
+        },
+        highlighted: args.visitInput.vigilanceHighlighted,
+      };
+
+      let newHighlighted;
+      if (args.visitInput.vigilanceHighlighted === null) {
+        newHighlighted = false;
+      } else {
+        newHighlighted = !args.visitInput.vigilanceHighlighted;
+      }
+
+      const visit = await Visit.findOneAndUpdate(
+        {_id:args.visitId,
+          vigilance: vigilance
+        },
+        {'vigilance.$.highlighted': newHighlighted},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('consultants')
+      .populate('appointment')
+      .populate('patient');
+      return {
+        ...visit._doc,
+        _id: visit.id,
+        title: visit.title,
+        date: visit.date
+      };
     } catch (err) {
       throw err;
     }
