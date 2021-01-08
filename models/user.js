@@ -41,6 +41,7 @@ const userSchema = new Schema({
     status: {type: String},
     description: {type: String},
     highlighted: {type: Boolean},
+    _id : false
   }],
   leave: [{
     type: {type: String},
@@ -48,6 +49,7 @@ const userSchema = new Schema({
     endDate: {type:Date},
     description: {type: String},
     highlighted: {type: Boolean},
+    _id : false
   }],
   images: [{
     name: {type:String},

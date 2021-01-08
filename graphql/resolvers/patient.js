@@ -528,7 +528,7 @@ module.exports = {
           phone1: args.patientInput.nextOfKinContactPhone1,
           phone2: args.patientInput.nextOfKinContactPhone2
         },
-        highlighted: args.patientInput.nextOfKinHighlighted
+        highlighted: false
       };
       const patient = await Patient.findOneAndUpdate(
         {_id:args.patientId},
@@ -639,7 +639,7 @@ module.exports = {
         title: args.patientInput.allergyTitle,
         description: args.patientInput.allergyDescription,
         attachments: [args.patientInput.allergyAttachment],
-        highlighted: args.patientInput.allergyHighlighted
+        highlighted: false
       };
       const patient = await Patient.findOneAndUpdate(
         {_id:args.patientId},
@@ -821,8 +821,8 @@ module.exports = {
         newHighlighted = !args.patientInput.medicationHighlighted;
       }
 
-      const patient2 = await Patient.find({_id:args.patientId, medication: medication})
-      console.log('meds',medication,patient2);
+      // const patient2 = await Patient.find({_id:args.patientId, medication: medication})
+      // console.log('meds',medication,patient2);
 
       const patient = await Patient.findOneAndUpdate(
         {_id:args.patientId,
@@ -1004,7 +1004,7 @@ module.exports = {
         type: args.patientInput.comorbidityType,
         title: args.patientInput.comorbidityTitle,
         description: args.patientInput.comorbidityDescription,
-        highlighted: args.patientInput.comorbidityHighlighted,
+        highlighted: false,
       };
       const patient = await Patient.findOneAndUpdate(
         {_id:args.patientId},
@@ -1105,7 +1105,7 @@ module.exports = {
         name: args.patientInput.imageName,
         type: args.patientInput.imageType,
         path: args.patientInput.imagePath,
-        highlighted: args.patientInput.imageHighlighted,
+        highlighted: false,
       };
 
       const patient = await Patient.findOneAndUpdate(
@@ -1208,7 +1208,7 @@ module.exports = {
         name: args.patientInput.fileName,
         type: args.patientInput.fileType,
         path: args.patientInput.filePath,
-        highlighted: args.patientInput.fileHighlighted,
+        highlighted: false,
       };
 
       const patient = await Patient.findOneAndUpdate(

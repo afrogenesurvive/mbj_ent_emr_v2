@@ -1768,7 +1768,7 @@ toggleStaffImageHighlighted = (args) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
+  const userId = this.props.user._id;
   let requestBody;
 
   const name = args.name;
@@ -1781,12 +1781,12 @@ toggleStaffImageHighlighted = (args) => {
       mutation {
         toggleUserImageHighlighted(
           activityId:"${activityId}",
-          patientId:"${patientId}",
-          patientInput:{
+          userId:"${userId}",
+          userInput:{
             imageName:"${name}",
             imageType:"${type}",
-            imagePath:"${path}"
-            imageHighlighted: ${highlighted},
+            imagePath:"${path}",
+            imageHighlighted: ${highlighted}
           })
           {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
@@ -1824,8 +1824,8 @@ toggleStaffImageHighlighted = (args) => {
       this.props.updateUser(resData.data.toggleUserImageHighlighted)
       this.setState({
         isLoading: false,
-        selectedVisit: resData.data.toggleUserImageHighlighted,
-        activityA: `toggleUserImageHighlighted?activityId:${activityId},patientId:${patientId}`,
+        selectedUser: resData.data.toggleUserImageHighlighted,
+        activityA: `toggleUserImageHighlighted?activityId:${activityId},userId:${userId}`,
         adding: {
           state: null,
           field: null
@@ -1843,12 +1843,231 @@ toggleStaffImageHighlighted = (args) => {
 }
 toggleStaffLeaveHighlighted = (args) => {
   console.log('toggleStaffLeaveHighlighted');
+  this.context.setUserAlert('...toggling staff leave highlight...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const userId = this.props.user._id;
+  let requestBody;
+
+  requestBody = {
+    query: `
+      mutation {toggleUserLeaveHighlighted(
+        activityId:"${activityId}",
+        userId:"${userId}",
+        userInput:{
+          leaveType:"${args.type}",
+          leaveStartDate:"${args.startDate}",
+          leaveEndDate:"${args.endDate}",
+          leaveDescription:"${args.description}",
+          leaveHighlighted:${args.highlighted}
+        }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.toggleUserLeaveHighlighted);
+      let responseAlert = `...leave highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updateUser(resData.data.toggleUserLeaveHighlighted)
+      this.setState({
+        isLoading: false,
+        selectedUser: resData.data.toggleUserLeaveHighlighted,
+        activityA: `toggleUserLeaveHighlighted?activityId:${activityId},userId:${userId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+
+      this.context.selectedUser = resData.data.toggleUserLeaveHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
 }
 toggleStaffAttendanceHighlighted = (args) => {
   console.log('toggleStaffAttendanceHighlighted');
+  this.context.setUserAlert('...toggling staff attendance highlight...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const userId = this.props.user._id;
+  let requestBody;
+
+  requestBody = {
+    query: `
+      mutation {toggleUserAttendanceHighlighted(
+        activityId:"${activityId}",
+        userId:"${userId}",
+        userInput:{
+          attendanceDate:"${args.date}",
+          attendanceStatus:"${args.status}",
+          attendanceDescription:"${args.description}",
+          attendanceHighlighted:${args.highlighted}
+        }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.toggleUserAttendanceHighlighted);
+      let responseAlert = `...attendance highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updateUser(resData.data.toggleUserAttendanceHighlighted)
+      this.setState({
+        isLoading: false,
+        selectedUser: resData.data.toggleUserAttendanceHighlighted,
+        activityA: `toggleUserAttendanceHighlighted?activityId:${activityId},userId:${userId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+
+      this.context.selectedUser = resData.data.toggleUserAttendanceHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+
 }
 toggleStaffFileHighlighted = (args) => {
   console.log('toggleStaffFileHighlighted');
+  this.context.setUserAlert('...toggling staff file highlight...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const userId = this.props.user._id;
+  let requestBody;
+
+  const name = args.name;
+  const type = args.type;
+  const path = args.path;
+  let highlighted = args.highlighted;
+
+  requestBody = {
+    query: `
+      mutation {
+        toggleUserFileHighlighted(
+          activityId:"${activityId}",
+          userId:"${userId}",
+          userInput:{
+            fileName:"${name}",
+            fileType:"${type}",
+            filePath:"${path}",
+            fileHighlighted: ${highlighted}
+          })
+          {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.toggleUserFileHighlighted);
+      let responseAlert = `...file highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updateUser(resData.data.toggleUserFileHighlighted)
+      this.setState({
+        isLoading: false,
+        selectedUser: resData.data.toggleUserFileHighlighted,
+        activityA: `toggleUserFileHighlighted?activityId:${activityId},userId:${userId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedUser = resData.data.toggleUserFileHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+
 }
 
 

@@ -6317,6 +6317,7 @@ render() {
                   filter={this.state.filter}
                   comorbidities={this.props.visit.patient.comorbidities}
                   authId={this.context.activityId}
+                  visitPage={true}
                 />
               </Col>
               </li>
@@ -6345,6 +6346,7 @@ render() {
                   authId={this.context.activityId}
                   onAddAttachment={this.nullAttachment}
                   deleteAttachment={this.nullAttachment}
+                  visitPage={true}
                 />
               </Col>
               </li>
@@ -6369,6 +6371,7 @@ render() {
                   authId={this.context.activityId}
                   onAddAttachment={this.nullAttachment}
                   deleteAttachment={this.nullAttachment}
+                  visitPage={true}
                 />
               </Col>
               </li>
@@ -7006,7 +7009,7 @@ render() {
                   filter={this.state.filter}
                   allergies={this.props.visit.patient.allergies}
                   authId={this.context.activityId}
-                  visitPage={this.state.visitPage}
+                  visitPage={true}
                   onAddAttachment={this.nullAttachment}
                   deleteAttachment={this.nullAttachment}
                 />
@@ -7031,7 +7034,7 @@ render() {
                   filter={this.state.filter}
                   medication={this.props.visit.patient.medication}
                   authId={this.context.activityId}
-                  visitPage={this.state.visitPage}
+                  visitPage={true}
                   onAddAttachment={this.nullAttachment}
                   deleteAttachment={this.nullAttachment}
                 />
@@ -7060,7 +7063,7 @@ render() {
                   filter={this.state.filter}
                   comorbidities={this.props.visit.patient.comorbidities}
                   authId={this.context.activityId}
-                  visitPage={this.state.visitPage}
+                  visitPage={true}
                 />
               </Col>
             )}

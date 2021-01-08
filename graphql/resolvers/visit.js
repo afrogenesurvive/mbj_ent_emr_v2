@@ -40,14 +40,41 @@ module.exports = {
         allUserIds2.push(user._id);
       })
       console.log('allUserIds',allUserIds2);
-      // for(const value of allUserIds2) {
-      //   let compUser = await User.findOneAndUpdate(
+      for(const value of allUserIds2) {
+        let compUser = await User.findOneAndUpdate(
+          {_id:value},
+          // {
+          //   'attendance.$[].highlighted': false,
+          //   'leave.$[].highlighted': false,
+          //   'images.$[].highlighted': false,
+          //   'files.$[].highlighted': false,
+          // },
+          // {'notes.$[]': {
+          //   note: '',
+          //   highlighted: false
+          // }},
+          {$unset: {"attendance.$[]._id": 1}},
+          {new: true, useFindAndModify: false}
+        )
+      }
+
+      let allPatientIds2 = [];
+      let allPatientIds = await Patient.find({});
+      allPatientIds.map(patient => {
+        allPatientIds2.push(patient._id);
+      })
+      console.log('allPatientIds',allPatientIds2);
+      // for(const value of allPatientIds2) {
+      //   let compPatient = await Patient.findOneAndUpdate(
       //     {_id:value},
       //     {
-      //       'attendance.$[].highlighted': false,
-      //       'leave.$[].highlighted': false,
+      //       'nextOfKin.$[].highlighted': false,
+      //       'allergies.$[].highlighted': false,
+      //       'medication.$[].highlighted': false,
+      //       'medication.$[].dosage': "",
       //       'images.$[].highlighted': false,
       //       'files.$[].highlighted': false,
+      //       'comorbidities.$[].highlighted': false,
       //     },
       //     // {'notes.$[]': {
       //     //   note: '',
@@ -57,42 +84,16 @@ module.exports = {
       //   )
       // }
 
-      let allPatientIds2 = [];
-      let allPatientIds = await Patient.find({});
-      allPatientIds.map(patient => {
-        allPatientIds2.push(patient._id);
-      })
-      console.log('allPatientIds',allPatientIds2);
-      for(const value of allPatientIds2) {
-        let compPatient = await Patient.findOneAndUpdate(
-          {_id:value},
-          {
-            'nextOfKin.$[].highlighted': false,
-            'allergies.$[].highlighted': false,
-            'medication.$[].highlighted': false,
-            'medication.$[].dosage': "",
-            'images.$[].highlighted': false,
-            'files.$[].highlighted': false,
-            // 'comorbidities.$[].highlighted': false,
-          },
-          // {'notes.$[]': {
-          //   note: '',
-          //   highlighted: false
-          // }},
-          {new: true, useFindAndModify: false}
-        )
-      }
-
       let allVisitIds2 = [];
       let allVisitIds = await Visit.find({});
       allVisitIds.map(visit => {
         allVisitIds2.push(visit._id);
       })
       console.log('allVisitIds',allVisitIds2);
-      // for(const value of allVisitIds2) {
-        // console.log(value);
-        // let compVisit = await Visit.findOneAndUpdate(
-        //   {_id:value},
+      for(const value of allVisitIds2) {
+        console.log(value);
+        let compVisit = await Visit.findOneAndUpdate(
+          {_id:value},
           // {
           //   'complaints.$[].highlighted': false,
           //   'surveys.$[].highlighted': false,
@@ -115,10 +116,10 @@ module.exports = {
           //   'vitals.$[].sp02': 0
           // },
           // {$unset: {"vitals.$[].ps02": 1}},
-          // {$unset: {"vitals.$[]._id": 1}},
-          // {new: true, useFindAndModify: false}
-      //   )
-      // }
+          {$unset: {"vitals.$[]._id": 1}},
+          {new: true, useFindAndModify: false}
+        )
+      }
 
 
       const visits = await Visit.find({})

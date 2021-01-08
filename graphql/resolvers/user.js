@@ -700,7 +700,7 @@ module.exports = {
         date: args.userInput.attendanceDate,
         status: args.userInput.attendanceStatus,
         description: args.userInput.attendanceDescription,
-        highlighted: args.userInput.attendanceHighlighted
+        highlighted: false
       };
 
       const user = await User.findOneAndUpdate(
@@ -750,6 +750,46 @@ module.exports = {
       throw err;
     }
   },
+  toggleUserAttendanceHighlighted: async (args, req) => {
+    console.log("Resolver: toggleUserAttendanceHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const attendance = {
+        date: args.userInput.attendanceDate,
+        status: args.userInput.attendanceStatus,
+        description: args.userInput.attendanceDescription,
+        highlighted: args.userInput.attendanceHighlighted
+      };
+
+      let newHighlighted;
+      if (args.userInput.attendanceHighlighted === null) {
+        newHighlighted = false;
+      } else {
+        newHighlighted = !args.userInput.attendanceHighlighted;
+      }
+
+      const user = await User.findOneAndUpdate(
+        {_id:args.userId,
+          attendance: attendance
+        },
+        {'attendance.$.highlighted': newHighlighted},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('reminders');
+      return {
+        ...user._doc,
+        _id: user.id,
+        name: user.name,
+        username: user.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
   addUserLeave: async (args, req) => {
     console.log("Resolver: addUserLeave...");
     if (!req.isAuth) {
@@ -761,7 +801,7 @@ module.exports = {
         startDate: args.userInput.leaveStartDate,
         endDate: args.userInput.leaveEndDate,
         description: args.userInput.leaveDescription,
-        highlighted: args.userInput.leaveHighlighted
+        highlighted: false
       };
 
       const user = await User.findOneAndUpdate(
@@ -812,6 +852,47 @@ module.exports = {
       throw err;
     }
   },
+  toggleUserLeaveHighlighted: async (args, req) => {
+    console.log("Resolver: toggleUserLeaveHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const leave = {
+        type: args.userInput.leaveType,
+        startDate: args.userInput.leaveStartDate,
+        endDate: args.userInput.leaveEndDate,
+        description: args.userInput.leaveDescription,
+        highlighted: args.userInput.leaveHighlighted
+      };
+
+      let newHighlighted;
+      if (args.userInput.leaveHighlighted === null) {
+        newHighlighted = false;
+      } else {
+        newHighlighted = !args.userInput.leaveHighlighted;
+      }
+
+      const user = await User.findOneAndUpdate(
+        {_id:args.userId,
+          leave: leave
+        },
+        {'leave.$.highlighted': newHighlighted},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('reminders');
+      return {
+        ...user._doc,
+        _id: user.id,
+        name: user.name,
+        username: user.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
   addUserImage: async (args, req) => {
     console.log("Resolver: addUserImage...");
     if (!req.isAuth) {
@@ -822,7 +903,7 @@ module.exports = {
         name: args.userInput.imageName,
         type: args.userInput.imageType,
         path: args.userInput.imagePath,
-        highlighted: args.userInput.imageHighlighted
+        highlighted: false
       };
 
       const user = await User.findOneAndUpdate(
@@ -922,7 +1003,7 @@ module.exports = {
         name: args.userInput.fileName,
         type: args.userInput.fileType,
         path: args.userInput.filePath,
-        highlighted: args.userInput.imageHighlighted
+        highlighted: false
       };
 
       const user = await User.findOneAndUpdate(
@@ -958,6 +1039,46 @@ module.exports = {
       const user = await User.findOneAndUpdate(
         {_id:args.userId},
         {$pull: {files: file}},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('reminders');
+      return {
+        ...user._doc,
+        _id: user.id,
+        name: user.name,
+        username: user.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  toggleUserFileHighlighted: async (args, req) => {
+    console.log("Resolver: toggleUserFileHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const file = {
+        name: args.userInput.fileName,
+        type: args.userInput.fileType,
+        path: args.userInput.filePath,
+        highlighted: args.userInput.fileHighlighted,
+      }
+
+      let newHighlighted;
+      if (args.userInput.fileHighlighted === null) {
+        newHighlighted = false;
+      } else {
+        newHighlighted = !args.userInput.fileHighlighted;
+      }
+
+      const user = await User.findOneAndUpdate(
+        {_id:args.userId,
+          files: file
+        },
+        {'files.$.highlighted': newHighlighted},
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')

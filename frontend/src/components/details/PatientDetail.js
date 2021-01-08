@@ -2977,7 +2977,7 @@ togglePatientComorbidityHighlighted = (args) => {
       this.props.updatePatient(resData.data.togglePatientComorbidityHighlighted)
       this.setState({
         isLoading: false,
-        selectedVisit: resData.data.togglePatientComorbidityHighlighted,
+        selectedPatient: resData.data.togglePatientComorbidityHighlighted,
         activityA: `togglePatientComorbidityHighlighted?activityId:${activityId},patientId:${patientId}`,
         adding: {
           state: null,
@@ -3053,7 +3053,7 @@ togglePatientAllergyHighlighted = (args) => {
       this.props.updatePatient(resData.data.togglePatientAllergyHighlighted)
       this.setState({
         isLoading: false,
-        selectedVisit: resData.data.togglePatientAllergyHighlighted,
+        selectedPatient: resData.data.togglePatientAllergyHighlighted,
         activityA: `togglePatientAllergyHighlighted?activityId:${activityId},patientId:${patientId}`,
         adding: {
           state: null,
@@ -3129,7 +3129,7 @@ togglePatientFileHighlighted = (args) => {
       this.props.updatePatient(resData.data.togglePatientFileHighlighted)
       this.setState({
         isLoading: false,
-        selectedVisit: resData.data.togglePatientFileHighlighted,
+        selectedPatient: resData.data.togglePatientFileHighlighted,
         activityA: `togglePatientFileHighlighted?activityId:${activityId},patientId:${patientId}`,
         adding: {
           state: null,
@@ -3209,7 +3209,7 @@ togglePatientImageHighlighted = (args) => {
       this.props.updatePatient(resData.data.togglePatientImageHighlighted)
       this.setState({
         isLoading: false,
-        selectedVisit: resData.data.togglePatientImageHighlighted,
+        selectedPatient: resData.data.togglePatientImageHighlighted,
         activityA: `togglePatientImageHighlighted?activityId:${activityId},patientId:${patientId}`,
         adding: {
           state: null,
@@ -3286,7 +3286,7 @@ togglePatientMedicationHighlighted = (args) => {
       this.props.updatePatient(resData.data.togglePatientMedicationHighlighted)
       this.setState({
         isLoading: false,
-        selectedVisit: resData.data.togglePatientMedicationHighlighted,
+        selectedPatient: resData.data.togglePatientMedicationHighlighted,
         activityA: `togglePatientMedicationHighlighted?activityId:${activityId},patientId:${patientId}`,
         adding: {
           state: null,
@@ -3363,7 +3363,7 @@ togglePatientNextOfKinHighlighted = (args) => {
       this.props.updatePatient(resData.data.togglePatientNextOfKinHighlighted)
       this.setState({
         isLoading: false,
-        selectedVisit: resData.data.togglePatientNextOfKinHighlighted,
+        selectedPatient: resData.data.togglePatientNextOfKinHighlighted,
         activityA: `togglePatientNextOfKinHighlighted?activityId:${activityId},patientId:${patientId}`,
         adding: {
           state: null,
