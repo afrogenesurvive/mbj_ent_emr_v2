@@ -71,7 +71,7 @@ const MedicationItem = props => {
           </OverlayTrigger>
 
 
-          {props.visitPage === true && (
+          {props.visitPage !== true && (
             <OverlayTrigger
               key={'top'}
               placement={'top'}

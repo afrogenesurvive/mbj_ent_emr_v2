@@ -73,7 +73,7 @@ const AllergyItem = props => {
             <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           </OverlayTrigger>
 
-          {props.visitPage === true && (
+          {props.visitPage !== true && (
             <OverlayTrigger
               key={'top'}
               placement={'top'}

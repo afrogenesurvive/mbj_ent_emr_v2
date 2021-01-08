@@ -821,9 +821,17 @@ module.exports = buildSchema(`
     setUserAddressPrimary(activityId: ID!, userId: ID!, userInput: UserInput!): User
 
     addUserAttendance(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    toggleUserAttendanceHighlighted(activityId: ID!, userId: ID!, userInput: UserInput!): User
+
     addUserLeave(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    toggleUserLeaveHighlighted(activityId: ID!, userId: ID!, userInput: UserInput!): User
+
     addUserImage(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    toggleUserImageHighlighted(activityId: ID!, userId: ID!, userInput: UserInput!): User
+
     addUserFile(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    toggleUserFileHighlighted(activityId: ID!, userId: ID!, userInput: UserInput!): User
+
     addUserNotes(activityId: ID!, userId: ID!, userInput: UserInput!): User
     addUserReminder(activityId: ID!, userId: ID!, reminderId: ID!): User
     addUserActivity(activityId: ID!, userId: ID!, userInput: UserInput!): User
@@ -850,13 +858,25 @@ module.exports = buildSchema(`
     addPatientAddress(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     setPatientAddressPrimary(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientNextOfKin(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    togglePatientNextOfKinHighlighted(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+
     addPatientAllergy(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientAllergyAttachment(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    togglePatientAllergyHighlighted(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+
     addPatientMedication(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientMedicationAttachment(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    togglePatientMedicationHighlighted(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+
     addPatientComorbidity(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    togglePatientComorbidityHighlighted(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+
     addPatientImage(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    togglePatientImageHighlighted(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+
     addPatientFile(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    togglePatientFileHighlighted(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+
     addPatientNotes(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientTags(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientVisit(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient

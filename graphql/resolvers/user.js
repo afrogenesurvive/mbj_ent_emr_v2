@@ -872,6 +872,46 @@ module.exports = {
       throw err;
     }
   },
+  toggleUserImageHighlighted: async (args, req) => {
+    console.log("Resolver: toggleUserImageHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const image = {
+        name: args.userInput.imageName,
+        type: args.userInput.imageType,
+        path: args.userInput.imagePath,
+        highlighted: args.userInput.imageHighlighted,
+      }
+
+      let newHighlighted;
+      if (args.userInput.imageHighlighted === null) {
+        newHighlighted = false;
+      } else {
+        newHighlighted = !args.userInput.imageHighlighted;
+      }
+
+      const user = await User.findOneAndUpdate(
+        {_id:args.userId,
+          images: image
+        },
+        {'images.$.highlighted': newHighlighted},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('reminders');
+      return {
+        ...user._doc,
+        _id: user.id,
+        name: user.name,
+        username: user.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
   addUserFile: async (args, req) => {
     console.log("Resolver: addUserFile...");
     if (!req.isAuth) {

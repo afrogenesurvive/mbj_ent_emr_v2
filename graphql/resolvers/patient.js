@@ -284,7 +284,6 @@ module.exports = {
     }
   },
 
-
   updatePatientAllFields: async (args, req) => {
     console.log("Resolver: updatePatientAllFields...");
     if (!req.isAuth) {
@@ -584,6 +583,51 @@ module.exports = {
       throw err;
     }
   },
+  togglePatientNextOfKinHighlighted: async (args, req) => {
+    console.log("Resolver: togglePatientNextOfKinHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const nextOfKin = {
+        name: args.patientInput.nextOfKinName,
+        relation: args.patientInput.nextOfKinRelation,
+        contact:{
+          email: args.patientInput.nextOfKinContactEmail,
+          phone1: args.patientInput.nextOfKinContactPhone1,
+          phone2: args.patientInput.nextOfKinContactPhone2
+        },
+        highlighted: args.patientInput.nextOfKinHighlighted
+      };
+
+      let newHighlighted;
+      if (args.patientInput.nextOfKinHighlighted === null) {
+        newHighlighted = false;
+      } else {
+        newHighlighted = !args.patientInput.nextOfKinHighlighted;
+      }
+
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId,
+          nextOfKin: nextOfKin
+        },
+        {'nextOfKin.$.highlighted': newHighlighted},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('visits')
+      .populate('reminders');
+      return {
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
   addPatientAllergy: async (args, req) => {
     console.log("Resolver: addPatientAllergy...");
     if (!req.isAuth) {
@@ -632,6 +676,48 @@ module.exports = {
       const patient = await Patient.findOneAndUpdate(
         {_id:args.patientId},
         {$pull: {allergies: allergy}},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('visits')
+      .populate('reminders');
+      return {
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  togglePatientAllergyHighlighted: async (args, req) => {
+    console.log("Resolver: togglePatientAllergyHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const allergy = {
+        type: args.patientInput.allergyType,
+        title: args.patientInput.allergyTitle,
+        description: args.patientInput.allergyDescription,
+        attachments: args.patientInput.allergyAttachments.split(','),
+        highlighted: args.patientInput.allergyHighlighted
+      };
+
+      let newHighlighted;
+      if (args.patientInput.allergyHighlighted === null) {
+        newHighlighted = false;
+      } else {
+        newHighlighted = !args.patientInput.allergyHighlighted;
+      }
+
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId,
+          allergies: allergy
+        },
+        {'allergies.$.highlighted': newHighlighted},
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
@@ -697,6 +783,52 @@ module.exports = {
       const patient = await Patient.findOneAndUpdate(
         {_id:args.patientId},
         {$pull: {medication: medication}},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('visits')
+      .populate('reminders');
+      return {
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  togglePatientMedicationHighlighted: async (args, req) => {
+    console.log("Resolver: togglePatientMedicationHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const medication = {
+        type: args.patientInput.medicationType,
+        title: args.patientInput.medicationTitle,
+        description: args.patientInput.medicationDescription,
+        dosage: args.patientInput.medicationDosage,
+        attachments: args.patientInput.medicationAttachments.split(','),
+        highlighted: args.patientInput.medicationHighlighted
+      };
+
+      let newHighlighted;
+      if (args.patientInput.medicationHighlighted === null) {
+        newHighlighted = false;
+      } else {
+        newHighlighted = !args.patientInput.medicationHighlighted;
+      }
+
+      const patient2 = await Patient.find({_id:args.patientId, medication: medication})
+      console.log('meds',medication,patient2);
+
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId,
+          medication: medication
+        },
+        {'medication.$.highlighted': newHighlighted},
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
@@ -922,6 +1054,47 @@ module.exports = {
       throw err;
     }
   },
+  togglePatientComorbidityHighlighted: async (args, req) => {
+    console.log("Resolver: togglePatientComorbidityHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const comorbidity = {
+        type: args.patientInput.comorbidityType,
+        title: args.patientInput.comorbidityTitle,
+        description: args.patientInput.comorbidityDescription,
+        highlighted: args.patientInput.comorbidityHighlighted,
+      };
+
+      let newHighlighted;
+      if (args.patientInput.comorbidityHighlighted === null) {
+        newHighlighted = false;
+      } else {
+        newHighlighted = !args.patientInput.comorbidityHighlighted;
+      }
+
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId,
+          comorbidities: comorbidity
+        },
+        {'comorbidities.$.highlighted': newHighlighted},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('visits')
+      .populate('reminders');
+      return {
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
   addPatientImage: async (args, req) => {
     console.log("Resolver: addPatientImage...");
     if (!req.isAuth) {
@@ -984,6 +1157,47 @@ module.exports = {
       throw err;
     }
   },
+  togglePatientImageHighlighted: async (args, req) => {
+    console.log("Resolver: togglePatientImageHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const image = {
+        name: args.patientInput.imageName,
+        type: args.patientInput.imageType,
+        path: args.patientInput.imagePath,
+        highlighted: args.patientInput.imageHighlighted,
+      }
+
+      let newHighlighted;
+      if (args.patientInput.imageHighlighted === null) {
+        newHighlighted = false;
+      } else {
+        newHighlighted = !args.patientInput.imageHighlighted;
+      }
+
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId,
+          images: image
+        },
+        {'images.$.highlighted': newHighlighted},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('visits')
+      .populate('reminders');
+      return {
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
   addPatientFile: async (args, req) => {
     console.log("Resolver: addPatientFile...");
     if (!req.isAuth) {
@@ -1031,6 +1245,47 @@ module.exports = {
       const patient = await Patient.findOneAndUpdate(
         {_id:args.patientId},
         {$pull: {files: file}},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('visits')
+      .populate('reminders');
+      return {
+        ...patient._doc,
+        _id: patient.id,
+        name: patient.name,
+        username: patient.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  togglePatientFileHighlighted: async (args, req) => {
+    console.log("Resolver: togglePatientFileHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const file = {
+        name: args.patientInput.fileName,
+        type: args.patientInput.fileType,
+        path: args.patientInput.filePath,
+        highlighted: args.patientInput.fileHighlighted,
+      }
+
+      let newHighlighted;
+      if (args.patientInput.fileHighlighted === null) {
+        newHighlighted = false;
+      } else {
+        newHighlighted = !args.patientInput.fileHighlighted;
+      }
+
+      const patient = await Patient.findOneAndUpdate(
+        {_id:args.patientId,
+          files: file
+        },
+        {'files.$.highlighted': newHighlighted},
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')

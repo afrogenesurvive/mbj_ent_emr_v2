@@ -1761,16 +1761,93 @@ toggleOverlay = () => {
   })
 }
 
-toggleStaffImageHighlighted = () => {
+toggleStaffImageHighlighted = (args) => {
   console.log('toggleStaffImageHighlighted');
+  this.context.setUserAlert('...toggling staff image highlight...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+  let requestBody;
+
+  const name = args.name;
+  const type = args.type;
+  const path = args.path;
+  let highlighted = args.highlighted;
+
+  requestBody = {
+    query: `
+      mutation {
+        toggleUserImageHighlighted(
+          activityId:"${activityId}",
+          patientId:"${patientId}",
+          patientInput:{
+            imageName:"${name}",
+            imageType:"${type}",
+            imagePath:"${path}"
+            imageHighlighted: ${highlighted},
+          })
+          {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.toggleUserImageHighlighted);
+      let responseAlert = `...image highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updateUser(resData.data.toggleUserImageHighlighted)
+      this.setState({
+        isLoading: false,
+        selectedVisit: resData.data.toggleUserImageHighlighted,
+        activityA: `toggleUserImageHighlighted?activityId:${activityId},patientId:${patientId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedUser = resData.data.toggleUserImageHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+
 }
-toggleStaffLeaveHighlighted = () => {
+toggleStaffLeaveHighlighted = (args) => {
   console.log('toggleStaffLeaveHighlighted');
 }
-toggleStaffAttendanceHighlighted = () => {
+toggleStaffAttendanceHighlighted = (args) => {
   console.log('toggleStaffAttendanceHighlighted');
 }
-toggleStaffFileHighlighted = () => {
+toggleStaffFileHighlighted = (args) => {
   console.log('toggleStaffFileHighlighted');
 }
 

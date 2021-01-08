@@ -82,7 +82,7 @@ const ImageItem = (props) => {
               </Popover>
             }
           >
-            <FontAwesomeIcon icon={faHighlighter} className="listIcon" onClick={props.togglePatientImageHighlighted.bind(this, props.file)}/>
+            <FontAwesomeIcon icon={faHighlighter} className="listIcon" onClick={props.togglePatientImageHighlighted.bind(this, props.image)}/>
           </OverlayTrigger>
 
           {state === true && (

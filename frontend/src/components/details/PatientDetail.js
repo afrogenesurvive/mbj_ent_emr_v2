@@ -2919,23 +2919,466 @@ checkAllergies = () => {
   })
 }
 
-togglePatientComorbidityHighlighted = () => {
+togglePatientComorbidityHighlighted = (args) => {
   console.log('togglePatientComorbidityHighlighted');
+  this.context.setUserAlert('...toggling patient comorbidity highlight...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+  let requestBody;
+
+  requestBody = {
+    query: `
+      mutation {
+        togglePatientComorbidityHighlighted(
+          activityId:"${activityId}",
+          patientId:"${patientId}",
+          patientInput:{
+            comorbidityType:"${args.type}",
+            comorbidityTitle:"${args.title}",
+            comorbidityDescription:"${args.description}",
+            comorbidityHighlighted: ${args.highlighted}
+          })
+          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.togglePatientComorbidityHighlighted);
+      let responseAlert = `...comorbidity highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.togglePatientComorbidityHighlighted)
+      this.setState({
+        isLoading: false,
+        selectedVisit: resData.data.togglePatientComorbidityHighlighted,
+        activityA: `togglePatientComorbidityHighlighted?activityId:${activityId},patientId:${patientId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedPatient = resData.data.togglePatientComorbidityHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+
 }
-togglePatientAllergyHighlighted = () => {
+togglePatientAllergyHighlighted = (args) => {
   console.log('togglePatientAllergyHighlighted');
+  this.context.setUserAlert('...toggling patient allergy highlight...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+  let requestBody;
+
+  requestBody = {
+    query: `
+      mutation {
+        togglePatientAllergyHighlighted(
+          activityId:"${activityId}",
+          patientId:"${patientId}",
+          patientInput:{
+            allergyType:"${args.type}",
+            allergyTitle:"${args.title}",
+            allergyDescription:"${args.description}",
+            allergyAttachments:"${args.attachments}",
+            allergyHighlighted: ${args.highlighted}
+          })
+          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.togglePatientAllergyHighlighted);
+      let responseAlert = `...allergy highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.togglePatientAllergyHighlighted)
+      this.setState({
+        isLoading: false,
+        selectedVisit: resData.data.togglePatientAllergyHighlighted,
+        activityA: `togglePatientAllergyHighlighted?activityId:${activityId},patientId:${patientId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedPatient = resData.data.togglePatientAllergyHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+
 }
-togglePatientFileHighlighted = () => {
+togglePatientFileHighlighted = (args) => {
   console.log('togglePatientFileHighlighted');
+  this.context.setUserAlert('...toggling patient file highlight...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+  let requestBody;
+
+
+  requestBody = {
+    query: `
+      mutation {
+        togglePatientFileHighlighted(
+          activityId:"${activityId}",
+          patientId:"${patientId}",
+          patientInput:{
+            fileName:"${args.name}",
+            fileType:"${args.type}",
+            filePath:"${args.path}",
+            fileHighlighted: ${args.highlighted},
+          })
+          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.togglePatientFileHighlighted);
+      let responseAlert = `...file highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.togglePatientFileHighlighted)
+      this.setState({
+        isLoading: false,
+        selectedVisit: resData.data.togglePatientFileHighlighted,
+        activityA: `togglePatientFileHighlighted?activityId:${activityId},patientId:${patientId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedPatient = resData.data.togglePatientFileHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+
 }
-togglePatientImageHighlighted = () => {
+togglePatientImageHighlighted = (args) => {
   console.log('togglePatientImageHighlighted');
+  this.context.setUserAlert('...toggling patient image highlight...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+  let requestBody;
+
+  const name = args.name;
+  const type = args.type;
+  const path = args.path;
+  let highlighted = args.highlighted;
+
+  requestBody = {
+    query: `
+      mutation {
+        togglePatientImageHighlighted(
+          activityId:"${activityId}",
+          patientId:"${patientId}",
+          patientInput:{
+            imageName:"${name}",
+            imageType:"${type}",
+            imagePath:"${path}"
+            imageHighlighted: ${highlighted},
+          })
+          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.togglePatientImageHighlighted);
+      let responseAlert = `...image highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.togglePatientImageHighlighted)
+      this.setState({
+        isLoading: false,
+        selectedVisit: resData.data.togglePatientImageHighlighted,
+        activityA: `togglePatientImageHighlighted?activityId:${activityId},patientId:${patientId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedPatient = resData.data.togglePatientImageHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+
 }
-togglePatientMedicationHighlighted = () => {
+togglePatientMedicationHighlighted = (args) => {
   console.log('togglePatientMedicationHighlighted');
+  this.context.setUserAlert('...toggling patient medication highlight...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+  let requestBody;
+
+  requestBody = {
+    query: `
+      mutation {
+        togglePatientMedicationHighlighted(
+          activityId:"${activityId}",
+          patientId:"${patientId}",
+          patientInput:{
+            medicationType:"${args.type}",
+            medicationTitle:"${args.title}",
+            medicationDescription:"${args.description}",
+            medicationDosage:"${args.dosage}",
+            medicationAttachments:"${args.attachments}",
+            medicationHighlighted:${args.highlighted}
+          })
+          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.togglePatientMedicationHighlighted);
+      let responseAlert = `...medication highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.togglePatientMedicationHighlighted)
+      this.setState({
+        isLoading: false,
+        selectedVisit: resData.data.togglePatientMedicationHighlighted,
+        activityA: `togglePatientMedicationHighlighted?activityId:${activityId},patientId:${patientId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedPatient = resData.data.togglePatientMedicationHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+
 }
-togglePatientNextOfKinHighlighted = () => {
+togglePatientNextOfKinHighlighted = (args) => {
   console.log('togglePatientNextOfKinHighlighted');
+  this.context.setUserAlert('...toggling patient nextOfKin highlight...')
+  this.setState({isLoading: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+  let requestBody;
+
+  requestBody = {
+    query: `
+      mutation {
+        togglePatientNextOfKinHighlighted(
+          activityId:"${activityId}",
+          patientId:"${patientId}",
+          patientInput:{
+            nextOfKinName:"${args.name}",
+            nextOfKinRelation:"${args.relation}",
+            nextOfKinContactEmail:"${args.contact.email}",
+            nextOfKinContactPhone1:"${args.contact.phone1}",
+            nextOfKinContactPhone2:"${args.contact.phone2}",
+            nextOfKinHighlighted: ${args.highlighted},
+          })
+          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.togglePatientNextOfKinHighlighted);
+      let responseAlert = `...nextOfKin highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.togglePatientNextOfKinHighlighted)
+      this.setState({
+        isLoading: false,
+        selectedVisit: resData.data.togglePatientNextOfKinHighlighted,
+        activityA: `togglePatientNextOfKinHighlighted?activityId:${activityId},patientId:${patientId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedPatient = resData.data.togglePatientNextOfKinHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+
 }
 
 render() {
