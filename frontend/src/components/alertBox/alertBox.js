@@ -12,7 +12,10 @@ import './alertBox.css'
 
 const AlertBox = (props) => {
 
-  // console.log('foo',props.alertArray);
+  // console.log('foooop',document.getElementsByClassName("alertAlert"));
+  let alertElem = document.getElementsByClassName("alertAlert");
+  // alertElem.scrollIntoView(false);
+  alertElem.scrollTop = alertElem.scrollHeight;
 
   let alert = "Alerts shown here";
 
@@ -37,7 +40,7 @@ return (
     <FontAwesomeIcon icon={faPlusSquare} className="alertIcon" size='2x' onClick={handleStateChange}/>
   )}
 
-  <Alert variant="warning">
+  <Alert variant="warning" className="alertAlert">
   {props.alertArray.map((alert) => (
     <p className="alertBoxText"> - {alert}</p>
   ))}

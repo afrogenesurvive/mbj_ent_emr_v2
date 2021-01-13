@@ -34,9 +34,16 @@
   color: black;
   margin: 5px;
 }
-.alert {
+.alertAlert {
   margin: 0;
   overflow: scroll;
+  scroll-snap-type: y proximity;
+  /* display: flex;
+  flex-direction: column-reverse; */
+}
+.alertAlert > .alertBoxText:last-child {
+  scroll-snap-align: end;
+
 }
 .alertIcon {
   /* width: 2rem !important; */

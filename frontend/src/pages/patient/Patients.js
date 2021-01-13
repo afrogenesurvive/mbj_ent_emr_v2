@@ -144,7 +144,7 @@ getAllPatients (args) {
       return res.json();
     })
     .then(resData => {
-      console.log('...resData...',resData.data.getAllPatients);
+      // console.log('...resData...',resData.data.getAllPatients);
       let responseAlert = '...all patients retrieval success!...';
       let error = null;
 
