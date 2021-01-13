@@ -11,6 +11,9 @@ import {
 import './alertBox.css'
 
 const AlertBox = (props) => {
+
+  // console.log('foo',props.alertArray);
+
   let alert = "Alerts shown here";
 
   if (props.alert !== null) {
@@ -35,7 +38,9 @@ return (
   )}
 
   <Alert variant="warning">
-  <p className="alertBoxText">{alert}</p>
+  {props.alertArray.map((alert) => (
+    <p className="alertBoxText"> - {alert}</p>
+  ))}
   </Alert>
   </div>
 )

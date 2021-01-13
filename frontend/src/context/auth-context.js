@@ -14,6 +14,7 @@ export default React.createContext({
     selectedAppointment: null,
     selectedVisit: null,
     userAlert: "...",
+    userAlertArray: [],
     file: null,
     fancyDate: null,
     login: (token, activityId, role, tokenExpiration) => {},

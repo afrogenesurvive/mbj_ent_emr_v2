@@ -906,7 +906,7 @@ deleteAllergy = (args) => {
         .deleteFile(filename2, config)
         .then(response => {
           console.log(response)
-          this.context.setUserAlert(response)
+          this.context.setUserAlert(response.message)
           this.setState({
             overlayStatus: null,
             overlay: false,
@@ -1210,7 +1210,7 @@ deleteMedication = (args) => {
         .deleteFile(filename2, config)
         .then(response => {
           console.log(response)
-          this.context.setUserAlert(response)
+          this.context.setUserAlert(response.message)
           this.setState({
             overlayStatus: null,
             overlay: false,
@@ -1765,7 +1765,7 @@ deleteAttachment = (args) => {
       .deleteFile(filename2, config)
       .then(response => {
         console.log(response)
-        this.context.setUserAlert(response)
+        this.context.setUserAlert(response.message)
         this.setState({
           overlayStatus: null,
           overlay: false,

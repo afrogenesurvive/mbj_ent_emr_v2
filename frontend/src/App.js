@@ -33,6 +33,7 @@ class App extends Component {
     passwordResetState: 'incomplete',
     passwordResetMessage: '...',
     userAlert: null,
+    userAlertArray: [],
     selectedUser: null,
     selectedPatient: null,
     selectedAppointment: null,
@@ -221,6 +222,7 @@ class App extends Component {
           sender: null,
           receiver: null,
           userAlert: "...",
+          userAlertArray: [],
           file: null,
           fancyDate: null,
           login: this.login,
@@ -300,12 +302,32 @@ class App extends Component {
 
   setUserAlert = (args) => {
     // console.log('...setUserAlert...',args);
+    let args2 = args;
     if (args === 'Unauthenticated!') {
       this.setState({userAlert: '...token expired! Logging you out...'})
 
       this.logout2()
     }
+    let alertArray = [...this.state.userAlertArray]
+    // console.log('alert type', typeof args);
+    if (typeof args === 'object') {
+      args2 = args.toString()
+
+      console.log('non string alert',args,args2);
+      // if (args.TypeError) {
+      //   console.log('type error alert found');
+      //   // args = args.TypeError
+      // } else if (args.Error) {
+      //   console.log('error alert found');
+      //   // args = args.Error
+      // } else {
+      //   args = JSON.stringify(args);
+      // }
+
+    }
+    alertArray.push(args2);
     this.setState({userAlert: args})
+    this.setState({userAlertArray: alertArray})
   }
 
   selectUser = (args) => {
@@ -354,6 +376,7 @@ class App extends Component {
               sender: null,
               receiver: null,
               userAlert: "...",
+              userAlertArray: [],
               file: null,
               fancyDate: null,
               login: this.login,
@@ -368,6 +391,7 @@ class App extends Component {
             <AlertBox
               authId={this.context.activityId}
               alert={this.state.userAlert}
+              alertArray={this.state.userAlertArray}
             />
             <main className="main-content">
               <Switch>
