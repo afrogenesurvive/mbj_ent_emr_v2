@@ -11,7 +11,7 @@ const util = require('util');
 const mongoose = require('mongoose');
 const moment = require('moment');
 const mailgun = require("mailgun-js");
-const puppeteer = require('puppeteer');
+// const puppeteer = require('puppeteer');
 
 const { transformUser } = require('./merge');
 const { dateToString } = require('../../helpers/date');
@@ -35,31 +35,31 @@ module.exports = {
     //   throw err;
     // }
   },
-  testPuppeteer: async () => {
-    console.log("Resolver: testPuppeteer...");
-
-      const browser = await puppeteer.launch();
-      const page = await browser.newPage();
-      await page.goto('https://example.org/', { waitUntil: 'networkidle0' });
-
-      const data = await page.evaluate(() => document.querySelector('body').innerHTML);
-      // const data = await page.evaluate(() => document.querySelector('*').outerHTML);
-
-      // const data = await page.evaluate(
-      //   () =>  Array.from(document.querySelectorAll('*'))
-      //               .map(elem => elem.tagName)
-      // );
-
-    console.log('data',data);
-
-      await browser.close();
-
-    try {
-      return JSON.stringify(data);
-    } catch (err) {
-      throw err;
-    }
-  },
+  // testPuppeteer: async () => {
+  //   console.log("Resolver: testPuppeteer...");
+  //
+  //     const browser = await puppeteer.launch();
+  //     const page = await browser.newPage();
+  //     await page.goto('https://example.org/', { waitUntil: 'networkidle0' });
+  //
+  //     const data = await page.evaluate(() => document.querySelector('body').innerHTML);
+  //     // const data = await page.evaluate(() => document.querySelector('*').outerHTML);
+  //
+  //     // const data = await page.evaluate(
+  //     //   () =>  Array.from(document.querySelectorAll('*'))
+  //     //               .map(elem => elem.tagName)
+  //     // );
+  //
+  //   console.log('data',data);
+  //
+  //     await browser.close();
+  //
+  //   try {
+  //     return JSON.stringify(data);
+  //   } catch (err) {
+  //     throw err;
+  //   }
+  // },
   testEmail: async () => {
     console.log("Resolver: test email...");
     try {
@@ -1033,7 +1033,7 @@ module.exports = {
         name: args.userInput.fileName,
         type: args.userInput.fileType,
         path: args.userInput.filePath,
-        highlighted: args.userInput.imageHighlighted
+        highlighted: args.userInput.fileHighlighted
       };
 
       const user = await User.findOneAndUpdate(

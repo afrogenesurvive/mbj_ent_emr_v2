@@ -949,6 +949,12 @@ module.exports = {
           },
           highlighted: args.visitInput.vitalsHighlighted,
         }
+        // console.log('vitals',vitals);
+        // const visitx = await Visit.find(
+        //   {_id:args.visitId ,vitals: vitals}
+        // )
+        // console.log('visitx',visitx);
+
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$pull: {vitals: vitals}},

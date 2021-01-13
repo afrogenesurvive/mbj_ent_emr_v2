@@ -69,7 +69,8 @@ module.exports = {
       const attendance = {
         date: moment().format('YYYY-MM-DD'),
         status: 'present',
-        description: 'login auto attendance'
+        description: 'login auto attendance',
+        highlighted: false,
       };
 
       const user2 = await User.findOneAndUpdate(

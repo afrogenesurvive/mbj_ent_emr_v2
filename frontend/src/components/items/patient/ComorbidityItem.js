@@ -60,7 +60,6 @@ const ComorbidityItem = props => {
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
-                <Popover.Title as="h3">{`Popover ${'top'}`}</Popover.Title>
                 <Popover.Content>
                   <strong>More Info</strong>
                 </Popover.Content>
@@ -113,7 +112,6 @@ const ComorbidityItem = props => {
                   placement={'top'}
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>
-                      <Popover.Title as="h3">{`Popover ${'top'}`}</Popover.Title>
                       <Popover.Content>
                         <strong>Delete!?</strong>
                       </Popover.Content>

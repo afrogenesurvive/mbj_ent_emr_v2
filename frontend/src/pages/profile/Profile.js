@@ -613,7 +613,8 @@ deleteAttendance = (args) => {
           userInput:{
             attendanceDate:"${args.date}",
             attendanceStatus:"${args.status}",
-            attendanceDescription:"${args.description}"
+            attendanceDescription:"${args.description}",
+            attendanceHighlighted:${args.highlighted}
           }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
    fetch('http://localhost:8088/graphql', {
@@ -770,7 +771,8 @@ deleteLeave = (args) => {
             leaveType:"${args.type}",
             leaveStartDate:"${args.startDate}",
             leaveEndDate:"${args.endDate}",
-            leaveDescription:"${args.description}"
+            leaveDescription:"${args.description}",
+            leaveHighlighted:${args.highlighted}
           })
           {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
@@ -986,7 +988,6 @@ deleteImage = (args) => {
 
   const filePath = 'staff/'+username+'/images';
   const filename = args.name;
-  // console.log('foo',filename);
 
   let requestBody = {
     query: `
@@ -996,7 +997,8 @@ deleteImage = (args) => {
           userInput:{
             imageName:"${args.name}",
             imageType:"${args.type}",
-            imagePath:"${args.path}"
+            imagePath:"${args.path}",
+            imageHighlighted:${args.highlighted}
           })
           {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
@@ -1264,7 +1266,8 @@ deleteFile = (args) => {
           userInput:{
             fileName:"${args.name}",
             fileType:"${args.type}",
-            filePath:"${args.path}"
+            filePath:"${args.path}",
+            fileHighlighted:${args.highlighted}
           })
           {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
