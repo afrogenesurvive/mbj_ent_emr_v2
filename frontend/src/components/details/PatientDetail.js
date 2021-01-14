@@ -24,6 +24,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AuthContext from '../../context/auth-context';
 import AlertBox from '../alertBox/AlertBox';
 import LoadingOverlay from '../overlay/LoadingOverlay';
+import LoadingOverlay2 from '../overlay/LoadingOverlay2';
 import PdfView from '../pdfView/PdfView';
 
 import PatientAddressList from '../lists/patient/PatientAddressList';
@@ -77,6 +78,7 @@ class PatientDetail extends Component {
     activityA: null,
     role: null,
     overlay: false,
+    overlay2: false,
     overlayStatus: "test",
     isGuest: true,
     context: null,
@@ -248,7 +250,7 @@ submitAddAddressForm = (event) => {
   event.preventDefault();
   console.log('...adding address...');
   this.context.setUserAlert('...adding address...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -268,7 +270,7 @@ submitAddAddressForm = (event) => {
       country.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -320,6 +322,7 @@ submitAddAddressForm = (event) => {
       this.props.updatePatient(resData.data.addPatientAddress)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.addPatientAddress,
         activityA: `addPatientAddress?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -333,13 +336,13 @@ submitAddAddressForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteAddress = (args) => {
   console.log('...deleting address...');
   this.context.setUserAlert('...deleting address...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -394,6 +397,7 @@ deleteAddress = (args) => {
       this.props.updatePatient(resData.data.deletePatientAddress)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.deletePatientAddress,
         activityA: `deletePatientAddress?activityId:${activityId},patientId:${patientId}`
       });
@@ -403,13 +407,13 @@ deleteAddress = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 setAddressPrimary = (args) => {
   console.log('...setting primary address...');
   this.context.setUserAlert('...setting primary address...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -463,6 +467,7 @@ setAddressPrimary = (args) => {
       this.props.updatePatient(resData.data.setPatientAddressPrimary)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.setPatientAddressPrimary,
         activityA: `setPatientAddressPrimary?activityId:${activityId},patientId:${patientId}`
       });
@@ -472,7 +477,7 @@ setAddressPrimary = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -480,7 +485,7 @@ submitAddNextOfKinForm = (event) => {
   event.preventDefault();
   console.log('...add next of kin...');
   this.context.setUserAlert('...adding next of kin...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -497,7 +502,7 @@ submitAddNextOfKinForm = (event) => {
       phone.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -547,6 +552,7 @@ submitAddNextOfKinForm = (event) => {
       this.props.updatePatient(resData.data.addPatientNextOfKin)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.addPatientNextOfKin,
         activityA: `addPatientNextOfKin?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -560,13 +566,13 @@ submitAddNextOfKinForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteNextOfKin = (args) => {
   console.log('...deleting next of kin...');
   this.context.setUserAlert('...deleting next of kin....')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -619,6 +625,7 @@ deleteNextOfKin = (args) => {
       this.props.updatePatient(resData.data.deletePatientNextOfKin)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.deletePatientNextOfKin,
         activityA: `deletePatientNextOfKin?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -632,7 +639,7 @@ deleteNextOfKin = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -640,7 +647,7 @@ submitAddAllergyForm = (event) => {
   event.preventDefault();
   console.log('...add allergy...');
   this.context.setUserAlert('...adding allergy...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -653,7 +660,7 @@ submitAddAllergyForm = (event) => {
       description.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -781,6 +788,7 @@ submitAddAllergyForm = (event) => {
       this.props.updatePatient(resData.data.addPatientAllergy)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.addPatientAllergy,
         activityA: `addPatientAllergy?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -794,13 +802,13 @@ submitAddAllergyForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteAllergy = (args) => {
   console.log('...deleting allergy...');
   this.context.setUserAlert('...deleting allergy...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -852,6 +860,7 @@ deleteAllergy = (args) => {
       this.props.updatePatient(resData.data.deletePatientAllergy)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.deletePatientAllergy,
         activityA: `deletePatientAllergy?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -926,20 +935,18 @@ deleteAllergy = (args) => {
       }
       console.log('end');
 
-
-
     })
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 submitAddMedicationForm = (event) => {
   event.preventDefault();
   console.log('...add medication...');
   this.context.setUserAlert('...adding medication...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -955,7 +962,7 @@ submitAddMedicationForm = (event) => {
       type.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -1084,6 +1091,7 @@ submitAddMedicationForm = (event) => {
       this.props.updatePatient(resData.data.addPatientMedication)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.addPatientMedication,
         activityA: `addPatientMedication?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -1097,13 +1105,13 @@ submitAddMedicationForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteMedication = (args) => {
   console.log('...deleting medication...',args);
   this.context.setUserAlert('...deleting medication...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -1156,6 +1164,7 @@ deleteMedication = (args) => {
       this.props.updatePatient(resData.data.deletePatientMedication)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.deletePatientMedication,
         activityA: `deletePatientMedication?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -1235,7 +1244,7 @@ deleteMedication = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -1243,7 +1252,7 @@ submitAddComorbidityForm = (event) => {
   event.preventDefault();
   console.log('...add comorbidities...');
   this.context.setUserAlert('...adding comorbidities...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -1257,7 +1266,7 @@ submitAddComorbidityForm = (event) => {
       type.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -1305,6 +1314,7 @@ submitAddComorbidityForm = (event) => {
       this.props.updatePatient(resData.data.addPatientComorbidity)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.addPatientComorbidity,
         activityA: `addPatientComorbidity?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -1318,13 +1328,13 @@ submitAddComorbidityForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteComorbidity = (args) => {
   console.log('...deleting medication...',args);
   this.context.setUserAlert('...deleting medication...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -1376,6 +1386,7 @@ deleteComorbidity = (args) => {
       this.props.updatePatient(resData.data.deletePatientComorbidity)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.deletePatientComorbidity,
         activityA: `deletePatientComorbidity?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -1390,7 +1401,7 @@ deleteComorbidity = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -1412,7 +1423,8 @@ addAttachment = (event) => {
   this.context.setUserAlert('...adding attachment...');
   this.setState({
     isLoading: true,
-    addAttachmentForm: false
+    addAttachmentForm: false,
+    overlay2: true
   })
 
   const token = this.context.token;
@@ -1425,7 +1437,7 @@ addAttachment = (event) => {
 
   if (event.target.fileInput.value === "" ) {
     this.context.setUserAlert("...no file!? Please add a file...")
-        this.setState({isLoading: false})
+        this.setState({isLoading: false, overlay2: false})
         return;
   }
 
@@ -1596,6 +1608,7 @@ addAttachment = (event) => {
         this.props.updatePatient(resData.data.addPatientAllergyAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedPatient: resData.data.addPatientAllergyAttachment,
           activityA: `addPatientAllergyAttachmentRegex?activityId:${activityId},patientId:${patientId}`
         });
@@ -1604,6 +1617,7 @@ addAttachment = (event) => {
         this.props.updatePatient(resData.data.addPatientMedicationAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedPatient: resData.data.addPatientMedicationAttachment,
           activityA: `addPatientMedicationAttachment?activityId:${activityId},patientId:${patientId}`
         });
@@ -1614,14 +1628,14 @@ addAttachment = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
 }
 deleteAttachment = (args) => {
   console.log('...deleting attachment...');
   this.context.setUserAlert('...adding attachment...');
-  this.setState({isLoading: true})
+  this.setState({isLoading: true, overlay2: true})
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -1715,6 +1729,7 @@ deleteAttachment = (args) => {
         this.props.updatePatient(resData.data.deletePatientAllergyAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedPatient: resData.data.deletePatientAllergyAttachment,
           activityA: `deletePatientAllergyAttachment?activityId:${activityId},patientId:${patientId}`
         });
@@ -1723,6 +1738,7 @@ deleteAttachment = (args) => {
         this.props.updatePatient(resData.data.deletePatientMedicationAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedPatient: resData.data.deletePatientMedicationAttachment,
           activityA: `deletePatientMedicationAttachment?activityId:${activityId},patientId:${patientId}`
         });
@@ -1786,7 +1802,7 @@ deleteAttachment = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
 }
@@ -1795,7 +1811,7 @@ submitAddImageForm = (event) => {
   event.preventDefault();
   console.log('...adding image...');
   this.context.setUserAlert('...adding image...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -1808,7 +1824,7 @@ submitAddImageForm = (event) => {
 
   if (event.target.fileInput.value === "" ) {
     this.context.setUserAlert("...no file!? Please add a file...")
-        this.setState({isLoading: false})
+        this.setState({isLoading: false, overlay2: false})
         return;
   }
 
@@ -1928,6 +1944,7 @@ submitAddImageForm = (event) => {
       this.props.updatePatient(resData.data.addPatientImage)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.addPatientImage,
         activityA: `addPatientImage?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -1941,13 +1958,13 @@ submitAddImageForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteImage = (args) => {
   console.log('...deleting image...');
   this.context.setUserAlert('...deleting image...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -2002,6 +2019,7 @@ deleteImage = (args) => {
       this.props.updatePatient(resData.data.deletePatientImage)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.deletePatientImage,
         activityA: `deletePatientImage?activityId:${activityId},patientId:${patientId}`
       });
@@ -2058,7 +2076,7 @@ deleteImage = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -2066,7 +2084,7 @@ submitAddFileForm = (event) => {
   event.preventDefault();
   console.log('...adding file...');
   this.context.setUserAlert('...adding file...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -2080,7 +2098,7 @@ submitAddFileForm = (event) => {
 
   if (event.target.fileInput.value === "" ) {
     this.context.setUserAlert("...no file!? Please add a file...")
-        this.setState({isLoading: false})
+        this.setState({isLoading: false, overlay2: false})
         return;
   }
 
@@ -2200,6 +2218,7 @@ submitAddFileForm = (event) => {
       this.props.updatePatient(resData.data.addPatientFile)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.addPatientFile,
         activityA: `addPatientFile?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -2213,13 +2232,13 @@ submitAddFileForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteFile = (args) => {
   console.log('...deleting file...');
   this.context.setUserAlert('...deleting file...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -2271,6 +2290,7 @@ deleteFile = (args) => {
       this.props.updatePatient(resData.data.deletePatientFile)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.deletePatientFile,
         activityA: `deletePatientFile?activityId:${activityId},patientId:${patientId}`
       });
@@ -2329,7 +2349,7 @@ deleteFile = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -2337,7 +2357,7 @@ submitAddNoteForm = (event) => {
   event.preventDefault();
   console.log('...adding notes...');
   this.context.setUserAlert('...adding notes...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -2348,7 +2368,7 @@ submitAddNoteForm = (event) => {
       notes.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -2394,6 +2414,7 @@ submitAddNoteForm = (event) => {
       this.props.updatePatient(resData.data.addPatientNotes)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.addPatientNotes,
         activityA: `addPatientNotes?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -2407,13 +2428,13 @@ submitAddNoteForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteNote = (args) => {
   console.log('...deleting note...');
   this.context.setUserAlert('...deleting note...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -2461,6 +2482,7 @@ deleteNote = (args) => {
       this.props.updatePatient(resData.data.deletePatientNote)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.deletePatientNote,
         activityA: `deletePatientNote?activityId:${activityId},patientId:${patientId}`
       });
@@ -2470,14 +2492,14 @@ deleteNote = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 submitAddTagForm = (event) => {
   event.preventDefault();
   console.log('...adding tags...');
   this.context.setUserAlert('...adding tags...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -2488,7 +2510,7 @@ submitAddTagForm = (event) => {
       tags.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -2534,6 +2556,7 @@ submitAddTagForm = (event) => {
       this.props.updatePatient(resData.data.addPatientTags)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.addPatientTags,
         activityA: `addPatientTags?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -2547,13 +2570,13 @@ submitAddTagForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteTag = (args) => {
   console.log('...deleting tag...');
   this.context.setUserAlert('...deleting tag...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -2601,6 +2624,7 @@ deleteTag = (args) => {
       this.props.updatePatient(resData.data.deletePatientTag)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.deletePatientTag,
         activityA: `deletePatienTag?activityId:${activityId},patientId:${patientId}`
       });
@@ -2610,7 +2634,7 @@ deleteTag = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -2618,7 +2642,7 @@ submitUpdateSingleFieldForm = (event) => {
   event.preventDefault();
   console.log('...updating single field...');
   this.context.setUserAlert('...updating single field...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -2630,7 +2654,7 @@ submitUpdateSingleFieldForm = (event) => {
       query.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -2676,6 +2700,7 @@ submitUpdateSingleFieldForm = (event) => {
       this.props.updatePatient(resData.data.updatePatientSingleField)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.updatePatientSingleField,
         activityA: `updatePatientSingleField?activityId:${activityId},patientId:${patientId}`,
         updateSingleField: {
@@ -2689,7 +2714,7 @@ submitUpdateSingleFieldForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 startUpdateSingleField = (args) => {
@@ -2772,6 +2797,9 @@ cancelAdd = () => {
 
 parseForCalendar = (args) => {
   console.log('...parsing patient dates for calendar...');
+  this.setState({
+    overlay2: true
+  })
 
   let calendarAppointments = args.appointments.map(x => ({
       title: x.title,
@@ -2805,6 +2833,7 @@ parseForCalendar = (args) => {
     this.setState({
       calendarAppointments: calendarAppointments,
       calendarVisits: calendarVisits,
+      overlay2: false
     })
 }
 viewCalendarEvent = (args) => {
@@ -2927,7 +2956,7 @@ checkAllergies = () => {
 togglePatientComorbidityHighlighted = (args) => {
   console.log('togglePatientComorbidityHighlighted');
   this.context.setUserAlert('...toggling patient comorbidity highlight...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -2982,6 +3011,7 @@ togglePatientComorbidityHighlighted = (args) => {
       this.props.updatePatient(resData.data.togglePatientComorbidityHighlighted)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.togglePatientComorbidityHighlighted,
         activityA: `togglePatientComorbidityHighlighted?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -2995,14 +3025,14 @@ togglePatientComorbidityHighlighted = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
 }
 togglePatientAllergyHighlighted = (args) => {
   console.log('togglePatientAllergyHighlighted');
   this.context.setUserAlert('...toggling patient allergy highlight...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -3058,6 +3088,7 @@ togglePatientAllergyHighlighted = (args) => {
       this.props.updatePatient(resData.data.togglePatientAllergyHighlighted)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.togglePatientAllergyHighlighted,
         activityA: `togglePatientAllergyHighlighted?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -3071,14 +3102,14 @@ togglePatientAllergyHighlighted = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
 }
 togglePatientFileHighlighted = (args) => {
   console.log('togglePatientFileHighlighted');
   this.context.setUserAlert('...toggling patient file highlight...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -3134,6 +3165,7 @@ togglePatientFileHighlighted = (args) => {
       this.props.updatePatient(resData.data.togglePatientFileHighlighted)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.togglePatientFileHighlighted,
         activityA: `togglePatientFileHighlighted?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -3147,14 +3179,14 @@ togglePatientFileHighlighted = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
 }
 togglePatientImageHighlighted = (args) => {
   console.log('togglePatientImageHighlighted');
   this.context.setUserAlert('...toggling patient image highlight...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -3214,6 +3246,7 @@ togglePatientImageHighlighted = (args) => {
       this.props.updatePatient(resData.data.togglePatientImageHighlighted)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.togglePatientImageHighlighted,
         activityA: `togglePatientImageHighlighted?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -3227,14 +3260,14 @@ togglePatientImageHighlighted = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
 }
 togglePatientMedicationHighlighted = (args) => {
   console.log('togglePatientMedicationHighlighted');
   this.context.setUserAlert('...toggling patient medication highlight...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -3291,6 +3324,7 @@ togglePatientMedicationHighlighted = (args) => {
       this.props.updatePatient(resData.data.togglePatientMedicationHighlighted)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.togglePatientMedicationHighlighted,
         activityA: `togglePatientMedicationHighlighted?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -3304,14 +3338,14 @@ togglePatientMedicationHighlighted = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
 }
 togglePatientNextOfKinHighlighted = (args) => {
   console.log('togglePatientNextOfKinHighlighted');
   this.context.setUserAlert('...toggling patient nextOfKin highlight...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -3368,6 +3402,7 @@ togglePatientNextOfKinHighlighted = (args) => {
       this.props.updatePatient(resData.data.togglePatientNextOfKinHighlighted)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.togglePatientNextOfKinHighlighted,
         activityA: `togglePatientNextOfKinHighlighted?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -3381,7 +3416,7 @@ togglePatientNextOfKinHighlighted = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
 }
@@ -3397,6 +3432,11 @@ render() {
       <LoadingOverlay
         status={this.state.overlayStatus}
         toggleOverlay={this.toggleOverlay}
+      />
+    )}
+    {this.state.overlay2 === true && (
+      <LoadingOverlay2
+        toggleOverlay2={this.toggleOverlay2}
       />
     )}
 

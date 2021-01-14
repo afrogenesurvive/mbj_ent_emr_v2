@@ -16,6 +16,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AuthContext from '../../context/auth-context';
 import AlertBox from '../alertBox/AlertBox';
 import LoadingOverlay from '../overlay/LoadingOverlay';
+import LoadingOverlay2 from '../overlay/LoadingOverlay2';
 
 import PatientAddressList from '../lists/patient/PatientAddressList';
 import PatientNextOfKinList from '../lists/patient/PatientNextOfKinList'
@@ -60,6 +61,7 @@ class AppointmentDetail extends Component {
     activityA: null,
     role: null,
     overlay: false,
+    overlay2: false,
     overlayStatus: "test",
     isGuest: true,
     context: null,
@@ -232,7 +234,7 @@ submitAddNoteForm = (event) => {
   event.preventDefault();
   console.log('...adding notes...');
   this.context.setUserAlert('...adding notes...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -289,6 +291,7 @@ submitAddNoteForm = (event) => {
       this.props.updateAppointment(resData.data.addAppointmentNotes)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedAppointment: resData.data.addAppointmentNotes,
         activityA: `addAppointmentNotes?activityId:${activityId},appointmentId:${appointmentId}`,
         adding: {
@@ -302,14 +305,14 @@ submitAddNoteForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteNote = (args) => {
 
   console.log('...deleting notes...');
   this.context.setUserAlert('...deleting notes...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -358,6 +361,7 @@ deleteNote = (args) => {
       this.props.updateAppointment(resData.data.deleteAppointmentNote)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedAppointment: resData.data.deleteAppointmentNote,
         activityA: `deleteAppointmentNote?activityId:${activityId},appointmentId:${appointmentId}`,
         adding: {
@@ -371,14 +375,14 @@ deleteNote = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 submitAddTagForm = (event) => {
   event.preventDefault();
   console.log('...adding tags...');
   this.context.setUserAlert('...adding tags...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -435,6 +439,7 @@ submitAddTagForm = (event) => {
       this.props.updateAppointment(resData.data.addAppointmentTags)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedAppointment: resData.data.addAppointmentTags,
         activityA: `addAppointmentTags?activityId:${activityId},appointmentId:${appointmentId}`,
         adding: {
@@ -448,14 +453,14 @@ submitAddTagForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteTag = (args) => {
 
   console.log('...deleting tags...');
   this.context.setUserAlert('...deleting tags...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -504,6 +509,7 @@ deleteTag = (args) => {
       this.props.updateAppointment(resData.data.deleteAppointmentTag)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedAppointment: resData.data.deleteAppointmentTag,
         activityA: `deleteAppointmentTag?activityId:${activityId},appointmentId:${appointmentId}`,
         adding: {
@@ -517,7 +523,7 @@ deleteTag = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -525,7 +531,7 @@ submitAddUserForm = (event) => {
   event.preventDefault();
   console.log('...adding consultant...');
   this.context.setUserAlert('...adding consultant...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -588,6 +594,7 @@ submitAddUserForm = (event) => {
       this.props.updateAppointment(resData.data.addAppointmentConsultant)
       this.setState({
         isLoading: false,
+        overlay2: false,
         activityA: `addAppointmentConsultant?activityId:${activityId},appointmentId:${appointmentId},consultantId:${consultantId}`,
       });
       this.logUserActivity({activityId: activityId,token: token});
@@ -596,13 +603,13 @@ submitAddUserForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteConsultant = (args) => {
   console.log('...deleting consultant...');
   this.context.setUserAlert('...deleting consultant...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
   //
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -650,6 +657,7 @@ deleteConsultant = (args) => {
       this.props.updateAppointment(resData.data.deleteAppointmentConsultant)
       this.setState({
         isLoading: false,
+        overlay2: false,
         activityA: `deleteAppointmentConsultant?activityId:${activityId},appointmentId:${appointmentId},consultantId:${consultantId}`,
       });
       this.logUserActivity({activityId: activityId,token: token});
@@ -658,7 +666,7 @@ deleteConsultant = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 startUpdatePatient = () => {
@@ -669,7 +677,7 @@ submitUpdateSingleFieldForm = (event) => {
   event.preventDefault();
   console.log('...updating single field...');
   this.context.setUserAlert('...updating single field...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -727,6 +735,7 @@ submitUpdateSingleFieldForm = (event) => {
       this.props.updateAppointment(resData.data.updateAppointmentSingleField)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.updateAppointmentSingleField,
         activityA: `updateAppointmentSingleField?activityId:${activityId},appointmentId:${appointmentId}`,
         updateSingleField: {
@@ -740,7 +749,7 @@ submitUpdateSingleFieldForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 startUpdateSingleField = (args) => {
@@ -825,6 +834,12 @@ render() {
 
   return (
     <React.Fragment>
+
+    {this.state.overlay2 === true && (
+      <LoadingOverlay2
+        toggleOverlay2={this.toggleOverlay2}
+      />
+    )}
 
     {this.state.overlay === true && (
       <LoadingOverlay

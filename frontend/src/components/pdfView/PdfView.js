@@ -94,7 +94,7 @@ return (
     <div className="pdfView">
 
     <Col className="pdfViewClose">
-    <Button variant="outline-danger" size="sm" class="centered_btn" onClick={props.close}>X</Button>
+    <Button variant="outline-danger" size="sm" class="centered_btn pdfViewCloseBtn" onClick={props.close}>X</Button>
     </Col>
     <Col className="pdfViewCol">
     <h3>Document Generator</h3>

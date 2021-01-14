@@ -17,6 +17,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AuthContext from '../../context/auth-context';
 import AlertBox from '../alertBox/AlertBox';
 import LoadingOverlay from '../overlay/LoadingOverlay';
+import LoadingOverlay2 from '../overlay/LoadingOverlay2';
 
 import PatientAddressList from '../lists/patient/PatientAddressList';
 import PatientNextOfKinList from '../lists/patient/PatientNextOfKinList'
@@ -102,6 +103,7 @@ class VisitDetail extends Component {
     activityA: null,
     role: null,
     overlay: false,
+    overlay2: false,
     overlayStatus: "test",
     isGuest: true,
     context: null,
@@ -159,6 +161,7 @@ class VisitDetail extends Component {
     this.propsVisit = this.props.visit;
     this.hasComorbidities = false;
     this.hasAllergies = false;
+    this.overlay2 = false;
   }
 
 componentDidMount () {
@@ -334,7 +337,7 @@ submitAddComplaintForm = (event) => {
   event.preventDefault();
   console.log('...adding complaint...');
   this.context.setUserAlert('...adding complaint...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -350,7 +353,7 @@ submitAddComplaintForm = (event) => {
       anamnesis.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -478,6 +481,7 @@ submitAddComplaintForm = (event) => {
       this.props.updateVisit(resData.data.addVisitComplaint)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.addVisitComplaint,
         activityA: `addVisitComplaint?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -491,14 +495,14 @@ submitAddComplaintForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteComplaint = (args) => {
 
   console.log('...deleting complaint...');
   this.context.setUserAlert('...deleting complaint...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -554,6 +558,7 @@ deleteComplaint = (args) => {
       this.props.updateVisit(resData.data.deleteVisitComplaint)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.deleteVisitComplaint,
         activityA: `deleteVisitComplaint?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -633,7 +638,7 @@ deleteComplaint = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -641,7 +646,7 @@ submitAddSurveyForm = (event) => {
   event.preventDefault();
   console.log('...adding survey...');
   this.context.setUserAlert('...adding survey...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -656,7 +661,7 @@ submitAddSurveyForm = (event) => {
       description.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -783,6 +788,7 @@ submitAddSurveyForm = (event) => {
       this.props.updateVisit(resData.data.addVisitSurvey)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.addVisitSurvey,
         activityA: `addVisitSurvey?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -796,14 +802,14 @@ submitAddSurveyForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteSurvey = (args) => {
 
   console.log('...deleting survey...');
   this.context.setUserAlert('...deleting survey...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: false});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -857,6 +863,7 @@ deleteSurvey = (args) => {
       this.props.updateVisit(resData.data.deleteVisitSurvey)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.deleteVisitSurvey,
         activityA: `deleteVisitSurvey?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -936,7 +943,7 @@ deleteSurvey = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -944,7 +951,7 @@ submitAddSystematicInquiryForm = (event) => {
   event.preventDefault();
   console.log('...adding systematicInquiry...');
   this.context.setUserAlert('...adding systematicInquiry...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -960,7 +967,7 @@ submitAddSystematicInquiryForm = (event) => {
       description.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -1087,6 +1094,7 @@ submitAddSystematicInquiryForm = (event) => {
       this.props.updateVisit(resData.data.addVisitSysInquiry)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.addVisitSysInquiry,
         activityA: `addVisitSysInquiry?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -1100,14 +1108,14 @@ submitAddSystematicInquiryForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteSystematicInquiry = (args) => {
 
   console.log('...deleting systematicInquiry...');
   this.context.setUserAlert('...deleting systematicInquiry...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -1161,6 +1169,7 @@ deleteSystematicInquiry = (args) => {
       this.props.updateVisit(resData.data.deleteVisitSysInquiry)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.deleteVisitSysInquiry,
         activityA: `deleteVisitSysInquiry?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -1239,7 +1248,7 @@ deleteSystematicInquiry = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -1247,7 +1256,7 @@ submitAddVitalsForm = (event) => {
   event.preventDefault();
   console.log('...adding Vitals...');
   this.context.setUserAlert('...adding Vitals...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -1288,7 +1297,7 @@ submitAddVitalsForm = (event) => {
       weightValue.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -1346,6 +1355,7 @@ submitAddVitalsForm = (event) => {
       this.props.updateVisit(resData.data.addVisitVitals)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.addVisitVitals,
         activityA: `addVisitVitals?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -1359,14 +1369,22 @@ submitAddVitalsForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteVitals = (args) => {
 
+  // this.setState({
+  //   overlay2: true
+  // })
+  // this.overlay2 = true;
+
   console.log('...deleting Vitals...');
   this.context.setUserAlert('...deleting Vitals...')
-  this.setState({isLoading: true});
+  this.setState({
+    isLoading: true,
+    overlay2: true
+  });
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -1441,6 +1459,7 @@ deleteVitals = (args) => {
       this.props.updateVisit(resData.data.deleteVisitVitals)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.deleteVisitVitals,
         activityA: `deleteVisitVitals?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -1454,7 +1473,7 @@ deleteVitals = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -1462,7 +1481,7 @@ submitAddExaminationForm = (event) => {
   event.preventDefault();
   console.log('...adding Examination...');
   this.context.setUserAlert('...adding Examination...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -1485,7 +1504,7 @@ submitAddExaminationForm = (event) => {
       value.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -1617,6 +1636,7 @@ submitAddExaminationForm = (event) => {
       this.props.updateVisit(resData.data.addVisitExamination)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.addVisitExamination,
         activityA: `addVisitExamination?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -1630,14 +1650,14 @@ submitAddExaminationForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteExamination = (args) => {
 
   console.log('...deleting Examination...');
   this.context.setUserAlert('...deleting Examination...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -1702,6 +1722,7 @@ deleteExamination = (args) => {
       this.props.updateVisit(resData.data.deleteVisitExamination)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.deleteVisitExamination,
         activityA: `deleteVisitExamination?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -1781,7 +1802,7 @@ deleteExamination = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -1789,7 +1810,7 @@ submitAddInvestigationForm = (event) => {
   event.preventDefault();
   console.log('...adding Investigation...');
   this.context.setUserAlert('...adding Investigation...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -1805,7 +1826,7 @@ submitAddInvestigationForm = (event) => {
       description.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -1933,6 +1954,7 @@ submitAddInvestigationForm = (event) => {
       this.props.updateVisit(resData.data.addVisitInvestigation)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.addVisitInvestigation,
         activityA: `addVisitInvestigation?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -1946,14 +1968,14 @@ submitAddInvestigationForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteInvestigation = (args) => {
 
   console.log('...deleting Investigation...');
   this.context.setUserAlert('...deleting Investigation...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -2010,6 +2032,7 @@ deleteInvestigation = (args) => {
       this.props.updateVisit(resData.data.deleteVisitInvestigation)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.deleteVisitInvestigation,
         activityA: `deleteVisitInvestigation?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -2089,7 +2112,7 @@ deleteInvestigation = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -2097,7 +2120,7 @@ submitAddDiagnosisForm = (event) => {
   event.preventDefault();
   console.log('...adding Diagnosis...');
   this.context.setUserAlert('...adding Diagnosis...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -2113,7 +2136,7 @@ submitAddDiagnosisForm = (event) => {
       description.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -2241,6 +2264,7 @@ submitAddDiagnosisForm = (event) => {
       this.props.updateVisit(resData.data.addVisitDiagnosis)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.addVisitDiagnosis,
         activityA: `addVisitDiagnosis?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -2254,14 +2278,14 @@ submitAddDiagnosisForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteDiagnosis = (args) => {
 
   console.log('...deleting Diagnosis...');
   this.context.setUserAlert('...deleting Diagnosis...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -2318,6 +2342,7 @@ deleteDiagnosis = (args) => {
       this.props.updateVisit(resData.data.deleteVisitDiagnosis)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.deleteVisitDiagnosis,
         activityA: `deleteVisitDiagnosis?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -2396,7 +2421,7 @@ deleteDiagnosis = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -2404,7 +2429,7 @@ submitAddTreatmentForm = (event) => {
   event.preventDefault();
   console.log('...adding Treatment...');
   this.context.setUserAlert('...adding Treatment...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -2425,7 +2450,7 @@ submitAddTreatmentForm = (event) => {
       frequency.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -2556,6 +2581,7 @@ submitAddTreatmentForm = (event) => {
       this.props.updateVisit(resData.data.addVisitTreatment)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.addVisitTreatment,
         activityA: `addVisitTreatment?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -2569,14 +2595,14 @@ submitAddTreatmentForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteTreatment = (args) => {
 
   console.log('...deleting Treatment...');
   this.context.setUserAlert('...deleting Treatment...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -2637,6 +2663,7 @@ deleteTreatment = (args) => {
       this.props.updateVisit(resData.data.deleteVisitTreatment)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.deleteVisitTreatment,
         activityA: `deleteVisitTreatment?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -2716,7 +2743,7 @@ deleteTreatment = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -2724,7 +2751,7 @@ submitAddBillingForm = (event) => {
   event.preventDefault();
   console.log('...adding Billing...',event.target.amount.value.trim().length);
   this.context.setUserAlert('...adding Billing...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -2745,7 +2772,7 @@ submitAddBillingForm = (event) => {
       parseFloat(amount) <= 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -2878,6 +2905,7 @@ submitAddBillingForm = (event) => {
       this.props.updateVisit(resData.data.addVisitBilling)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.addVisitBilling,
         activityA: `addVisitBilling?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -2891,13 +2919,13 @@ submitAddBillingForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 updateBillingPaid = (args) => {
   console.log('...updating billing paid...');
   this.context.setUserAlert('...updating billing paid...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -2950,6 +2978,7 @@ updateBillingPaid = (args) => {
       this.props.updateVisit(resData.data.updateVisitBillingPaid)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.updateVisitBillingPaid,
         activityA: `updateVisitBillingPaid?activityId:${activityId},visitId:${visitId}`,
       });
@@ -2959,7 +2988,7 @@ updateBillingPaid = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
 }
@@ -2967,7 +2996,7 @@ deleteBilling = (args) => {
 
   console.log('...deleting Billing...',args);
   this.context.setUserAlert('...deleting Billing...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -3030,6 +3059,7 @@ deleteBilling = (args) => {
       this.props.updateVisit(resData.data.deleteVisitBilling)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.deleteVisitBilling,
         activityA: `deleteVisitBilling?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -3108,7 +3138,7 @@ deleteBilling = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -3116,7 +3146,7 @@ submitAddImageForm = (event) => {
   event.preventDefault();
   console.log('...adding Image...');
   this.context.setUserAlert('...adding Image...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -3128,7 +3158,7 @@ submitAddImageForm = (event) => {
 
   if (event.target.fileInput.value === "" ) {
     this.context.setUserAlert("...no file!? Please add a file...")
-        this.setState({isLoading: false})
+        this.setState({isLoading: false, overlay2: false})
         return;
   }
 
@@ -3249,6 +3279,7 @@ submitAddImageForm = (event) => {
       this.props.updateVisit(resData.data.addVisitImage)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.addVisitImage,
         activityA: `addVisitImage?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -3262,14 +3293,14 @@ submitAddImageForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteImage = (args) => {
 
   console.log('...deleting Image...',args);
   this.context.setUserAlert('...deleting Image...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -3324,6 +3355,7 @@ deleteImage = (args) => {
       this.props.updateVisit(resData.data.deleteVisitImage)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.deleteVisitImage,
         activityA: `deleteVisitImage?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -3388,7 +3420,7 @@ deleteImage = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -3396,7 +3428,7 @@ submitAddFileForm = (event) => {
   event.preventDefault();
   console.log('...adding File...');
   this.context.setUserAlert('...adding File...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -3408,7 +3440,7 @@ submitAddFileForm = (event) => {
 
   if (event.target.fileInput.value === "" ) {
     this.context.setUserAlert("...no file!? Please add a file...")
-        this.setState({isLoading: false})
+        this.setState({isLoading: false, overlay2: false})
         return;
   }
 
@@ -3528,6 +3560,7 @@ submitAddFileForm = (event) => {
       this.props.updateVisit(resData.data.addVisitFile)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.addVisitFile,
         activityA: `addVisitFile?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -3541,14 +3574,14 @@ submitAddFileForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteFile = (args) => {
 
   console.log('...deleting File...',args);
   this.context.setUserAlert('...deleting File...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -3603,6 +3636,7 @@ deleteFile = (args) => {
       this.props.updateVisit(resData.data.deleteVisitFile)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.deleteVisitFile,
         activityA: `deleteVisitFile?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -3665,7 +3699,7 @@ deleteFile = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -3673,7 +3707,7 @@ submitAddVigilanceForm = (event) => {
   event.preventDefault();
   console.log('...adding Vigilance...');
   this.context.setUserAlert('...adding Vigilance...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -3790,6 +3824,7 @@ submitAddVigilanceForm = (event) => {
       this.props.updateVisit(resData.data.addVisitVigilance)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.addVisitVigilance,
         activityA: `addVisitVigilance?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -3803,14 +3838,14 @@ submitAddVigilanceForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteVigilance = (args) => {
 
   console.log('...deleting Vigilance...');
   this.context.setUserAlert('...deleting Vigilance...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -3928,6 +3963,7 @@ deleteVigilance = (args) => {
       this.props.updateVisit(resData.data.deleteVisitVigilance)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.deleteVisitVigilance,
         activityA: `deleteVisitFile?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -3941,7 +3977,7 @@ deleteVigilance = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -3949,7 +3985,7 @@ submitAddUserForm = (event) => {
   event.preventDefault();
   console.log('...adding consultant...');
   this.context.setUserAlert('...adding consultant...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -3960,7 +3996,7 @@ submitAddUserForm = (event) => {
       consultantId.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -4012,6 +4048,7 @@ submitAddUserForm = (event) => {
       this.props.updateVisit(resData.data.addVisitConsultant)
       this.setState({
         isLoading: false,
+        overlay2: false,
         activityA: `addVisitConsultant?activityId:${activityId},visitId:${visitId},consultantId:${consultantId}`,
       });
       this.logUserActivity({activityId: activityId,token: token});
@@ -4020,13 +4057,13 @@ submitAddUserForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteConsultant = (args) => {
   console.log('...deleting consultant...');
   this.context.setUserAlert('...deleting consultant...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
   //
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -4074,6 +4111,7 @@ deleteConsultant = (args) => {
       this.props.updateVisit(resData.data.deleteVisitConsultant)
       this.setState({
         isLoading: false,
+        overlay2: false,
         activityA: `deleteVisitConsultant?activityId:${activityId},visitId:${visitId},consultantId:${consultantId}`,
       });
       this.logUserActivity({activityId: activityId,token: token});
@@ -4082,7 +4120,7 @@ deleteConsultant = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -4104,7 +4142,8 @@ addAttachment = (event) => {
   this.context.setUserAlert('...adding attachment...');
   this.setState({
     isLoading: true,
-    addAttachmentForm: false
+    addAttachmentForm: false,
+    overlay2: true
   })
 
   const token = this.context.token;
@@ -4117,7 +4156,7 @@ addAttachment = (event) => {
 
   if (event.target.fileInput.value === "" ) {
     this.context.setUserAlert("...no file!? Please add a file...")
-        this.setState({isLoading: false})
+        this.setState({isLoading: false, overlay2: false})
         return;
   }
 
@@ -4427,6 +4466,7 @@ addAttachment = (event) => {
         this.props.updateVisit(resData.data.addVisitComplaintAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedVisit: resData.data.addVisitComplaintAttachment,
           activityA: `addVisitComplaintAttachment?activityId:${activityId},visitId:${visitId}`
         });
@@ -4435,6 +4475,7 @@ addAttachment = (event) => {
         this.props.updateVisit(resData.data.addVisitSurveyAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedVisit: resData.data.addVisitSurveyAttachment,
           activityA: `addVisitSurveyAttachment?activityId:${activityId},visitId:${visitId}`
         });
@@ -4443,6 +4484,7 @@ addAttachment = (event) => {
         this.props.updateVisit(resData.data.addVisitSysInquiryAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedVisit: resData.data.addVisitSysInquiryAttachment,
           activityA: `addVisitSysInquiryAttachment?activityId:${activityId},visitId:${visitId}`
         });
@@ -4451,6 +4493,7 @@ addAttachment = (event) => {
         this.props.updateVisit(resData.data.addVisitExaminationAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedVisit: resData.data.addVisitExaminationAttachment,
           activityA: `addVisitExaminationAttachment?activityId:${activityId},visitId:${visitId}`
         });
@@ -4459,6 +4502,7 @@ addAttachment = (event) => {
         this.props.updateVisit(resData.data.addVisitInvestigationAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedVisit: resData.data.addVisitInvestigationAttachment,
           activityA: `addVisitInvestigationAttachment?activityId:${activityId},visitId:${visitId}`
         });
@@ -4467,6 +4511,7 @@ addAttachment = (event) => {
         this.props.updateVisit(resData.data.addVisitDiagnosisAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedVisit: resData.data.addVisitDiagnosisAttachment,
           activityA: `addVisitDiagnosisAttachment?activityId:${activityId},visitId:${visitId}`
         });
@@ -4475,6 +4520,7 @@ addAttachment = (event) => {
         this.props.updateVisit(resData.data.addVisitTreatmentAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedVisit: resData.data.addVisitTreatmentAttachment,
           activityA: `addVisitTreatmentAttachment?activityId:${activityId},visitId:${visitId}`
         });
@@ -4483,6 +4529,7 @@ addAttachment = (event) => {
         this.props.updateVisit(resData.data.addVisitBillingAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedVisit: resData.data.addVisitBillingAttachment,
           activityA: `addVisitBillingAttachment?activityId:${activityId},visitId:${visitId}`
         });
@@ -4493,14 +4540,14 @@ addAttachment = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
 }
 deleteAttachment = (args) => {
   console.log('...deleting attachment...', args.type);
   this.context.setUserAlert('...adding attachment...');
-  // this.setState({isLoading: true})
+  this.setState({isLoading: true, overlay2: true})
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -4748,6 +4795,7 @@ deleteAttachment = (args) => {
         this.props.updateVisit(resData.data.deleteVisitComplaintAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedVisit: resData.data.deleteVisitComplaintAttachment,
           activityA: `deleteVisitComplaintAttachment?activityId:${activityId},visitId:${visitId}`
         });
@@ -4756,6 +4804,7 @@ deleteAttachment = (args) => {
         this.props.updateVisit(resData.data.deleteVisitSurveyAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedVisit: resData.data.deleteVisitSurveyAttachment,
           activityA: `deleteVisitSurveyAttachment?activityId:${activityId},visitId:${visitId}`
         });
@@ -4764,6 +4813,7 @@ deleteAttachment = (args) => {
         this.props.updateVisit(resData.data.deleteVisitSysInquiryAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedVisit: resData.data.deleteVisitSysInquiryAttachment,
           activityA: `deleteVisitSysInquiryAttachment?activityId:${activityId},visitId:${visitId}`
         });
@@ -4772,6 +4822,7 @@ deleteAttachment = (args) => {
         this.props.updateVisit(resData.data.deleteVisitExaminationAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedVisit: resData.data.deleteVisitExaminationAttachment,
           activityA: `deleteVisitExaminationAttachment?activityId:${activityId},visitId:${visitId}`
         });
@@ -4780,6 +4831,7 @@ deleteAttachment = (args) => {
         this.props.updateVisit(resData.data.deleteVisitInvestigationAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedVisit: resData.data.deleteVisitInvestigationAttachment,
           activityA: `deleteVisitInvestigationAttachment?activityId:${activityId},visitId:${visitId}`
         });
@@ -4788,6 +4840,7 @@ deleteAttachment = (args) => {
         this.props.updateVisit(resData.data.deleteVisitDiagnosisAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedVisit: resData.data.deleteVisitDiagnosisAttachment,
           activityA: `deleteVisitDiagnosisAttachment?activityId:${activityId},visitId:${visitId}`
         });
@@ -4796,6 +4849,7 @@ deleteAttachment = (args) => {
         this.props.updateVisit(resData.data.deleteVisitTreatmentAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedVisit: resData.data.deleteVisitTreatmentAttachment,
           activityA: `deleteVisitTreatmentAttachment?activityId:${activityId},visitId:${visitId}`
         });
@@ -4804,6 +4858,7 @@ deleteAttachment = (args) => {
         this.props.updateVisit(resData.data.deleteVisitBillingAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedVisit: resData.data.deleteVisitBillingAttachment,
           activityA: `deleteVisitBillingAttachment?activityId:${activityId},visitId:${visitId}`
         });
@@ -4870,7 +4925,7 @@ deleteAttachment = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
 }
@@ -4879,7 +4934,7 @@ submitUpdateSingleFieldForm = (event) => {
   event.preventDefault();
   console.log('...updating single field...');
   this.context.setUserAlert('...updating single field...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -4891,7 +4946,7 @@ submitUpdateSingleFieldForm = (event) => {
       query.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -4937,6 +4992,7 @@ submitUpdateSingleFieldForm = (event) => {
       this.props.updateVisit(resData.data.updateVisitSingleField)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.updateVisitSingleField,
         activityA: `updateVisitSingleField?activityId:${activityId},visitId:${visitId}`,
         updateSingleField: {
@@ -4950,7 +5006,7 @@ submitUpdateSingleFieldForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 startUpdateSingleField = (args) => {
@@ -5034,7 +5090,7 @@ cancelAdd = () => {
 completeVisit = () => {
   console.log('...completing visit...');
   this.context.setUserAlert('...completing visit...')
-  this.setState({isLoading: true})
+  this.setState({isLoading: true, overlay2: true})
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -5080,6 +5136,7 @@ completeVisit = () => {
       this.props.updateVisit(resData.data.completeVisitById)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.completeVisitById,
         activityA: `completeVisitById?activityId:${activityId},visitId:${visitId}`,
         updateSingleField: {
@@ -5093,7 +5150,7 @@ completeVisit = () => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
 }
@@ -5124,7 +5181,7 @@ checkAllergies = () => {
 toggleVisitComplaintHighlighted = (args) => {
   console.log('...toggling visit complaint highlight...');
   this.context.setUserAlert('...toggling visit complaint highlight...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -5185,6 +5242,7 @@ toggleVisitComplaintHighlighted = (args) => {
       this.props.updateVisit(resData.data.toggleVisitComplaintHighlighted)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.toggleVisitComplaintHighlighted,
         activityA: `toggleVisitComplaintHighlighted?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -5198,13 +5256,13 @@ toggleVisitComplaintHighlighted = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 toggleVisitSurveyHighlighted = (args) => {
   console.log('...toggling visit survey highlight...');
   this.context.setUserAlert('...toggling visit survey highlight...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -5263,6 +5321,7 @@ toggleVisitSurveyHighlighted = (args) => {
       this.props.updateVisit(resData.data.toggleVisitSurveyHighlighted)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.toggleVisitSurveyHighlighted,
         activityA: `toggleVisitSurveyHighlighted?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -5276,13 +5335,13 @@ toggleVisitSurveyHighlighted = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 toggleVisitSysInquiryHighlighted = (args) => {
   console.log('...toggling visit systematicInquiry highlight...');
   this.context.setUserAlert('...toggling visit systematicInquiry highlight...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -5341,6 +5400,7 @@ toggleVisitSysInquiryHighlighted = (args) => {
       this.props.updateVisit(resData.data.toggleVisitSysInquiryHighlighted)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.toggleVisitSysInquiryHighlighted,
         activityA: `toggleVisitSysInquiryHighlighted?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -5354,14 +5414,14 @@ toggleVisitSysInquiryHighlighted = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
 }
 toggleVisitVitalsHighlighted = (args) => {
   console.log('...toggling visit vitals highlight...');
   this.context.setUserAlert('...toggling visit vitals highlight...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true,overlay2:true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -5442,6 +5502,7 @@ toggleVisitVitalsHighlighted = (args) => {
       this.props.updateVisit(resData.data.toggleVisitVitalsHighlighted)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.toggleVisitVitalsHighlighted,
         activityA: `toggleVisitVitalsHighlighted?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -5455,14 +5516,14 @@ toggleVisitVitalsHighlighted = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
 }
 toggleVisitExaminationHighlighted = (args) => {
   console.log('...toggling visit examination highlight...');
   this.context.setUserAlert('...toggling visit examination highlight...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -5533,6 +5594,7 @@ toggleVisitExaminationHighlighted = (args) => {
       this.props.updateVisit(resData.data.toggleVisitExaminationHighlighted)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.toggleVisitExaminationHighlighted,
         activityA: `toggleVisitExaminationHighlighted?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -5546,14 +5608,14 @@ toggleVisitExaminationHighlighted = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
 }
 toggleVisitInvestigationHighlighted = (args) => {
   console.log('...toggling visit investigation highlight...');
   this.context.setUserAlert('...toggling visit investigation highlight...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -5615,6 +5677,7 @@ toggleVisitInvestigationHighlighted = (args) => {
       this.props.updateVisit(resData.data.toggleVisitInvestigationHighlighted)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.toggleVisitInvestigationHighlighted,
         activityA: `toggleVisitInvestigationHighlighted?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -5628,14 +5691,14 @@ toggleVisitInvestigationHighlighted = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
 }
 toggleVisitDiagnosisHighlighted = (args) => {
   console.log('...toggling visit diagnosis highlight...');
   this.context.setUserAlert('...toggling visit diagnosis highlight...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -5697,6 +5760,7 @@ toggleVisitDiagnosisHighlighted = (args) => {
       this.props.updateVisit(resData.data.toggleVisitDiagnosisHighlighted)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.toggleVisitDiagnosisHighlighted,
         activityA: `toggleVisitDiagnosisHighlighted?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -5710,14 +5774,14 @@ toggleVisitDiagnosisHighlighted = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
 }
 toggleVisitTreatmentHighlighted = (args) => {
   console.log('...toggling visit treatment highlight...');
   this.context.setUserAlert('...toggling visit treatment highlight...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -5783,6 +5847,7 @@ toggleVisitTreatmentHighlighted = (args) => {
       this.props.updateVisit(resData.data.toggleVisitTreatmentHighlighted)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.toggleVisitTreatmentHighlighted,
         activityA: `toggleVisitTreatmentHighlighted?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -5796,21 +5861,19 @@ toggleVisitTreatmentHighlighted = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
 }
 toggleVisitVigilanceHighlighted = (args) => {
   console.log('...toggling visit vigilance highlight...');
   this.context.setUserAlert('...toggling visit vigilance highlight...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
   const visitId = this.props.visit._id;
   let requestBody;
-
-  console.log('foo',args);
 
   requestBody = {
     query: `
@@ -5927,6 +5990,7 @@ toggleVisitVigilanceHighlighted = (args) => {
       this.props.updateVisit(resData.data.toggleVisitVigilanceHighlighted)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.toggleVisitVigilanceHighlighted,
         activityA: `toggleVisitVigilanceHighlighted?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -5940,14 +6004,14 @@ toggleVisitVigilanceHighlighted = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
 }
 toggleVisitBillingHighlighted = (args) => {
   console.log('...toggling visit billing highlight...');
   this.context.setUserAlert('...toggling visit billing highlight...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -6015,6 +6079,7 @@ toggleVisitBillingHighlighted = (args) => {
       this.props.updateVisit(resData.data.toggleVisitBillingHighlighted)
       this.setState({
         isLoading: false,
+        overlay2: true,
         selectedVisit: resData.data.toggleVisitBillingHighlighted,
         activityA: `toggleVisitBillingHighlighted?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -6028,14 +6093,14 @@ toggleVisitBillingHighlighted = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
 }
 toggleVisitImageHighlighted = (args) => {
   console.log('...toggling visit image highlight...');
   this.context.setUserAlert('...toggling visit image highlight...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: false});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -6095,6 +6160,7 @@ toggleVisitImageHighlighted = (args) => {
       this.props.updateVisit(resData.data.toggleVisitImageHighlighted)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.toggleVisitImageHighlighted,
         activityA: `toggleVisitImageHighlighted?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -6108,14 +6174,14 @@ toggleVisitImageHighlighted = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
 }
 toggleVisitFileHighlighted = (args) => {
   console.log('...toggling visit file highlight...');
   this.context.setUserAlert('...toggling visit file highlight...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -6175,6 +6241,7 @@ toggleVisitFileHighlighted = (args) => {
       this.props.updateVisit(resData.data.toggleVisitFileHighlighted)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedVisit: resData.data.toggleVisitFileHighlighted,
         activityA: `toggleVisitFileHighlighted?activityId:${activityId},visitId:${visitId}`,
         adding: {
@@ -6188,9 +6255,16 @@ toggleVisitFileHighlighted = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
+}
+
+toggleOverlay2 = () => {
+  this.setState({
+    overlay2: false
+  })
+  this.overlay2 = false;
 }
 
 render() {
@@ -6201,6 +6275,11 @@ render() {
     {this.state.overlay === true && (
       <LoadingOverlay
         status={this.state.overlayStatus}
+      />
+    )}
+    {this.state.overlay2 === true && (
+      <LoadingOverlay2
+        toggleOverlay2={this.toggleOverlay2}
       />
     )}
 
