@@ -4705,35 +4705,35 @@ render() {
                       <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'referral', data: 'abc_xyz'})}>Create</Button>
                     </ListGroup.Item>
                     <ListGroup.Item>
-                      <p className="listGroupText">admissionReminder</p>
+                      <p className="listGroupText">Admission Reminder</p>
                       <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'admissionReminder', data: 'abc_xyz'})}>Create</Button>
                     </ListGroup.Item>
                     <ListGroup.Item>
-                      <p className="listGroupText">sickNote</p>
+                      <p className="listGroupText">Sick Note</p>
                       <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'sickNote', data: 'abc_xyz'})}>Create</Button>
                     </ListGroup.Item>
                     <ListGroup.Item>
-                      <p className="listGroupText">insurance</p>
+                      <p className="listGroupText">Insurance</p>
                       <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'insurance', data: 'abc_xyz'})}>Create</Button>
                     </ListGroup.Item>
                     <ListGroup.Item>
-                      <p className="listGroupText">diagnosisTesting</p>
+                      <p className="listGroupText">Diagnosis/Testing</p>
                       <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'diagnosisTesting', data: 'abc_xyz'})}>Create</Button>
                     </ListGroup.Item>
                     <ListGroup.Item>
-                      <p className="listGroupText">prescription</p>
+                      <p className="listGroupText">Prescription</p>
                       <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'prescription', data: 'abc_xyz'})}>Create</Button>
                     </ListGroup.Item>
                     <ListGroup.Item>
-                      <p className="listGroupText">treatmentConsent</p>
+                      <p className="listGroupText">Treatment Consent</p>
                       <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'treatmentConsent', data: 'abc_xyz'})}>Create</Button>
                     </ListGroup.Item>
                     <ListGroup.Item>
-                      <p className="listGroupText">treatmentInstructions</p>
+                      <p className="listGroupText">Treatment Instructions</p>
                       <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'treatmentInstructions', data: 'abc_xyz'})}>Create</Button>
                     </ListGroup.Item>
                     <ListGroup.Item>
-                      <p className="listGroupText">unfitToFly</p>
+                      <p className="listGroupText">Unfit-To-Fly</p>
                       <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'unfitToFly', data: 'abc_xyz'})}>Create</Button>
                     </ListGroup.Item>
                   </ListGroup>

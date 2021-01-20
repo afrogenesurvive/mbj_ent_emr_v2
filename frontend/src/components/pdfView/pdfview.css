@@ -34,7 +34,7 @@
 .pdfViewCol {
   text-align: center;
 }
-.pdfViewCloseBtn {
-  margin: .5rem 2rem;
+#pdfViewCloseBtn {
+  margin: 1rem;
   border-radius: 5px;
 }
