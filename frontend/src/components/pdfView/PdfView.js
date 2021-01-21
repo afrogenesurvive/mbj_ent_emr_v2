@@ -9,6 +9,7 @@ import { PDFViewer, Page, Text, View, Document, StyleSheet, Image } from '@react
 import moment from 'moment';
 import loadingGif from '../../assets/loading.gif';
 import letterHead from '../../assets/letterhead2.png';
+import rxicon from '../../assets/rxicon.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBatteryThreeQuarters,
@@ -110,6 +111,60 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10,
     flexGrow: 1
+  },
+
+  table: {
+    display: "table",
+    width: "auto",
+  },
+  tableRow: {
+    margin: "auto",
+    flexDirection: "row"
+  },
+  tableRowTall: {
+    margin: "auto",
+    flexDirection: "row",
+    height: '50%'
+  },
+  table3Col: {
+    width: "33%",
+    borderStyle: "solid",
+    borderWidth: 1,
+    // borderLeftWidth: 0,
+    // borderTopWidth: 0
+  },
+  tableCol3Free: {
+    width: "33%",
+  },
+  tableCol2: {
+    width: "50%",
+    borderStyle: "solid",
+    borderWidth: 1,
+    // borderLeftWidth: 0,
+    // borderTopWidth: 0
+  },
+  tableCol2Free: {
+    width: "50%",
+  },
+  tableCell: {
+    margin: "auto",
+    margin: 5,
+    fontSize: 14,
+    textAlign: 'justify',
+    fontFamily: 'Times-Roman'
+  },
+  tableCol7: {
+    width: "60%",
+    borderStyle: "solid",
+    borderWidth: 1,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    borderBottomWidth: 0
+  },
+
+  rxiconimg: {
+    height: '25rem',
+    width: '25rem',
   }
 
 });
@@ -173,7 +228,7 @@ return (
         </Page>
         <Page>
           <View style={styles.section}>
-            <Text>{props.pdfViewData.type}</Text>
+            <Text>xtyz</Text>
           </View>
           <View style={styles.section}>
             <Text>Section #2</Text>
@@ -384,18 +439,53 @@ return (
           <Text style={styles.textClose}>
             Date of Operation :  _____________________________________
           </Text>
-          <Text style={styles.textCenter}>
-            Total          Ins wil Pay
-          </Text>
-          <Text style={styles.textClose}>
-            Surgeon's Fee:
-          </Text>
-          <Text style={styles.textClose}>
-            Assistant Surgeon's Fee:
-          </Text>
-          <Text style={styles.textClose}>
-            Anesthetist's Fee:
-          </Text>
+
+          <View style={styles.table}>
+            <View style={styles.tableRow}>
+              <View style={styles.tableCol3Free}>
+                <Text style={styles.tableCell}></Text>
+              </View>
+              <View style={styles.tableCol3Free}>
+                <Text style={styles.tableCell}>Total  </Text>
+              </View>
+              <View style={styles.tableCol3Free}>
+                <Text style={styles.tableCell}>Ins will pay</Text>
+              </View>
+            </View>
+            <View style={styles.tableRow}>
+              <View style={styles.tableCol3Free}>
+                <Text style={styles.tableCell}>Surgeon's Fee:</Text>
+              </View>
+              <View style={styles.tableCol3}>
+                <Text style={styles.tableCell}></Text>
+              </View>
+              <View style={styles.tableCol3}>
+                <Text style={styles.tableCell}></Text>
+              </View>
+            </View>
+            <View style={styles.tableRow}>
+              <View style={styles.tableCol3Free}>
+                <Text style={styles.tableCell}>Assistant Surgeon's Fee:</Text>
+              </View>
+              <View style={styles.tableCol3}>
+                <Text style={styles.tableCell}></Text>
+              </View>
+              <View style={styles.tableCol3}>
+                <Text style={styles.tableCell}></Text>
+              </View>
+            </View>
+            <View style={styles.tableRow}>
+              <View style={styles.tableCol3Free}>
+                <Text style={styles.tableCell}>Anesthetist's Fee:</Text>
+              </View>
+              <View style={styles.tableCol3}>
+                <Text style={styles.tableCell}></Text>
+              </View>
+              <View style={styles.tableCol3}>
+                <Text style={styles.tableCell}></Text>
+              </View>
+            </View>
+          </View>
           <Text style={styles.textClose}>
             Please review or approval for surgery and insurance payment.
           </Text>
@@ -470,10 +560,53 @@ return (
             src={letterHead}
           />
 
-          <Text style={styles.textCenter}>
-            PRESCRIPTION
+
+          <View style={styles.table}>
+            <View style={styles.tableRow}>
+              <View style={styles.tableCol2Free}>
+                <Text style={styles.tableCell}>Age : ________</Text>
+              </View>
+              <View style={styles.tableCol2Free}>
+                <Text style={styles.tableCell}>Date : ________</Text>
+              </View>
+            </View>
+          </View>
+
+          <Text style={styles.textClose}>
+            Name :  _____________________________________
+          </Text>
+          <Text style={styles.textClose}>
+            Address :  _____________________________________
           </Text>
 
+          <View style={styles.table}>
+            <View style={styles.tableRowTall}>
+              <View style={styles.tableCol7}>
+                <Image
+                  style={styles.rxiconimg}
+                  src={rxicon}
+                />
+              </View>
+              <View style={styles.tableCol3Free}>
+                <Text style={styles.tableCell}>Pharmacy Use Only</Text>
+              </View>
+            </View>
+          </View>
+
+          <Text style={styles.text}>
+            Repeat _____________________________________ times
+          </Text>
+
+          <View style={styles.table}>
+            <View style={styles.tableRow}>
+              <View style={styles.tableCol2Free}>
+                <Text style={styles.tableCell}>Pharmacist Sig : ________</Text>
+              </View>
+              <View style={styles.tableCol2Free}>
+                <Text style={styles.tableCell}>Dr : ________</Text>
+              </View>
+            </View>
+          </View>
 
         </Page>
       </Document>
