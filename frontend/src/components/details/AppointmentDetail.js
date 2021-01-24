@@ -9,7 +9,7 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import { NavLink } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import AddToCalendar from 'react-add-to-calendar';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -99,8 +99,8 @@ class AppointmentDetail extends Component {
       title: this.props.appointment.title,
       description: this.props.appointment.description,
       location: this.props.appointment.location,
-      startTime: moment.unix(this.props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')+'T'+this.props.appointment.time+':00-05:00',
-      endTime: moment.unix(this.props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')+'T'+this.props.appointment.time+':00-05:00',
+      startTime: moment.unix(this.props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')+'T'+this.props.appointment.time+':00-05:00',
+      endTime: moment.unix(this.props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')+'T'+this.props.appointment.time+':00-05:00',
     },
   };
   static contextType = AuthContext;
@@ -111,8 +111,8 @@ constructor(props) {
 }
 
 componentDidMount () {
-  console.log('...appointment details component mounted...');
-  // console.log(moment.unix(this.props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')+'T'+this.props.appointment.time+':00-05:00');
+  console.log('...appointment details component mounted...',this.props.appointment);
+  // console.log(moment.unix(this.props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')+'T'+this.props.appointment.time+':00-05:00');
   let seshStore;
   if (sessionStorage.getItem('logInfo')) {
     seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
@@ -542,7 +542,7 @@ submitAddUserForm = (event) => {
       consultantId.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -916,7 +916,7 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Time:</p>
@@ -1123,7 +1123,7 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Time:</p>

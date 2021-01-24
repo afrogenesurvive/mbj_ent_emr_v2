@@ -3,7 +3,7 @@ import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import {
   faBatteryThreeQuarters,
   faPlusSquare,
@@ -39,7 +39,7 @@ const QueueItem = props => {
       <Card>
         <Card.Body className="cardBody">
           <Card.Text className="cardText">
-            Date: {moment.unix(props.queue.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}
+            Date: {moment.unix(props.queue.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}
           </Card.Text>
           <Card.Text className="cardText">
             Creator: {props.queue.creator.username}

@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { PDFViewer, Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import loadingGif from '../../assets/loading.gif';
 import letterHead from '../../assets/letterhead2.png';
 import rxicon from '../../assets/rxicon.png';

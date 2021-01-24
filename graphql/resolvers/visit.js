@@ -9,9 +9,10 @@ const Reminder = require('../../models/reminder');
 const Queue = require('../../models/queue');
 const util = require('util');
 const mongoose = require('mongoose');
-const moment = require('moment');
+// const moment = require('moment');
+const moment = require('moment-timezone');
 const mailgun = require("mailgun-js");
-const puppeteer = require('puppeteer');
+// const puppeteer = require('puppeteer');
 
 const { transformVisit } = require('./merge');
 const { dateToString } = require('../../helpers/date');
@@ -2738,14 +2739,14 @@ module.exports = {
       // console.log('consultants',consultants)
       const today = moment();
       const dateTime = moment(appointment.date).format('YYYY-MM-DD')+'T'+appointment.time+'';
-      console.log('a',moment(appointment.date).add(1,'days').format('YYYY-MM-DD'));
-      console.log('c',moment().format('YYYY-MM-DD'));
-      console.log('d...early',moment().format('YYYY-MM-DD') < moment(appointment.date).add(1,'days').format('YYYY-MM-DD'));
-      console.log('e...late',moment().format('YYYY-MM-DD') > moment(appointment.date).add(1,'days').format('YYYY-MM-DD'));
-      console.log('f...ontime',moment().format('YYYY-MM-DD') === moment(appointment.date).add(1,'days').format('YYYY-MM-DD'));
-      const tooEarly = moment().format('YYYY-MM-DD') < moment(appointment.date).add(1,'days').format('YYYY-MM-DD');
-      const tooLate = moment().format('YYYY-MM-DD') > moment(appointment.date).add(1,'days').format('YYYY-MM-DD');
-      const onSchedule = moment().format('YYYY-MM-DD') === moment(appointment.date).add(1,'days').format('YYYY-MM-DD');
+      console.log('a',moment(appointment.date).tz("America/Bogota").format('YYYY-MM-DD'));
+      console.log('c',moment().tz("America/Bogota").format('YYYY-MM-DD'));
+      console.log('d...early',moment().tz("America/Bogota").format('YYYY-MM-DD') < moment(appointment.date).format('YYYY-MM-DD'));
+      console.log('e...late',moment().tz("America/Bogota").format('YYYY-MM-DD') > moment(appointment.date).format('YYYY-MM-DD'));
+      console.log('f...ontime',moment().tz("America/Bogota").format('YYYY-MM-DD') === moment(appointment.date).format('YYYY-MM-DD'));
+      const tooEarly = moment().tz("America/Bogota").format('YYYY-MM-DD') < moment(appointment.date).tz("America/Bogota").format('YYYY-MM-DD');
+      const tooLate = moment().tz("America/Bogota").format('YYYY-MM-DD') > moment(appointment.date).tz("America/Bogota").format('YYYY-MM-DD');
+      const onSchedule = moment().tz("America/Bogota").format('YYYY-MM-DD') === moment(appointment.date).tz("America/Bogota").format('YYYY-MM-DD');
 
       if (tooEarly === true) {
         console.log('...appointment for this visit is in the future...please wait or create a new appointment...');
@@ -2756,7 +2757,7 @@ module.exports = {
         throw new Error('...appointment for this visit has already gone... please create a new appointment...');
       }
 
-      let date = moment().format('YYYY-MM-DD');
+      let date = moment().tz("America/Bogota").format('YYYY-MM-DD');
 
       const visitExists = await Visit.find({
           date: date,

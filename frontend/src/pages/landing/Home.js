@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import { NavLink } from 'react-router-dom';
 import Image from 'react-bootstrap/Image';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Popover from 'react-bootstrap/Popover';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

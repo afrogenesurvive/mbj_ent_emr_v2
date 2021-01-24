@@ -18,7 +18,7 @@ import {
   faCheckSquare,
   faExternalLinkAlt
 } from '@fortawesome/free-solid-svg-icons';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import './visitItem.css';
 
@@ -49,7 +49,7 @@ const VisitItem = props => {
       <Card>
         <Card.Body className="cardBody">
           <Card.Text className="cardText">
-            Date: <span className="bold">{moment.unix(props.visit.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
+            Date: <span className="bold">{moment.unix(props.visit.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
           </Card.Text>
           <Card.Text className="cardText">
             Time: <span className="bold">{props.visit.time}</span>

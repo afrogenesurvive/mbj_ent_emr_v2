@@ -9,7 +9,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import Nav from 'react-bootstrap/Nav';
 import { NavLink } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import FullCalendar from '@fullcalendar/react';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -1629,7 +1629,7 @@ parseForCalendar = (args) => {
   })
   let calendarAttendance = args.attendance.map(x => ({
       title: x.status,
-      date: moment.unix(x.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      date: moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD'),
       props: {
         date: x.date,
         status: x.status,
@@ -1640,8 +1640,8 @@ parseForCalendar = (args) => {
     }))
   let calendarLeave = args.leave.map(x => ({
       title: x.type,
-      date: moment.unix(x.startDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
-      end: moment.unix(x.endDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      date: moment.unix(x.startDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD'),
+      end: moment.unix(x.endDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD'),
       props: {
         date: x.date,
         type: x.type,
@@ -1665,7 +1665,7 @@ parseForCalendar = (args) => {
     let evt = {
       title: x.status,
       color: color,
-      date: moment.unix(x.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      date: moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD'),
       props: {
         date: x.date,
         status: x.status,
@@ -1685,8 +1685,8 @@ parseForCalendar = (args) => {
     let evt = {
       title: x.type,
       color: color,
-      date: moment.unix(x.startDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
-      end: moment.unix(x.endDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      date: moment.unix(x.startDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD'),
+      end: moment.unix(x.endDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD'),
       props: {
         date: x.date,
         type: x.type,
@@ -1701,7 +1701,7 @@ parseForCalendar = (args) => {
   }
   let calendarAppointments = args.appointments.map(x => ({
       title: x.title,
-      date: moment.unix(x.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      date: moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD'),
       props: {
         _id: x._id,
         date: x.date,
@@ -2176,7 +2176,7 @@ render() {
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <p className="listGroupText">DOB:</p>
-                    <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                     {this.state.canDelete === true && (
                       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
                     )}
@@ -2229,7 +2229,7 @@ render() {
                   <ListGroup.Item>
                     <p className="listGroupText">Employment Date:</p>
                     {this.props.user.employmentDate && (
-                      <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                      <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                     )}
                     {this.context.role === 'Admin' && (
                       <Button variant="primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'employmentDate')}>Edit</Button>
@@ -2580,7 +2580,7 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">DOB:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   {this.state.canDelete === true && (
                     <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
                   )}
@@ -2633,7 +2633,7 @@ render() {
                   <ListGroup.Item>
                     <p className="listGroupText">Employment Date:</p>
                     {this.props.user.employmentDate && (
-                      <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                      <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                     )}
                     {this.context.role === 'Admin' && (
                       <Button variant="primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'employmentDate')}>Edit</Button>

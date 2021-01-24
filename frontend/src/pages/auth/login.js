@@ -6,7 +6,7 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import './Auth.css';
 import AuthContext from '../../context/auth-context';
@@ -33,7 +33,8 @@ class LoginPage extends Component {
   static contextType = AuthContext;
 
   componentDidMount() {
-    console.log('...login component mounted...');;
+    console.log('...login component mounted...');
+
   }
 
   submitLoginForm = (event) => {
@@ -280,10 +281,27 @@ class LoginPage extends Component {
       })
       .then(resData => {
         console.log('...resData...',resData.data.requestPasswordReset)
+
+        let responseAlert = '...';
+        let error = null;
+
         if (resData.errors) {
           this.context.setUserAlert(resData.errors[0].message);
-        } else {
-          this.context.setUserAlert('...password reset request sent...');
+        }
+        else if (resData.data.error) {
+          this.context.setUserAlert(resData.data.error);
+        }
+        else {
+
+          const key = 'Request_MBJ_ENT__emr_v2_Password';
+          const encryptor = require('simple-encryptor')(key);
+          const encrypted = encryptor.encrypt(resData.data.requestPasswordReset.verification.code);
+          const resetUrl = 'http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/passwordReset/'+resData.data.requestPasswordReset._id+'@'+encrypted+'';
+          // const resetUrl = 'localhost:3000/passwordReset/'+userExists._id+'@'+encrypted+'';
+          console.log('resetUrl',resetUrl);
+          responseAlert = '...password reset request sent...'+'..url: '+resetUrl;
+
+          this.context.setUserAlert(responseAlert);
           this.setState({isLoading: false, requestingPasswordReset: false});
           this.toggleForgotPassword();
         }

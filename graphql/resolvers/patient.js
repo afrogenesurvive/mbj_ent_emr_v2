@@ -9,9 +9,10 @@ const Reminder = require('../../models/reminder');
 const Queue = require('../../models/queue');
 const util = require('util');
 const mongoose = require('mongoose');
-const moment = require('moment');
+// const moment = require('moment');
+const moment = require('moment-timezone');
 const mailgun = require("mailgun-js");
-const puppeteer = require('puppeteer');
+// const puppeteer = require('puppeteer');
 
 const { transformPatient } = require('./merge');
 const { dateToString } = require('../../helpers/date');
@@ -1489,7 +1490,7 @@ module.exports = {
         username: args.patientInput.username,
         registration: {
           number: regNo,
-          date: moment().format('YYYY-MM-DD')
+          date: moment().tz("America/Bogota").format('YYYY-MM-DD')
         },
         dob: args.patientInput.dob,
         age: age,

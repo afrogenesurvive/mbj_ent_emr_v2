@@ -8,7 +8,7 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import { NavLink } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AuthContext from '../../context/auth-context';

@@ -6,7 +6,7 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import './Auth.css';
 import AuthContext from '../../context/auth-context';

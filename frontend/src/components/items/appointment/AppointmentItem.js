@@ -20,7 +20,7 @@ import {
   faUserPlus,
   faCalendarPlus
 } from '@fortawesome/free-solid-svg-icons';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import './AppointmentItem.css';
 
@@ -59,7 +59,7 @@ const AppointmentItem = (props) => {
           )}
           {!props.homePage && (
             <Card.Text className="cardText">
-              Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
+              Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
             </Card.Text>
           )}
           {props.homePage && (
@@ -178,7 +178,7 @@ const AppointmentItem = (props) => {
               </li>
               <li>
               <Card.Text className="cardText">
-                Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
+                Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
               </Card.Text>
               </li>
               <li>

@@ -765,6 +765,7 @@ module.exports = buildSchema(`
     getUsersByField(activityId: ID!, field: String!, query: String!): [User]
     getUsersByFieldRegex(activityId: ID!, field: String!, query: String!): [User]
     getUsersByAppointment(activityId: ID!, appointmentId: ID!): [User]
+    checkConsultantAppointments(activityId: ID!, consultantId: ID!, date: String!): Int
 
     getAllPatients(activityId: ID!): [Patient]
     getPatientById(activityId: ID!, patientId: ID!): Patient

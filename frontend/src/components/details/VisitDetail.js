@@ -9,7 +9,7 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import { NavLink } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import AddToCalendar from 'react-add-to-calendar';
 import S3 from 'react-aws-s3';
 
@@ -142,8 +142,8 @@ class VisitDetail extends Component {
       title: this.props.visit.title,
       description: this.props.visit.appointment.description,
       location: this.props.visit.appointment.location,
-      startTime: moment.unix(this.props.visit.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')+'T'+this.props.visit.time+':00-05:00',
-      endTime: moment.unix(this.props.visit.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')+'T'+this.props.visit.time+':00-05:00',
+      startTime: moment.unix(this.props.visit.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')+'T'+this.props.visit.time+':00-05:00',
+      endTime: moment.unix(this.props.visit.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')+'T'+this.props.visit.time+':00-05:00',
     },
     pocketVars: null,
     s3State: {
@@ -6333,7 +6333,7 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Time:</p>
@@ -6379,7 +6379,7 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                 <p className="listGroupText">Date:</p>
-                <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                 </ListGroup.Item>
               </ListGroup>
               </Col>
@@ -7031,7 +7031,7 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   <p className="listGroupText">Time:</p>
                   <p className="listGroupText bold">{this.props.visit.time}</p>
                   {this.context.role !== 'Staff' && (
@@ -7065,7 +7065,7 @@ render() {
                   <p className="listGroupText">Title:</p>
                   <p className="listGroupText bold">{this.props.visit.appointment.title}</p>
                   <p className="listGroupText">Date:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   <Link
                     to={{
                       pathname: "/appointments",

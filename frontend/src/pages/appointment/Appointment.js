@@ -9,7 +9,7 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import { NavLink } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AuthContext from '../../context/auth-context';
@@ -469,7 +469,7 @@ submitCreateNewAppointmentForm = (event) => {
   }
   console.log('foo',date);
 
-  if (date < moment().format('YYYY-MM-DD')) {
+  if (date < moment().tz("America/Bogota").format('YYYY-MM-DD')) {
     console.log('...ummm no! Please pick a date today or in the future...');
     this.context.setUserAlert('...ummm no! Please pick a date today or in the future...')
     this.setState({isLoading:false})
@@ -722,7 +722,7 @@ parseForCalendar = (args) => {
   console.log('...parsing appointments for calendar...');
   let calendarAppointments = args.map(x => ({
       title: x.title,
-      date: moment.unix(x.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      date: moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD'),
       props: {
         _id: x._id,
         date: x.date,

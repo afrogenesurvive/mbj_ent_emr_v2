@@ -9,7 +9,8 @@ const Reminder = require('../../models/reminder');
 const Queue = require('../../models/queue');
 const util = require('util');
 const mongoose = require('mongoose');
-const moment = require('moment');
+// const moment = require('moment');
+const moment = require('moment-timezone');
 const mailgun = require("mailgun-js");
 // const puppeteer = require('puppeteer');
 
@@ -238,6 +239,52 @@ module.exports = {
       return users.map(user => {
         return transformUser(user);
       });
+    } catch (err) {
+      throw err;
+    }
+  },
+  checkConsultantAppointments: async (args, req) => {
+    console.log("Resolver: checkConsultantAppointments...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const date = args.date;
+      const consultant = await User.findById({_id: args.consultantId})
+      .populate('appointments');
+
+      if (date === '') {
+        console.log('invalid date...');
+        throw new Error('invalid date...')
+      }
+      if (!consultant) {
+        console.log('consultant not found! check the reference and try again...');
+        throw new Error('consultant not found! check the reference and try again...')
+      }
+      if (consultant.role === 'Staff' || consultant.role === 'Admin') {
+        console.log('consultant not found! check the reference and try again...');
+        throw new Error('consultant not found! check the reference and try again...')
+      }
+      // if (consultant && consultant.role !== 'Nurse') {
+      //   console.log('consultant not found! check the reference and try again...');
+      //   throw new Error('consultant not found! check the reference and try again...')
+      // }
+
+      const consultantAppointments = consultant.appointments.map(x=> x = {
+        date: moment(x.date).format('YYYY-MM-DD'),
+        time: x.time,
+        dateTime: moment(x.date).format('YYYY-MM-DD')+'T'+x.time+'-05:00',
+        type: x.type
+      });
+      console.log('consultantAppointments',consultantAppointments.length ,consultantAppointments[consultantAppointments.length-1]);
+      const consultantAppointmentsXDate = consultantAppointments.filter(x=>x.date === date);
+      console.log('consultantAppointmentsXDate',consultantAppointmentsXDate);
+      // calculate values of todays appts based on type
+      // check is above value added to new appt type/value exceeds daily cap thne throw error
+      let appointmentCount = consultantAppointmentsXDate.length;
+
+      return appointmentCount;
     } catch (err) {
       throw err;
     }

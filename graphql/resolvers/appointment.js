@@ -9,9 +9,10 @@ const Reminder = require('../../models/reminder');
 const Queue = require('../../models/queue');
 const util = require('util');
 const mongoose = require('mongoose');
-const moment = require('moment');
+const moment = require('moment-timezone');
+// const moment = require('moment');
 const mailgun = require("mailgun-js");
-const puppeteer = require('puppeteer');
+// const puppeteer = require('puppeteer');
 
 const { transformAppointment } = require('./merge');
 const { dateToString } = require('../../helpers/date');
@@ -592,10 +593,11 @@ module.exports = {
         consultants.push(creator);
       }
       const patient = await Patient.findById({_id: args.patientId})
-      const today = moment();
+      const today = moment().tz("America/Bogota");
+      console.log('today',today);
 
 
-      if (moment(args.appointmentInput.date).format('YYYY-MM-DD') < moment().format('YYYY-MM-DD')) {
+      if (moment(args.appointmentInput.date).tz("America/Bogota").format('YYYY-MM-DD') < moment().tz("America/Bogota").format('YYYY-MM-DD')) {
         console.log('...ummm no! Please pick a date today or in the future...');
         throw new Error('...ummm no! Please pick a date today or in the future...');
       }
@@ -613,7 +615,7 @@ module.exports = {
         title: args.appointmentInput.title,
         type: args.appointmentInput.type,
         subType: args.appointmentInput.subType,
-        date: args.appointmentInput.date,
+        date: moment(args.appointmentInput.date).tz("America/Bogota"),
         time: args.appointmentInput.time,
         checkinTime:0,
         seenTime: 0,
