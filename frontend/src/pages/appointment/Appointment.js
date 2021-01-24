@@ -432,6 +432,7 @@ onStartCreateNewAppointment = () => {
   this.setState({
     creatingAppointment: true
   })
+
 }
 cancelCreateNewAppointment = () => {
   this.setState({
@@ -521,6 +522,11 @@ submitCreateNewAppointmentForm = (event) => {
         error = resData.data.error;
         responseAlert = error;
       }
+
+      if (this.context.role === "Doctor") {
+        this.checkConsultantAppointments(date)
+      }
+
       this.context.setUserAlert(responseAlert)
       this.setState({
         isLoading: false,
@@ -529,6 +535,7 @@ submitCreateNewAppointmentForm = (event) => {
         selectedAppointment: resData.data.createAppointment,
         newAppointment: resData.data.createAppointment,
         tabKey: 'detail',
+        menuSelect: 'detail',
         activityA: `createAppointment?activityId:${activityId},appointmentId:${resData.data.createAppointment._id}`
       });
       this.logUserActivity({activityId: activityId,token: token});
@@ -924,6 +931,61 @@ clearSearch = () => {
   })
 }
 
+checkConsultantAppointments = (date) => {
+  console.log('...checking consultant appointments');
+  this.context.setUserAlert('...checking consultant appointments');
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const date2 = moment(date).tz("America/Bogota").format('YYYY-MM-DD');
+
+  let requestBody = {
+    query: `
+      query {checkConsultantAppointments(
+        activityId:"${activityId}",
+        consultantId:"${activityId}",
+        date:"${date}"
+      )}
+    `};
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      console.log('...resData...',resData.data.checkConsultantAppointments);
+      window.alert(`You have ${resData.data.checkConsultantAppointments} appointments scheduled for that date`)
+      let responseAlert = `You have ${resData.data.checkConsultantAppointments} appointments scheduled for that date`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+
+}
+
 render() {
 
   return (
@@ -1121,11 +1183,13 @@ render() {
                 />
               </Row>
             )}
-            {this.state.newAppointment && (
-              <Row>
-                <h3>Review New Appointment {this.state.newAppointment._id}</h3>
-              </Row>
-            )}
+            {
+              //   this.state.newAppointment && (
+              //   <Row>
+              //     <h3>Review New Appointment {this.state.newAppointment._id}</h3>
+              //   </Row>
+              // )
+            }
             </Col>
           )}
           </Col>

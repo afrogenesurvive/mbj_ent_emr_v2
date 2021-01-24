@@ -599,6 +599,7 @@ submitAddUserForm = (event) => {
       });
       this.logUserActivity({activityId: activityId,token: token});
       this.cancelAdd();
+      this.checkConsultantAppointments(this.props.appointment.date, consultantId)
     })
     .catch(err => {
       console.log(err);
@@ -828,6 +829,61 @@ cancelAdd = () => {
       field: null
     }
   })
+}
+
+checkConsultantAppointments = (date, consultant) => {
+  console.log('...checking consultant appointments',date);
+  this.context.setUserAlert('...checking consultant appointments');
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const date2 = moment.unix(date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+
+  let requestBody = {
+    query: `
+      query {checkConsultantAppointments(
+        activityId:"${activityId}",
+        consultantId:"${consultant}",
+        date:"${date2}"
+      )}
+    `};
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      console.log('...resData...',resData.data.checkConsultantAppointments);
+      window.alert(`Consultant has ${resData.data.checkConsultantAppointments} appointments scheduled for that date`)
+      let responseAlert = `Consultant has ${resData.data.checkConsultantAppointments} appointments scheduled for that date`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+
 }
 
 render() {

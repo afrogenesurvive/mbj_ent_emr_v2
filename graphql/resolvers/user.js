@@ -251,6 +251,7 @@ module.exports = {
     try {
 
       const date = args.date;
+      console.log(date);
       const consultant = await User.findById({_id: args.consultantId})
       .populate('appointments');
 
