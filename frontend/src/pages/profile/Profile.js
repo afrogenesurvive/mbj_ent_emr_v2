@@ -1678,7 +1678,7 @@ parseForCalendar = (args) => {
   })
   let calendarAttendance = args.attendance.map(x => ({
       title: x.status,
-      date: moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD'),
+      date: moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD'),
       props: {
         date: x.date,
         status: x.status,
@@ -1689,8 +1689,8 @@ parseForCalendar = (args) => {
     }))
   let calendarLeave = args.leave.map(x => ({
       title: x.type,
-      date: moment.unix(x.startDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD'),
-      end: moment.unix(x.endDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD'),
+      date: moment.unix(x.startDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD'),
+      end: moment.unix(x.endDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD'),
       props: {
         date: x.date,
         type: x.type,
@@ -1711,7 +1711,7 @@ parseForCalendar = (args) => {
     let evt = {
       title: x.status,
       color: color,
-      date: moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD'),
+      date: moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD'),
       props: {
         date: x.date,
         status: x.status,
@@ -1731,8 +1731,8 @@ parseForCalendar = (args) => {
     let evt = {
       title: x.type,
       color: color,
-      date: moment.unix(x.startDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD'),
-      end: moment.unix(x.endDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD'),
+      date: moment.unix(x.startDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD'),
+      end: moment.unix(x.endDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD'),
       props: {
         date: x.date,
         type: x.type,
@@ -1748,7 +1748,7 @@ parseForCalendar = (args) => {
 
   let calendarAppointments = args.appointments.map(x => ({
       title: x.title,
-      date: moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD'),
+      date: moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD'),
       props: {
         _id: x._id,
         date: x.date,

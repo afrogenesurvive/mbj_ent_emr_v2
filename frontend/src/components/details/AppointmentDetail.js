@@ -99,8 +99,8 @@ class AppointmentDetail extends Component {
       title: this.props.appointment.title,
       description: this.props.appointment.description,
       location: this.props.appointment.location,
-      startTime: moment.unix(this.props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')+'T'+this.props.appointment.time+':00-05:00',
-      endTime: moment.unix(this.props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')+'T'+this.props.appointment.time+':00-05:00',
+      startTime: moment.unix(this.props.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')+'T'+this.props.appointment.time+':00-05:00',
+      endTime: moment.unix(this.props.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')+'T'+this.props.appointment.time+':00-05:00',
     },
   };
   static contextType = AuthContext;
@@ -112,7 +112,7 @@ constructor(props) {
 
 componentDidMount () {
   console.log('...appointment details component mounted...',this.props.appointment);
-  // console.log(moment.unix(this.props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')+'T'+this.props.appointment.time+':00-05:00');
+  // console.log(moment.unix(this.props.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')+'T'+this.props.appointment.time+':00-05:00');
   let seshStore;
   if (sessionStorage.getItem('logInfo')) {
     seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
@@ -837,7 +837,7 @@ checkConsultantAppointments = (date, consultant) => {
 
   const token = this.context.token;
   const activityId = this.context.activityId;
-  const date2 = moment.unix(date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+  const date2 = moment.unix(date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
 
   let requestBody = {
     query: `
@@ -972,7 +972,7 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Time:</p>
@@ -1179,7 +1179,7 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Time:</p>

@@ -52,7 +52,7 @@ const LeaveItem = props => {
       <Card>
         <Card.Body className={liClass}>
           <Card.Text className="cardText">
-            Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+            Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
           </Card.Text>
 
           <OverlayTrigger
@@ -95,12 +95,12 @@ const LeaveItem = props => {
               </li>
               <li>
               <Card.Text className="cardText">
-                Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
               </Card.Text>
               </li>
               <li>
               <Card.Text className="cardText">
-                End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
               </Card.Text>
               </li>
               <li>

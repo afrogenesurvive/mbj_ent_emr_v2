@@ -46,7 +46,7 @@ const AppointmentItem = (props) => {
             Type: <span className="bold">{props.appointment.type}</span>
           </Card.Text>
           <Card.Text className="cardText">
-            Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+            Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
           </Card.Text>
 
           <OverlayTrigger

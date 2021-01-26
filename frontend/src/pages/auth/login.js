@@ -202,7 +202,7 @@ class LoginPage extends Component {
       })
       .then(resData => {
         // console.log('...resData...',resData.data.verifyUser);
-        let responseAlert;
+        let responseAlert = 'Verified...Please try loggin in again..';
         let error = null;
 
         if (resData.errors) {
@@ -216,9 +216,10 @@ class LoginPage extends Component {
         }
 
         this.context.setUserAlert(responseAlert)
+        if (resData.data.verifyUser) {
+          this.setState({showForm: 'login'})
+        }
 
-        this.context.setUserAlert('Verified...Please try loggin in again..')
-        this.setState({showForm: 'login'})
       })
       .catch(err => {
         this.context.setUserAlert(err)

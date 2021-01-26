@@ -74,8 +74,7 @@ class SignUpPage extends Component {
         addressTown.trim().length === 0 ||
         addressCity.trim().length === 0 ||
         addressParish.trim().length === 0 ||
-        addressCountry.trim().length === 0 ||
-        addressPostalCode.trim().length === 0
+        addressCountry.trim().length === 0
         ) {
       this.context.setUserAlert("...blank required fields!!!...");
       return;

@@ -607,10 +607,10 @@ submitCreateNewVisitForm = (event) => {
     return;
   }
 
-  // const tooEarly = moment().format('YYYY-MM-DD') < moment.unix(this.state.selectedAppointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
-  // const tooLate = moment().format('YYYY-MM-DD') > moment.unix(this.state.selectedAppointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
-  const tooEarly = moment().tz("America/Bogota").format('YYYY-MM-DD') < moment.unix(this.state.selectedAppointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
-  const tooLate = moment().tz("America/Bogota").format('YYYY-MM-DD') > moment.unix(this.state.selectedAppointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+  // const tooEarly = moment().format('YYYY-MM-DD') < moment.unix(this.state.selectedAppointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+  // const tooLate = moment().format('YYYY-MM-DD') > moment.unix(this.state.selectedAppointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+  const tooEarly = moment().tz("America/Bogota").format('YYYY-MM-DD') < moment.unix(this.state.selectedAppointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+  const tooLate = moment().tz("America/Bogota").format('YYYY-MM-DD') > moment.unix(this.state.selectedAppointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
 
   // console.log(tooEarly, tooLate);
 
@@ -928,12 +928,12 @@ parseForCalendar = (args) => {
   console.log('...parsing visits for calendar...');
   let calendarVisits = args.map(x => ({
       title: x.title,
-      date: moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD'),
+      date: moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD'),
       props: {
         _id: x._id,
         title: x.title,
         type: x.type,
-        date: moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD'),
+        date: moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD'),
         time: x.time,
         subType: x.subType,
       }
@@ -946,7 +946,7 @@ parseForCalendarAppts = (args) => {
   console.log('...parsing appointments for calendar...');
   let calendarAppointments = args.map(x => ({
       title: x.title,
-      date: moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD'),
+      date: moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD'),
       props: {
         _id: x._id,
         date: x.date,

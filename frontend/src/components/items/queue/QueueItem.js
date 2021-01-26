@@ -39,7 +39,7 @@ const QueueItem = props => {
       <Card>
         <Card.Body className="cardBody">
           <Card.Text className="cardText">
-            Date: {moment.unix(props.queue.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}
+            Date: {moment.unix(props.queue.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}
           </Card.Text>
           <Card.Text className="cardText">
             Creator: {props.queue.creator.username}

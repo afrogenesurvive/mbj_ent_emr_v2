@@ -98,7 +98,7 @@ return (
               <p className="overlayListGroupItemText">Patient: <span className="bold">{props.status.data.patient.name}</span></p>
               </ListGroup.Item>
               <ListGroup.Item className="overlayListGroupItem">
-              <p className="overlayListGroupItemText">Date: <span className="bold">{moment.unix(props.status.data.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span></p>
+              <p className="overlayListGroupItemText">Date: <span className="bold">{moment.unix(props.status.data.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span></p>
               <p className="overlayListGroupItemText">Time: <span className="bold">{props.status.data.time}</span></p>
               </ListGroup.Item>
               <ListGroup.Item className="overlayListGroupItem">
@@ -169,7 +169,7 @@ return (
             <p className="overlayListGroupItemText">Patient: <span className="bold">{props.status.data.patient.name}</span></p>
             </ListGroup.Item>
             <ListGroup.Item className="overlayListGroupItem">
-            <p className="overlayListGroupItemText">Date: <span className="bold">{moment.unix(props.status.data.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span></p>
+            <p className="overlayListGroupItemText">Date: <span className="bold">{moment.unix(props.status.data.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span></p>
             <p className="overlayListGroupItemText">Time: <span className="bold">{props.status.data.time}</span></p>
             </ListGroup.Item>
             <ListGroup.Item className="overlayListGroupItem">
@@ -186,7 +186,7 @@ return (
           <Row className="overlayRow">
             <ListGroup className="overlayListGroup">
               <ListGroup.Item className="overlayListGroupItem">
-              <p>Date: <span className="bold">{moment.unix(props.status.data.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span></p>
+              <p>Date: <span className="bold">{moment.unix(props.status.data.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span></p>
               </ListGroup.Item>
               <ListGroup.Item className="overlayListGroupItem">
               <p>Status: <span className="bold">{props.status.data.status}</span></p>
@@ -206,10 +206,10 @@ return (
               <p>Type: <span className="bold">{props.status.data.type}</span></p>
               </ListGroup.Item>
               <ListGroup.Item className="overlayListGroupItem">
-              <p>startDate: <span className="bold">{moment.unix(props.status.data.startDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span></p>
+              <p>startDate: <span className="bold">{moment.unix(props.status.data.startDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span></p>
               </ListGroup.Item>
               <ListGroup.Item className="overlayListGroupItem">
-              <p>endDate: <span className="bold">{moment.unix(props.status.data.endDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span></p>
+              <p>endDate: <span className="bold">{moment.unix(props.status.data.endDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span></p>
               </ListGroup.Item>
               <ListGroup.Item className="overlayListGroupItem">
               <p>Description: <span className="bold">{props.status.data.description}</span></p>

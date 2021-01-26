@@ -52,7 +52,7 @@ const AttendanceItem = props => {
       <Card>
         <Card.Body className={liClass}>
           <Card.Text className="cardText">
-          Date: <span className="bold">{moment.unix(props.attendance.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+          Date: <span className="bold">{moment.unix(props.attendance.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
           </Card.Text>
           <Card.Text className="cardText">
             Status: <span className="bold">{props.attendance.status}</span>
@@ -92,7 +92,7 @@ const AttendanceItem = props => {
             <ul>
               <li>
               <Card.Text className="cardText">
-              Date: <span className="bold">{moment.unix(props.attendance.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+              Date: <span className="bold">{moment.unix(props.attendance.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
               </Card.Text>
               </li>
               <li>

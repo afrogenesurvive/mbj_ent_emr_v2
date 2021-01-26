@@ -516,6 +516,7 @@ submitCreateNewPatientForm = (event) => {
         showDetails: true,
         creatingPatient: false,
         tabKey: 'detail',
+        menuSelect: 'detail',
         selectedPatient: resData.data.createPatient,
         newPatient: resData.data.createPatient,
         activityA: `createPatient?activityId:${activityId},patientId:${resData.data.createPatient._id}`
@@ -860,12 +861,14 @@ render() {
                   onCancel={this.cancelCreateNewPatient}
                 />
               )}
-              {this.state.newPatient && (
-                <Row>
-                  <h3>Review New Patient</h3>
-                  {this.state.newPatient.username}
-                </Row>
-              )}
+              {
+              //   this.state.newPatient && (
+              //   <Row>
+              //     <h3>Review New Patient</h3>
+              //     {this.state.newPatient.username}
+              //   </Row>
+              // )
+            }
             </Col>
           )}
           </Col>

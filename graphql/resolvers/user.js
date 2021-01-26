@@ -336,10 +336,17 @@ module.exports = {
         'contact.email': args.userInput.contactEmail,
         username: args.userInput.username
       });
+      console.log(preUser);
+      if (!preUser) {
+        console.log('User not found! Check your details & try again!');
+        throw new Error('User not found! Check your details & try again!')
+      }
+      
       const response = {
         type: preUser.verification.type,
         code: preUser.verification.code,
       };
+
       // console.log('challenge', challenge, 'response',response, 'match',challenge.type === response.type && challenge.code === response.code);
       let match = challenge.type === response.type && challenge.code === response.code;
       if (match === false) {
