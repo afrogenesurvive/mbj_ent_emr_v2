@@ -123,28 +123,7 @@ componentDidMount () {
   }
   this.getAllUsers(seshStore);
 
-  if (props.appointment.date.length == 12) {
-    this.setState({
-      calEvent: {
-        title: this.props.appointment.title,
-        description: this.props.appointment.description,
-        location: this.props.appointment.location,
-        startTime: moment.unix(this.props.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
-        endTime: moment.unix(this.props.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
-      }
-    })
-  }
-  if (props.appointment.date.length == 13) {
-    this.setState({
-      calEvent: {
-        title: this.props.appointment.title,
-        description: this.props.appointment.description,
-        location: this.props.appointment.location,
-        startTime: moment.unix(this.props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
-        endTime: moment.unix(this.props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
-      }
-    })
-  }
+
 }
 componentWillUnmount() {
 
@@ -241,6 +220,8 @@ getAllUsers (args) {
         activityA: `getAllUsers?activityId:${activityId},userId:${userId}`
       });
       this.logUserActivity({activityId: activityId,token: token});
+
+      this.setStateCalEvent()
     })
     .catch(err => {
       console.log(err);
@@ -902,6 +883,33 @@ checkConsultantAppointments = (date, consultant) => {
       this.context.setUserAlert(err);
       this.setState({isLoading: false })
     });
+
+}
+
+setStateCalEvent = () => {
+
+  if (this.props.appointment.date.length == 12) {
+    this.setState({
+      calEvent: {
+        title: this.props.appointment.title,
+        description: this.props.appointment.description,
+        location: this.props.appointment.location,
+        startTime: moment.unix(this.props.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
+        endTime: moment.unix(this.props.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
+      }
+    })
+  }
+  if (this.props.appointment.date.length == 13) {
+    this.setState({
+      calEvent: {
+        title: this.props.appointment.title,
+        description: this.props.appointment.description,
+        location: this.props.appointment.location,
+        startTime: moment.unix(this.props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
+        endTime: moment.unix(this.props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
+      }
+    })
+  }
 
 }
 
