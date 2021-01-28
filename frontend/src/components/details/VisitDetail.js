@@ -6267,7 +6267,7 @@ toggleOverlay2 = () => {
 
 setStateCalEvent = () => {
 
-  if (this.props.visit.date.length == 12 ) {
+  if (this.props.visit.date.length === 12 ) {
     this.setState({
       calEvent: {
         title: this.props.visit.title,
@@ -6278,7 +6278,7 @@ setStateCalEvent = () => {
       }
     })
   }
-  if (this.props.visit.date.length == 13 ) {
+  if (this.props.visit.date.length === 13 ) {
     this.setState({
       calEvent: {
         title: this.props.visit.title,
@@ -6359,10 +6359,10 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
-                  {this.props.visit.date.length == 12 && (
+                  {this.props.visit.date.length === 12 && (
                     <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
-                  {this.props.visit.date.length == 13 && (
+                  {this.props.visit.date.length === 13 && (
                     <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                 </ListGroup.Item>
@@ -6410,10 +6410,10 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                 <p className="listGroupText">Date:</p>
-                {this.props.visit.appointment.date.length == 12 && (
+                {this.props.visit.appointment.date.length === 12 && (
                   <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                 )}
-                {this.props.visit.appointment.date.length == 13 && (
+                {this.props.visit.appointment.date.length === 13 && (
                   <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                 )}
                 </ListGroup.Item>
@@ -7067,10 +7067,10 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
-                  {this.props.visit.date.length == 12 && (
+                  {this.props.visit.date.length === 12 && (
                     <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
-                  {this.props.visit.date.length == 13 && (
+                  {this.props.visit.date.length === 13 && (
                     <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   <p className="listGroupText">Time:</p>
@@ -7106,10 +7106,10 @@ render() {
                   <p className="listGroupText">Title:</p>
                   <p className="listGroupText bold">{this.props.visit.appointment.title}</p>
                   <p className="listGroupText">Date:</p>
-                  {this.props.visit.appointment.date.length == 12 && (
+                  {this.props.visit.appointment.date.length === 12 && (
                     <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
-                  {this.props.visit.appointment.date.length == 13 && (
+                  {this.props.visit.appointment.date.length === 13 && (
                     <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   <Link

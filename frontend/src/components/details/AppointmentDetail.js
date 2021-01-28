@@ -888,7 +888,7 @@ checkConsultantAppointments = (date, consultant) => {
 
 setStateCalEvent = () => {
 
-  if (this.props.appointment.date.length == 12) {
+  if (this.props.appointment.date.length === 12) {
     this.setState({
       calEvent: {
         title: this.props.appointment.title,
@@ -899,7 +899,7 @@ setStateCalEvent = () => {
       }
     })
   }
-  if (this.props.appointment.date.length == 13) {
+  if (this.props.appointment.date.length === 13) {
     this.setState({
       calEvent: {
         title: this.props.appointment.title,

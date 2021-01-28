@@ -57,12 +57,12 @@ const AppointmentItem = (props) => {
               Type: <span className="bold">{props.appointment.type}</span>
             </Card.Text>
           )}
-          {!props.homePage && props.appointment.date.length == 12 && (
+          {!props.homePage && props.appointment.date.length === 12 && (
             <Card.Text className="cardText">
               Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
             </Card.Text>
           )}
-          {!props.homePage && props.appointment.date.length == 13 && (
+          {!props.homePage && props.appointment.date.length === 13 && (
             <Card.Text className="cardText">
               Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
             </Card.Text>
@@ -182,12 +182,12 @@ const AppointmentItem = (props) => {
               </Card.Text>
               </li>
               <li>
-              {props.appointment.date.length == 12 && (
+              {props.appointment.date.length === 12 && (
                 <Card.Text className="cardText">
                   Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
                 </Card.Text>
               )}
-              {props.appointment.date.length == 13 && (
+              {props.appointment.date.length === 13 && (
                 <Card.Text className="cardText">
                   Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
                 </Card.Text>

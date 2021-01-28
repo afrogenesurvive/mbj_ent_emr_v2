@@ -1665,9 +1665,9 @@ parseForCalendar = (args) => {
     }
 
     let date;
-    if (x.date.length == 12) {
+    if (x.date.length === 12) {
       date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
-    } else if (x.date.length == 13) {
+    } else if (x.date.length === 13) {
       date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
     }
 
@@ -1695,16 +1695,16 @@ parseForCalendar = (args) => {
 
     let startDate;
     let endDate;
-    if (x.startDate.length == 12) {
+    if (x.startDate.length === 12) {
       startDate = moment.unix(x.startDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
     }
-    if (x.endDate.length == 12) {
+    if (x.endDate.length === 12) {
       endDate = moment.unix(x.endDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
     }
-    if (x.startDate.length == 13) {
+    if (x.startDate.length === 13) {
       startDate = moment.unix(x.startDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
     }
-    if (x.endDate.length == 13) {
+    if (x.endDate.length === 13) {
       endDate = moment.unix(x.endDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
     }
 
@@ -1746,9 +1746,9 @@ parseForCalendar = (args) => {
   let calendarAppointments2 = [];
   for (const x of args.appointments) {
     let date;
-    if (x.date.length == 12) {
+    if (x.date.length === 12) {
       date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
-    } else if (x.date.length == 13) {
+    } else if (x.date.length === 13) {
       date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
     }
 
@@ -2232,10 +2232,10 @@ render() {
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <p className="listGroupText">DOB:</p>
-                    {this.props.user.dob.length == 12 && (
+                    {this.props.user.dob.length === 12 && (
                       <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                     )}
-                    {this.props.user.dob.length == 13 && (
+                    {this.props.user.dob.length === 13 && (
                       <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                     )}
                     {this.state.canDelete === true && (
@@ -2289,10 +2289,10 @@ render() {
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <p className="listGroupText">Employment Date:</p>
-                    {this.props.user.employmentDate && this.props.user.employmentDate.length == 12 && (
+                    {this.props.user.employmentDate && this.props.user.employmentDate.length === 12 && (
                       <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                     )}
-                    {this.props.user.employmentDate && this.props.user.employmentDate.length == 13 && (
+                    {this.props.user.employmentDate && this.props.user.employmentDate.length === 13 && (
                       <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                     )}
                     {this.context.role === 'Admin' && (
@@ -2644,10 +2644,10 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">DOB:</p>
-                  {this.props.user.dob.length == 12 && (
+                  {this.props.user.dob.length === 12 && (
                     <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
-                  {this.props.user.dob.length == 13 && (
+                  {this.props.user.dob.length === 13 && (
                     <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.state.canDelete === true && (
@@ -2701,10 +2701,10 @@ render() {
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <p className="listGroupText">Employment Date:</p>
-                    {this.props.user.employmentDate && this.props.user.employmentDate.length == 12 && (
+                    {this.props.user.employmentDate && this.props.user.employmentDate.length === 12 && (
                       <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                     )}
-                    {this.props.user.employmentDate && this.props.user.employmentDate.length == 13 && (
+                    {this.props.user.employmentDate && this.props.user.employmentDate.length === 13 && (
                       <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                     )}
                     {this.context.role === 'Admin' && (

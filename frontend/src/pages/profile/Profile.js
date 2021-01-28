@@ -1712,9 +1712,9 @@ parseForCalendar = (args) => {
     }
 
     let date;
-    if (x.date.length == 12) {
+    if (x.date.length === 12) {
       date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
-    } else if (x.date.length == 13) {
+    } else if (x.date.length === 13) {
       date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
     }
 
@@ -1741,16 +1741,16 @@ parseForCalendar = (args) => {
 
     let startDate;
     let endDate;
-    if (x.startDate.length == 12) {
+    if (x.startDate.length === 12) {
       startDate = moment.unix(x.startDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
     }
-    if (x.startDate.length == 13) {
+    if (x.startDate.length === 13) {
       startDate = moment.unix(x.startDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
     }
-    if (x.endDate.length == 12) {
+    if (x.endDate.length === 12) {
       endDate = moment.unix(x.endDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
     }
-    if (x.endDate.length == 13) {
+    if (x.endDate.length === 13) {
       endDate = moment.unix(x.endDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
     }
 
@@ -1792,9 +1792,9 @@ parseForCalendar = (args) => {
     let calendarAppointments2 = [];
     for (const x of args.appointments) {
       let date;
-      if (x.date.length == 12) {
+      if (x.date.length === 12) {
         date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
-      } else if (x.date.length == 13) {
+      } else if (x.date.length === 13) {
         date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
       }
 
@@ -2279,10 +2279,10 @@ render() {
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <p className="listGroupText">DOB:</p>
-                      {this.state.activityUser.dob.length == 12 && (
+                      {this.state.activityUser.dob.length === 12 && (
                         <p className="listGroupText bold">{moment.unix(this.state.activityUser.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                       )}
-                      {this.state.activityUser.dob.length == 13 && (
+                      {this.state.activityUser.dob.length === 13 && (
                         <p className="listGroupText bold">{moment.unix(this.state.activityUser.dob.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                       )}
                       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
@@ -2326,10 +2326,10 @@ render() {
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <p className="listGroupText">Employment Date:</p>
-                      {this.state.activityUser.employmentDate && this.state.activityUser.employmentDate.length == 12 (
+                      {this.state.activityUser.employmentDate && this.state.activityUser.employmentDate.length === 12 (
                         <p className="listGroupText bold">{moment.unix(this.state.activityUser.employmentDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                       )}
-                      {this.state.activityUser.employmentDate && this.state.activityUser.employmentDate.length == 13 (
+                      {this.state.activityUser.employmentDate && this.state.activityUser.employmentDate.length === 13 (
                         <p className="listGroupText bold">{moment.unix(this.state.activityUser.employmentDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                       )}
 
@@ -2658,10 +2658,10 @@ render() {
               </ListGroup.Item>
               <ListGroup.Item>
                 <p className="listGroupText">DOB:</p>
-                {this.state.activityUser.dob.length == 12 && (
+                {this.state.activityUser.dob.length === 12 && (
                   <p className="listGroupText bold">{moment.unix(this.state.activityUser.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                 )}
-                {this.state.activityUser.dob.length == 13 && (
+                {this.state.activityUser.dob.length === 13 && (
                   <p className="listGroupText bold">{moment.unix(this.state.activityUser.dob.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                 )}
                 <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
@@ -2705,10 +2705,10 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Employment Date:</p>
-                  {this.state.activityUser.employmentDate && this.state.activityUser.employmentDate.length == 12 (
+                  {this.state.activityUser.employmentDate && this.state.activityUser.employmentDate.length === 12 (
                     <p className="listGroupText bold">{moment.unix(this.state.activityUser.employmentDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
-                  {this.state.activityUser.employmentDate && this.state.activityUser.employmentDate.length == 13 (
+                  {this.state.activityUser.employmentDate && this.state.activityUser.employmentDate.length === 13 (
                     <p className="listGroupText bold">{moment.unix(this.state.activityUser.employmentDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
 

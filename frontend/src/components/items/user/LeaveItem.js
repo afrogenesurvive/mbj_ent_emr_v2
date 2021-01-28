@@ -51,23 +51,23 @@ const LeaveItem = props => {
     <li key={props.key} className="">
       <Card>
         <Card.Body className={liClass}>
-          {props.leave.startDate.length == 12 && (
+          {props.leave.startDate.length === 12 && (
             <Card.Text className="cardText">
               Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
             </Card.Text>
           )}
-          {props.leave.startDate.length == 13 && (
+          {props.leave.startDate.length === 13 && (
             <Card.Text className="cardText">
               Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
             </Card.Text>
           )}
 
-          {props.leave.endDate.length == 12 && (
+          {props.leave.endDate.length === 12 && (
             <Card.Text className="cardText">
               End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
             </Card.Text>
           )}
-          {props.leave.endDate.length == 13 && (
+          {props.leave.endDate.length === 13 && (
             <Card.Text className="cardText">
               End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
             </Card.Text>
@@ -112,24 +112,24 @@ const LeaveItem = props => {
               </Card.Text>
               </li>
               <li>
-              {props.leave.startDate.length == 12 && (
+              {props.leave.startDate.length === 12 && (
                 <Card.Text className="cardText">
                   Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
                 </Card.Text>
               )}
-              {props.leave.startDate.length == 13 && (
+              {props.leave.startDate.length === 13 && (
                 <Card.Text className="cardText">
                   Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
                 </Card.Text>
               )}
               </li>
               <li>
-              {props.leave.endDate.length == 12 && (
+              {props.leave.endDate.length === 12 && (
                 <Card.Text className="cardText">
                   End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
                 </Card.Text>
               )}
-              {props.leave.endDate.length == 13 && (
+              {props.leave.endDate.length === 13 && (
                 <Card.Text className="cardText">
                   End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
                 </Card.Text>

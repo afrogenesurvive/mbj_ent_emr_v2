@@ -611,10 +611,10 @@ submitCreateNewVisitForm = (event) => {
   // const tooLate = moment().format('YYYY-MM-DD') > moment.unix(this.state.selectedAppointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
   let tooEarly;
   let tooLate;
-  if (this.state.selectedAppointment.date.length == 12) {
+  if (this.state.selectedAppointment.date.length === 12) {
     tooEarly = moment().tz("America/Bogota").format('YYYY-MM-DD') < moment.unix(this.state.selectedAppointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
     tooLate = moment().tz("America/Bogota").format('YYYY-MM-DD') > moment.unix(this.state.selectedAppointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
-  } else if (this.state.selectedAppointment.date.length == 13) {
+  } else if (this.state.selectedAppointment.date.length === 13) {
     tooEarly = moment().tz("America/Bogota").format('YYYY-MM-DD') < moment.unix(this.state.selectedAppointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
     tooLate = moment().tz("America/Bogota").format('YYYY-MM-DD') > moment.unix(this.state.selectedAppointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
   }
@@ -949,9 +949,9 @@ parseForCalendar = (args) => {
   let calendarVisits2 = [];
   for (const x of args) {
     let date;
-    if (x.date.length == 12) {
+    if (x.date.length === 12) {
       date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
-    } else if (x.date.length == 13) {
+    } else if (x.date.length === 13) {
       date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
     }
     let evt = {
@@ -995,9 +995,9 @@ parseForCalendarAppts = (args) => {
     let calendarAppointments2 = [];
     for (const x of args) {
       let date;
-      if (x.date.length == 12) {
+      if (x.date.length === 12) {
         date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
-      } else if (x.date.length == 13) {
+      } else if (x.date.length === 13) {
         date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
       }
       let evt = {

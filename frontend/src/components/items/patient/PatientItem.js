@@ -180,12 +180,12 @@ const PatientItem = (props) => {
               </Card.Text>
               </li>
               <li>
-              {props.patient.dob.length == 13 && (
+              {props.patient.dob.length === 13 && (
                 <Card.Text className="cardText">
                   dob: <span className="bold">{moment.unix(props.patient.dob.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
                 </Card.Text>
               )}
-              {props.patient.dob.length == 12 && (
+              {props.patient.dob.length === 12 && (
                 <Card.Text className="cardText">
                   dob: <span className="bold">{moment.unix(props.patient.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
                 </Card.Text>
