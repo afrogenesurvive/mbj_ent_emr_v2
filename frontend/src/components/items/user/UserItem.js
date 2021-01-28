@@ -202,9 +202,16 @@ const UserItem = (props) => {
               </Card.Text>
               </li>
               <li>
-              <Card.Text className="cardText">
-                dob: <span className="bold">{moment.unix(props.user.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
-              </Card.Text>
+              {props.user.dob.length == 12 && (
+                <Card.Text className="cardText">
+                  dob: <span className="bold">{moment.unix(props.user.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                </Card.Text>
+              )}
+              {props.user.dob.length == 13 && (
+                <Card.Text className="cardText">
+                  dob: <span className="bold">{moment.unix(props.user.dob.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                </Card.Text>
+              )}
               </li>
               <li>
               <Card.Text className="cardText">

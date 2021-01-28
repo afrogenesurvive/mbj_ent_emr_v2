@@ -1,28 +1,28 @@
 import React, { Component } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Image from 'react-bootstrap/Image';
+// import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
+// import Container from 'react-bootstrap/Container';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
-import Nav from 'react-bootstrap/Nav';
+// import Nav from 'react-bootstrap/Nav';
 import { NavLink, Link } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
-import Popover from 'react-bootstrap/Popover';
+// import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+// import Popover from 'react-bootstrap/Popover';
 import moment from 'moment-timezone';
 
 import FullCalendar from '@fullcalendar/react';
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import bootstrapPlugin from '@fullcalendar/bootstrap';
+// import bootstrapPlugin from '@fullcalendar/bootstrap';
 import '../../calendar.scss'
 import S3 from 'react-aws-s3';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AuthContext from '../../context/auth-context';
-import AlertBox from '../alertBox/AlertBox';
+// import AlertBox from '../alertBox/AlertBox';
 import LoadingOverlay from '../overlay/LoadingOverlay';
 import LoadingOverlay2 from '../overlay/LoadingOverlay2';
 import PdfView from '../pdfView/PdfView';
@@ -53,8 +53,8 @@ import FilterTagForm from '../forms/filter/FilterTagForm';
 
 import UpdatePatientSingleFieldForm from '../forms/add/UpdatePatientSingleFieldForm';
 import AddAddressForm from '../forms/add/AddAddressForm';
-import AddAttendanceForm from '../forms/add/AddAttendanceForm';
-import AddLeaveForm from '../forms/add/AddLeaveForm';
+// import AddAttendanceForm from '../forms/add/AddAttendanceForm';
+// import AddLeaveForm from '../forms/add/AddLeaveForm';
 import AddNoteForm from '../forms/add/AddNoteForm';
 import AddTagForm from '../forms/add/AddTagForm';
 import AddImageForm from '../forms/add/AddImageForm';
@@ -65,10 +65,10 @@ import AddMedicationForm from '../forms/add/AddMedicationForm';
 import AddComorbidityForm from '../forms/add/AddComorbidityForm';
 import AddAttachmentForm from '../forms/add/AddAttachmentForm';
 
-import FloatMenu from '../../components/floatMenu/FloatMenu';
-import loadingGif from '../../assets/loading.gif';
+// import FloatMenu from '../../components/floatMenu/FloatMenu';
+// import loadingGif from '../../assets/loading.gif';
 import {
-  faBath,
+  // faBath,
   faExclamationTriangle,
  } from '@fortawesome/free-solid-svg-icons';
 import './details.css';
@@ -2830,9 +2830,62 @@ parseForCalendar = (args) => {
         field: 'visits'
       }
     }))
+
+    let calendarAppointments2;
+    for (const x of args.appointments) {
+      let date;
+      if (x.date.length == 12) {
+        date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+      } else if (x.date.length == 13) {
+        date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+      }
+      let evt = {
+        title: x.title,
+        date: date,
+        props: {
+          _id: x._id,
+          date: x.date,
+          title: x.title,
+          type: x.type,
+          subType: x.subType,
+          time: x.time,
+          location: x.location,
+          description: x.description,
+          important: x.important,
+          field: 'appointments'
+        }
+      }
+      calendarAppointments2.push(evt)
+
+    }
+    let calendarVisits2;
+    for (const x of args.visits) {
+      let date;
+      if (x.date.length == 12) {
+        date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+      } else if (x.date.length == 13) {
+        date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+      }
+      let evt = {
+        title: x.title,
+        date: date,
+        props: {
+          _id: x._id,
+          date: x.date,
+          title: x.title,
+          type: x.type,
+          subType: x.subType,
+          time: x.time,
+          field: 'visits'
+        }
+      }
+      calendarVisits2.push(evt)
+
+    }
+
     this.setState({
-      calendarAppointments: calendarAppointments,
-      calendarVisits: calendarVisits,
+      calendarAppointments: calendarAppointments2,
+      calendarVisits: calendarVisits2,
       overlay2: false
     })
 }
@@ -2913,7 +2966,6 @@ showPdfView = (args) => {
     }
   })
 }
-
 closePdfView = () => {
   this.setState({
     showPdfView: false,
@@ -3547,7 +3599,7 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Number:</p>

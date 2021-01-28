@@ -729,7 +729,7 @@ parseForCalendar = (args) => {
   console.log('...parsing appointments for calendar...');
   let calendarAppointments = args.map(x => ({
       title: x.title,
-      date: moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD'),
+      date: moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD'),
       props: {
         _id: x._id,
         date: x.date,
@@ -743,8 +743,34 @@ parseForCalendar = (args) => {
       }
     }))
 
+    let calendarAppointments2 = [];
+    for (const x of args) {
+      let date;
+      if (x.date.length == 12) {
+        date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')
+      } else if (x.date.length == 13) {
+        date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')
+      }
+      let evt = {
+        title: x.title,
+        date: date,
+        props: {
+          _id: x._id,
+          date: x.date,
+          title: x.title,
+          type: x.type,
+          subType: x.subType,
+          time: x.time,
+          location: x.location,
+          description: x.description,
+          important: x.important,
+        }
+      }
+      calendarAppointments2.push(evt)
+    }
+
     this.setState({
-      calendarAppointments: calendarAppointments,
+      calendarAppointments: calendarAppointments2,
     })
 
 }

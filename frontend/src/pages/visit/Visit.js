@@ -254,12 +254,12 @@ getAllAppointments (args) {
 
       if (this.props.location.state &&
           this.props.location.state.newVisit ) {
-            console.log('foo')
+            // console.log('foo')
           this.newVisitPatient({dateClick: false});
       }
       if (this.props.location.state &&
           this.props.location.state.newVisitDate ) {
-            console.log('bar')
+            // console.log('bar')
           this.newVisitPatient({dateClick: true});
       }
 
@@ -496,7 +496,7 @@ newVisitPatient = (args) => {
   const token = this.context.token;
   const activityId = this.context.activityId;
   const patient = this.props.location.state.newVisit;
-  const today = moment().format('YYYY-MM-DD,h:mm a')
+  const today = moment().tz("America/Bogota").format('YYYY-MM-DD,h:mm a')
 
   const title = patient.name+'appt'+today;
   const type = 'new_unreferred';
@@ -609,8 +609,16 @@ submitCreateNewVisitForm = (event) => {
 
   // const tooEarly = moment().format('YYYY-MM-DD') < moment.unix(this.state.selectedAppointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
   // const tooLate = moment().format('YYYY-MM-DD') > moment.unix(this.state.selectedAppointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
-  const tooEarly = moment().tz("America/Bogota").format('YYYY-MM-DD') < moment.unix(this.state.selectedAppointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
-  const tooLate = moment().tz("America/Bogota").format('YYYY-MM-DD') > moment.unix(this.state.selectedAppointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+  let tooEarly;
+  let tooLate;
+  if (this.state.selectedAppointment.date.length == 12) {
+    tooEarly = moment().tz("America/Bogota").format('YYYY-MM-DD') < moment.unix(this.state.selectedAppointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+    tooLate = moment().tz("America/Bogota").format('YYYY-MM-DD') > moment.unix(this.state.selectedAppointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+  } else if (this.state.selectedAppointment.date.length == 13) {
+    tooEarly = moment().tz("America/Bogota").format('YYYY-MM-DD') < moment.unix(this.state.selectedAppointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+    tooLate = moment().tz("America/Bogota").format('YYYY-MM-DD') > moment.unix(this.state.selectedAppointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+  }
+
 
   // console.log(tooEarly, tooLate);
 
@@ -938,8 +946,31 @@ parseForCalendar = (args) => {
         subType: x.subType,
       }
     }))
+  let calendarVisits2 = [];
+  for (const x of args) {
+    let date;
+    if (x.date.length == 12) {
+      date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+    } else if (x.date.length == 13) {
+      date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+    }
+    let evt = {
+      title: x.title,
+      date: date,
+      props: {
+        _id: x._id,
+        title: x.title,
+        type: x.type,
+        date: date,
+        time: x.time,
+        subType: x.subType,
+      }
+    }
+    calendarVisits2.push(evt)
+  }
+
     this.setState({
-      calendarVisits: calendarVisits
+      calendarVisits: calendarVisits2
     })
 }
 parseForCalendarAppts = (args) => {
@@ -960,8 +991,36 @@ parseForCalendarAppts = (args) => {
         patient: x.patient,
       }
     }))
+
+    let calendarAppointments2 = [];
+    for (const x of args) {
+      let date;
+      if (x.date.length == 12) {
+        date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+      } else if (x.date.length == 13) {
+        date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+      }
+      let evt = {
+        title: x.title,
+        date: date,
+        props: {
+          _id: x._id,
+          date: x.date,
+          title: x.title,
+          type: x.type,
+          subType: x.subType,
+          time: x.time,
+          location: x.location,
+          description: x.description,
+          important: x.important,
+          patient: x.patient,
+        }
+      }
+      calendarAppointments2.push(evt)
+    }
+
     this.setState({
-      calendarAppointments: calendarAppointments
+      calendarAppointments: calendarAppointments2
     })
 
 }

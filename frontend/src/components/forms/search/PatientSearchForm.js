@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -16,6 +16,7 @@ return (
         <Form.Label className="formLabel">Search Field</Form.Label>
         <Form.Control as="select">
         <option>name</option>
+        <option>lastName</option>
         <option>username</option>
         <option>title</option>
         <option>role</option>

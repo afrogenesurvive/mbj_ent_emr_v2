@@ -1659,15 +1659,24 @@ parseForCalendar = (args) => {
   let calendarAttendance2 = [];
   for (const x of args.attendance) {
     let color = 'blue';
+
     if (x.highlighted === true) {
       color = 'red'
     }
+
+    let date;
+    if (x.date.length == 12) {
+      date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+    } else if (x.date.length == 13) {
+      date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+    }
+
     let evt = {
       title: x.status,
       color: color,
-      date: moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD'),
+      date: x.date,
       props: {
-        date: x.date,
+        date: date,
         status: x.status,
         description: x.description,
         highlighted: x.highlighted,
@@ -1679,14 +1688,31 @@ parseForCalendar = (args) => {
   let calendarLeave2 = [];
   for (const x of args.leave) {
     let color = 'blue';
+
     if (x.highlighted === true) {
       color = 'red'
     }
+
+    let startDate;
+    let endDate;
+    if (x.startDate.length == 12) {
+      startDate = moment.unix(x.startDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+    }
+    if (x.endDate.length == 12) {
+      endDate = moment.unix(x.endDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+    }
+    if (x.startDate.length == 13) {
+      startDate = moment.unix(x.startDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+    }
+    if (x.endDate.length == 13) {
+      endDate = moment.unix(x.endDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+    }
+
     let evt = {
       title: x.type,
       color: color,
-      date: moment.unix(x.startDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD'),
-      end: moment.unix(x.endDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD'),
+      date: startDate,
+      end: endDate,
       props: {
         date: x.date,
         type: x.type,
@@ -1716,10 +1742,40 @@ parseForCalendar = (args) => {
         patient: x.patient,
       }
     }))
+
+  let calendarAppointments2 = [];
+  for (const x of args.appointments) {
+    let date;
+    if (x.date.length == 12) {
+      date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+    } else if (x.date.length == 13) {
+      date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+    }
+
+    let evt = {
+      title: x.title,
+      date: date,
+      props: {
+        _id: x._id,
+        date: x.date,
+        title: x.title,
+        type: x.type,
+        subType: x.subType,
+        time: x.time,
+        location: x.location,
+        description: x.description,
+        important: x.important,
+        field: 'appointments',
+        patient: x.patient,
+      }
+    }
+    calendarAppointments2.push(evt)
+  }
+
     this.setState({
       calendarAttendance: calendarAttendance2,
       calendarLeave: calendarLeave2,
-      calendarAppointments: calendarAppointments,
+      calendarAppointments: calendarAppointments2,
       overlay2: false
     })
 }
