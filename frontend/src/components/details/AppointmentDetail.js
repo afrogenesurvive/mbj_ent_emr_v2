@@ -96,11 +96,7 @@ class AppointmentDetail extends Component {
     showAddConsultantForm: false,
     users: null,
     calEvent: {
-      title: this.props.appointment.title,
-      description: this.props.appointment.description,
-      location: this.props.appointment.location,
-      startTime: moment.unix(this.props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')+'T'+this.props.appointment.time+':00-05:00',
-      endTime: moment.unix(this.props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')+'T'+this.props.appointment.time+':00-05:00',
+
     },
   };
   static contextType = AuthContext;
@@ -126,6 +122,29 @@ componentDidMount () {
     })
   }
   this.getAllUsers(seshStore);
+
+  if (props.appointment.date.length == 12) {
+    this.setState({
+      calEvent: {
+        title: this.props.appointment.title,
+        description: this.props.appointment.description,
+        location: this.props.appointment.location,
+        startTime: moment.unix(this.props.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
+        endTime: moment.unix(this.props.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
+      }
+    })
+  }
+  if (props.appointment.date.length == 13) {
+    this.setState({
+      calEvent: {
+        title: this.props.appointment.title,
+        description: this.props.appointment.description,
+        location: this.props.appointment.location,
+        startTime: moment.unix(this.props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
+        endTime: moment.unix(this.props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
+      }
+    })
+  }
 }
 componentWillUnmount() {
 
