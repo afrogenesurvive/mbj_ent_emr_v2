@@ -139,11 +139,7 @@ class VisitDetail extends Component {
     showAddConsultantForm: false,
     users: null,
     calEvent: {
-      title: this.props.visit.title,
-      description: this.props.visit.appointment.description,
-      location: this.props.visit.appointment.location,
-      startTime: moment.unix(this.props.visit.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')+'T'+this.props.visit.time+':00-05:00',
-      endTime: moment.unix(this.props.visit.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')+'T'+this.props.visit.time+':00-05:00',
+
     },
     pocketVars: null,
     s3State: {
@@ -325,6 +321,8 @@ getAllUsers (args) {
         activityA: `getAllUsers?activityId:${activityId},userId:${userId}`
       });
       this.logUserActivity({activityId: activityId,token: token});
+
+      this.setStateCalEvent();
     })
     .catch(err => {
       console.log(err);
@@ -6266,6 +6264,26 @@ toggleOverlay2 = () => {
   })
   this.overlay2 = false;
 }
+
+setStateCalEvent = () => {
+
+  if (this.props.visit.date.length == 12 ) {
+    title: this.props.visit.title,
+    description: this.props.visit.appointment.description,
+    location: this.props.visit.appointment.location,
+    startTime: moment.unix(this.props.visit.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
+    endTime: moment.unix(this.props.visit.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
+  }
+  if (this.props.visit.date.length == 13 ) {
+    title: this.props.visit.title,
+    description: this.props.visit.appointment.description,
+    location: this.props.visit.appointment.location,
+    startTime: moment.unix(this.props.visit.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
+    endTime: moment.unix(this.props.visit.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
+  }
+
+}
+
 
 render() {
 

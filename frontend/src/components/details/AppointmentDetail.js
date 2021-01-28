@@ -221,7 +221,7 @@ getAllUsers (args) {
       });
       this.logUserActivity({activityId: activityId,token: token});
 
-      this.setStateCalEvent()
+      this.setStateCalEvent();
     })
     .catch(err => {
       console.log(err);
