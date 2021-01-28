@@ -133,7 +133,7 @@ getPocketVars (args) {
           // **f*etch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {**
           // **f*etch('http://localhost:8088/graphql', {**
 
-     fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+     fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -184,7 +184,7 @@ getThisUser (args) {
       )
       {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -257,7 +257,7 @@ logUserActivity(args) {
         })
       {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -330,7 +330,7 @@ submitAddAddressForm = (event) => {
         })
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -404,7 +404,7 @@ deleteAddress = (args) => {
         })
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -473,7 +473,7 @@ setAddressPrimary = (args) => {
         })
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -551,7 +551,7 @@ submitAddAttendanceForm = (event) => {
         })
       {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -625,7 +625,7 @@ deleteAttendance = (args) => {
             attendanceHighlighted:${args.highlighted}
           }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -710,7 +710,7 @@ submitAddLeaveForm = (event) => {
           leaveDescription:"${description}"
         }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -786,7 +786,7 @@ deleteLeave = (args) => {
           })
           {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -940,7 +940,7 @@ submitAddImageForm = (event) => {
         })
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1014,7 +1014,7 @@ deleteImage = (args) => {
           })
           {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1213,7 +1213,7 @@ submitAddFileForm = (event) => {
         })
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1285,7 +1285,7 @@ deleteFile = (args) => {
           })
           {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1406,7 +1406,7 @@ submitAddNoteForm = (event) => {
           notes:"${note}"
         }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1472,7 +1472,7 @@ deleteNote = (args) => {
           })
           {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1547,7 +1547,7 @@ submitUpdateSingleFieldForm = (event) => {
       )
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1913,7 +1913,7 @@ toggleStaffImageHighlighted = (args) => {
     `};
 
 
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1987,7 +1987,7 @@ toggleStaffLeaveHighlighted = (args) => {
     `};
 
 
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -2060,7 +2060,7 @@ toggleStaffAttendanceHighlighted = (args) => {
     `};
 
 
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -2141,7 +2141,7 @@ toggleStaffFileHighlighted = (args) => {
     `};
 
 
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
