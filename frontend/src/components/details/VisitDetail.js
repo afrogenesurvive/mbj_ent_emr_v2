@@ -6268,18 +6268,26 @@ toggleOverlay2 = () => {
 setStateCalEvent = () => {
 
   if (this.props.visit.date.length == 12 ) {
-    title: this.props.visit.title,
-    description: this.props.visit.appointment.description,
-    location: this.props.visit.appointment.location,
-    startTime: moment.unix(this.props.visit.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
-    endTime: moment.unix(this.props.visit.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
+    this.setState({
+      calEvent: {
+        title: this.props.visit.title,
+        description: this.props.visit.appointment.description,
+        location: this.props.visit.appointment.location,
+        startTime: moment.unix(this.props.visit.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
+        endTime: moment.unix(this.props.visit.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
+      }
+    })
   }
   if (this.props.visit.date.length == 13 ) {
-    title: this.props.visit.title,
-    description: this.props.visit.appointment.description,
-    location: this.props.visit.appointment.location,
-    startTime: moment.unix(this.props.visit.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
-    endTime: moment.unix(this.props.visit.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
+    this.setState({
+      calEvent: {
+        title: this.props.visit.title,
+        description: this.props.visit.appointment.description,
+        location: this.props.visit.appointment.location,
+        startTime: moment.unix(this.props.visit.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
+        endTime: moment.unix(this.props.visit.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
+      }
+    })
   }
 
 }

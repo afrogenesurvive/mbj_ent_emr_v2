@@ -35,7 +35,7 @@
     "s3": "^4.4.0",
     "sib-api-v3-sdk": "^7.2.3",
     "simple-encryptor": "^4.0.0",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.4.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
