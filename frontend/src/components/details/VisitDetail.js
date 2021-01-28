@@ -6333,7 +6333,12 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  {this.props.visit.date.length == 12 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
+                  {this.props.visit.date.length == 13 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Time:</p>
@@ -6379,7 +6384,12 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                 <p className="listGroupText">Date:</p>
-                <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                {this.props.visit.appointment.date.length == 12 && (
+                  <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                )}
+                {this.props.visit.appointment.date.length == 13 && (
+                  <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                )}
                 </ListGroup.Item>
               </ListGroup>
               </Col>
@@ -7031,7 +7041,12 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  {this.props.visit.date.length == 12 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
+                  {this.props.visit.date.length == 13 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
                   <p className="listGroupText">Time:</p>
                   <p className="listGroupText bold">{this.props.visit.time}</p>
                   {this.context.role !== 'Staff' && (
@@ -7065,7 +7080,12 @@ render() {
                   <p className="listGroupText">Title:</p>
                   <p className="listGroupText bold">{this.props.visit.appointment.title}</p>
                   <p className="listGroupText">Date:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  {this.props.visit.appointment.date.length == 12 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
+                  {this.props.visit.appointment.date.length == 13 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
                   <Link
                     to={{
                       pathname: "/appointments",

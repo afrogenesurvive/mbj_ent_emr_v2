@@ -2232,7 +2232,12 @@ render() {
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <p className="listGroupText">DOB:</p>
-                    <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    {this.props.user.dob.length == 12 && (
+                      <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    )}
+                    {this.props.user.dob.length == 13 && (
+                      <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    )}
                     {this.state.canDelete === true && (
                       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
                     )}
@@ -2284,8 +2289,11 @@ render() {
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <p className="listGroupText">Employment Date:</p>
-                    {this.props.user.employmentDate && (
+                    {this.props.user.employmentDate && this.props.user.employmentDate.length == 12 && (
                       <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    )}
+                    {this.props.user.employmentDate && this.props.user.employmentDate.length == 13 && (
+                      <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                     )}
                     {this.context.role === 'Admin' && (
                       <Button variant="primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'employmentDate')}>Edit</Button>
@@ -2636,7 +2644,12 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">DOB:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  {this.props.user.dob.length == 12 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
+                  {this.props.user.dob.length == 13 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
                   {this.state.canDelete === true && (
                     <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
                   )}
@@ -2688,8 +2701,11 @@ render() {
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <p className="listGroupText">Employment Date:</p>
-                    {this.props.user.employmentDate && (
+                    {this.props.user.employmentDate && this.props.user.employmentDate.length == 12 && (
                       <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    )}
+                    {this.props.user.employmentDate && this.props.user.employmentDate.length == 13 && (
+                      <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                     )}
                     {this.context.role === 'Admin' && (
                       <Button variant="primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'employmentDate')}>Edit</Button>
