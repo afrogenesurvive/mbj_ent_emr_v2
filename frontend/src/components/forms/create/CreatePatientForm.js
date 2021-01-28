@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import './createForms.css';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 const CreatePatientForm = (props) => {
   const today = moment().format('YYYY-MM-DD')

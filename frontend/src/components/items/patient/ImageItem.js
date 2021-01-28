@@ -5,14 +5,27 @@ import Row from 'react-bootstrap/Row';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Popover from 'react-bootstrap/Popover';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
-import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBatteryThreeQuarters,
+  faPlusSquare,
+  faBatteryEmpty,
+  faEye,
+  faTrashAlt,
+  faHighlighter,
+  faExclamation
+} from '@fortawesome/free-solid-svg-icons';
 
 import './PatientItem.css';
 
 const ImageItem = (props) => {
+
+  let liClass;
+  if (props.image.highlighted === false) {
+    liClass = 'cardBody';
+  } else {
+    liClass = 'cardBodyHighlighted';
+  }
+
   const [state, setState] = useState(false);
   const handleStateChange = () => {
     if (state === true) {
@@ -37,7 +50,7 @@ const ImageItem = (props) => {
   return (
     <li key={props.key} className="">
       <Card>
-        <Card.Body className="cardBody">
+        <Card.Body className={liClass}>
           <Card.Text className="cardText">
           <img src={props.image.path} className="imgPreview" />
           <a href={props.image.path} target="_blank" rel="noopener noreferrer">{props.image.name}</a>
@@ -55,6 +68,21 @@ const ImageItem = (props) => {
             }
           >
             <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+          </OverlayTrigger>
+
+
+          <OverlayTrigger
+            key={'top'}
+            placement={'top'}
+            overlay={
+              <Popover id={`popover-positioned-${'top'}`}>
+                <Popover.Content>
+                  <strong>Toggle Highlight</strong>
+                </Popover.Content>
+              </Popover>
+            }
+          >
+            <FontAwesomeIcon icon={faHighlighter} className="listIcon" onClick={props.togglePatientImageHighlighted.bind(this, props.image)}/>
           </OverlayTrigger>
 
           {state === true && (

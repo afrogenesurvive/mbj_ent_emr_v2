@@ -16,13 +16,16 @@ import {
   faTrashAlt,
   faBan,
   faCheckSquare,
-  faExternalLinkAlt
+  faExternalLinkAlt,
+  faHighlighter,
+  faExclamation
 } from '@fortawesome/free-solid-svg-icons';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import './UserItem.css';
 
 const AppointmentItem = (props) => {
+
   const [state, setState] = useState(false);
   const handleStateChange = () => {
     if (state === true) {
@@ -42,9 +45,16 @@ const AppointmentItem = (props) => {
           <Card.Text className="cardText">
             Type: <span className="bold">{props.appointment.type}</span>
           </Card.Text>
-          <Card.Text className="cardText">
-            Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
-          </Card.Text>
+          {props.appointment.date.length == 12 && (
+            <Card.Text className="cardText">
+              Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+            </Card.Text>
+          )}
+          {props.appointment.date.length == 13 && (
+            <Card.Text className="cardText">
+              Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+            </Card.Text>
+          )}
 
           <OverlayTrigger
             key={'top'}
@@ -83,6 +93,7 @@ const AppointmentItem = (props) => {
 
           </Link>
 
+
           {state === true && (
             <Row className="listItemHiddenRow">
             <ul>
@@ -90,6 +101,18 @@ const AppointmentItem = (props) => {
               <Card.Text className="cardText">
                 id: <span className="bold">{props.appointment._id}</span>
               </Card.Text>
+              </li>
+              <li>
+              {props.appointment.date.length == 12 && (
+                <Card.Text className="cardText">
+                  Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                </Card.Text>
+              )}
+              {props.appointment.date.length == 13 && (
+                <Card.Text className="cardText">
+                  Date: <span className="bold">{moment.unix(props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                </Card.Text>
+              )}
               </li>
               <li>
               <Card.Text className="cardText">

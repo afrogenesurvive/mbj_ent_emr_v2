@@ -20,7 +20,7 @@ import {
   faUserPlus,
   faCalendarPlus
 } from '@fortawesome/free-solid-svg-icons';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import './UserItem.css';
 
@@ -202,9 +202,16 @@ const UserItem = (props) => {
               </Card.Text>
               </li>
               <li>
-              <Card.Text className="cardText">
-                dob: <span className="bold">{moment.unix(props.user.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</span>
-              </Card.Text>
+              {props.user.dob.length == 12 && (
+                <Card.Text className="cardText">
+                  dob: <span className="bold">{moment.unix(props.user.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                </Card.Text>
+              )}
+              {props.user.dob.length == 13 && (
+                <Card.Text className="cardText">
+                  dob: <span className="bold">{moment.unix(props.user.dob.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                </Card.Text>
+              )}
               </li>
               <li>
               <Card.Text className="cardText">

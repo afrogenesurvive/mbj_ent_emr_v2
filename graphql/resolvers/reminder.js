@@ -9,9 +9,10 @@ const Reminder = require('../../models/reminder');
 const Queue = require('../../models/queue');
 const util = require('util');
 const mongoose = require('mongoose');
-const moment = require('moment');
+// const moment = require('moment');
+const moment = require('moment-timezone');
 const mailgun = require("mailgun-js");
-const puppeteer = require('puppeteer');
+// const puppeteer = require('puppeteer');
 
 const { transformReminder } = require('./merge');
 const { dateToString } = require('../../helpers/date');
@@ -458,7 +459,7 @@ module.exports = {
       let sendTime;
       if (args.reminderInput.type === 'Reminder') {
         console.log('Reminder');
-        const dateTime = moment(appointment.date).format('YYYY-MM-DD')+'T'+appointment.time+'';
+        const dateTime = moment(appointment.date).tz("America/Bogota").format('YYYY-MM-DD')+'T'+appointment.time+'';
         start = moment(dateTime);
         sendDate = moment(start).subtract(triggerValue, triggerUnit);
         console.log('dateTime',dateTime,'start',start,'moment(start)',moment(start));
@@ -466,14 +467,14 @@ module.exports = {
       }
       if (args.reminderInput.type === 'FollowUp') {
         console.log('FollowUp');
-        const dateTime = moment(appointment.date).format('YYYY-MM-DD')+'T'+appointment.time+'';
+        const dateTime = moment(appointment.date).tz("America/Bogota").format('YYYY-MM-DD')+'T'+appointment.time+'';
         start = moment(dateTime);
-        sendDate = moment(start).add(triggerValue, triggerUnit);
+        sendDate = moment(start).tz("America/Bogota").add(triggerValue, triggerUnit);
         console.log('dateTime',dateTime,'start',start,'moment(start)',moment(start));
         console.log('sendDate',sendDate);
       }
-      console.log('sendDate',moment(sendDate).format().split('T')[1].substr(0,5));
-      sendTime = moment(sendDate).format().split('T')[1].substr(0,5);
+      console.log('sendDate',moment(sendDate).tz("America/Bogota").format().split('T')[1].substr(0,5));
+      sendTime = moment(sendDate).tz("America/Bogota").format().split('T')[1].substr(0,5);
       const tooLate = sendDate < moment();
       console.log('tooLate',tooLate);
       if (tooLate === true) {
@@ -492,7 +493,7 @@ module.exports = {
       }
 
       const reminder = new Reminder({
-        createDate: moment().format('YYYY-MM-DD'),
+        createDate: moment().tz("America/Bogota").format('YYYY-MM-DD'),
         sendDate: sendDate.format('YYYY-MM-DD'),
         sendTime: sendTime,
         creator: creator,

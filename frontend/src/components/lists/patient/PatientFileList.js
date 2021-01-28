@@ -49,6 +49,7 @@ const UserFileList = props => {
         file={file}
         canDelete={props.canDelete}
         onDelete={props.onDelete}
+        togglePatientFileHighlighted={props.togglePatientFileHighlighted}
       />
     );
   });

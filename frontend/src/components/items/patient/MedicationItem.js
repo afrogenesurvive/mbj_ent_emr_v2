@@ -5,16 +5,28 @@ import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Popover from 'react-bootstrap/Popover';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
-import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBatteryThreeQuarters,
+  faPlusSquare,
+  faBatteryEmpty,
+  faEye,
+  faTrashAlt,
+  faHighlighter,
+  faExclamation
+} from '@fortawesome/free-solid-svg-icons';
 import PatientAttachmentList from '../../lists/patient/PatientAttachmentList';
 
 import './PatientItem.css';
 
 const MedicationItem = props => {
+
+  let liClass;
+  if (props.medication.highlighted === false) {
+    liClass = 'cardBody';
+  } else {
+    liClass = 'cardBodyHighlighted';
+  }
+
   const [state, setState] = useState(false);
   const handleStateChange = () => {
     if (state === true) {
@@ -39,7 +51,7 @@ const MedicationItem = props => {
   return (
     <li key={props.key} className="">
       <Card>
-        <Card.Body className="cardBody">
+        <Card.Body className={liClass}>
           <Card.Text className="cardText">
             Name : <span className="bold">{props.medication.title}</span>
           </Card.Text>
@@ -58,6 +70,23 @@ const MedicationItem = props => {
             <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           </OverlayTrigger>
 
+
+          {props.visitPage !== true && (
+            <OverlayTrigger
+              key={'top'}
+              placement={'top'}
+              overlay={
+                <Popover id={`popover-positioned-${'top'}`}>
+                  <Popover.Content>
+                    <strong>Toggle Highlight</strong>
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <FontAwesomeIcon icon={faHighlighter} className="listIcon" onClick={props.togglePatientMedicationHighlighted.bind(this, props.medication)}/>
+            </OverlayTrigger>
+          )}
+
           {state === true && (
             <Row className="listItemHiddenRow">
             <ul>
@@ -74,6 +103,11 @@ const MedicationItem = props => {
               <li>
               <Card.Text className="cardText">
                 Description: <span className="bold">{props.medication.description}</span>
+              </Card.Text>
+              </li>
+              <li>
+              <Card.Text className="cardText">
+                Dosage: <span className="bold">{props.medication.dosage}</span>
               </Card.Text>
               </li>
               <li>

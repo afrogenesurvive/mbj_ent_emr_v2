@@ -8,7 +8,7 @@ import Container from 'react-bootstrap/Container';
 import ListGroup from 'react-bootstrap/ListGroup';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Popover from 'react-bootstrap/Popover';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import loadingGif from '../../assets/loading.gif';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -35,7 +35,6 @@ const FloatMenu = (props) =>{
   } else {
     highlighted = `${props.page}${props.menu}`;
   }
-
 
 return (
   <div className="FloatMenuTop">
@@ -495,7 +494,7 @@ return (
     <ul className="FloatSubMenuList">
     <li>
     {highlighted === 'visitdetailall' ? (
-      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
     ):(
       <Button variant="light" onClick={props.subMenuSelect.bind(this, 'all')}>All</Button>
     )}

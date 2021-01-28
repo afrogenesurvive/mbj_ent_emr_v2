@@ -9,16 +9,24 @@ import {
   faBatteryThreeQuarters,
   faPlusSquare,
   faBatteryEmpty,
-  faFolderMinus,
   faEye,
-  faTrashAlt
+  faTrashAlt,
+  faHighlighter,
+  faExclamation
 } from '@fortawesome/free-solid-svg-icons';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import './UserItem.css';
 
 const AttendanceItem = props => {
-  console.log('foo',props.attendance.highlighted);
+
+  let liClass;
+  if (props.attendance.highlighted === false) {
+    liClass = 'cardBody';
+  } else {
+    liClass = 'cardBodyHighlighted';
+  }
+
   const [state, setState] = useState(false);
   const handleStateChange = () => {
     if (state === true) {
@@ -42,10 +50,18 @@ const AttendanceItem = props => {
   return (
     <li key={props.key} className="">
       <Card>
-        <Card.Body className="cardBody">
-          <Card.Text className="cardText">
-          Date: <span className="bold">{moment.unix(props.attendance.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
-          </Card.Text>
+        <Card.Body className={liClass}>
+          {props.attendance.date.length == 12 && (
+            <Card.Text className="cardText">
+            Date: <span className="bold">{moment.unix(props.attendance.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+            </Card.Text>
+          )}
+          {props.attendance.date.length == 13 && (
+            <Card.Text className="cardText">
+            Date: <span className="bold">{moment.unix(props.attendance.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+            </Card.Text>
+          )}
+
           <Card.Text className="cardText">
             Status: <span className="bold">{props.attendance.status}</span>
           </Card.Text>
@@ -64,13 +80,35 @@ const AttendanceItem = props => {
             <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           </OverlayTrigger>
 
+
+          <OverlayTrigger
+            key={'top'}
+            placement={'top'}
+            overlay={
+              <Popover id={`popover-positioned-${'top'}`}>
+                <Popover.Content>
+                  <strong>Toggle Highlight</strong>
+                </Popover.Content>
+              </Popover>
+            }
+          >
+            <FontAwesomeIcon icon={faHighlighter} className="listIcon" onClick={props.toggleStaffAttendanceHighlighted.bind(this, props.attendance)}/>
+          </OverlayTrigger>
+
           {state === true && (
             <Row className="listItemHiddenRow">
             <ul>
               <li>
-              <Card.Text className="cardText">
-              Date: <span className="bold">{moment.unix(props.attendance.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
-              </Card.Text>
+              {props.attendance.date.length == 12 && (
+                <Card.Text className="cardText">
+                Date: <span className="bold">{moment.unix(props.attendance.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                </Card.Text>
+              )}
+              {props.attendance.date.length == 13 && (
+                <Card.Text className="cardText">
+                Date: <span className="bold">{moment.unix(props.attendance.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                </Card.Text>
+              )}
               </li>
               <li>
               <Card.Text className="cardText">

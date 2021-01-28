@@ -44,6 +44,7 @@ const PatientMedicationList = props => {
         onAddAttachment={props.onAddAttachment}
         deleteAttachment={props.deleteAttachment}
         visitPage={props.visitPage}
+        togglePatientMedicationHighlighted={props.togglePatientMedicationHighlighted}
       />
     );
   });

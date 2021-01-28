@@ -5,14 +5,27 @@ import Row from 'react-bootstrap/Row';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Popover from 'react-bootstrap/Popover';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
-import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBatteryThreeQuarters,
+  faPlusSquare,
+  faBatteryEmpty,
+  faEye,
+  faTrashAlt,
+  faHighlighter,
+  faExclamation
+} from '@fortawesome/free-solid-svg-icons';
 
 import './UserItem.css';
 
 const FileItem = (props) => {
+
+  let liClass;
+  if (props.file.highlighted === false) {
+    liClass = 'cardBody';
+  } else {
+    liClass = 'cardBodyHighlighted';
+  }
+
   const [state, setState] = useState(false);
   const handleStateChange = () => {
     if (state === true) {
@@ -36,7 +49,7 @@ const FileItem = (props) => {
   return (
     <li key={props.key} className="">
       <Card>
-        <Card.Body className="cardBody">
+        <Card.Body className={liClass}>
         <Card.Text className="cardText">
         <a href={props.file.path} target="_blank" rel="noopener noreferrer">{props.file.name}</a>
         </Card.Text>
@@ -53,6 +66,20 @@ const FileItem = (props) => {
           }
         >
           <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+        </OverlayTrigger>
+
+        <OverlayTrigger
+          key={'top'}
+          placement={'top'}
+          overlay={
+            <Popover id={`popover-positioned-${'top'}`}>
+              <Popover.Content>
+                <strong>Toggle Highlight</strong>
+              </Popover.Content>
+            </Popover>
+          }
+        >
+          <FontAwesomeIcon icon={faHighlighter} className="listIcon" onClick={props.toggleStaffFileHighlighted.bind(this, props.file)}/>
         </OverlayTrigger>
 
           {state === true && (

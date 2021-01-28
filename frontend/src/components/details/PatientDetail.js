@@ -1,29 +1,30 @@
 import React, { Component } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Image from 'react-bootstrap/Image';
+// import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
+// import Container from 'react-bootstrap/Container';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
-import Nav from 'react-bootstrap/Nav';
+// import Nav from 'react-bootstrap/Nav';
 import { NavLink, Link } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
-import Popover from 'react-bootstrap/Popover';
-import moment from 'moment';
+// import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+// import Popover from 'react-bootstrap/Popover';
+import moment from 'moment-timezone';
 
 import FullCalendar from '@fullcalendar/react';
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import bootstrapPlugin from '@fullcalendar/bootstrap';
+// import bootstrapPlugin from '@fullcalendar/bootstrap';
 import '../../calendar.scss'
 import S3 from 'react-aws-s3';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AuthContext from '../../context/auth-context';
-import AlertBox from '../alertBox/AlertBox';
+// import AlertBox from '../alertBox/AlertBox';
 import LoadingOverlay from '../overlay/LoadingOverlay';
+import LoadingOverlay2 from '../overlay/LoadingOverlay2';
 import PdfView from '../pdfView/PdfView';
 
 import PatientAddressList from '../lists/patient/PatientAddressList';
@@ -52,8 +53,8 @@ import FilterTagForm from '../forms/filter/FilterTagForm';
 
 import UpdatePatientSingleFieldForm from '../forms/add/UpdatePatientSingleFieldForm';
 import AddAddressForm from '../forms/add/AddAddressForm';
-import AddAttendanceForm from '../forms/add/AddAttendanceForm';
-import AddLeaveForm from '../forms/add/AddLeaveForm';
+// import AddAttendanceForm from '../forms/add/AddAttendanceForm';
+// import AddLeaveForm from '../forms/add/AddLeaveForm';
 import AddNoteForm from '../forms/add/AddNoteForm';
 import AddTagForm from '../forms/add/AddTagForm';
 import AddImageForm from '../forms/add/AddImageForm';
@@ -64,10 +65,10 @@ import AddMedicationForm from '../forms/add/AddMedicationForm';
 import AddComorbidityForm from '../forms/add/AddComorbidityForm';
 import AddAttachmentForm from '../forms/add/AddAttachmentForm';
 
-import FloatMenu from '../../components/floatMenu/FloatMenu';
-import loadingGif from '../../assets/loading.gif';
+// import FloatMenu from '../../components/floatMenu/FloatMenu';
+// import loadingGif from '../../assets/loading.gif';
 import {
-  faBath,
+  // faBath,
   faExclamationTriangle,
  } from '@fortawesome/free-solid-svg-icons';
 import './details.css';
@@ -77,6 +78,7 @@ class PatientDetail extends Component {
     activityA: null,
     role: null,
     overlay: false,
+    overlay2: false,
     overlayStatus: "test",
     isGuest: true,
     context: null,
@@ -169,7 +171,7 @@ getPocketVars (args) {
               activityId:"${activityId}")}
           `};
 
-    fetch('http://localhost:8088/graphql', {
+     fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -219,7 +221,7 @@ logUserActivity(args) {
         })
       {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -248,7 +250,7 @@ submitAddAddressForm = (event) => {
   event.preventDefault();
   console.log('...adding address...');
   this.context.setUserAlert('...adding address...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -268,7 +270,7 @@ submitAddAddressForm = (event) => {
       country.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -288,7 +290,7 @@ submitAddAddressForm = (event) => {
         })
       {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -320,6 +322,7 @@ submitAddAddressForm = (event) => {
       this.props.updatePatient(resData.data.addPatientAddress)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.addPatientAddress,
         activityA: `addPatientAddress?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -333,13 +336,13 @@ submitAddAddressForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteAddress = (args) => {
   console.log('...deleting address...');
   this.context.setUserAlert('...deleting address...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -362,7 +365,7 @@ deleteAddress = (args) => {
         })
       {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -394,6 +397,7 @@ deleteAddress = (args) => {
       this.props.updatePatient(resData.data.deletePatientAddress)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.deletePatientAddress,
         activityA: `deletePatientAddress?activityId:${activityId},patientId:${patientId}`
       });
@@ -403,13 +407,13 @@ deleteAddress = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 setAddressPrimary = (args) => {
   console.log('...setting primary address...');
   this.context.setUserAlert('...setting primary address...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -431,7 +435,7 @@ setAddressPrimary = (args) => {
         })
         {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -463,6 +467,7 @@ setAddressPrimary = (args) => {
       this.props.updatePatient(resData.data.setPatientAddressPrimary)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.setPatientAddressPrimary,
         activityA: `setPatientAddressPrimary?activityId:${activityId},patientId:${patientId}`
       });
@@ -472,7 +477,7 @@ setAddressPrimary = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -480,7 +485,7 @@ submitAddNextOfKinForm = (event) => {
   event.preventDefault();
   console.log('...add next of kin...');
   this.context.setUserAlert('...adding next of kin...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -497,7 +502,7 @@ submitAddNextOfKinForm = (event) => {
       phone.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -515,7 +520,7 @@ submitAddNextOfKinForm = (event) => {
         })
       {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -547,6 +552,7 @@ submitAddNextOfKinForm = (event) => {
       this.props.updatePatient(resData.data.addPatientNextOfKin)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.addPatientNextOfKin,
         activityA: `addPatientNextOfKin?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -560,13 +566,13 @@ submitAddNextOfKinForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteNextOfKin = (args) => {
   console.log('...deleting next of kin...');
   this.context.setUserAlert('...deleting next of kin....')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -582,11 +588,12 @@ deleteNextOfKin = (args) => {
           nextOfKinRelation:"${args.relation}",
           nextOfKinContactEmail:"${args.contact.email}",
           nextOfKinContactPhone1:"${args.contact.phone1}",
-          nextOfKinContactPhone2:"${args.contact.phone2}"
+          nextOfKinContactPhone2:"${args.contact.phone2}",
+          nextOfKinHighlighted:${args.highlighted}
         })
       {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -618,6 +625,7 @@ deleteNextOfKin = (args) => {
       this.props.updatePatient(resData.data.deletePatientNextOfKin)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.deletePatientNextOfKin,
         activityA: `deletePatientNextOfKin?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -631,7 +639,7 @@ deleteNextOfKin = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -639,7 +647,7 @@ submitAddAllergyForm = (event) => {
   event.preventDefault();
   console.log('...add allergy...');
   this.context.setUserAlert('...adding allergy...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -652,7 +660,7 @@ submitAddAllergyForm = (event) => {
       description.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -748,7 +756,7 @@ submitAddAllergyForm = (event) => {
         })
       {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -780,6 +788,7 @@ submitAddAllergyForm = (event) => {
       this.props.updatePatient(resData.data.addPatientAllergy)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.addPatientAllergy,
         activityA: `addPatientAllergy?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -793,13 +802,13 @@ submitAddAllergyForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteAllergy = (args) => {
   console.log('...deleting allergy...');
   this.context.setUserAlert('...deleting allergy...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -814,11 +823,12 @@ deleteAllergy = (args) => {
           allergyType:"${args.type}",
           allergyTitle:"${args.title}",
           allergyDescription:"${args.description}",
-          allergyAttachments:"${args.attachments}"
+          allergyAttachments:"${args.attachments}",
+          allergyHighlighted:${args.highlighted}
         })
       {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -850,6 +860,7 @@ deleteAllergy = (args) => {
       this.props.updatePatient(resData.data.deletePatientAllergy)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.deletePatientAllergy,
         activityA: `deletePatientAllergy?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -906,7 +917,7 @@ deleteAllergy = (args) => {
         .deleteFile(filename2, config)
         .then(response => {
           console.log(response)
-          this.context.setUserAlert(response)
+          this.context.setUserAlert(response.message)
           this.setState({
             overlayStatus: null,
             overlay: false,
@@ -924,26 +935,26 @@ deleteAllergy = (args) => {
       }
       console.log('end');
 
-
-
     })
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 submitAddMedicationForm = (event) => {
   event.preventDefault();
   console.log('...add medication...');
   this.context.setUserAlert('...adding medication...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
   const patientId = this.props.patient._id;
-  const title = this.props.patient.name+"_medication_"+moment().format("YYYY-MM-DD, h:mm:ss a");
+  const title = event.target.title.value;
+  // const title = this.props.patient.name+"_medication_"+moment().format("YYYY-MM-DD, h:mm:ss a");
   const type = event.target.type.value;
+  const dosage = event.target.dosage.value;
   const description = event.target.description.value.replace(/\n/g, ' ');
 
   if (
@@ -951,7 +962,7 @@ submitAddMedicationForm = (event) => {
       type.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -1043,11 +1054,12 @@ submitAddMedicationForm = (event) => {
           medicationType:"${type}",
           medicationTitle:"${title}",
           medicationDescription:"${description}",
+          medicationDosage:"${dosage}",
           medicationAttachment:"${file2Path}"
         })
       {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1079,6 +1091,7 @@ submitAddMedicationForm = (event) => {
       this.props.updatePatient(resData.data.addPatientMedication)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.addPatientMedication,
         activityA: `addPatientMedication?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -1092,13 +1105,13 @@ submitAddMedicationForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteMedication = (args) => {
-  console.log('...deleting medication...');
+  console.log('...deleting medication...',args);
   this.context.setUserAlert('...deleting medication...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -1113,11 +1126,13 @@ deleteMedication = (args) => {
           medicationType:"${args.type}",
           medicationTitle:"${args.title}",
           medicationDescription:"${args.description}",
+          medicationDosage:"${args.dosage}",
+          medicationHighlighted:${args.highlighted},
           medicationAttachments:"${args.attachments}"
         })
       {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1149,6 +1164,7 @@ deleteMedication = (args) => {
       this.props.updatePatient(resData.data.deletePatientMedication)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.deletePatientMedication,
         activityA: `deletePatientMedication?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -1205,7 +1221,7 @@ deleteMedication = (args) => {
         .deleteFile(filename2, config)
         .then(response => {
           console.log(response)
-          this.context.setUserAlert(response)
+          this.context.setUserAlert(response.message)
           this.setState({
             overlayStatus: null,
             overlay: false,
@@ -1228,7 +1244,7 @@ deleteMedication = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -1236,7 +1252,7 @@ submitAddComorbidityForm = (event) => {
   event.preventDefault();
   console.log('...add comorbidities...');
   this.context.setUserAlert('...adding comorbidities...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -1250,7 +1266,7 @@ submitAddComorbidityForm = (event) => {
       type.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -1264,9 +1280,9 @@ submitAddComorbidityForm = (event) => {
           comorbidityTitle:"${title}",
           comorbidityDescription:"${description}"
         })
-      {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},comorbidities{type,title,description},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
+      {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1281,7 +1297,7 @@ submitAddComorbidityForm = (event) => {
       return res.json();
     })
     .then(resData => {
-      // console.log('...resData...',resData.data.addPatientComorbidity);
+      console.log('...resData...',resData.data.addPatientComorbidity);
       let responseAlert = '...Comorbidity add success!...';
       let error = null;
 
@@ -1298,6 +1314,7 @@ submitAddComorbidityForm = (event) => {
       this.props.updatePatient(resData.data.addPatientComorbidity)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.addPatientComorbidity,
         activityA: `addPatientComorbidity?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -1311,13 +1328,13 @@ submitAddComorbidityForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteComorbidity = (args) => {
   console.log('...deleting medication...',args);
   this.context.setUserAlert('...deleting medication...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -1331,12 +1348,13 @@ deleteComorbidity = (args) => {
         patientInput:{
           comorbidityType:"${args.type}",
           comorbidityTitle:"${args.title}",
-          comorbidityDescription:"${args.description}"
+          comorbidityDescription:"${args.description}",
+          comorbidityHighlighted:${args.highlighted}
         })
-      {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2}},allergies{type,title,description,attachments},medication{type,title,description,attachments},comorbidities{type,title,description},images{name,type,path},files{name,type,path},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
+      {_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
 
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1368,6 +1386,7 @@ deleteComorbidity = (args) => {
       this.props.updatePatient(resData.data.deletePatientComorbidity)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.deletePatientComorbidity,
         activityA: `deletePatientComorbidity?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -1382,7 +1401,7 @@ deleteComorbidity = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -1404,7 +1423,8 @@ addAttachment = (event) => {
   this.context.setUserAlert('...adding attachment...');
   this.setState({
     isLoading: true,
-    addAttachmentForm: false
+    addAttachmentForm: false,
+    overlay2: true
   })
 
   const token = this.context.token;
@@ -1417,7 +1437,7 @@ addAttachment = (event) => {
 
   if (event.target.fileInput.value === "" ) {
     this.context.setUserAlert("...no file!? Please add a file...")
-        this.setState({isLoading: false})
+        this.setState({isLoading: false, overlay2: false})
         return;
   }
 
@@ -1548,7 +1568,7 @@ addAttachment = (event) => {
 
 
 
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1588,6 +1608,7 @@ addAttachment = (event) => {
         this.props.updatePatient(resData.data.addPatientAllergyAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedPatient: resData.data.addPatientAllergyAttachment,
           activityA: `addPatientAllergyAttachmentRegex?activityId:${activityId},patientId:${patientId}`
         });
@@ -1596,6 +1617,7 @@ addAttachment = (event) => {
         this.props.updatePatient(resData.data.addPatientMedicationAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedPatient: resData.data.addPatientMedicationAttachment,
           activityA: `addPatientMedicationAttachment?activityId:${activityId},patientId:${patientId}`
         });
@@ -1606,14 +1628,14 @@ addAttachment = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
 }
 deleteAttachment = (args) => {
   console.log('...deleting attachment...');
   this.context.setUserAlert('...adding attachment...');
-  this.setState({isLoading: true})
+  this.setState({isLoading: true, overlay2: true})
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -1667,7 +1689,7 @@ deleteAttachment = (args) => {
       `};
   }
 
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1707,6 +1729,7 @@ deleteAttachment = (args) => {
         this.props.updatePatient(resData.data.deletePatientAllergyAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedPatient: resData.data.deletePatientAllergyAttachment,
           activityA: `deletePatientAllergyAttachment?activityId:${activityId},patientId:${patientId}`
         });
@@ -1715,6 +1738,7 @@ deleteAttachment = (args) => {
         this.props.updatePatient(resData.data.deletePatientMedicationAttachment)
         this.setState({
           isLoading: false,
+          overlay2: false,
           selectedPatient: resData.data.deletePatientMedicationAttachment,
           activityA: `deletePatientMedicationAttachment?activityId:${activityId},patientId:${patientId}`
         });
@@ -1760,7 +1784,7 @@ deleteAttachment = (args) => {
       .deleteFile(filename2, config)
       .then(response => {
         console.log(response)
-        this.context.setUserAlert(response)
+        this.context.setUserAlert(response.message)
         this.setState({
           overlayStatus: null,
           overlay: false,
@@ -1778,7 +1802,7 @@ deleteAttachment = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 
 }
@@ -1787,7 +1811,7 @@ submitAddImageForm = (event) => {
   event.preventDefault();
   console.log('...adding image...');
   this.context.setUserAlert('...adding image...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -1800,7 +1824,7 @@ submitAddImageForm = (event) => {
 
   if (event.target.fileInput.value === "" ) {
     this.context.setUserAlert("...no file!? Please add a file...")
-        this.setState({isLoading: false})
+        this.setState({isLoading: false, overlay2: false})
         return;
   }
 
@@ -1888,7 +1912,7 @@ submitAddImageForm = (event) => {
         })
       {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1920,6 +1944,7 @@ submitAddImageForm = (event) => {
       this.props.updatePatient(resData.data.addPatientImage)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.addPatientImage,
         activityA: `addPatientImage?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -1933,13 +1958,13 @@ submitAddImageForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteImage = (args) => {
   console.log('...deleting image...');
   this.context.setUserAlert('...deleting image...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -1957,11 +1982,12 @@ deleteImage = (args) => {
       patientInput:{
         imageName:"${args.name}",
         imageType:"${args.type}",
-        imagePath:"${args.path}"
+        imagePath:"${args.path}",
+        imageHighlighted:${args.highlighted}
       })
     {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1993,6 +2019,7 @@ deleteImage = (args) => {
       this.props.updatePatient(resData.data.deletePatientImage)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.deletePatientImage,
         activityA: `deletePatientImage?activityId:${activityId},patientId:${patientId}`
       });
@@ -2049,7 +2076,7 @@ deleteImage = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -2057,7 +2084,7 @@ submitAddFileForm = (event) => {
   event.preventDefault();
   console.log('...adding file...');
   this.context.setUserAlert('...adding file...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -2071,7 +2098,7 @@ submitAddFileForm = (event) => {
 
   if (event.target.fileInput.value === "" ) {
     this.context.setUserAlert("...no file!? Please add a file...")
-        this.setState({isLoading: false})
+        this.setState({isLoading: false, overlay2: false})
         return;
   }
 
@@ -2159,7 +2186,7 @@ submitAddFileForm = (event) => {
         })
       {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -2191,6 +2218,7 @@ submitAddFileForm = (event) => {
       this.props.updatePatient(resData.data.addPatientFile)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.addPatientFile,
         activityA: `addPatientFile?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -2204,13 +2232,13 @@ submitAddFileForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteFile = (args) => {
   console.log('...deleting file...');
   this.context.setUserAlert('...deleting file...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -2225,11 +2253,12 @@ deleteFile = (args) => {
       patientInput:{
         fileName:"${args.name}",
         fileType:"${args.type}",
-        filePath:"${args.path}"
+        filePath:"${args.path}",
+        fileHighlighted:${args.highlighted}
       })
     {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -2261,6 +2290,7 @@ deleteFile = (args) => {
       this.props.updatePatient(resData.data.deletePatientFile)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.deletePatientFile,
         activityA: `deletePatientFile?activityId:${activityId},patientId:${patientId}`
       });
@@ -2319,7 +2349,7 @@ deleteFile = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -2327,7 +2357,7 @@ submitAddNoteForm = (event) => {
   event.preventDefault();
   console.log('...adding notes...');
   this.context.setUserAlert('...adding notes...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -2338,7 +2368,7 @@ submitAddNoteForm = (event) => {
       notes.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -2352,7 +2382,7 @@ submitAddNoteForm = (event) => {
         })
       {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -2384,6 +2414,7 @@ submitAddNoteForm = (event) => {
       this.props.updatePatient(resData.data.addPatientNotes)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.addPatientNotes,
         activityA: `addPatientNotes?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -2397,13 +2428,13 @@ submitAddNoteForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteNote = (args) => {
   console.log('...deleting note...');
   this.context.setUserAlert('...deleting note...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -2419,7 +2450,7 @@ deleteNote = (args) => {
         })
         {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -2451,6 +2482,7 @@ deleteNote = (args) => {
       this.props.updatePatient(resData.data.deletePatientNote)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.deletePatientNote,
         activityA: `deletePatientNote?activityId:${activityId},patientId:${patientId}`
       });
@@ -2460,14 +2492,14 @@ deleteNote = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 submitAddTagForm = (event) => {
   event.preventDefault();
   console.log('...adding tags...');
   this.context.setUserAlert('...adding tags...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -2478,7 +2510,7 @@ submitAddTagForm = (event) => {
       tags.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -2492,7 +2524,7 @@ submitAddTagForm = (event) => {
         })
       {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -2524,6 +2556,7 @@ submitAddTagForm = (event) => {
       this.props.updatePatient(resData.data.addPatientTags)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.addPatientTags,
         activityA: `addPatientTags?activityId:${activityId},patientId:${patientId}`,
         adding: {
@@ -2537,13 +2570,13 @@ submitAddTagForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteTag = (args) => {
   console.log('...deleting tag...');
   this.context.setUserAlert('...deleting tag...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -2559,7 +2592,7 @@ deleteTag = (args) => {
         })
         {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -2591,6 +2624,7 @@ deleteTag = (args) => {
       this.props.updatePatient(resData.data.deletePatientTag)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.deletePatientTag,
         activityA: `deletePatienTag?activityId:${activityId},patientId:${patientId}`
       });
@@ -2600,7 +2634,7 @@ deleteTag = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -2608,7 +2642,7 @@ submitUpdateSingleFieldForm = (event) => {
   event.preventDefault();
   console.log('...updating single field...');
   this.context.setUserAlert('...updating single field...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -2620,7 +2654,7 @@ submitUpdateSingleFieldForm = (event) => {
       query.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -2634,7 +2668,7 @@ submitUpdateSingleFieldForm = (event) => {
     )
     {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -2666,6 +2700,7 @@ submitUpdateSingleFieldForm = (event) => {
       this.props.updatePatient(resData.data.updatePatientSingleField)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.updatePatientSingleField,
         activityA: `updatePatientSingleField?activityId:${activityId},patientId:${patientId}`,
         updateSingleField: {
@@ -2679,7 +2714,7 @@ submitUpdateSingleFieldForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 startUpdateSingleField = (args) => {
@@ -2762,10 +2797,13 @@ cancelAdd = () => {
 
 parseForCalendar = (args) => {
   console.log('...parsing patient dates for calendar...');
+  this.setState({
+    overlay2: true
+  })
 
   let calendarAppointments = args.appointments.map(x => ({
       title: x.title,
-      date: moment.unix(x.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      date: moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD'),
       props: {
         _id: x._id,
         date: x.date,
@@ -2781,7 +2819,7 @@ parseForCalendar = (args) => {
     }))
   let calendarVisits = args.visits.map(x => ({
       title: x.title,
-      date: moment.unix(x.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      date: moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD'),
       props: {
         _id: x._id,
         date: x.date,
@@ -2792,9 +2830,63 @@ parseForCalendar = (args) => {
         field: 'visits'
       }
     }))
+
+    let calendarAppointments2;
+    for (const x of args.appointments) {
+      let date;
+      if (x.date.length == 12) {
+        date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+      } else if (x.date.length == 13) {
+        date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+      }
+      let evt = {
+        title: x.title,
+        date: date,
+        props: {
+          _id: x._id,
+          date: x.date,
+          title: x.title,
+          type: x.type,
+          subType: x.subType,
+          time: x.time,
+          location: x.location,
+          description: x.description,
+          important: x.important,
+          field: 'appointments'
+        }
+      }
+      calendarAppointments2.push(evt)
+
+    }
+    let calendarVisits2;
+    for (const x of args.visits) {
+      let date;
+      if (x.date.length == 12) {
+        date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+      } else if (x.date.length == 13) {
+        date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+      }
+      let evt = {
+        title: x.title,
+        date: date,
+        props: {
+          _id: x._id,
+          date: x.date,
+          title: x.title,
+          type: x.type,
+          subType: x.subType,
+          time: x.time,
+          field: 'visits'
+        }
+      }
+      calendarVisits2.push(evt)
+
+    }
+
     this.setState({
-      calendarAppointments: calendarAppointments,
-      calendarVisits: calendarVisits,
+      calendarAppointments: calendarAppointments2,
+      calendarVisits: calendarVisits2,
+      overlay2: false
     })
 }
 viewCalendarEvent = (args) => {
@@ -2874,7 +2966,6 @@ showPdfView = (args) => {
     }
   })
 }
-
 closePdfView = () => {
   this.setState({
     showPdfView: false,
@@ -2914,6 +3005,474 @@ checkAllergies = () => {
   })
 }
 
+togglePatientComorbidityHighlighted = (args) => {
+  console.log('togglePatientComorbidityHighlighted');
+  this.context.setUserAlert('...toggling patient comorbidity highlight...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+  let requestBody;
+
+  requestBody = {
+    query: `
+      mutation {
+        togglePatientComorbidityHighlighted(
+          activityId:"${activityId}",
+          patientId:"${patientId}",
+          patientInput:{
+            comorbidityType:"${args.type}",
+            comorbidityTitle:"${args.title}",
+            comorbidityDescription:"${args.description}",
+            comorbidityHighlighted: ${args.highlighted}
+          })
+          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.togglePatientComorbidityHighlighted);
+      let responseAlert = `...comorbidity highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.togglePatientComorbidityHighlighted)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedPatient: resData.data.togglePatientComorbidityHighlighted,
+        activityA: `togglePatientComorbidityHighlighted?activityId:${activityId},patientId:${patientId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedPatient = resData.data.togglePatientComorbidityHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
+togglePatientAllergyHighlighted = (args) => {
+  console.log('togglePatientAllergyHighlighted');
+  this.context.setUserAlert('...toggling patient allergy highlight...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+  let requestBody;
+
+  requestBody = {
+    query: `
+      mutation {
+        togglePatientAllergyHighlighted(
+          activityId:"${activityId}",
+          patientId:"${patientId}",
+          patientInput:{
+            allergyType:"${args.type}",
+            allergyTitle:"${args.title}",
+            allergyDescription:"${args.description}",
+            allergyAttachments:"${args.attachments}",
+            allergyHighlighted: ${args.highlighted}
+          })
+          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.togglePatientAllergyHighlighted);
+      let responseAlert = `...allergy highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.togglePatientAllergyHighlighted)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedPatient: resData.data.togglePatientAllergyHighlighted,
+        activityA: `togglePatientAllergyHighlighted?activityId:${activityId},patientId:${patientId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedPatient = resData.data.togglePatientAllergyHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
+togglePatientFileHighlighted = (args) => {
+  console.log('togglePatientFileHighlighted');
+  this.context.setUserAlert('...toggling patient file highlight...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+  let requestBody;
+
+
+  requestBody = {
+    query: `
+      mutation {
+        togglePatientFileHighlighted(
+          activityId:"${activityId}",
+          patientId:"${patientId}",
+          patientInput:{
+            fileName:"${args.name}",
+            fileType:"${args.type}",
+            filePath:"${args.path}",
+            fileHighlighted: ${args.highlighted},
+          })
+          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.togglePatientFileHighlighted);
+      let responseAlert = `...file highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.togglePatientFileHighlighted)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedPatient: resData.data.togglePatientFileHighlighted,
+        activityA: `togglePatientFileHighlighted?activityId:${activityId},patientId:${patientId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedPatient = resData.data.togglePatientFileHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
+togglePatientImageHighlighted = (args) => {
+  console.log('togglePatientImageHighlighted');
+  this.context.setUserAlert('...toggling patient image highlight...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+  let requestBody;
+
+  const name = args.name;
+  const type = args.type;
+  const path = args.path;
+  let highlighted = args.highlighted;
+
+  requestBody = {
+    query: `
+      mutation {
+        togglePatientImageHighlighted(
+          activityId:"${activityId}",
+          patientId:"${patientId}",
+          patientInput:{
+            imageName:"${name}",
+            imageType:"${type}",
+            imagePath:"${path}"
+            imageHighlighted: ${highlighted},
+          })
+          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.togglePatientImageHighlighted);
+      let responseAlert = `...image highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.togglePatientImageHighlighted)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedPatient: resData.data.togglePatientImageHighlighted,
+        activityA: `togglePatientImageHighlighted?activityId:${activityId},patientId:${patientId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedPatient = resData.data.togglePatientImageHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
+togglePatientMedicationHighlighted = (args) => {
+  console.log('togglePatientMedicationHighlighted');
+  this.context.setUserAlert('...toggling patient medication highlight...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+  let requestBody;
+
+  requestBody = {
+    query: `
+      mutation {
+        togglePatientMedicationHighlighted(
+          activityId:"${activityId}",
+          patientId:"${patientId}",
+          patientInput:{
+            medicationType:"${args.type}",
+            medicationTitle:"${args.title}",
+            medicationDescription:"${args.description}",
+            medicationDosage:"${args.dosage}",
+            medicationAttachments:"${args.attachments}",
+            medicationHighlighted:${args.highlighted}
+          })
+          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.togglePatientMedicationHighlighted);
+      let responseAlert = `...medication highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.togglePatientMedicationHighlighted)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedPatient: resData.data.togglePatientMedicationHighlighted,
+        activityA: `togglePatientMedicationHighlighted?activityId:${activityId},patientId:${patientId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedPatient = resData.data.togglePatientMedicationHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
+togglePatientNextOfKinHighlighted = (args) => {
+  console.log('togglePatientNextOfKinHighlighted');
+  this.context.setUserAlert('...toggling patient nextOfKin highlight...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+  let requestBody;
+
+  requestBody = {
+    query: `
+      mutation {
+        togglePatientNextOfKinHighlighted(
+          activityId:"${activityId}",
+          patientId:"${patientId}",
+          patientInput:{
+            nextOfKinName:"${args.name}",
+            nextOfKinRelation:"${args.relation}",
+            nextOfKinContactEmail:"${args.contact.email}",
+            nextOfKinContactPhone1:"${args.contact.phone1}",
+            nextOfKinContactPhone2:"${args.contact.phone2}",
+            nextOfKinHighlighted: ${args.highlighted},
+          })
+          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.togglePatientNextOfKinHighlighted);
+      let responseAlert = `...nextOfKin highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.togglePatientNextOfKinHighlighted)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedPatient: resData.data.togglePatientNextOfKinHighlighted,
+        activityA: `togglePatientNextOfKinHighlighted?activityId:${activityId},patientId:${patientId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedPatient = resData.data.togglePatientNextOfKinHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
+
 render() {
 
   return (
@@ -2925,6 +3484,11 @@ render() {
       <LoadingOverlay
         status={this.state.overlayStatus}
         toggleOverlay={this.toggleOverlay}
+      />
+    )}
+    {this.state.overlay2 === true && (
+      <LoadingOverlay2
+        toggleOverlay2={this.toggleOverlay2}
       />
     )}
 
@@ -2939,78 +3503,6 @@ render() {
       <Row className="">
         {this.props.patient && (
           <Col md={12} className="">
-            {
-            //   this.state.startFilter === true && (
-            //   <Col>
-            //     {this.selectFilter === 'address' && (
-            //       <FilterAddressForm
-            //         onCancel={this.toggleFilter}
-            //         onConfirm={this.submitFilterForm}
-            //       />
-            //     )}
-            //     {this.selectFilter === 'nextOfKin' && (
-            //       <FilterNextOfKinForm
-            //         onCancel={this.toggleFilter}
-            //         onConfirm={this.submitFilterForm}
-            //       />
-            //     )}
-            //     {this.selectFilter === 'allergy' && (
-            //       <FilterAllergyForm
-            //         onCancel={this.toggleFilter}
-            //         onConfirm={this.submitFilterForm}
-            //       />
-            //     )}
-            //     {this.selectFilter === 'medication' && (
-            //       <FilterMedicationForm
-            //         onCancel={this.toggleFilter}
-            //         onConfirm={this.submitFilterForm}
-            //       />
-            //     )}
-            //     {this.selectFilter === 'comorbidities' && (
-            //       <FilterComorbidityForm
-            //         onCancel={this.toggleFilter}
-            //         onConfirm={this.submitFilterForm}
-            //       />
-            //     )}
-            //     {this.selectFilter === 'image' && (
-            //       <FilterImageForm
-            //         onCancel={this.toggleFilter}
-            //         onConfirm={this.submitFilterForm}
-            //       />
-            //     )}
-            //     {this.selectFilter === 'file' && (
-            //       <FilterFileForm
-            //         onCancel={this.toggleFilter}
-            //         onConfirm={this.submitFilterForm}
-            //       />
-            //     )}
-            //     {this.selectFilter === 'appointment' && (
-            //       <FilterAppointmentForm
-            //         onCancel={this.toggleFilter}
-            //         onConfirm={this.submitFilterForm}
-            //       />
-            //     )}
-            //     {this.selectFilter === 'visit' && (
-            //       <FilterVisitForm
-            //         onCancel={this.toggleFilter}
-            //         onConfirm={this.submitFilterForm}
-            //       />
-            //     )}
-            //     {this.selectFilter === 'note' && (
-            //       <FilterNoteForm
-            //         onCancel={this.toggleFilter}
-            //         onConfirm={this.submitFilterForm}
-            //       />
-            //     )}
-            //     {this.selectFilter === 'tag' && (
-            //       <FilterTagForm
-            //         onCancel={this.toggleFilter}
-            //         onConfirm={this.submitFilterForm}
-            //       />
-            //     )}
-            //   </Col>
-            // )
-          }
 
             {this.state.updateSingleField.state === true && (
               <UpdatePatientSingleFieldForm
@@ -3070,7 +3562,12 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">DOB:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  {this.props.patient.dob.length == 12 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
+                  {this.props.patient.dob.length == 13 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
                 </ListGroup.Item>
                 <ListGroup.Item>
@@ -3107,7 +3604,12 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  {this.props.patient.registration.date.length == 12 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
+                  {this.props.patient.registration.date.length == 13 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Number:</p>
@@ -3118,8 +3620,11 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
-                  {this.props.patient.referral.date && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  {this.props.patient.referral.date && this.props.patient.referral.date.length == 12 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
+                  {this.props.patient.referral.date && this.props.patient.referral.date.length == 13 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.date')}>Edit</Button>
                 </ListGroup.Item>
@@ -3198,7 +3703,12 @@ render() {
                 {this.props.patient.insurance.expiryDate && (
                   <ListGroup.Item>
                   <p className="listGroupText">Expiry:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  {this.props.patient.insurance.expiryDate.length == 12 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
+                  {this.props.patient.insurance.expiryDate.length == 13 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.expiryDate')}>Edit</Button>
                   </ListGroup.Item>
                 )}
@@ -3217,7 +3727,12 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Date of Death:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  {this.props.patient.expiryDate.length == 12 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
+                  {this.props.patient.expiryDate.length == 13 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'expiryDate')}>Edit</Button>
                 </ListGroup.Item>
               </ListGroup>
@@ -3256,6 +3771,7 @@ render() {
                   authId={this.context.activityId}
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteComorbidity}
+                  togglePatientComorbidityHighlighted={this.togglePatientComorbidityHighlighted}
                 />
               </Col>
               </li>
@@ -3350,6 +3866,7 @@ render() {
                   authId={this.context.activityId}
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteNextOfKin}
+                  togglePatientNextOfKinHighlighted={this.togglePatientNextOfKinHighlighted}
                 />
               </Col>
               </li>
@@ -3395,6 +3912,7 @@ render() {
                   onDelete={this.deleteAllergy}
                   onAddAttachment={this.startAddAttachment}
                   deleteAttachment={this.deleteAttachment}
+                  togglePatientAllergyHighlighted={this.togglePatientAllergyHighlighted}
                 />
               </Col>
               </li>
@@ -3435,6 +3953,7 @@ render() {
                   onDelete={this.deleteMedication}
                   onAddAttachment={this.startAddAttachment}
                   deleteAttachment={this.deleteAttachment}
+                  togglePatientMedicationHighlighted={this.togglePatientMedicationHighlighted}
                 />
               </Col>
               </li>
@@ -3468,6 +3987,7 @@ render() {
                   authId={this.context.activityId}
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteImage}
+                  togglePatientImageHighlighted={this.togglePatientImageHighlighted}
                 />
               </Col>
               </li>
@@ -3500,6 +4020,7 @@ render() {
                   authId={this.context.activityId}
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteFile}
+                  togglePatientFileHighlighted={this.togglePatientFileHighlighted}
                 />
               </Col>
               </li>
@@ -3671,7 +4192,12 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">DOB:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  {this.props.patient.dob.length == 12 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
+                  {this.props.patient.dob.length == 13 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
                 </ListGroup.Item>
                 <ListGroup.Item>
@@ -3708,7 +4234,12 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  {this.props.patient.registration.date.length == 12 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
+                  {this.props.patient.registration.date.length == 13 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Number:</p>
@@ -3719,8 +4250,11 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
-                  {this.props.patient.referral.date && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  {this.props.patient.referral.date && this.props.patient.referral.date.length == 12 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
+                  {this.props.patient.referral.date && this.props.patient.referral.date.length == 13 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.date')}>Edit</Button>
                 </ListGroup.Item>
@@ -3799,7 +4333,12 @@ render() {
                 {this.props.patient.insurance.expiryDate && (
                   <ListGroup.Item>
                   <p className="listGroupText">Expiry:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  {this.props.patient.insurance.expiryDate.length == 12 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
+                  {this.props.patient.insurance.expiryDate.length == 13 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.expiryDate')}>Edit</Button>
                   </ListGroup.Item>
                 )}
@@ -3818,7 +4357,12 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Date of Death:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  {this.props.patient.expiryDate.length == 12 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
+                  {this.props.patient.expiryDate.length == 13 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'expiryDate')}>Edit</Button>
                 </ListGroup.Item>
               </ListGroup>
@@ -3915,6 +4459,7 @@ render() {
                   authId={this.context.activityId}
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteNextOfKin}
+                  togglePatientNextOfKinHighlighted={this.togglePatientNextOfKinHighlighted}
                 />
               </Col>
             )}
@@ -3959,6 +4504,7 @@ render() {
                   onDelete={this.deleteAllergy}
                   onAddAttachment={this.startAddAttachment}
                   deleteAttachment={this.deleteAttachment}
+                  togglePatientAllergyHighlighted={this.togglePatientAllergyHighlighted}
                 />
               </Col>
             )}
@@ -3999,6 +4545,7 @@ render() {
                   onDelete={this.deleteMedication}
                   onAddAttachment={this.startAddAttachment}
                   deleteAttachment={this.deleteAttachment}
+                  togglePatientMedicationHighlighted={this.togglePatientMedicationHighlighted}
                 />
               </Col>
             )}
@@ -4031,6 +4578,7 @@ render() {
                   authId={this.context.activityId}
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteComorbidity}
+                  togglePatientComorbidityHighlighted={this.togglePatientComorbidityHighlighted}
                 />
               </Col>
             )}
@@ -4063,6 +4611,7 @@ render() {
                   authId={this.context.activityId}
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteImage}
+                  togglePatientImageHighlighted={this.togglePatientImageHighlighted}
                 />
               </Col>
             )}
@@ -4095,6 +4644,7 @@ render() {
                   authId={this.context.activityId}
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteFile}
+                  togglePatientFileHighlighted={this.togglePatientFileHighlighted}
                 />
               </Col>
             )}
@@ -4253,35 +4803,35 @@ render() {
                       <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'referral', data: 'abc_xyz'})}>Create</Button>
                     </ListGroup.Item>
                     <ListGroup.Item>
-                      <p className="listGroupText">admissionReminder</p>
+                      <p className="listGroupText">Admission Reminder</p>
                       <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'admissionReminder', data: 'abc_xyz'})}>Create</Button>
                     </ListGroup.Item>
                     <ListGroup.Item>
-                      <p className="listGroupText">sickNote</p>
+                      <p className="listGroupText">Sick Note</p>
                       <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'sickNote', data: 'abc_xyz'})}>Create</Button>
                     </ListGroup.Item>
                     <ListGroup.Item>
-                      <p className="listGroupText">insurance</p>
+                      <p className="listGroupText">Insurance</p>
                       <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'insurance', data: 'abc_xyz'})}>Create</Button>
                     </ListGroup.Item>
                     <ListGroup.Item>
-                      <p className="listGroupText">diagnosisTesting</p>
+                      <p className="listGroupText">Diagnosis/Testing</p>
                       <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'diagnosisTesting', data: 'abc_xyz'})}>Create</Button>
                     </ListGroup.Item>
                     <ListGroup.Item>
-                      <p className="listGroupText">prescription</p>
+                      <p className="listGroupText">Prescription</p>
                       <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'prescription', data: 'abc_xyz'})}>Create</Button>
                     </ListGroup.Item>
                     <ListGroup.Item>
-                      <p className="listGroupText">treatmentConsent</p>
+                      <p className="listGroupText">Treatment Consent</p>
                       <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'treatmentConsent', data: 'abc_xyz'})}>Create</Button>
                     </ListGroup.Item>
                     <ListGroup.Item>
-                      <p className="listGroupText">treatmentInstructions</p>
+                      <p className="listGroupText">Treatment Instructions</p>
                       <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'treatmentInstructions', data: 'abc_xyz'})}>Create</Button>
                     </ListGroup.Item>
                     <ListGroup.Item>
-                      <p className="listGroupText">unfitToFly</p>
+                      <p className="listGroupText">Unfit-To-Fly</p>
                       <Button variant="outline-primary" size="sm" onClick={this.showPdfView.bind(this, {type: 'unfitToFly', data: 'abc_xyz'})}>Create</Button>
                     </ListGroup.Item>
                   </ListGroup>

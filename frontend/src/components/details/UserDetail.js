@@ -9,7 +9,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import Nav from 'react-bootstrap/Nav';
 import { NavLink } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import FullCalendar from '@fullcalendar/react';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -22,6 +22,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AuthContext from '../../context/auth-context';
 import AlertBox from '../alertBox/AlertBox';
 import LoadingOverlay from '../overlay/LoadingOverlay';
+import LoadingOverlay2 from '../overlay/LoadingOverlay2';
 
 import UserAddressList from '../lists/user/UserAddressList'
 import UserAttendanceList from '../lists/user/UserAttendanceList'
@@ -55,6 +56,7 @@ class UserDetail extends Component {
     activityA: null,
     role: null,
     overlay: false,
+    overlay2: false,
     overlayStatus: "test",
     isGuest: true,
     context: null,
@@ -139,7 +141,7 @@ getPocketVars (args) {
               activityId:"${activityId}")}
           `};
 
-    fetch('http://localhost:8088/graphql', {
+     fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -188,7 +190,7 @@ logUserActivity(args) {
         })
       {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -220,7 +222,7 @@ submitAddAddressForm = (event) => {
   event.preventDefault();
   console.log('...adding address...');
   this.context.setUserAlert('...adding address...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -240,7 +242,7 @@ submitAddAddressForm = (event) => {
       country.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -260,7 +262,7 @@ submitAddAddressForm = (event) => {
         })
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -292,6 +294,7 @@ submitAddAddressForm = (event) => {
       this.props.updateUser(resData.data.addUserAddress)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedUser: resData.data.addUserAddress,
         activityA: `addUserAddress?activityId:${activityId},userId:${userId}`,
         adding: {
@@ -305,13 +308,13 @@ submitAddAddressForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteAddress = (args) => {
   console.log('...deleting address...');
   this.context.setUserAlert('...deleting address...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -334,7 +337,7 @@ deleteAddress = (args) => {
         })
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -366,6 +369,7 @@ deleteAddress = (args) => {
       this.props.updateUser(resData.data.deleteUserAddress)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedUser: resData.data.deleteUserAddress,
         activityA: `deleteUserAddress?activityId:${activityId},userId:${userId}`
       });
@@ -375,13 +379,13 @@ deleteAddress = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 setAddressPrimary = (args) => {
   console.log('...setting primary address...');
   this.context.setUserAlert('...setting primary address...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -403,7 +407,7 @@ setAddressPrimary = (args) => {
         })
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -435,6 +439,7 @@ setAddressPrimary = (args) => {
       this.props.updateUser(resData.data.setUserAddressPrimary)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedUser: resData.data.setUserAddressPrimary,
         activityA: `setUserAddressPrimary?activityId:${activityId},userId:${userId}`
       });
@@ -444,14 +449,14 @@ setAddressPrimary = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 submitAddAttendanceForm = (event) => {
   event.preventDefault();
   console.log('...adding attendance...');
   this.context.setUserAlert('...attendance...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -465,7 +470,7 @@ submitAddAttendanceForm = (event) => {
       attendanceStatus.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -481,7 +486,7 @@ submitAddAttendanceForm = (event) => {
         })
       {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -513,6 +518,7 @@ submitAddAttendanceForm = (event) => {
       this.props.updateUser(resData.data.addUserAttendance)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedUser: resData.data.addUserAttendance,
         activityA: `addUserAttendance?activityId:${activityId},userId:${userId}`,
         adding: {
@@ -531,13 +537,13 @@ submitAddAttendanceForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteAttendance = (args) => {
   console.log('...deleting attendance...');
   this.context.setUserAlert('...deleting attendance...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -551,10 +557,11 @@ deleteAttendance = (args) => {
           userInput:{
             attendanceDate:"${args.date}",
             attendanceStatus:"${args.status}",
-            attendanceDescription:"${args.description}"
+            attendanceDescription:"${args.description}",
+            attendanceHighlighted:${args.highlighted}
           }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -600,14 +607,14 @@ deleteAttendance = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 submitAddLeaveForm = (event) => {
   event.preventDefault();
   console.log('...adding leave...');
   this.context.setUserAlert('...leave...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -623,7 +630,7 @@ submitAddLeaveForm = (event) => {
       type.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -639,7 +646,7 @@ submitAddLeaveForm = (event) => {
           leaveDescription:"${description}"
         }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -671,6 +678,7 @@ submitAddLeaveForm = (event) => {
       this.props.updateUser(resData.data.addUserLeave)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedUser: resData.data.addUserLeave,
         activityA: `addUserLeave?activityId:${activityId},userId:${userId}`,
         adding: {
@@ -689,13 +697,13 @@ submitAddLeaveForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteLeave = (args) => {
   console.log('...deleting leave...');
   this.context.setUserAlert('...deleting leave...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -710,11 +718,12 @@ deleteLeave = (args) => {
             leaveType:"${args.type}",
             leaveStartDate:"${args.startDate}",
             leaveEndDate:"${args.endDate}",
-            leaveDescription:"${args.description}"
+            leaveDescription:"${args.description}",
+            leaveHighlighted:${args.highlighted}
           })
           {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -746,6 +755,7 @@ deleteLeave = (args) => {
       this.props.updateUser(resData.data.deleteUserLeave)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedUser: resData.data.deleteUserLeave,
         activityA: `deleteUserLeave?activityId:${activityId},userId:${userId}`
       });
@@ -760,14 +770,14 @@ deleteLeave = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 submitAddImageForm = (event) => {
   event.preventDefault();
   console.log('...adding image...');
   this.context.setUserAlert('...image...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -779,7 +789,7 @@ submitAddImageForm = (event) => {
 
   if (event.target.fileInput.value === "" ) {
     this.context.setUserAlert("...no file!? Please add a file...")
-        this.setState({isLoading: false})
+        this.setState({isLoading: false, overlay2: false})
         return;
   }
 
@@ -866,7 +876,7 @@ submitAddImageForm = (event) => {
         })
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -898,6 +908,7 @@ submitAddImageForm = (event) => {
       this.props.updateUser(resData.data.addUserImage)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedUser: resData.data.addUserImage,
         activityA: `addUserImage?activityId:${activityId},userId:${userId}`,
         adding: {
@@ -911,13 +922,13 @@ submitAddImageForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteImage = (args) => {
   console.log('...deleting image...');
   this.context.setUserAlert('...deleting image...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -935,11 +946,12 @@ deleteImage = (args) => {
           userInput:{
             imageName:"${args.name}",
             imageType:"${args.type}",
-            imagePath:"${args.path}"
+            imagePath:"${args.path}",
+            imageHighlighted:${args.highlighted}
           })
           {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -971,6 +983,7 @@ deleteImage = (args) => {
       this.props.updateUser(resData.data.deleteUserImage)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedUser: resData.data.deleteUserImage,
         activityA: `deleteUserImage?activityId:${activityId},userId:${userId}`
       });
@@ -1030,14 +1043,14 @@ deleteImage = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 submitAddFileForm = (event) => {
   event.preventDefault();
   console.log('...adding file...');
   this.context.setUserAlert('...file...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -1050,7 +1063,7 @@ submitAddFileForm = (event) => {
 
   if (event.target.fileInput.value === "" ) {
     this.context.setUserAlert("...no file!? Please add a file...")
-        this.setState({isLoading: false})
+        this.setState({isLoading: false, overlay2: false})
         return;
   }
 
@@ -1139,7 +1152,7 @@ submitAddFileForm = (event) => {
         })
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1171,6 +1184,7 @@ submitAddFileForm = (event) => {
       this.props.updateUser(resData.data.addUserFile)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedUser: resData.data.addUserFile,
         activityA: `addUserFile?activityId:${activityId},userId:${userId}`,
         adding: {
@@ -1184,13 +1198,13 @@ submitAddFileForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteFile = (args) => {
   console.log('...deleting file...');
   this.context.setUserAlert('...deleting file...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -1206,11 +1220,12 @@ deleteFile = (args) => {
           userInput:{
             fileName:"${args.name}",
             fileType:"${args.type}",
-            filePath:"${args.path}"
+            filePath:"${args.path}",
+            fileHighlighted:${args.highlighted}
           })
           {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1242,6 +1257,7 @@ deleteFile = (args) => {
       this.props.updateUser(resData.data.deleteUserFile)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedUser: resData.data.deleteUserFile,
         activityA: `deleteUserFile?activityId:${activityId},userId:${userId}`
       });
@@ -1301,14 +1317,14 @@ deleteFile = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 submitAddNoteForm = (event) => {
   event.preventDefault();
   console.log('...adding note...');
   this.context.setUserAlert('...adding note...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -1320,7 +1336,7 @@ submitAddNoteForm = (event) => {
       note.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -1335,7 +1351,7 @@ submitAddNoteForm = (event) => {
           notes:"${note}"
         }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1367,6 +1383,7 @@ submitAddNoteForm = (event) => {
       this.props.updateUser(resData.data.addUserNotes)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedUser: resData.data.addUserNotes,
         activityA: `addUserNotes?activityId:${activityId},userId:${userId}`,
         adding: {
@@ -1380,13 +1397,13 @@ submitAddNoteForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteNote = (args) => {
   console.log('...deleting note...');
   this.context.setUserAlert('...deleting note...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -1401,7 +1418,7 @@ deleteNote = (args) => {
           })
           {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1433,6 +1450,7 @@ deleteNote = (args) => {
       this.props.updateUser(resData.data.deleteUserNote)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedUser: resData.data.deleteUserNote,
         activityA: `deleteUserNote?activityId:${activityId},userId:${userId}`
       });
@@ -1442,7 +1460,7 @@ deleteNote = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -1450,7 +1468,7 @@ submitUpdateSingleFieldForm = (event) => {
   event.preventDefault();
   console.log('...updating single field...');
   this.context.setUserAlert('...updating single field...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -1462,7 +1480,7 @@ submitUpdateSingleFieldForm = (event) => {
       query.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -1476,7 +1494,7 @@ submitUpdateSingleFieldForm = (event) => {
       )
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1508,6 +1526,7 @@ submitUpdateSingleFieldForm = (event) => {
       this.props.updateUser(resData.data.updateUserSingleField)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedUser: resData.data.updateUserSingleField,
         activityA: `updateUserSingleField?activityId:${activityId},userId:${userId}`,
         updateSingleField: {
@@ -1521,7 +1540,7 @@ submitUpdateSingleFieldForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 startUpdateSingleField = (args) => {
@@ -1605,36 +1624,110 @@ cancelAdd = () => {
 
 parseForCalendar = (args) => {
   console.log('...parsing staff dates for calendar...');
+  this.setState({
+    overlay2: true
+  })
   let calendarAttendance = args.attendance.map(x => ({
       title: x.status,
-      date: moment.unix(x.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      date: moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD'),
       props: {
         date: x.date,
         status: x.status,
         description: x.description,
+        highlighted: x.highlighted,
         field: 'attendance'
       }
     }))
   let calendarLeave = args.leave.map(x => ({
       title: x.type,
-      date: moment.unix(x.startDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
-      end: moment.unix(x.endDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      date: moment.unix(x.startDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD'),
+      end: moment.unix(x.endDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD'),
       props: {
         date: x.date,
         type: x.type,
         startDate: x.startDate,
         endDate: x.endDate,
         description: x.description,
+        highlighted: x.highlighted,
         field: 'leave'
       }
     }))
-    this.setState({
-      calendarAttendance: calendarAttendance,
-      calendarLeave: calendarLeave
-    })
+    // this.setState({
+    //   calendarAttendance: calendarAttendance,
+    //   calendarLeave: calendarLeave
+    // })
+  let calendarAttendance2 = [];
+  for (const x of args.attendance) {
+    let color = 'blue';
+
+    if (x.highlighted === true) {
+      color = 'red'
+    }
+
+    let date;
+    if (x.date.length == 12) {
+      date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+    } else if (x.date.length == 13) {
+      date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+    }
+
+    let evt = {
+      title: x.status,
+      color: color,
+      date: x.date,
+      props: {
+        date: date,
+        status: x.status,
+        description: x.description,
+        highlighted: x.highlighted,
+        field: 'attendance'
+      }
+    }
+    calendarAttendance2.push(evt);
+  }
+  let calendarLeave2 = [];
+  for (const x of args.leave) {
+    let color = 'blue';
+
+    if (x.highlighted === true) {
+      color = 'red'
+    }
+
+    let startDate;
+    let endDate;
+    if (x.startDate.length == 12) {
+      startDate = moment.unix(x.startDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+    }
+    if (x.endDate.length == 12) {
+      endDate = moment.unix(x.endDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+    }
+    if (x.startDate.length == 13) {
+      startDate = moment.unix(x.startDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+    }
+    if (x.endDate.length == 13) {
+      endDate = moment.unix(x.endDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+    }
+
+    let evt = {
+      title: x.type,
+      color: color,
+      date: startDate,
+      end: endDate,
+      props: {
+        date: x.date,
+        type: x.type,
+        startDate: x.startDate,
+        endDate: x.endDate,
+        description: x.description,
+        highlighted: x.highlighted,
+        field: 'leave'
+      }
+    }
+    calendarLeave2.push(evt)
+  }
   let calendarAppointments = args.appointments.map(x => ({
       title: x.title,
-      date: moment.unix(x.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      date: moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD'),
       props: {
         _id: x._id,
         date: x.date,
@@ -1649,10 +1742,41 @@ parseForCalendar = (args) => {
         patient: x.patient,
       }
     }))
+
+  let calendarAppointments2 = [];
+  for (const x of args.appointments) {
+    let date;
+    if (x.date.length == 12) {
+      date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+    } else if (x.date.length == 13) {
+      date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+    }
+
+    let evt = {
+      title: x.title,
+      date: date,
+      props: {
+        _id: x._id,
+        date: x.date,
+        title: x.title,
+        type: x.type,
+        subType: x.subType,
+        time: x.time,
+        location: x.location,
+        description: x.description,
+        important: x.important,
+        field: 'appointments',
+        patient: x.patient,
+      }
+    }
+    calendarAppointments2.push(evt)
+  }
+
     this.setState({
-      calendarAttendance: calendarAttendance,
-      calendarLeave: calendarLeave,
-      calendarAppointments: calendarAppointments,
+      calendarAttendance: calendarAttendance2,
+      calendarLeave: calendarLeave2,
+      calendarAppointments: calendarAppointments2,
+      overlay2: false
     })
 }
 viewCalendarEvent = (args) => {
@@ -1716,6 +1840,319 @@ toggleOverlay = () => {
   })
 }
 
+toggleStaffImageHighlighted = (args) => {
+  console.log('toggleStaffImageHighlighted');
+  this.context.setUserAlert('...toggling staff image highlight...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const userId = this.props.user._id;
+  let requestBody;
+
+  const name = args.name;
+  const type = args.type;
+  const path = args.path;
+  let highlighted = args.highlighted;
+
+  requestBody = {
+    query: `
+      mutation {
+        toggleUserImageHighlighted(
+          activityId:"${activityId}",
+          userId:"${userId}",
+          userInput:{
+            imageName:"${name}",
+            imageType:"${type}",
+            imagePath:"${path}",
+            imageHighlighted: ${highlighted}
+          })
+          {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.toggleUserImageHighlighted);
+      let responseAlert = `...image highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updateUser(resData.data.toggleUserImageHighlighted)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedUser: resData.data.toggleUserImageHighlighted,
+        activityA: `toggleUserImageHighlighted?activityId:${activityId},userId:${userId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedUser = resData.data.toggleUserImageHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
+toggleStaffLeaveHighlighted = (args) => {
+  console.log('toggleStaffLeaveHighlighted');
+  this.context.setUserAlert('...toggling staff leave highlight...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const userId = this.props.user._id;
+  let requestBody;
+
+  requestBody = {
+    query: `
+      mutation {toggleUserLeaveHighlighted(
+        activityId:"${activityId}",
+        userId:"${userId}",
+        userInput:{
+          leaveType:"${args.type}",
+          leaveStartDate:"${args.startDate}",
+          leaveEndDate:"${args.endDate}",
+          leaveDescription:"${args.description}",
+          leaveHighlighted:${args.highlighted}
+        }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.toggleUserLeaveHighlighted);
+      let responseAlert = `...leave highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updateUser(resData.data.toggleUserLeaveHighlighted)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedUser: resData.data.toggleUserLeaveHighlighted,
+        activityA: `toggleUserLeaveHighlighted?activityId:${activityId},userId:${userId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+
+      this.context.selectedUser = resData.data.toggleUserLeaveHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+}
+toggleStaffAttendanceHighlighted = (args) => {
+  console.log('toggleStaffAttendanceHighlighted');
+  this.context.setUserAlert('...toggling staff attendance highlight...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const userId = this.props.user._id;
+  let requestBody;
+
+  requestBody = {
+    query: `
+      mutation {toggleUserAttendanceHighlighted(
+        activityId:"${activityId}",
+        userId:"${userId}",
+        userInput:{
+          attendanceDate:"${args.date}",
+          attendanceStatus:"${args.status}",
+          attendanceDescription:"${args.description}",
+          attendanceHighlighted:${args.highlighted}
+        }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.toggleUserAttendanceHighlighted);
+      let responseAlert = `...attendance highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updateUser(resData.data.toggleUserAttendanceHighlighted)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedUser: resData.data.toggleUserAttendanceHighlighted,
+        activityA: `toggleUserAttendanceHighlighted?activityId:${activityId},userId:${userId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+
+      this.context.selectedUser = resData.data.toggleUserAttendanceHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false,overlay2: false })
+    });
+
+}
+toggleStaffFileHighlighted = (args) => {
+  console.log('toggleStaffFileHighlighted');
+  this.context.setUserAlert('...toggling staff file highlight...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const userId = this.props.user._id;
+  let requestBody;
+
+  const name = args.name;
+  const type = args.type;
+  const path = args.path;
+  let highlighted = args.highlighted;
+
+  requestBody = {
+    query: `
+      mutation {
+        toggleUserFileHighlighted(
+          activityId:"${activityId}",
+          userId:"${userId}",
+          userInput:{
+            fileName:"${name}",
+            fileType:"${type}",
+            filePath:"${path}",
+            fileHighlighted: ${highlighted}
+          })
+          {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.toggleUserFileHighlighted);
+      let responseAlert = `...file highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updateUser(resData.data.toggleUserFileHighlighted)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedUser: resData.data.toggleUserFileHighlighted,
+        activityA: `toggleUserFileHighlighted?activityId:${activityId},userId:${userId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedUser = resData.data.toggleUserFileHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
+
 
 render() {
 
@@ -1726,6 +2163,11 @@ render() {
       <LoadingOverlay
         status={this.state.overlayStatus}
         toggleOverlay={this.toggleOverlay}
+      />
+    )}
+    {this.state.overlay2 === true && (
+      <LoadingOverlay2
+        toggleOverlay2={this.toggleOverlay2}
       />
     )}
 
@@ -1741,55 +2183,6 @@ render() {
       <Row className="">
         {this.props.user && (
           <Col md={12} className="">
-
-            {
-          //     this.state.startFilter === true && (
-          //   <Col>
-          //     {this.state.selectFilter === 'address' && (
-          //       <FilterAddressForm
-          //         onCancel={this.toggleFilter}
-          //         onConfirm={this.submitFilterForm}
-          //       />
-          //     )}
-          //     {this.state.selectFilter === 'attendance' && (
-          //       <FilterAttendanceForm
-          //         onCancel={this.toggleFilter}
-          //         onConfirm={this.submitFilterForm}
-          //       />
-          //     )}
-          //     {this.state.selectFilter === 'leave' && (
-          //       <FilterLeaveForm
-          //         onCancel={this.toggleFilter}
-          //         onConfirm={this.submitFilterForm}
-          //       />
-          //     )}
-          //     {this.state.selectFilter === 'image' && (
-          //       <FilterImageForm
-          //         onCancel={this.toggleFilter}
-          //         onConfirm={this.submitFilterForm}
-          //       />
-          //     )}
-          //     {this.state.selectFilter === 'file' && (
-          //       <FilterFileForm
-          //         onCancel={this.toggleFilter}
-          //         onConfirm={this.submitFilterForm}
-          //       />
-          //     )}
-          //     {this.state.selectFilter === 'appointment' && (
-          //       <FilterAppointmentForm
-          //         onCancel={this.toggleFilter}
-          //         onConfirm={this.submitFilterForm}
-          //       />
-          //     )}
-          //     {this.state.selectFilter === 'note' && (
-          //       <FilterNoteForm
-          //         onCancel={this.toggleFilter}
-          //         onConfirm={this.submitFilterForm}
-          //       />
-          //     )}
-          //   </Col>
-          // )
-        }
 
             {this.state.updateSingleField.state === true && (
               <UpdateUserSingleFieldForm
@@ -1839,7 +2232,12 @@ render() {
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <p className="listGroupText">DOB:</p>
-                    <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                    {this.props.user.dob.length == 12 && (
+                      <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    )}
+                    {this.props.user.dob.length == 13 && (
+                      <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    )}
                     {this.state.canDelete === true && (
                       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
                     )}
@@ -1891,8 +2289,11 @@ render() {
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <p className="listGroupText">Employment Date:</p>
-                    {this.props.user.employmentDate && (
-                      <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                    {this.props.user.employmentDate && this.props.user.employmentDate.length == 12 && (
+                      <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    )}
+                    {this.props.user.employmentDate && this.props.user.employmentDate.length == 13 && (
+                      <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                     )}
                     {this.context.role === 'Admin' && (
                       <Button variant="primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'employmentDate')}>Edit</Button>
@@ -1993,6 +2394,7 @@ render() {
                   authId={this.context.activityId}
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteAttendance}
+                  toggleStaffAttendanceHighlighted={this.toggleStaffAttendanceHighlighted}
                 />
                 </Tab>
                 <Tab eventKey="2" title="calendar" className="calendarTab">
@@ -2043,6 +2445,7 @@ render() {
                   authId={this.context.activityId}
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteLeave}
+                  toggleStaffLeaveHighlighted={this.toggleStaffLeaveHighlighted}
                 />
                 </Tab>
                 <Tab eventKey="2" title="calendar" className="calendarTab">
@@ -2090,6 +2493,7 @@ render() {
                 showListDetails={this.showListDetails}
                 canDelete={this.state.canDelete}
                 onDelete={this.deleteImage}
+                toggleStaffImageHighlighted={this.toggleStaffImageHighlighted}
               />
               </Col>
               </li>
@@ -2124,6 +2528,7 @@ render() {
                 authId={this.context.activityId}
                 canDelete={this.state.canDelete}
                 onDelete={this.deleteFile}
+                toggleStaffFileHighlighted={this.toggleStaffFileHighlighted}
               />
               </Col>
               </li>
@@ -2239,7 +2644,12 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">DOB:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  {this.props.user.dob.length == 12 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
+                  {this.props.user.dob.length == 13 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
                   {this.state.canDelete === true && (
                     <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
                   )}
@@ -2291,8 +2701,11 @@ render() {
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <p className="listGroupText">Employment Date:</p>
-                    {this.props.user.employmentDate && (
-                      <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,9)).add(1,'days').format('YYYY-MM-DD')}</p>
+                    {this.props.user.employmentDate && this.props.user.employmentDate.length == 12 && (
+                      <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    )}
+                    {this.props.user.employmentDate && this.props.user.employmentDate.length == 13 && (
+                      <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                     )}
                     {this.context.role === 'Admin' && (
                       <Button variant="primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'employmentDate')}>Edit</Button>
@@ -2393,6 +2806,7 @@ render() {
                   authId={this.context.activityId}
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteAttendance}
+                  toggleStaffAttendanceHighlighted={this.toggleStaffAttendanceHighlighted}
                 />
                 </Tab>
                 <Tab eventKey="2" title="calendar" className="calendarTab">
@@ -2443,6 +2857,7 @@ render() {
                   authId={this.context.activityId}
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteLeave}
+                  toggleStaffLeaveHighlighted={this.toggleStaffLeaveHighlighted}
                 />
                 </Tab>
                 <Tab eventKey="2" title="calendar" className="calendarTab">
@@ -2490,6 +2905,7 @@ render() {
                 showListDetails={this.showListDetails}
                 canDelete={this.state.canDelete}
                 onDelete={this.deleteImage}
+                toggleStaffImageHighlighted={this.toggleStaffImageHighlighted}
               />
               </Col>
             )}
@@ -2524,6 +2940,7 @@ render() {
                 authId={this.context.activityId}
                 canDelete={this.state.canDelete}
                 onDelete={this.deleteFile}
+                toggleStaffFileHighlighted={this.toggleStaffFileHighlighted}
               />
               </Col>
             )}

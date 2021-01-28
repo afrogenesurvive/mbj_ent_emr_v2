@@ -9,13 +9,14 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import { NavLink } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import AddToCalendar from 'react-add-to-calendar';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AuthContext from '../../context/auth-context';
 import AlertBox from '../alertBox/AlertBox';
 import LoadingOverlay from '../overlay/LoadingOverlay';
+import LoadingOverlay2 from '../overlay/LoadingOverlay2';
 
 import PatientAddressList from '../lists/patient/PatientAddressList';
 import PatientNextOfKinList from '../lists/patient/PatientNextOfKinList'
@@ -60,6 +61,7 @@ class AppointmentDetail extends Component {
     activityA: null,
     role: null,
     overlay: false,
+    overlay2: false,
     overlayStatus: "test",
     isGuest: true,
     context: null,
@@ -94,11 +96,7 @@ class AppointmentDetail extends Component {
     showAddConsultantForm: false,
     users: null,
     calEvent: {
-      title: this.props.appointment.title,
-      description: this.props.appointment.description,
-      location: this.props.appointment.location,
-      startTime: moment.unix(this.props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')+'T'+this.props.appointment.time+':00-05:00',
-      endTime: moment.unix(this.props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')+'T'+this.props.appointment.time+':00-05:00',
+
     },
   };
   static contextType = AuthContext;
@@ -109,8 +107,8 @@ constructor(props) {
 }
 
 componentDidMount () {
-  console.log('...appointment details component mounted...');
-  // console.log(moment.unix(this.props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')+'T'+this.props.appointment.time+':00-05:00');
+  console.log('...appointment details component mounted...',this.props.appointment);
+  // console.log(moment.unix(this.props.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')+'T'+this.props.appointment.time+':00-05:00');
   let seshStore;
   if (sessionStorage.getItem('logInfo')) {
     seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
@@ -124,6 +122,8 @@ componentDidMount () {
     })
   }
   this.getAllUsers(seshStore);
+
+
 }
 componentWillUnmount() {
 
@@ -146,7 +146,7 @@ logUserActivity(args) {
         })
       {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -185,7 +185,7 @@ getAllUsers (args) {
         activityId:"${activityId}" )
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -220,6 +220,8 @@ getAllUsers (args) {
         activityA: `getAllUsers?activityId:${activityId},userId:${userId}`
       });
       this.logUserActivity({activityId: activityId,token: token});
+
+      this.setStateCalEvent()
     })
     .catch(err => {
       console.log(err);
@@ -232,7 +234,7 @@ submitAddNoteForm = (event) => {
   event.preventDefault();
   console.log('...adding notes...');
   this.context.setUserAlert('...adding notes...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -257,7 +259,7 @@ submitAddNoteForm = (event) => {
         })
         {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -289,6 +291,7 @@ submitAddNoteForm = (event) => {
       this.props.updateAppointment(resData.data.addAppointmentNotes)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedAppointment: resData.data.addAppointmentNotes,
         activityA: `addAppointmentNotes?activityId:${activityId},appointmentId:${appointmentId}`,
         adding: {
@@ -302,14 +305,14 @@ submitAddNoteForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteNote = (args) => {
 
   console.log('...deleting notes...');
   this.context.setUserAlert('...deleting notes...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -326,7 +329,7 @@ deleteNote = (args) => {
         })
         {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -358,6 +361,7 @@ deleteNote = (args) => {
       this.props.updateAppointment(resData.data.deleteAppointmentNote)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedAppointment: resData.data.deleteAppointmentNote,
         activityA: `deleteAppointmentNote?activityId:${activityId},appointmentId:${appointmentId}`,
         adding: {
@@ -371,14 +375,14 @@ deleteNote = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 submitAddTagForm = (event) => {
   event.preventDefault();
   console.log('...adding tags...');
   this.context.setUserAlert('...adding tags...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -403,7 +407,7 @@ submitAddTagForm = (event) => {
         })
         {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -435,6 +439,7 @@ submitAddTagForm = (event) => {
       this.props.updateAppointment(resData.data.addAppointmentTags)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedAppointment: resData.data.addAppointmentTags,
         activityA: `addAppointmentTags?activityId:${activityId},appointmentId:${appointmentId}`,
         adding: {
@@ -448,14 +453,14 @@ submitAddTagForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteTag = (args) => {
 
   console.log('...deleting tags...');
   this.context.setUserAlert('...deleting tags...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -472,7 +477,7 @@ deleteTag = (args) => {
         })
         {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -504,6 +509,7 @@ deleteTag = (args) => {
       this.props.updateAppointment(resData.data.deleteAppointmentTag)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedAppointment: resData.data.deleteAppointmentTag,
         activityA: `deleteAppointmentTag?activityId:${activityId},appointmentId:${appointmentId}`,
         adding: {
@@ -517,7 +523,7 @@ deleteTag = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 
@@ -525,7 +531,7 @@ submitAddUserForm = (event) => {
   event.preventDefault();
   console.log('...adding consultant...');
   this.context.setUserAlert('...adding consultant...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -536,7 +542,7 @@ submitAddUserForm = (event) => {
       consultantId.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
-    this.setState({isLoading: false})
+    this.setState({isLoading: false, overlay2: false})
     return;
   }
 
@@ -556,7 +562,7 @@ submitAddUserForm = (event) => {
       )
       {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -588,21 +594,23 @@ submitAddUserForm = (event) => {
       this.props.updateAppointment(resData.data.addAppointmentConsultant)
       this.setState({
         isLoading: false,
+        overlay2: false,
         activityA: `addAppointmentConsultant?activityId:${activityId},appointmentId:${appointmentId},consultantId:${consultantId}`,
       });
       this.logUserActivity({activityId: activityId,token: token});
       this.cancelAdd();
+      this.checkConsultantAppointments(this.props.appointment.date, consultantId)
     })
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 deleteConsultant = (args) => {
   console.log('...deleting consultant...');
   this.context.setUserAlert('...deleting consultant...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
   //
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -618,7 +626,7 @@ deleteConsultant = (args) => {
       )
       {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -650,6 +658,7 @@ deleteConsultant = (args) => {
       this.props.updateAppointment(resData.data.deleteAppointmentConsultant)
       this.setState({
         isLoading: false,
+        overlay2: false,
         activityA: `deleteAppointmentConsultant?activityId:${activityId},appointmentId:${appointmentId},consultantId:${consultantId}`,
       });
       this.logUserActivity({activityId: activityId,token: token});
@@ -658,7 +667,7 @@ deleteConsultant = (args) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 startUpdatePatient = () => {
@@ -669,7 +678,7 @@ submitUpdateSingleFieldForm = (event) => {
   event.preventDefault();
   console.log('...updating single field...');
   this.context.setUserAlert('...updating single field...')
-  this.setState({isLoading: true});
+  this.setState({isLoading: true, overlay2: true});
 
   const token = this.context.token;
   const activityId = this.context.activityId;
@@ -695,7 +704,7 @@ submitUpdateSingleFieldForm = (event) => {
       )
       {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -727,6 +736,7 @@ submitUpdateSingleFieldForm = (event) => {
       this.props.updateAppointment(resData.data.updateAppointmentSingleField)
       this.setState({
         isLoading: false,
+        overlay2: false,
         selectedPatient: resData.data.updateAppointmentSingleField,
         activityA: `updateAppointmentSingleField?activityId:${activityId},appointmentId:${appointmentId}`,
         updateSingleField: {
@@ -740,7 +750,7 @@ submitUpdateSingleFieldForm = (event) => {
     .catch(err => {
       console.log(err);
       this.context.setUserAlert(err);
-      this.setState({isLoading: false })
+      this.setState({isLoading: false, overlay2: false })
     });
 }
 startUpdateSingleField = (args) => {
@@ -821,10 +831,98 @@ cancelAdd = () => {
   })
 }
 
+checkConsultantAppointments = (date, consultant) => {
+  console.log('...checking consultant appointments',date);
+  this.context.setUserAlert('...checking consultant appointments');
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const date2 = moment.unix(date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+
+  let requestBody = {
+    query: `
+      query {checkConsultantAppointments(
+        activityId:"${activityId}",
+        consultantId:"${consultant}",
+        date:"${date2}"
+      )}
+    `};
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      console.log('...resData...',resData.data.checkConsultantAppointments);
+      window.alert(`Consultant has ${resData.data.checkConsultantAppointments} appointments scheduled for that date`)
+      let responseAlert = `Consultant has ${resData.data.checkConsultantAppointments} appointments scheduled for that date`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+
+}
+
+setStateCalEvent = () => {
+
+  if (this.props.appointment.date.length == 12) {
+    this.setState({
+      calEvent: {
+        title: this.props.appointment.title,
+        description: this.props.appointment.description,
+        location: this.props.appointment.location,
+        startTime: moment.unix(this.props.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
+        endTime: moment.unix(this.props.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
+      }
+    })
+  }
+  if (this.props.appointment.date.length == 13) {
+    this.setState({
+      calEvent: {
+        title: this.props.appointment.title,
+        description: this.props.appointment.description,
+        location: this.props.appointment.location,
+        startTime: moment.unix(this.props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
+        endTime: moment.unix(this.props.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD, h:mm:ss a'),
+      }
+    })
+  }
+
+}
+
 render() {
 
   return (
     <React.Fragment>
+
+    {this.state.overlay2 === true && (
+      <LoadingOverlay2
+        toggleOverlay2={this.toggleOverlay2}
+      />
+    )}
 
     {this.state.overlay === true && (
       <LoadingOverlay
@@ -901,7 +999,7 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Time:</p>
@@ -1108,7 +1206,7 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</p>
+                  <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Time:</p>

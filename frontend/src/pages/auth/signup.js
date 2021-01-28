@@ -6,7 +6,7 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import './Auth.css';
 import AuthContext from '../../context/auth-context';
@@ -74,8 +74,7 @@ class SignUpPage extends Component {
         addressTown.trim().length === 0 ||
         addressCity.trim().length === 0 ||
         addressParish.trim().length === 0 ||
-        addressCountry.trim().length === 0 ||
-        addressPostalCode.trim().length === 0
+        addressCountry.trim().length === 0
         ) {
       this.context.setUserAlert("...blank required fields!!!...");
       return;
@@ -105,7 +104,7 @@ class SignUpPage extends Component {
             )
             {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id},reminders{_id},activity{date,request}}}
           `};
-    fetch('http://localhost:8088/graphql', {
+     fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -152,7 +151,7 @@ class SignUpPage extends Component {
         query: `
             query {verifyInvitation(challenge:"${challenge}")}
           `};
-    fetch('http://localhost:8088/graphql', {
+     fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {

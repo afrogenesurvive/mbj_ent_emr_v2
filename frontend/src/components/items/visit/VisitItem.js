@@ -18,7 +18,7 @@ import {
   faCheckSquare,
   faExternalLinkAlt
 } from '@fortawesome/free-solid-svg-icons';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import './visitItem.css';
 
@@ -48,9 +48,16 @@ const VisitItem = props => {
     <li key={props.key} className="">
       <Card>
         <Card.Body className="cardBody">
-          <Card.Text className="cardText">
-            Date: <span className="bold">{moment.unix(props.visit.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
-          </Card.Text>
+          {props.visit.date.length == 12 && (
+            <Card.Text className="cardText">
+              Date: <span className="bold">{moment.unix(props.visit.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+            </Card.Text>
+          )}
+          {props.visit.date.length == 13 && (
+            <Card.Text className="cardText">
+              Date: <span className="bold">{moment.unix(props.visit.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+            </Card.Text>
+          )}
           <Card.Text className="cardText">
             Time: <span className="bold">{props.visit.time}</span>
           </Card.Text>
@@ -136,6 +143,18 @@ const VisitItem = props => {
               <Card.Text className="cardText">
                 Id: <span className="bold">{props.visit._id}</span>
               </Card.Text>
+              </li>
+              <li>
+              {props.visit.date.length == 12 && (
+                <Card.Text className="cardText">
+                  Date: <span className="bold">{moment.unix(props.visit.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                </Card.Text>
+              )}
+              {props.visit.date.length == 13 && (
+                <Card.Text className="cardText">
+                  Date: <span className="bold">{moment.unix(props.visit.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                </Card.Text>
+              )}
               </li>
               <li>
               <Card.Text className="cardText">

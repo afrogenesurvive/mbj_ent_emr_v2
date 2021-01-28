@@ -258,6 +258,7 @@ module.exports = buildSchema(`
     allergyHighlighted: Boolean
     medicationTitle: String
     medicationType: String
+    medicationDosage: String
     medicationDescription: String
     medicationAttachment: String
     medicationAttachments: String
@@ -505,7 +506,7 @@ module.exports = buildSchema(`
     vitalsBp2: Float
     vitalsRr: Float
     vitalsTemp: Float
-    vitalsPs02: Float
+    vitalsSp02: Float
     vitalsHeightUnit: String
     vitalsHeightValue: Float
     vitalsWeightUnit: String
@@ -764,6 +765,7 @@ module.exports = buildSchema(`
     getUsersByField(activityId: ID!, field: String!, query: String!): [User]
     getUsersByFieldRegex(activityId: ID!, field: String!, query: String!): [User]
     getUsersByAppointment(activityId: ID!, appointmentId: ID!): [User]
+    checkConsultantAppointments(activityId: ID!, consultantId: ID!, date: String!): Int
 
     getAllPatients(activityId: ID!): [Patient]
     getPatientById(activityId: ID!, patientId: ID!): Patient
@@ -815,12 +817,22 @@ module.exports = buildSchema(`
     createUser(userInput: UserInput!): User
     updateUserAllFields(activityId: ID!, userId: ID!, userInput: UserInput!): User
     updateUserSingleField(activityId: ID!, userId: ID!, field: String!, query: String!): User
+
     addUserAddress(activityId: ID!, userId: ID!, userInput: UserInput!): User
     setUserAddressPrimary(activityId: ID!, userId: ID!, userInput: UserInput!): User
+
     addUserAttendance(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    toggleUserAttendanceHighlighted(activityId: ID!, userId: ID!, userInput: UserInput!): User
+
     addUserLeave(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    toggleUserLeaveHighlighted(activityId: ID!, userId: ID!, userInput: UserInput!): User
+
     addUserImage(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    toggleUserImageHighlighted(activityId: ID!, userId: ID!, userInput: UserInput!): User
+
     addUserFile(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    toggleUserFileHighlighted(activityId: ID!, userId: ID!, userInput: UserInput!): User
+
     addUserNotes(activityId: ID!, userId: ID!, userInput: UserInput!): User
     addUserReminder(activityId: ID!, userId: ID!, reminderId: ID!): User
     addUserActivity(activityId: ID!, userId: ID!, userInput: UserInput!): User
@@ -847,13 +859,25 @@ module.exports = buildSchema(`
     addPatientAddress(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     setPatientAddressPrimary(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientNextOfKin(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    togglePatientNextOfKinHighlighted(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+
     addPatientAllergy(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientAllergyAttachment(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    togglePatientAllergyHighlighted(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+
     addPatientMedication(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientMedicationAttachment(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    togglePatientMedicationHighlighted(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+
     addPatientComorbidity(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    togglePatientComorbidityHighlighted(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+
     addPatientImage(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    togglePatientImageHighlighted(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+
     addPatientFile(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    togglePatientFileHighlighted(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+
     addPatientNotes(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientTags(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientVisit(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
@@ -900,36 +924,48 @@ module.exports = buildSchema(`
     addVisitComplaint(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     toggleVisitComplaintHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitComplaintAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+
     addVisitSurvey(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitSurveyAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     toggleVisitSurveyHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+
     addVisitSysInquiry(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitSysInquiryAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     toggleVisitSysInquiryHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+
     addVisitVitals(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     toggleVisitVitalsHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+
     addVisitExamination(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitExaminationAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     toggleVisitExaminationHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+
     addVisitInvestigation(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitInvestigationAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     toggleVisitInvestigationHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+
     addVisitDiagnosis(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitDiagnosisAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     toggleVisitDiagnosisHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+
     addVisitTreatment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitTreatmentAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     toggleVisitTreatmentHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+
     addVisitBilling(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitBillingAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     updateVisitBillingPaid(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     toggleVisitBillingHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+
     addVisitVigilance(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     toggleVisitVigilanceHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+
     addVisitImage(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     toggleVisitImageHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+
     addVisitFile(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     toggleVisitFileHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+
     completeVisitById(activityId: ID!, visitId: ID!): Visit
 
     deleteVisitById(activityId: ID!, visitId: ID!): Visit

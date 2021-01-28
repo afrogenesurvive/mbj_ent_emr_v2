@@ -5,15 +5,28 @@ import Row from 'react-bootstrap/Row';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Popover from 'react-bootstrap/Popover';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
-import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import moment from 'moment';
+import {
+  faBatteryThreeQuarters,
+  faPlusSquare,
+  faBatteryEmpty,
+  faEye,
+  faTrashAlt,
+  faHighlighter,
+  faExclamation
+} from '@fortawesome/free-solid-svg-icons';
+import moment from 'moment-timezone';
 
 import './UserItem.css';
 
 const LeaveItem = props => {
+
+  let liClass;
+  if (props.leave.highlighted === false) {
+    liClass = 'cardBody';
+  } else {
+    liClass = 'cardBodyHighlighted';
+  }
+
   const [state, setState] = useState(false);
   const handleStateChange = () => {
     if (state === true) {
@@ -37,10 +50,28 @@ const LeaveItem = props => {
   return (
     <li key={props.key} className="">
       <Card>
-        <Card.Body className="cardBody">
-          <Card.Text className="cardText">
-            Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
-          </Card.Text>
+        <Card.Body className={liClass}>
+          {props.leave.startDate.length == 12 && (
+            <Card.Text className="cardText">
+              Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+            </Card.Text>
+          )}
+          {props.leave.startDate.length == 13 && (
+            <Card.Text className="cardText">
+              Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+            </Card.Text>
+          )}
+
+          {props.leave.endDate.length == 12 && (
+            <Card.Text className="cardText">
+              End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+            </Card.Text>
+          )}
+          {props.leave.endDate.length == 13 && (
+            <Card.Text className="cardText">
+              End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+            </Card.Text>
+          )}
 
           <OverlayTrigger
             key={'top'}
@@ -57,6 +88,21 @@ const LeaveItem = props => {
           </OverlayTrigger>
 
 
+          <OverlayTrigger
+            key={'top'}
+            placement={'top'}
+            overlay={
+              <Popover id={`popover-positioned-${'top'}`}>
+                <Popover.Content>
+                  <strong>Toggle Highlight</strong>
+                </Popover.Content>
+              </Popover>
+            }
+          >
+            <FontAwesomeIcon icon={faHighlighter} className="listIcon" onClick={props.toggleStaffLeaveHighlighted.bind(this, props.leave)}/>
+          </OverlayTrigger>
+
+
           {state === true && (
             <Row className="listItemHiddenRow">
             <ul>
@@ -66,14 +112,28 @@ const LeaveItem = props => {
               </Card.Text>
               </li>
               <li>
-              <Card.Text className="cardText">
-                Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
-              </Card.Text>
+              {props.leave.startDate.length == 12 && (
+                <Card.Text className="cardText">
+                  Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                </Card.Text>
+              )}
+              {props.leave.startDate.length == 13 && (
+                <Card.Text className="cardText">
+                  Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                </Card.Text>
+              )}
               </li>
               <li>
-              <Card.Text className="cardText">
-                End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,10)).add(1,'days').format('YYYY-MM-DD')}</span>
-              </Card.Text>
+              {props.leave.endDate.length == 12 && (
+                <Card.Text className="cardText">
+                  End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                </Card.Text>
+              )}
+              {props.leave.endDate.length == 13 && (
+                <Card.Text className="cardText">
+                  End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                </Card.Text>
+              )}
               </li>
               <li>
               <Card.Text className="cardText">

@@ -49,6 +49,7 @@ const UserLeaveList = props => {
         leave={leaveItem}
         canDelete={props.canDelete}
         onDelete={props.onDelete}
+        toggleStaffLeaveHighlighted={props.toggleStaffLeaveHighlighted}
       />
     );
   });

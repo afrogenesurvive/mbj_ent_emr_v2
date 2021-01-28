@@ -9,9 +9,10 @@ const Reminder = require('../../models/reminder');
 const Queue = require('../../models/queue');
 const util = require('util');
 const mongoose = require('mongoose');
-const moment = require('moment');
+// const moment = require('moment');
+const moment = require('moment-timezone');
 const mailgun = require("mailgun-js");
-const puppeteer = require('puppeteer');
+// const puppeteer = require('puppeteer');
 
 const { transformUser } = require('./merge');
 const { dateToString } = require('../../helpers/date');
@@ -35,31 +36,31 @@ module.exports = {
     //   throw err;
     // }
   },
-  testPuppeteer: async () => {
-    console.log("Resolver: testPuppeteer...");
-
-      const browser = await puppeteer.launch();
-      const page = await browser.newPage();
-      await page.goto('https://example.org/', { waitUntil: 'networkidle0' });
-
-      const data = await page.evaluate(() => document.querySelector('body').innerHTML);
-      // const data = await page.evaluate(() => document.querySelector('*').outerHTML);
-
-      // const data = await page.evaluate(
-      //   () =>  Array.from(document.querySelectorAll('*'))
-      //               .map(elem => elem.tagName)
-      // );
-
-    console.log('data',data);
-
-      await browser.close();
-
-    try {
-      return JSON.stringify(data);
-    } catch (err) {
-      throw err;
-    }
-  },
+  // testPuppeteer: async () => {
+  //   console.log("Resolver: testPuppeteer...");
+  //
+  //     const browser = await puppeteer.launch();
+  //     const page = await browser.newPage();
+  //     await page.goto('https://example.org/', { waitUntil: 'networkidle0' });
+  //
+  //     const data = await page.evaluate(() => document.querySelector('body').innerHTML);
+  //     // const data = await page.evaluate(() => document.querySelector('*').outerHTML);
+  //
+  //     // const data = await page.evaluate(
+  //     //   () =>  Array.from(document.querySelectorAll('*'))
+  //     //               .map(elem => elem.tagName)
+  //     // );
+  //
+  //   console.log('data',data);
+  //
+  //     await browser.close();
+  //
+  //   try {
+  //     return JSON.stringify(data);
+  //   } catch (err) {
+  //     throw err;
+  //   }
+  // },
   testEmail: async () => {
     console.log("Resolver: test email...");
     try {
@@ -242,6 +243,53 @@ module.exports = {
       throw err;
     }
   },
+  checkConsultantAppointments: async (args, req) => {
+    console.log("Resolver: checkConsultantAppointments...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const date = args.date;
+      console.log(date);
+      const consultant = await User.findById({_id: args.consultantId})
+      .populate('appointments');
+
+      if (date === '') {
+        console.log('invalid date...');
+        throw new Error('invalid date...')
+      }
+      if (!consultant) {
+        console.log('consultant not found! check the reference and try again...');
+        throw new Error('consultant not found! check the reference and try again...')
+      }
+      if (consultant.role === 'Staff' || consultant.role === 'Admin') {
+        console.log('consultant not found! check the reference and try again...');
+        throw new Error('consultant not found! check the reference and try again...')
+      }
+      // if (consultant && consultant.role !== 'Nurse') {
+      //   console.log('consultant not found! check the reference and try again...');
+      //   throw new Error('consultant not found! check the reference and try again...')
+      // }
+
+      const consultantAppointments = consultant.appointments.map(x=> x = {
+        date: moment(x.date).format('YYYY-MM-DD'),
+        time: x.time,
+        dateTime: moment(x.date).format('YYYY-MM-DD')+'T'+x.time+'-05:00',
+        type: x.type
+      });
+      console.log('consultantAppointments',consultantAppointments.length ,consultantAppointments[consultantAppointments.length-1]);
+      const consultantAppointmentsXDate = consultantAppointments.filter(x=>x.date === date);
+      console.log('consultantAppointmentsXDate',consultantAppointmentsXDate);
+      // calculate values of todays appts based on type
+      // check is above value added to new appt type/value exceeds daily cap thne throw error
+      let appointmentCount = consultantAppointmentsXDate.length;
+
+      return appointmentCount;
+    } catch (err) {
+      throw err;
+    }
+  },
   getPocketVars: async (args, req) => {
     console.log('Resolver: getPocketVars...');
     if (!req.isAuth) {
@@ -288,10 +336,17 @@ module.exports = {
         'contact.email': args.userInput.contactEmail,
         username: args.userInput.username
       });
+      console.log(preUser);
+      if (!preUser) {
+        console.log('User not found! Check your details & try again!');
+        throw new Error('User not found! Check your details & try again!')
+      }
+      
       const response = {
         type: preUser.verification.type,
         code: preUser.verification.code,
       };
+
       // console.log('challenge', challenge, 'response',response, 'match',challenge.type === response.type && challenge.code === response.code);
       let match = challenge.type === response.type && challenge.code === response.code;
       if (match === false) {
@@ -700,7 +755,7 @@ module.exports = {
         date: args.userInput.attendanceDate,
         status: args.userInput.attendanceStatus,
         description: args.userInput.attendanceDescription,
-        highlighted: args.userInput.attendanceHighlighted
+        highlighted: false
       };
 
       const user = await User.findOneAndUpdate(
@@ -750,6 +805,46 @@ module.exports = {
       throw err;
     }
   },
+  toggleUserAttendanceHighlighted: async (args, req) => {
+    console.log("Resolver: toggleUserAttendanceHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const attendance = {
+        date: args.userInput.attendanceDate,
+        status: args.userInput.attendanceStatus,
+        description: args.userInput.attendanceDescription,
+        highlighted: args.userInput.attendanceHighlighted
+      };
+
+      let newHighlighted;
+      if (args.userInput.attendanceHighlighted === null) {
+        newHighlighted = false;
+      } else {
+        newHighlighted = !args.userInput.attendanceHighlighted;
+      }
+
+      const user = await User.findOneAndUpdate(
+        {_id:args.userId,
+          attendance: attendance
+        },
+        {'attendance.$.highlighted': newHighlighted},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('reminders');
+      return {
+        ...user._doc,
+        _id: user.id,
+        name: user.name,
+        username: user.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
   addUserLeave: async (args, req) => {
     console.log("Resolver: addUserLeave...");
     if (!req.isAuth) {
@@ -761,7 +856,7 @@ module.exports = {
         startDate: args.userInput.leaveStartDate,
         endDate: args.userInput.leaveEndDate,
         description: args.userInput.leaveDescription,
-        highlighted: args.userInput.leaveHighlighted
+        highlighted: false
       };
 
       const user = await User.findOneAndUpdate(
@@ -812,6 +907,47 @@ module.exports = {
       throw err;
     }
   },
+  toggleUserLeaveHighlighted: async (args, req) => {
+    console.log("Resolver: toggleUserLeaveHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const leave = {
+        type: args.userInput.leaveType,
+        startDate: args.userInput.leaveStartDate,
+        endDate: args.userInput.leaveEndDate,
+        description: args.userInput.leaveDescription,
+        highlighted: args.userInput.leaveHighlighted
+      };
+
+      let newHighlighted;
+      if (args.userInput.leaveHighlighted === null) {
+        newHighlighted = false;
+      } else {
+        newHighlighted = !args.userInput.leaveHighlighted;
+      }
+
+      const user = await User.findOneAndUpdate(
+        {_id:args.userId,
+          leave: leave
+        },
+        {'leave.$.highlighted': newHighlighted},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('reminders');
+      return {
+        ...user._doc,
+        _id: user.id,
+        name: user.name,
+        username: user.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
   addUserImage: async (args, req) => {
     console.log("Resolver: addUserImage...");
     if (!req.isAuth) {
@@ -822,7 +958,7 @@ module.exports = {
         name: args.userInput.imageName,
         type: args.userInput.imageType,
         path: args.userInput.imagePath,
-        highlighted: args.userInput.imageHighlighted
+        highlighted: false
       };
 
       const user = await User.findOneAndUpdate(
@@ -872,6 +1008,46 @@ module.exports = {
       throw err;
     }
   },
+  toggleUserImageHighlighted: async (args, req) => {
+    console.log("Resolver: toggleUserImageHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const image = {
+        name: args.userInput.imageName,
+        type: args.userInput.imageType,
+        path: args.userInput.imagePath,
+        highlighted: args.userInput.imageHighlighted,
+      }
+
+      let newHighlighted;
+      if (args.userInput.imageHighlighted === null) {
+        newHighlighted = false;
+      } else {
+        newHighlighted = !args.userInput.imageHighlighted;
+      }
+
+      const user = await User.findOneAndUpdate(
+        {_id:args.userId,
+          images: image
+        },
+        {'images.$.highlighted': newHighlighted},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('reminders');
+      return {
+        ...user._doc,
+        _id: user.id,
+        name: user.name,
+        username: user.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
   addUserFile: async (args, req) => {
     console.log("Resolver: addUserFile...");
     if (!req.isAuth) {
@@ -882,7 +1058,7 @@ module.exports = {
         name: args.userInput.fileName,
         type: args.userInput.fileType,
         path: args.userInput.filePath,
-        highlighted: args.userInput.imageHighlighted
+        highlighted: false
       };
 
       const user = await User.findOneAndUpdate(
@@ -912,12 +1088,52 @@ module.exports = {
         name: args.userInput.fileName,
         type: args.userInput.fileType,
         path: args.userInput.filePath,
-        highlighted: args.userInput.imageHighlighted
+        highlighted: args.userInput.fileHighlighted
       };
 
       const user = await User.findOneAndUpdate(
         {_id:args.userId},
         {$pull: {files: file}},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate('reminders');
+      return {
+        ...user._doc,
+        _id: user.id,
+        name: user.name,
+        username: user.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  toggleUserFileHighlighted: async (args, req) => {
+    console.log("Resolver: toggleUserFileHighlighted...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const file = {
+        name: args.userInput.fileName,
+        type: args.userInput.fileType,
+        path: args.userInput.filePath,
+        highlighted: args.userInput.fileHighlighted,
+      }
+
+      let newHighlighted;
+      if (args.userInput.fileHighlighted === null) {
+        newHighlighted = false;
+      } else {
+        newHighlighted = !args.userInput.fileHighlighted;
+      }
+
+      const user = await User.findOneAndUpdate(
+        {_id:args.userId,
+          files: file
+        },
+        {'files.$.highlighted': newHighlighted},
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')

@@ -5,14 +5,27 @@ import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Popover from 'react-bootstrap/Popover';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
-import { faBatteryEmpty } from '@fortawesome/free-solid-svg-icons';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBatteryThreeQuarters,
+  faPlusSquare,
+  faBatteryEmpty,
+  faEye,
+  faTrashAlt,
+  faHighlighter,
+  faExclamation
+} from '@fortawesome/free-solid-svg-icons';
 
 import './PatientItem.css';
 
 const NextOfKinItem = props => {
+
+  let liClass;
+  if (props.nextOfKin.highlighted === false) {
+    liClass = 'cardBody';
+  } else {
+    liClass = 'cardBodyHighlighted';
+  }
+
   const [state, setState] = useState(false);
   const handleStateChange = () => {
     if (state === true) {
@@ -36,13 +49,14 @@ const NextOfKinItem = props => {
   return (
     <li key={props.key} className="">
       <Card>
-        <Card.Body className="cardBody">
+        <Card.Body className={liClass}>
           <Card.Text className="cardText">
             Name: <span className="bold">{props.nextOfKin.name}</span>
           </Card.Text>
           <Card.Text className="cardText">
             Relation: <span className="bold">{props.nextOfKin.relation}</span>
           </Card.Text>
+
           <OverlayTrigger
             key={'top'}
             placement={'top'}
@@ -55,6 +69,21 @@ const NextOfKinItem = props => {
             }
           >
             <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
+          </OverlayTrigger>
+
+
+          <OverlayTrigger
+            key={'top'}
+            placement={'top'}
+            overlay={
+              <Popover id={`popover-positioned-${'top'}`}>
+                <Popover.Content>
+                  <strong>Toggle Highlight</strong>
+                </Popover.Content>
+              </Popover>
+            }
+          >
+            <FontAwesomeIcon icon={faHighlighter} className="listIcon" onClick={props.togglePatientNextOfKinHighlighted.bind(this, props.nextOfKin)}/>
           </OverlayTrigger>
 
           {state === true && (

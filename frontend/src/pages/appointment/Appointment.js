@@ -9,7 +9,7 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import { NavLink } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AuthContext from '../../context/auth-context';
@@ -155,7 +155,7 @@ getAllAppointments (args) {
       )
       {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -222,7 +222,7 @@ getAllPatients (args) {
       )
       {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -282,7 +282,7 @@ logUserActivity(args) {
         })
       {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id},reminders{_id},activity{date,request}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -355,7 +355,7 @@ searchAppointments = (event) => {
       {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,reminders{_id},creator{_id}}}
       `};
   }
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -432,6 +432,7 @@ onStartCreateNewAppointment = () => {
   this.setState({
     creatingAppointment: true
   })
+
 }
 cancelCreateNewAppointment = () => {
   this.setState({
@@ -469,7 +470,7 @@ submitCreateNewAppointmentForm = (event) => {
   }
   console.log('foo',date);
 
-  if (date < moment().format('YYYY-MM-DD')) {
+  if (date < moment().tz("America/Bogota").format('YYYY-MM-DD')) {
     console.log('...ummm no! Please pick a date today or in the future...');
     this.context.setUserAlert('...ummm no! Please pick a date today or in the future...')
     this.setState({isLoading:false})
@@ -493,7 +494,7 @@ submitCreateNewAppointmentForm = (event) => {
         })
         {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id},consultants{_id},inProgress,attended,important,notes,tags,reminders{_id},creator{_id}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -521,6 +522,11 @@ submitCreateNewAppointmentForm = (event) => {
         error = resData.data.error;
         responseAlert = error;
       }
+
+      if (this.context.role === "Doctor") {
+        this.checkConsultantAppointments(date)
+      }
+
       this.context.setUserAlert(responseAlert)
       this.setState({
         isLoading: false,
@@ -529,6 +535,7 @@ submitCreateNewAppointmentForm = (event) => {
         selectedAppointment: resData.data.createAppointment,
         newAppointment: resData.data.createAppointment,
         tabKey: 'detail',
+        menuSelect: 'detail',
         activityA: `createAppointment?activityId:${activityId},appointmentId:${resData.data.createAppointment._id}`
       });
       this.logUserActivity({activityId: activityId,token: token});
@@ -675,7 +682,7 @@ deleteAppointment = (args) => {
       )
       {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -722,7 +729,7 @@ parseForCalendar = (args) => {
   console.log('...parsing appointments for calendar...');
   let calendarAppointments = args.map(x => ({
       title: x.title,
-      date: moment.unix(x.date.substr(0,10)).add(1,'days').format('YYYY-MM-DD'),
+      date: moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD'),
       props: {
         _id: x._id,
         date: x.date,
@@ -736,8 +743,34 @@ parseForCalendar = (args) => {
       }
     }))
 
+    let calendarAppointments2 = [];
+    for (const x of args) {
+      let date;
+      if (x.date.length == 12) {
+        date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')
+      } else if (x.date.length == 13) {
+        date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')
+      }
+      let evt = {
+        title: x.title,
+        date: date,
+        props: {
+          _id: x._id,
+          date: x.date,
+          title: x.title,
+          type: x.type,
+          subType: x.subType,
+          time: x.time,
+          location: x.location,
+          description: x.description,
+          important: x.important,
+        }
+      }
+      calendarAppointments2.push(evt)
+    }
+
     this.setState({
-      calendarAppointments: calendarAppointments,
+      calendarAppointments: calendarAppointments2,
     })
 
 }
@@ -836,7 +869,7 @@ submitSublistSearchForm = (event) => {
         {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType},reminders{_id},activity{date,request}}}
       `};
   }
-  fetch('http://localhost:8088/graphql', {
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -922,6 +955,61 @@ clearSearch = () => {
   this.setState({
     searchAppointments: null
   })
+}
+
+checkConsultantAppointments = (date) => {
+  console.log('...checking consultant appointments');
+  this.context.setUserAlert('...checking consultant appointments');
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const date2 = moment(date).tz("America/Bogota").format('YYYY-MM-DD');
+
+  let requestBody = {
+    query: `
+      query {checkConsultantAppointments(
+        activityId:"${activityId}",
+        consultantId:"${activityId}",
+        date:"${date}"
+      )}
+    `};
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      console.log('...resData...',resData.data.checkConsultantAppointments);
+      window.alert(`You have ${resData.data.checkConsultantAppointments} appointments scheduled for that date`)
+      let responseAlert = `You have ${resData.data.checkConsultantAppointments} appointments scheduled for that date`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false })
+    });
+
 }
 
 render() {
@@ -1121,11 +1209,13 @@ render() {
                 />
               </Row>
             )}
-            {this.state.newAppointment && (
-              <Row>
-                <h3>Review New Appointment {this.state.newAppointment._id}</h3>
-              </Row>
-            )}
+            {
+              //   this.state.newAppointment && (
+              //   <Row>
+              //     <h3>Review New Appointment {this.state.newAppointment._id}</h3>
+              //   </Row>
+              // )
+            }
             </Col>
           )}
           </Col>

@@ -21,6 +21,14 @@ import {
 import './UserItem.css';
 
 const AddressItem = props => {
+  
+  let liClass;
+  if (props.address.primary === false) {
+    liClass = 'cardBody';
+  } else {
+    liClass = 'cardBodyHighlighted';
+  }
+
   const [state, setState] = useState(false);
   const handleStateChange = () => {
     if (state === true) {
@@ -44,7 +52,7 @@ const AddressItem = props => {
   return (
     <li key={props.key} className="">
       <Card>
-        <Card.Body className="cardBody">
+        <Card.Body className={liClass}>
           <Card.Text className="cardText">
             Town: <span className="bold">{props.address.town}</span>
           </Card.Text>

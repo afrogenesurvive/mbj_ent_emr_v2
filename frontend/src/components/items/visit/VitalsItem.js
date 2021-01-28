@@ -98,6 +98,11 @@ const VitalsItem = props => {
             </li>
             <li>
             <Card.Text className="cardText">
+              Blood Pressure: <span className="bold">{props.vitals.bp1}/{props.vitals.bp2}</span>
+            </Card.Text>
+            </li>
+            <li>
+            <Card.Text className="cardText">
               Temperature: <span className="bold">{props.vitals.temp}</span>
             </Card.Text>
             </li>
