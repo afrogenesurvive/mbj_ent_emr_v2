@@ -16,6 +16,13 @@ An Electronic Medical Records System built on the MERN (MongoDB, Express w/ grap
 - Admin updates and in-app messaging with socket.io
 - Generate documents such as Referrals and Prescriptions in PDF format w/ patient info
 
+<img src="https://i.imgur.com/X3B0RDm.png" height="440" />
+<img src="https://i.imgur.com/vaL9Y7C.png" height="440" />
+<img src="https://i.imgur.com/7TrV8Lo.png" height="440" />
+<img src="https://i.imgur.com/TaR6ktS.png" height="440" />
+<img src="https://i.imgur.com/kpjTGgC.png" height="440" />
+<img src="https://i.imgur.com/jBxsAPl.png" height="440" />
+
 
 ## Why was it made??
 
@@ -40,7 +47,7 @@ An Electronic Medical Records System built on the MERN (MongoDB, Express w/ grap
     - FullCalendar
   - Dev Notes:
     - This app has gone through several iterations as it has been tested/reviewed along the way.
-    The database models and corresponding graphql methods have been expanded significantly since original conception. 
+    The database models and corresponding graphql methods have been expanded significantly since original conception.
 
 
 
