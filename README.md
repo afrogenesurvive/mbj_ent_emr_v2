@@ -33,3 +33,4 @@ An Electronic Medical Records System built on the MERN (MongoDB, Express w/ grap
 - Specify your database in mongoose connection string in app.js file
 - Add an .env file with the following properties
   - APP_SECRET, JWT_TOKEN, PORT, SOCKET_PORT
+- Run "npm start" in both the root and frontend folders
