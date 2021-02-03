@@ -3479,7 +3479,6 @@ render() {
     <React.Fragment>
 
 
-
     {this.state.overlay === true && (
       <LoadingOverlay
         status={this.state.overlayStatus}
@@ -3516,22 +3515,30 @@ render() {
               <ul className="summaryList">
               <li className="summaryListItem">
               <Col className="subTabCol">
-              <Link
-                to={{
-                  pathname: "/appointments",
-                  state: {newAppointment: this.props.patient}
-                }}
-              >
-              <Button variant="primary" className="searchBtn" onClick={this.new.bind(this, 'appointment')}>New Appointment</Button>
-              </Link>
-              <Link
-                to={{
-                  pathname: "/visits",
-                  state: {newVisit: this.props.patient}
-                }}
-              >
-              <Button variant="primary" className="searchBtn" onClick={this.new.bind(this, 'visit')}>New Visit</Button>
-              </Link>
+              {this.context.role === "Nurse" ||
+                this.context.role === "Doctor" && (
+                  <Link
+                    to={{
+                      pathname: "/appointments",
+                      state: {newAppointment: this.props.patient}
+                    }}
+                  >
+                  <Button variant="primary" className="searchBtn" onClick={this.new.bind(this, 'appointment')}>New Appointment</Button>
+                  </Link>
+              )}
+
+              {this.context.role === "Nurse" ||
+                this.context.role === "Doctor" && (
+                  <Link
+                    to={{
+                      pathname: "/visits",
+                      state: {newVisit: this.props.patient}
+                    }}
+                  >
+                  <Button variant="primary" className="searchBtn" onClick={this.new.bind(this, 'visit')}>New Visit</Button>
+                  </Link>
+              )}
+              
               </Col>
               </li>
               <li className="summaryListItem">

@@ -126,6 +126,7 @@ class VisitDetail extends Component {
       field: null
     },
     canDelete: false,
+    canEdit: false,
     updateSingleField: {
       state: null,
       field: null
@@ -167,12 +168,20 @@ componentDidMount () {
     seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
     this.getPocketVars(seshStore);
   }
-  if (this.context.role === 'Admin' ||
-      this.context.role === 'Doctor' ||
-      this.context.role === 'Nurse'
+  if (this.context.role === 'Admin'
+      // this.context.role === 'Doctor' ||
+      // this.context.role === 'Nurse'
     ) {
     this.setState({
       canDelete: true
+    })
+  }
+
+  // console.log('canEdit...?', this.props.visit.consultants.map(x=>x._id), this.context.activityId, this.context.role);
+  if ( this.props.visit.consultants.map(x=>x._id).includes(this.context.activityId) === true) {
+    console.log('You can edit!!');
+    this.setState({
+      canEdit: true
     })
   }
 
@@ -6339,21 +6348,21 @@ render() {
                 <ListGroup.Item>
                   <p className="listGroupText">Title:</p>
                   <p className="listGroupText bold">{this.props.visit.title}</p>
-                  {this.context.role !== 'Staff' && (
+                  {this.state.canEdit === true && (
                     <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
                   )}
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Type:</p>
                   <p className="listGroupText bold">{this.props.visit.type}</p>
-                  {this.context.role !== 'Staff' && (
+                  {this.state.canEdit === true && (
                     <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'type')}>Edit</Button>
                   )}
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">subType:</p>
                   <p className="listGroupText bold">{this.props.visit.subType}</p>
-                  {this.context.role !== 'Staff' && (
+                  {this.state.canEdit === true && (
                     <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'subType')}>Edit</Button>
                   )}
                 </ListGroup.Item>
@@ -6369,7 +6378,7 @@ render() {
                 <ListGroup.Item>
                   <p className="listGroupText">Time:</p>
                   <p className="listGroupText bold">{this.props.visit.time}</p>
-                  {this.context.role !== 'Staff' && (
+                  {this.state.canEdit === true && (
                     <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'time')}>Edit</Button>
                   )}
                 </ListGroup.Item>
@@ -6523,7 +6532,7 @@ render() {
               </Col>
               <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'consultant')}>Filter</Button>
-                {this.context.role !== 'Staff' && (
+                {this.state.canEdit === true && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'consultant')}>Add</Button>
                 )}
               </Col>
@@ -6561,7 +6570,7 @@ render() {
               </Col>
                 <Col className="subTabCol">
                   <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'complaint')}>Filter</Button>
-                  {this.context.role !== 'Staff' && (
+                  {this.state.canEdit === true && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'complaint')}>Add</Button>
                   )}
                 </Col>
@@ -6604,7 +6613,7 @@ render() {
               </Col>
               <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'survey')}>Filter</Button>
-                {this.context.role !== 'Staff' && (
+                {this.state.canEdit === true && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'survey')}>Add</Button>
                 )}
               </Col>
@@ -6647,7 +6656,7 @@ render() {
               </Col>
                 <Col className="subTabCol">
                   <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'systematicInquiry')}>Filter</Button>
-                  {this.context.role !== 'Staff' && (
+                  {this.state.canEdit === true && (
                     <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'systematicInquiry')}>Add</Button>
                   )}
                 </Col>
@@ -6690,7 +6699,7 @@ render() {
               </Col>
               <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'vitals')}>Filter</Button>
-                {this.context.role !== 'Staff' && (
+                {this.state.canEdit === true && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'vitals')}>Add</Button>
                 )}
               </Col>
@@ -6725,7 +6734,7 @@ render() {
               </Col>
               <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'examination')}>Filter</Button>
-                {this.context.role !== 'Staff' && (
+                {this.state.canEdit === true && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'examination')}>Add</Button>
                 )}
               </Col>
@@ -6768,7 +6777,7 @@ render() {
               </Col>
               <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'investigation')}>Filter</Button>
-                {this.context.role !== 'Staff' && (
+                {this.state.canEdit === true && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'investigation')}>Add</Button>
                 )}
               </Col>
@@ -6811,7 +6820,7 @@ render() {
               </Col>
               <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'diagnosis')}>Filter</Button>
-                {this.context.role !== 'Staff' && (
+                {this.state.canEdit === true && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'diagnosis')}>Add</Button>
                 )}
               </Col>
@@ -6854,7 +6863,7 @@ render() {
               </Col>
               <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'treatment')}>Filter</Button>
-                {this.context.role !== 'Staff' && (
+                {this.state.canEdit === true && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'treatment')}>Add</Button>
                 )}
               </Col>
@@ -6942,7 +6951,7 @@ render() {
               </Col>
               <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'vigilance')}>Filter</Button>
-                {this.context.role !== 'Staff' && (
+                {this.state.canEdit === true && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'vigilance')}>Add</Button>
                 )}
               </Col>
@@ -6974,7 +6983,7 @@ render() {
               </Col>
               <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'image')}>Filter</Button>
-                {this.context.role !== 'Staff' && (
+                {this.state.canEdit === true && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
                 )}
               </Col>
@@ -7009,7 +7018,7 @@ render() {
               </Col>
               <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'file')}>Filter</Button>
-                {this.context.role !== 'Staff' && (
+                {this.state.canEdit === true && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
                 )}
               </Col>
@@ -7049,19 +7058,19 @@ render() {
                 <ListGroup.Item>
                   <p className="listGroupText">Title:</p>
                   <p className="listGroupText bold">{this.props.visit.title}</p>
-                  {this.context.role !== 'Staff' && (
+                  {this.state.canEdit === true && (
                     <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'title')}>Edit</Button>
                   )}
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Type:</p>
                   <p className="listGroupText bold">{this.props.visit.type}</p>
-                  {this.context.role !== 'Staff' && (
+                  {this.state.canEdit === true && (
                     <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'type')}>Edit</Button>
                   )}
                   <p className="listGroupText">subType:</p>
                   <p className="listGroupText bold">{this.props.visit.subType}</p>
-                  {this.context.role !== 'Staff' && (
+                  {this.state.canEdit === true && (
                     <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'subType')}>Edit</Button>
                   )}
                 </ListGroup.Item>
@@ -7075,7 +7084,7 @@ render() {
                   )}
                   <p className="listGroupText">Time:</p>
                   <p className="listGroupText bold">{this.props.visit.time}</p>
-                  {this.context.role !== 'Staff' && (
+                  {this.state.canEdit === true && (
                     <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'time')}>Edit</Button>
                   )}
                 </ListGroup.Item>
@@ -7227,7 +7236,7 @@ render() {
               </Col>
               <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'consultant')}>Filter</Button>
-                {this.context.role !== 'Staff' && (
+                {this.state.canEdit === true && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'consultant')}>Add</Button>
                 )}
               </Col>
@@ -7265,7 +7274,7 @@ render() {
               </Col>
                 <Col className="subTabCol">
                   <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'complaint')}>Filter</Button>
-                  {this.context.role !== 'Staff' && (
+                  {this.state.canEdit === true && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'complaint')}>Add</Button>
                   )}
                 </Col>
@@ -7308,7 +7317,7 @@ render() {
               </Col>
               <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'survey')}>Filter</Button>
-                {this.context.role !== 'Staff' && (
+                {this.state.canEdit === true && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'survey')}>Add</Button>
                 )}
               </Col>
@@ -7351,7 +7360,7 @@ render() {
               </Col>
                 <Col className="subTabCol">
                   <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'systematicInquiry')}>Filter</Button>
-                  {this.context.role !== 'Staff' && (
+                  {this.state.canEdit === true && (
                     <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'systematicInquiry')}>Add</Button>
                   )}
                 </Col>
@@ -7394,7 +7403,7 @@ render() {
               </Col>
               <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'vitals')}>Filter</Button>
-                {this.context.role !== 'Staff' && (
+                {this.state.canEdit === true && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'vitals')}>Add</Button>
                 )}
               </Col>
@@ -7429,7 +7438,7 @@ render() {
               </Col>
               <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'examination')}>Filter</Button>
-                {this.context.role !== 'Staff' && (
+                {this.state.canEdit === true && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'examination')}>Add</Button>
                 )}
               </Col>
@@ -7472,7 +7481,7 @@ render() {
               </Col>
               <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'investigation')}>Filter</Button>
-                {this.context.role !== 'Staff' && (
+                {this.state.canEdit === true && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'investigation')}>Add</Button>
                 )}
               </Col>
@@ -7515,7 +7524,7 @@ render() {
               </Col>
               <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'diagnosis')}>Filter</Button>
-                {this.context.role !== 'Staff' && (
+                {this.state.canEdit === true && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'diagnosis')}>Add</Button>
                 )}
               </Col>
@@ -7558,7 +7567,7 @@ render() {
               </Col>
               <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'treatment')}>Filter</Button>
-                {this.context.role !== 'Staff' && (
+                {this.state.canEdit === true && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'treatment')}>Add</Button>
                 )}
               </Col>
@@ -7644,7 +7653,7 @@ render() {
               </Col>
               <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'vigilance')}>Filter</Button>
-                {this.context.role !== 'Staff' && (
+                {this.state.canEdit === true && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'vigilance')}>Add</Button>
                 )}
               </Col>
@@ -7676,7 +7685,7 @@ render() {
               </Col>
               <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'image')}>Filter</Button>
-                {this.context.role !== 'Staff' && (
+                {this.state.canEdit === true && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'image')}>Add</Button>
                 )}
               </Col>
@@ -7711,7 +7720,7 @@ render() {
               </Col>
               <Col className="subTabCol">
                 <Button variant="outline-primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'file')}>Filter</Button>
-                {this.context.role !== 'Staff' && (
+                {this.state.canEdit === true && (
                   <Button variant="outline-success" className="searchBtn" onClick={this.startAdd.bind(this, 'file')}>Add</Button>
                 )}
               </Col>

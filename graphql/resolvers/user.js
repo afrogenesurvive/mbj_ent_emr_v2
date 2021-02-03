@@ -174,6 +174,7 @@ module.exports = {
     try {
       const user = await User.findById(args.userId)
       .populate('appointments')
+      .populate('visits')
       .populate('reminders');
       return {
           ...user._doc,
@@ -341,7 +342,7 @@ module.exports = {
         console.log('User not found! Check your details & try again!');
         throw new Error('User not found! Check your details & try again!')
       }
-      
+
       const response = {
         type: preUser.verification.type,
         code: preUser.verification.code,

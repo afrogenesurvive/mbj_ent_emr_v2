@@ -26,6 +26,7 @@ module.exports = buildSchema(`
     files: [File]
     notes: [String]
     appointments: [Appointment]
+    visits: [Visit]
     reminders: [Reminder]
     activity: [Activity]
   }

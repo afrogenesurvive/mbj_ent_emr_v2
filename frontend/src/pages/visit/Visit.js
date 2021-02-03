@@ -90,6 +90,7 @@ class VisitPage extends Component {
     otfAppt: false,
     hasComorbidities: false,
     hasAllergies: false,
+    canViewVisit: false,
   };
   static contextType = AuthContext;
 
@@ -117,6 +118,17 @@ componentDidMount () {
       this.setState({
         showDetails: true,
         selectedVisit: this.props.selectedVisit
+      })
+    }
+
+    console.log('Can view visit?');
+    if (
+      this.context.role === 'Doctor' ||
+      this.context.role === 'Nurse'
+    ) {
+      console.log('You can view Visits');
+      this.setState({
+        canViewVisit: true,
       })
     }
     // if (this.props.location.state &&
@@ -1340,7 +1352,8 @@ render() {
                 <h3>Select a Visit to see details</h3>
               )}
               {this.state.showDetails === true &&
-                this.state.selectedVisit && (
+                this.state.selectedVisit &&
+                this.state.canViewVisit === true && (
                   <VisitDetail
                     visit={this.state.selectedVisit}
                     updateVisit={this.updateVisit}
@@ -1350,6 +1363,11 @@ render() {
                     hasComorbidities={this.hasComorbidities}
                   />
               )}
+              {this.state.showDetails === true &&
+                this.state.selectedVisit &&
+                this.state.canViewVisit === false && (
+                  <h3>Only Doctors and Nurses can view visit details!!</h3>
+              )}
             </Col>
           )}
           {this.state.menuSelect === 'new' && (
@@ -1357,6 +1375,20 @@ render() {
               {this.state.creatingVisit === false && (
                 <Button variant="secondary" className="filterFormBtn" onClick={this.onStartCreateNewVisit}>Create New</Button>
               )}
+              {
+              //   this.state.creatingVisit === false &&
+              //   this.context.role === 'Nurse' && (
+              //   <Button variant="secondary" className="filterFormBtn" onClick={this.onStartCreateNewVisit}>Create New</Button>
+              // )
+            }
+              {
+              //   this.context.role === 'Doctor' ||
+              //   this.context.role === 'Nurse' && (
+              //     <h3>
+              //     Only Doctors and Nurses can create Visits
+              //     </h3>
+              // )
+            }
               {this.state.creatingVisit === true &&
                 this.state.appointments &&
                 !this.state.selectedAppointment && (

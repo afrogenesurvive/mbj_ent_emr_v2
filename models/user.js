@@ -67,6 +67,7 @@ const userSchema = new Schema({
   }],
   notes: [{type: String}],
   appointments: [{type: Schema.Types.ObjectId,ref: 'Appointment'}],
+  visits: [{type: Schema.Types.ObjectId,ref: 'Visit'}],
   reminders: [{type: Schema.Types.ObjectId,ref: 'Reminder'}],
   activity:[{
     date: {type: Date},
