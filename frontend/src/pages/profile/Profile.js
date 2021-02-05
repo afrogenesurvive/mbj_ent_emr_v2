@@ -2278,14 +2278,12 @@ render() {
     <div className="topContainer">
 
       <div className="headTop">
-        <Row className="">
+        <Row className="headTopRow">
             <h1 className="">My Profile</h1>
         </Row>
         <Row className="">
-            {this.state.isLoading ? (
+            {this.state.isLoading && (
               <Image src={loadingGif} className="loadingGif" fluid />
-            ):(
-              <p>.</p>
             )}
         </Row>
       </div>
