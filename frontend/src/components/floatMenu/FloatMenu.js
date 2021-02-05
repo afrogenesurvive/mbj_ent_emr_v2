@@ -105,6 +105,13 @@ return (
       )}
       </li>
       <li>
+      {highlighted === 'profilevisit' ? (
+        <Button variant="success" onClick={props.menuSelect.bind(this, 'visit')}>Visits</Button>
+      ):(
+        <Button variant="light" onClick={props.menuSelect.bind(this, 'visit')}>Visits</Button>
+      )}
+      </li>
+      <li>
       {highlighted === 'profilenote' ? (
         <Button variant="success" onClick={props.menuSelect.bind(this, 'note')}>Notes</Button>
       ):(
@@ -431,6 +438,13 @@ return (
       <Button variant="success" onClick={props.subMenuSelect.bind(this, 'appointment')}>Appointment</Button>
     ):(
       <Button variant="light" onClick={props.subMenuSelect.bind(this, 'appointment')}>Appointment</Button>
+    )}
+    </li>
+    <li>
+    {highlighted === 'staffdetailvisit' ? (
+      <Button variant="success" onClick={props.subMenuSelect.bind(this, 'visit')}>Visit</Button>
+    ):(
+      <Button variant="light" onClick={props.subMenuSelect.bind(this, 'visit')}>Visit</Button>
     )}
     </li>
     <li>

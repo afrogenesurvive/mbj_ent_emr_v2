@@ -174,7 +174,35 @@ module.exports = {
     try {
       const user = await User.findById(args.userId)
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
       return {
           ...user._doc,
@@ -197,6 +225,35 @@ module.exports = {
       // console.log(query);
       const users = await User.find(query)
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
       return users.map(user => {
         return transformUser(user);
@@ -218,6 +275,35 @@ module.exports = {
       // console.log(query);
       const users = await User.find(query)
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
       return users.map(user => {
         return transformUser(user);
@@ -236,6 +322,35 @@ module.exports = {
         appointments: args.appointmentId,
       })
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
       return users.map(user => {
         return transformUser(user);
@@ -311,6 +426,35 @@ module.exports = {
     try {
       const user = await User.findById({_id: args.activityId})
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
       return {
         ...user._doc,
@@ -576,6 +720,35 @@ module.exports = {
         },
         {new: true, useFindAndModify: false})
         .populate('appointments')
+        .populate({
+           path: 'appointments',
+           populate: {
+             path: 'patient',
+             model: 'Patient'
+           }
+        })
+        .populate({
+           path: 'appointments',
+           populate: {
+             path: 'consultants',
+             model: 'User'
+           }
+        })
+        .populate('visits')
+        .populate({
+           path: 'visits',
+           populate: {
+             path: 'patient',
+             model: 'Patient'
+           }
+        })
+        .populate({
+           path: 'visits',
+           populate: {
+             path: 'consultants',
+             model: 'User'
+           }
+        })
         .populate('reminders');
       return {
         ...user._doc,
@@ -613,6 +786,35 @@ module.exports = {
         query,
         {new: true, useFindAndModify: false})
         .populate('appointments')
+        .populate({
+           path: 'appointments',
+           populate: {
+             path: 'patient',
+             model: 'Patient'
+           }
+        })
+        .populate({
+           path: 'appointments',
+           populate: {
+             path: 'consultants',
+             model: 'User'
+           }
+        })
+        .populate('visits')
+        .populate({
+           path: 'visits',
+           populate: {
+             path: 'patient',
+             model: 'Patient'
+           }
+        })
+        .populate({
+           path: 'visits',
+           populate: {
+             path: 'consultants',
+             model: 'User'
+           }
+        })
         .populate('reminders');
       return {
         ...user._doc,
@@ -647,6 +849,35 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
       return {
         ...user._doc,
@@ -682,12 +913,37 @@ module.exports = {
           {$pull: { 'addresses': address }},
           {new: true, useFindAndModify: false}
         )
-        .populate('wishlist')
-        .populate('liked')
-        .populate('cart')
-        .populate('reviews')
-        .populate('orders')
-        .populate('affiliate.referrer');
+        .populate('appointments')
+        .populate({
+           path: 'appointments',
+           populate: {
+             path: 'patient',
+             model: 'Patient'
+           }
+        })
+        .populate({
+           path: 'appointments',
+           populate: {
+             path: 'consultants',
+             model: 'User'
+           }
+        })
+        .populate('visits')
+        .populate({
+           path: 'visits',
+           populate: {
+             path: 'patient',
+             model: 'Patient'
+           }
+        })
+        .populate({
+           path: 'visits',
+           populate: {
+             path: 'consultants',
+             model: 'User'
+           }
+        })
+        .populate('reminders');
 
         return {
           ...user._doc,
@@ -735,6 +991,35 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
       return {
         ...user._doc,
@@ -765,6 +1050,35 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
       return {
         ...user._doc,
@@ -795,6 +1109,35 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
       return {
         ...user._doc,
@@ -835,6 +1178,35 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
       return {
         ...user._doc,
@@ -866,6 +1238,35 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
       return {
         ...user._doc,
@@ -897,6 +1298,35 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
       return {
         ...user._doc,
@@ -938,6 +1368,35 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
       return {
         ...user._doc,
@@ -968,6 +1427,35 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
       return {
         ...user._doc,
@@ -998,6 +1486,35 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
       return {
         ...user._doc,
@@ -1038,6 +1555,35 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
       return {
         ...user._doc,
@@ -1068,6 +1614,35 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
       return {
         ...user._doc,
@@ -1098,6 +1673,35 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
       return {
         ...user._doc,
@@ -1138,6 +1742,35 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
       return {
         ...user._doc,
@@ -1163,6 +1796,35 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
 
       return {
@@ -1188,6 +1850,35 @@ module.exports = {
           {new: true, useFindAndModify: false}
         )
         .populate('appointments')
+        .populate({
+           path: 'appointments',
+           populate: {
+             path: 'patient',
+             model: 'Patient'
+           }
+        })
+        .populate({
+           path: 'appointments',
+           populate: {
+             path: 'consultants',
+             model: 'User'
+           }
+        })
+        .populate('visits')
+        .populate({
+           path: 'visits',
+           populate: {
+             path: 'patient',
+             model: 'Patient'
+           }
+        })
+        .populate({
+           path: 'visits',
+           populate: {
+             path: 'consultants',
+             model: 'User'
+           }
+        })
         .populate('reminders');
         return {
           ...user._doc,
@@ -1232,6 +1923,35 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
 
       return {
@@ -1257,6 +1977,35 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
 
       return {
@@ -1282,6 +2031,35 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
 
       return {
@@ -1368,6 +2146,7 @@ module.exports = {
         files: [],
         notes: [],
         appointments: [],
+        visits: [],
         reminders: [],
         activity: [{
           date: today,

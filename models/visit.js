@@ -7,6 +7,7 @@ const visitSchema = new Schema({
   time: {type: String},
   title: {type: String},
   type: {type: String},
+  followUp: {type: Boolean},
   subType: {type: String},
   patient: {type: Schema.Types.ObjectId,ref: 'Patient'},
   consultants: [{type: Schema.Types.ObjectId,ref: 'User'}],

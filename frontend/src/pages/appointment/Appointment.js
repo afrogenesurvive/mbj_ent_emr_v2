@@ -187,6 +187,7 @@ getAllAppointments (args) {
         let goLinkAppointment = resData.data.getAllAppointments.filter(x => x._id === this.state.goLinkId)[0];
         this.setState({
           showDetails: true,
+          menuSelect: 'detail',
           selectedAppointment: goLinkAppointment,
           tabKey: 'detail'
         })
