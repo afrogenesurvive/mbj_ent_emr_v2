@@ -142,6 +142,7 @@ getAllUsers (args) {
         let goLinkUser = resData.data.getAllUsers.filter(x => x._id === this.state.goLinkId)[0];
         this.setState({
           showDetails: true,
+          menuSelect: 'detail',
           selectedUser: goLinkUser,
           tabKey: 'detail'
         })

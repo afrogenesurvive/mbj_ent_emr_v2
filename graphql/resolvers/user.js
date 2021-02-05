@@ -158,6 +158,28 @@ module.exports = {
            model: 'Patient'
          }
       })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
       .populate('reminders');
       return users.map(user => {
         return transformUser(user,);

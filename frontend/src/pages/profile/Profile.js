@@ -34,6 +34,7 @@ import UserLeaveList from '../../components/lists/user/UserLeaveList'
 import UserImageList from '../../components/lists/user/UserImageList'
 import UserFileList from '../../components/lists/user/UserFileList'
 import UserAppointmentList from '../../components/lists/user/UserAppointmentList'
+import UserVisitList from '../../components/lists/user/UserVisitList'
 import UserNoteList from '../../components/lists/user/UserNoteList'
 
 import FilterAddressForm from '../../components/forms/filter/FilterAddressForm';
@@ -42,6 +43,7 @@ import FilterLeaveForm from '../../components/forms/filter/FilterLeaveForm';
 import FilterImageForm from '../../components/forms/filter/FilterImageForm';
 import FilterFileForm from '../../components/forms/filter/FilterFileForm';
 import FilterAppointmentForm from '../../components/forms/filter/FilterAppointmentForm';
+import FilterVisitForm from '../../components/forms/filter/FilterVisitForm';
 import FilterNoteForm from '../../components/forms/filter/FilterNoteForm';
 
 import UpdateUserSingleFieldForm from '../../components/forms/add/UpdateUserSingleFieldForm';
@@ -92,6 +94,7 @@ class MyProfilePage extends Component {
     calendarAttendance: null,
     calendarLeave: null,
     calendarAppointments: null,
+    calendarVisits: null,
     pocketVars: null,
     s3State: {
       action: null,
@@ -231,6 +234,7 @@ getThisUser (args) {
         attendance: resData.data.getUserById.attendance,
         leave: resData.data.getUserById.leave,
         appointments: resData.data.getUserById.appointments,
+        visits: resData.data.getUserById.visits,
       })
       this.logUserActivity(args);
       this.props.sendSocketAdminMessage(`${activityId} just logged in...`);
@@ -1822,17 +1826,46 @@ parseForCalendar = (args) => {
       calendarAppointments2.push(evt)
     }
 
+    let calendarVisits = []
+    for (const x of args.visits) {
+      let date;
+      if (x.date.length === 12) {
+        date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+      } else if (x.date.length === 13) {
+        date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+      }
+
+      let evt = {
+        title: x.title,
+        date: date,
+        props: {
+          _id: x._id,
+          consultants: x.consultants,
+          date: date,
+          patient: x.patient,
+          subType: x.subType,
+          time: x.time,
+          title: x.title,
+          type: x.type,
+          field: 'visits'
+        }
+      }
+      calendarVisits.push(evt);
+    }
+
     this.setState({
       calendarAttendance: calendarAttendance2,
       calendarLeave: calendarLeave2,
       calendarAppointments: calendarAppointments2,
+      calendarVisits: calendarVisits,
       overlay2: false
     })
 }
+
 viewCalendarEvent = (args) => {
 
-
   let input = args.event.extendedProps.props;
+
   let data;
   if (input.field === 'attendance') {
     data = {
@@ -1875,6 +1908,23 @@ viewCalendarEvent = (args) => {
       overlayStatus: {type: 'calendarAppointment', data: data, goLink: true}
     })
   }
+  if (input.field === 'visits') {
+    data = {
+      _id: input._id,
+      consultants: input.consultants,
+      date: input.date,
+      patient: input.patient,
+      subType: input.subType,
+      time: input.time,
+      title: input.title,
+      type: input.type,
+    }
+    this.setState({
+      overlay: true,
+      overlayStatus: {type: 'calendarVisit', data: data, goLink: true}
+    })
+  }
+
 }
 dateClick = (args) => {
   console.log('dateClick',args)
@@ -2633,6 +2683,40 @@ render() {
                 </Col>
               </li>
               <li className="summaryListItem">
+                <Col className="tabCol">
+                  <Col className="subTabCol">
+                    <p className="">Visits:</p>
+                  </Col>
+                  <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
+                    <Tab eventKey="1" title="list">
+                    {this.state.startFilter === true &&
+                      this.state.selectFilter === 'visit' && (
+                      <FilterVisitForm
+                        onCancel={this.toggleFilter}
+                        onConfirm={this.submitFilterForm}
+                      />
+                    )}
+                    <Col className="subTabCol">
+                      <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'visit')}>Filter</Button>
+                    </Col>
+                    <UserVisitList
+                      filter={this.state.filter}
+                      visits={this.state.activityUser.visits}
+                      authId={this.state.activityUser._id}
+                    />
+                    </Tab>
+
+                    <Tab eventKey="2" title="calendar" className="calendarTab">
+                      <FullCalendar
+                        initialView="dayGridMonth"
+                        plugins={[dayGridPlugin, interactionPlugin]}
+                        events={this.state.calendarVisits}
+                        eventClick={this.viewCalendarEvent}
+                        dateClick={this.dateClick}
+                      />
+                    </Tab>
+                  </Tabs>
+                </Col>
               </li>
               </ul>
               </Row>
@@ -2978,6 +3062,43 @@ render() {
               </Tabs>
             </Col>
             )}
+
+            {this.state.menuSelect === 'visit' && (
+            <Col className="tabCol">
+              <Col className="subTabCol">
+                <p className="">Visits:</p>
+              </Col>
+              <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
+                <Tab eventKey="1" title="list">
+                {this.state.startFilter === true &&
+                  this.state.selectFilter === 'visit' && (
+                  <FilterVisitForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                <Col className="subTabCol">
+                  <Button variant="primary" className="searchBtn" onClick={this.toggleFilter.bind(this, 'visit')}>Filter</Button>
+                </Col>
+                <UserVisitList
+                  filter={this.state.filter}
+                  visits={this.state.activityUser.visits}
+                  authId={this.state.activityUser._id}
+                />
+                </Tab>
+                <Tab eventKey="2" title="calendar" className="calendarTab">
+                  <FullCalendar
+                    initialView="dayGridMonth"
+                    plugins={[dayGridPlugin, interactionPlugin]}
+                    events={this.state.calendarVisits}
+                    eventClick={this.viewCalendarEvent}
+                    dateClick={this.dateClick}
+                  />
+                </Tab>
+              </Tabs>
+            </Col>
+            )}
+
             {this.state.menuSelect === 'note' && (
             <Col className="tabCol">
               <Col className="subTabCol">

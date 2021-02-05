@@ -2712,7 +2712,9 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
+
         const visit = await Visit.findByIdAndRemove({_id:args.visitId});
+
         return {
           ...visit._doc,
           _id: visit.id,

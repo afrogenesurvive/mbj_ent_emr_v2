@@ -169,7 +169,12 @@ return (
             <p className="overlayListGroupItemText">Patient: <span className="bold">{props.status.data.patient.name}</span></p>
             </ListGroup.Item>
             <ListGroup.Item className="overlayListGroupItem">
-            <p className="overlayListGroupItemText">Date: <span className="bold">{moment.unix(props.status.data.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span></p>
+            {props.status.data.date.length === 12 && (
+              <p className="overlayListGroupItemText">Date: <span className="bold">{moment.unix(props.status.data.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span></p>
+            )}
+            {props.status.data.date.length === 13 && (
+              <p className="overlayListGroupItemText">Date: <span className="bold">{moment.unix(props.status.data.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span></p>
+            )}
             <p className="overlayListGroupItemText">Time: <span className="bold">{props.status.data.time}</span></p>
             </ListGroup.Item>
             <ListGroup.Item className="overlayListGroupItem">

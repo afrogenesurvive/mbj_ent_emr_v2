@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Row from 'react-bootstrap/Row';
+import {Link} from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
-import { Link } from 'react-router-dom';
+import Row from 'react-bootstrap/Row';
+import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Popover from 'react-bootstrap/Popover';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,14 +16,16 @@ import {
   faTrashAlt,
   faBan,
   faCheckSquare,
-  faExternalLinkAlt
+  faExternalLinkAlt,
+  faHighlighter,
+  faExclamation
 } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment-timezone';
 
-import './visitItem.css';
+import './UserItem.css';
 
-const VisitItem = props => {
-
+const VisitItem = (props) => {
+  
   const [state, setState] = useState(false);
   const handleStateChange = () => {
     if (state === true) {
@@ -32,18 +34,7 @@ const VisitItem = props => {
     if (state === false) {
       setState(true);
     }
-  }
-
-  const [deleteState, setDeleteState] = useState(false);
-  const handleDeleteStateChange = () => {
-    if (deleteState === true) {
-      setDeleteState(false);
-    }
-    if (deleteState === false) {
-      setDeleteState(true);
-    }
    }
-
   return (
     <li key={props.key} className="">
       <Card>
@@ -65,8 +56,9 @@ const VisitItem = props => {
             Title: <span className="bold">{props.visit.title}</span>
           </Card.Text>
 
-          <OverlayTrigger
 
+          <OverlayTrigger
+            key={'top'}
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -79,63 +71,29 @@ const VisitItem = props => {
             <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           </OverlayTrigger>
 
-          {!props.patientPage && (
-            <OverlayTrigger
+          <Link
+            to={{
+              pathname: "/visits",
+              state: {visit: props.visit._id}
+            }}
+          >
+          <OverlayTrigger
 
-              placement={'top'}
-              overlay={
-                <Popover id={`popover-positioned-${'top'}`}>
-                  <Popover.Content>
-                    <strong>Go to Visit Details</strong>
-                  </Popover.Content>
-                </Popover>
-              }
-            >
-              <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon" onClick={props.showDetails.bind(this, props.visit)}/>
-            </OverlayTrigger>
+            placement={'top'}
+            overlay={
+              <Popover id={`popover-positioned-${'top'}`}>
+                <Popover.Content>
+                  <strong>Go to Visit Details</strong>
+                </Popover.Content>
+              </Popover>
+            }
+          >
+            <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
+          </OverlayTrigger>
 
-          )}
+          </Link>
 
-          {props.patientPage && (
-            <Link
-              to={{
-                pathname: "/visits",
-                state: {visit: props.visit._id}
-              }}
-            >
-            <OverlayTrigger
 
-              placement={'top'}
-              overlay={
-                <Popover id={`popover-positioned-${'top'}`}>
-                  <Popover.Content>
-                    <strong>Go to Visit Details</strong>
-                  </Popover.Content>
-                </Popover>
-              }
-            >
-              <FontAwesomeIcon icon={faExternalLinkAlt} className="listIcon"/>
-            </OverlayTrigger>
-
-            </Link>
-          )}
-
-          {props.canDelete && (
-            <OverlayTrigger
-
-              placement={'top'}
-              overlay={
-                <Popover id={`popover-positioned-${'top'}`}>
-                  <Popover.Content>
-                    <strong>Delete!?</strong>
-                  </Popover.Content>
-                </Popover>
-              }
-            >
-              <FontAwesomeIcon icon={faTrashAlt} className="listIcon" onClick={handleDeleteStateChange}/>
-            </OverlayTrigger>
-
-          )}
           {state === true && (
             <Row className="listItemHiddenRow">
             <ul>
@@ -189,13 +147,6 @@ const VisitItem = props => {
               )}
 
             </ul>
-            </Row>
-          )}
-          {deleteState === true && (
-            <Row className="listItemHiddenRow">
-              {props.canDelete === true && (
-                <Button variant="outline-danger" onClick={props.onDelete.bind(this, props.visit)}>Delete</Button>
-              )}
             </Row>
           )}
         </Card.Body>

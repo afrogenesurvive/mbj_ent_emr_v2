@@ -122,7 +122,7 @@ componentDidMount () {
       })
     }
 
-    console.log('Can view visit?');
+    console.log('Can view visit?',this.context.role);
     if (
       this.context.role === 'Doctor' ||
       this.context.role === 'Nurse'
@@ -193,6 +193,7 @@ getAllVisits (args) {
         let goLinkVisit = resData.data.getAllVisits.filter(x => x._id === this.state.goLinkId)[0];
         this.setState({
           showDetails: true,
+          menuSelect: 'detail',
           selectedVisit: goLinkVisit,
           tabKey: 'detail'
         })
