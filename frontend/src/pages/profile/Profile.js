@@ -1861,7 +1861,6 @@ parseForCalendar = (args) => {
       overlay2: false
     })
 }
-
 viewCalendarEvent = (args) => {
 
   let input = args.event.extendedProps.props;
