@@ -26,6 +26,7 @@ module.exports = buildSchema(`
     files: [File]
     notes: [String]
     appointments: [Appointment]
+    visits: [Visit]
     reminders: [Reminder]
     activity: [Activity]
   }
@@ -331,6 +332,7 @@ module.exports = buildSchema(`
     time: String
     title: String
     type: String
+    followUp: Boolean
     subType: String
     patient: Patient
     consultants: [User]
@@ -484,6 +486,7 @@ module.exports = buildSchema(`
     time: String
     title: String
     type: String
+    followUp: Boolean
     subType: String
     complaintTitle: String
     complaintDescription: String

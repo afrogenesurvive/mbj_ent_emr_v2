@@ -30,6 +30,7 @@ import UserLeaveList from '../lists/user/UserLeaveList'
 import UserImageList from '../lists/user/UserImageList'
 import UserFileList from '../lists/user/UserFileList'
 import UserAppointmentList from '../lists/user/UserAppointmentList'
+import UserVisitList from '../lists/user/UserVisitList'
 import UserNoteList from '../lists/user/UserNoteList'
 
 import FilterAddressForm from '../forms/filter/FilterAddressForm';
@@ -38,6 +39,7 @@ import FilterLeaveForm from '../forms/filter/FilterLeaveForm';
 import FilterImageForm from '../forms/filter/FilterImageForm';
 import FilterFileForm from '../forms/filter/FilterFileForm';
 import FilterAppointmentForm from '../forms/filter/FilterAppointmentForm';
+import FilterVisitForm from '../forms/filter/FilterVisitForm';
 import FilterNoteForm from '../forms/filter/FilterNoteForm';
 
 import UpdateUserSingleFieldForm from '../forms/add/UpdateUserSingleFieldForm';
@@ -87,6 +89,7 @@ class UserDetail extends Component {
     calendarAttendance: null,
     calendarLeave: null,
     calendarAppointments: null,
+    calendarVisits: null,
     pocketVars: null,
     s3State: {
       action: null,
@@ -121,6 +124,7 @@ componentDidMount () {
     attendance: this.props.user.attendance,
     leave: this.props.user.leave,
     appointments: this.props.user.appointments,
+    visits: this.props.user.visits,
   })
 }
 // componentDidUpdate () {
@@ -260,7 +264,7 @@ submitAddAddressForm = (event) => {
           addressCountry:"${country}",
           addressPostalCode:"${postalCode}"
         })
-        {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+        {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
    fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
@@ -335,7 +339,7 @@ deleteAddress = (args) => {
           addressPostalCode:"${args.postalCode}",
           addressPrimary: ${args.primary}
         })
-        {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+        {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
    fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
@@ -405,7 +409,7 @@ setAddressPrimary = (args) => {
           addressCountry:"${args.country}",
           addressPostalCode:"${args.postalCode}"
         })
-        {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+        {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
    fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
@@ -484,7 +488,7 @@ submitAddAttendanceForm = (event) => {
           attendanceStatus:"${attendanceStatus}",
           attendanceDescription:"${attendanceDescription}"
         })
-      {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+      {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
    fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
@@ -559,7 +563,7 @@ deleteAttendance = (args) => {
             attendanceStatus:"${args.status}",
             attendanceDescription:"${args.description}",
             attendanceHighlighted:${args.highlighted}
-          }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+          }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
    fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
@@ -644,7 +648,7 @@ submitAddLeaveForm = (event) => {
           leaveStartDate:"${startDate}",
           leaveEndDate:"${endDate}",
           leaveDescription:"${description}"
-        }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+        }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
    fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
@@ -721,7 +725,7 @@ deleteLeave = (args) => {
             leaveDescription:"${args.description}",
             leaveHighlighted:${args.highlighted}
           })
-          {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+          {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
    fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
@@ -874,7 +878,7 @@ submitAddImageForm = (event) => {
           imageType:"${imageType}",
           imagePath:"${imagePath}"
         })
-        {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+        {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
    fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
@@ -949,7 +953,7 @@ deleteImage = (args) => {
             imagePath:"${args.path}",
             imageHighlighted:${args.highlighted}
           })
-          {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+          {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
    fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
@@ -1150,7 +1154,7 @@ submitAddFileForm = (event) => {
           fileType:"${file2Type}",
           filePath:"${file2Path}"
         })
-        {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+        {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
    fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
@@ -1223,7 +1227,7 @@ deleteFile = (args) => {
             filePath:"${args.path}",
             fileHighlighted:${args.highlighted}
           })
-          {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+          {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
    fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
@@ -1349,7 +1353,7 @@ submitAddNoteForm = (event) => {
         userId:"${userId}",
         userInput:{
           notes:"${note}"
-        }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+        }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
    fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
@@ -1416,7 +1420,7 @@ deleteNote = (args) => {
           userInput:{
             note: "${args}"
           })
-          {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+          {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
    fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
@@ -1492,7 +1496,7 @@ submitUpdateSingleFieldForm = (event) => {
         field:"${field}",
         query:"${query}"
       )
-        {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+        {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
    fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
       method: 'POST',
@@ -1665,9 +1669,9 @@ parseForCalendar = (args) => {
     }
 
     let date;
-    if (x.date.length == 12) {
+    if (x.date.length === 12) {
       date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
-    } else if (x.date.length == 13) {
+    } else if (x.date.length === 13) {
       date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
     }
 
@@ -1695,16 +1699,16 @@ parseForCalendar = (args) => {
 
     let startDate;
     let endDate;
-    if (x.startDate.length == 12) {
+    if (x.startDate.length === 12) {
       startDate = moment.unix(x.startDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
     }
-    if (x.endDate.length == 12) {
+    if (x.endDate.length === 12) {
       endDate = moment.unix(x.endDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
     }
-    if (x.startDate.length == 13) {
+    if (x.startDate.length === 13) {
       startDate = moment.unix(x.startDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
     }
-    if (x.endDate.length == 13) {
+    if (x.endDate.length === 13) {
       endDate = moment.unix(x.endDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
     }
 
@@ -1746,9 +1750,9 @@ parseForCalendar = (args) => {
   let calendarAppointments2 = [];
   for (const x of args.appointments) {
     let date;
-    if (x.date.length == 12) {
+    if (x.date.length === 12) {
       date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
-    } else if (x.date.length == 13) {
+    } else if (x.date.length === 13) {
       date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
     }
 
@@ -1772,10 +1776,38 @@ parseForCalendar = (args) => {
     calendarAppointments2.push(evt)
   }
 
+  let calendarVisits = []
+  for (const x of args.visits) {
+    let date;
+    if (x.date.length === 12) {
+      date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+    } else if (x.date.length === 13) {
+      date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+    }
+
+    let evt = {
+      title: x.title,
+      date: date,
+      props: {
+        _id: x._id,
+        consultants: x.consultants,
+        date: date,
+        patient: x.patient,
+        subType: x.subType,
+        time: x.time,
+        title: x.title,
+        type: x.type,
+        field: 'visits'
+      }
+    }
+    calendarVisits.push(evt);
+  }
+
     this.setState({
       calendarAttendance: calendarAttendance2,
       calendarLeave: calendarLeave2,
       calendarAppointments: calendarAppointments2,
+      calendarVisits: calendarVisits,
       overlay2: false
     })
 }
@@ -1824,6 +1856,22 @@ viewCalendarEvent = (args) => {
       overlayStatus: {type: 'calendarAppointment', data: data, goLink: true}
     })
   }
+  if (input.field === 'visits') {
+    data = {
+      _id: input._id,
+      consultants: input.consultants,
+      date: input.date,
+      patient: input.patient,
+      subType: input.subType,
+      time: input.time,
+      title: input.title,
+      type: input.type,
+    }
+    this.setState({
+      overlay: true,
+      overlayStatus: {type: 'calendarVisit', data: data, goLink: true}
+    })
+  }
 
 }
 dateClick = (args) => {
@@ -1867,7 +1915,7 @@ toggleStaffImageHighlighted = (args) => {
             imagePath:"${path}",
             imageHighlighted: ${highlighted}
           })
-          {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+          {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
 
 
@@ -1942,7 +1990,7 @@ toggleStaffLeaveHighlighted = (args) => {
           leaveEndDate:"${args.endDate}",
           leaveDescription:"${args.description}",
           leaveHighlighted:${args.highlighted}
-        }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+        }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
 
 
@@ -2016,7 +2064,7 @@ toggleStaffAttendanceHighlighted = (args) => {
           attendanceStatus:"${args.status}",
           attendanceDescription:"${args.description}",
           attendanceHighlighted:${args.highlighted}
-        }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+        }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
 
 
@@ -2098,7 +2146,7 @@ toggleStaffFileHighlighted = (args) => {
             filePath:"${path}",
             fileHighlighted: ${highlighted}
           })
-          {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+          {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
 
 
@@ -2232,10 +2280,10 @@ render() {
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <p className="listGroupText">DOB:</p>
-                    {this.props.user.dob.length == 12 && (
+                    {this.props.user.dob.length === 12 && (
                       <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                     )}
-                    {this.props.user.dob.length == 13 && (
+                    {this.props.user.dob.length === 13 && (
                       <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                     )}
                     {this.state.canDelete === true && (
@@ -2289,10 +2337,10 @@ render() {
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <p className="listGroupText">Employment Date:</p>
-                    {this.props.user.employmentDate && this.props.user.employmentDate.length == 12 && (
+                    {this.props.user.employmentDate && this.props.user.employmentDate.length === 12 && (
                       <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                     )}
-                    {this.props.user.employmentDate && this.props.user.employmentDate.length == 13 && (
+                    {this.props.user.employmentDate && this.props.user.employmentDate.length === 13 && (
                       <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                     )}
                     {this.context.role === 'Admin' && (
@@ -2572,6 +2620,43 @@ render() {
               <li className="summaryListItem">
               <Col className="tabCol2">
               <Col className="subTabCol">
+              <h3>Visits:</h3>
+              </Col>
+
+              <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
+                <Tab eventKey="1" title="list">
+                {this.state.startFilter === true &&
+                  this.state.selectFilter === 'visit' && (
+                  <FilterVisitForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                <Col className="subTabCol">
+                  <Button variant="primary" onClick={this.toggleFilter.bind(this, 'visit')}>Filter</Button>
+                </Col>
+                <UserVisitList
+                  filter={this.state.filter}
+                  visits={this.props.user.visits}
+                  authId={this.context.activityId}
+                />
+                </Tab>
+                <Tab eventKey="2" title="calendar" className="calendarTab">
+                  <h3>Calendar</h3>
+                  <FullCalendar
+                    initialView="dayGridMonth"
+                    plugins={[dayGridPlugin, interactionPlugin]}
+                    events={this.state.calendarVisits}
+                    eventClick={this.viewCalendarEvent}
+                    dateClick={this.dateClick}
+                  />
+                </Tab>
+              </Tabs>
+              </Col>
+              </li>
+              <li className="summaryListItem">
+              <Col className="tabCol2">
+              <Col className="subTabCol">
               <h3>Notes:</h3>
               </Col>
               <Col className="subTabCol">
@@ -2644,10 +2729,10 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">DOB:</p>
-                  {this.props.user.dob.length == 12 && (
+                  {this.props.user.dob.length === 12 && (
                     <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
-                  {this.props.user.dob.length == 13 && (
+                  {this.props.user.dob.length === 13 && (
                     <p className="listGroupText bold">{moment.unix(this.props.user.dob.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.state.canDelete === true && (
@@ -2701,10 +2786,10 @@ render() {
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <p className="listGroupText">Employment Date:</p>
-                    {this.props.user.employmentDate && this.props.user.employmentDate.length == 12 && (
+                    {this.props.user.employmentDate && this.props.user.employmentDate.length === 12 && (
                       <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                     )}
-                    {this.props.user.employmentDate && this.props.user.employmentDate.length == 13 && (
+                    {this.props.user.employmentDate && this.props.user.employmentDate.length === 13 && (
                       <p className="listGroupText bold">{moment.unix(this.props.user.employmentDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
                     )}
                     {this.context.role === 'Admin' && (
@@ -2976,6 +3061,46 @@ render() {
                     initialView="dayGridMonth"
                     plugins={[dayGridPlugin, interactionPlugin]}
                     events={this.state.calendarAppointments}
+                    eventClick={this.viewCalendarEvent}
+                    dateClick={this.dateClick}
+                  />
+                </Tab>
+              </Tabs>
+              </Col>
+            )}
+            {this.props.subMenu === 'visit' && (
+              <Col className="tabCol2">
+              <Col className="subTabCol">
+              <h3>Visits:</h3>
+              </Col>
+              <Col className="subTabCol">
+                <Button variant="primary" onClick={this.toggleFilter}>Filter</Button>
+              </Col>
+              <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
+                <Tab eventKey="1" title="list">
+                {this.state.startFilter === true &&
+                  this.state.selectFilter === 'visit' && (
+                  <FilterVisitForm
+                    onCancel={this.toggleFilter}
+                    onConfirm={this.submitFilterForm}
+                  />
+                )}
+                <Col className="subTabCol">
+                  <Button variant="primary" onClick={this.toggleFilter.bind(this, 'visit')}>Filter</Button>
+                </Col>
+                <UserVisitList
+                  filter={this.state.filter}
+                  visits={this.props.user.visits}
+                  authId={this.context.activityId}
+                />
+
+                </Tab>
+                <Tab eventKey="2" title="calendar" className="calendarTab">
+                  <h3>Calendar</h3>
+                  <FullCalendar
+                    initialView="dayGridMonth"
+                    plugins={[dayGridPlugin, interactionPlugin]}
+                    events={this.state.calendarVisits}
                     eventClick={this.viewCalendarEvent}
                     dateClick={this.dateClick}
                   />

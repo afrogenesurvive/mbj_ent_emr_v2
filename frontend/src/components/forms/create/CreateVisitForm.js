@@ -32,6 +32,11 @@ return (
         <Form.Control type="text" placeholder="..."/>
       </Form.Group>
 
+      <Form.Group as={Col} controlId="followUp" className="formGroup">
+        <Form.Label className="formLabel">FollowUp ?</Form.Label>
+        <Form.Control type="checkbox"/>
+      </Form.Group>
+
     </Form.Row>
 
     <Form.Row className="formRow">

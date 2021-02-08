@@ -187,6 +187,7 @@ getAllAppointments (args) {
         let goLinkAppointment = resData.data.getAllAppointments.filter(x => x._id === this.state.goLinkId)[0];
         this.setState({
           showDetails: true,
+          menuSelect: 'detail',
           selectedAppointment: goLinkAppointment,
           tabKey: 'detail'
         })
@@ -746,9 +747,9 @@ parseForCalendar = (args) => {
     let calendarAppointments2 = [];
     for (const x of args) {
       let date;
-      if (x.date.length == 12) {
+      if (x.date.length === 12) {
         date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')
-      } else if (x.date.length == 13) {
+      } else if (x.date.length === 13) {
         date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')
       }
       let evt = {
@@ -1039,21 +1040,18 @@ render() {
 
     <div className="topContainer">
       <div className="headTop">
-        <Row className="">
-          <h1>Appointments:
-          {
-            this.state.showDetails === true &&
+        <Row className="headTopRow">
+          <h1>Appointments: </h1>
+          {this.state.showDetails === true &&
             this.state.selectedAppointment &&
             this.state.tabKey === 'detail' && (
-              this.state.selectedAppointment.title
+              <h1 className="ul"> {this.state.selectedAppointment.title} </h1>
             )}
-          </h1>
+
         </Row>
         <Row className="">
-          {this.state.isLoading ? (
+          {this.state.isLoading && (
             <Image src={loadingGif} className="loadingGif" fluid />
-          ):(
-            <p>.</p>
           )}
         </Row>
       </div>

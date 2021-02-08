@@ -90,6 +90,7 @@ class VisitPage extends Component {
     otfAppt: false,
     hasComorbidities: false,
     hasAllergies: false,
+    canViewVisit: false,
   };
   static contextType = AuthContext;
 
@@ -98,6 +99,7 @@ componentDidMount () {
   if (sessionStorage.getItem('logInfo')) {
     const seshStore = JSON.parse(sessionStorage.getItem('logInfo'));
     if (seshStore.role === 'Admin') {
+      console.log('!!! We have an admin here !!!');
       this.setState({canDelete:true})
     }
 
@@ -117,6 +119,17 @@ componentDidMount () {
       this.setState({
         showDetails: true,
         selectedVisit: this.props.selectedVisit
+      })
+    }
+
+    console.log('Can view visit?',this.context.role);
+    if (
+      this.context.role === 'Doctor' ||
+      this.context.role === 'Nurse'
+    ) {
+      console.log('You can view Visits');
+      this.setState({
+        canViewVisit: true,
       })
     }
     // if (this.props.location.state &&
@@ -144,7 +157,7 @@ getAllVisits (args) {
       query {getAllVisits(
         activityId:"${activityId}"
       )
-      {_id,date,time,title,type,subType,
+      {_id,date,time,title,type,subType,followUp,
         patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted}},
         consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress},complaints{title,description,anamnesis,attachments,highlighted},surveys{title,description,attachments,highlighted},systematicInquiry{title,description,attachments,highlighted},vitals{pr,bp1,bp2,rr,temp,sp02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value},highlighted},examination{general,area,type,measure,value,description,followUp,attachments,highlighted},investigation{type,title,description,attachments,highlighted},diagnosis{type,title,description,attachments,highlighted},treatment{type,title,description,dose,frequency,attachments,highlighted},billing{title,type,description,amount,paid,attachments,notes,highlighted},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}},highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted}}}
     `};
@@ -180,6 +193,7 @@ getAllVisits (args) {
         let goLinkVisit = resData.data.getAllVisits.filter(x => x._id === this.state.goLinkId)[0];
         this.setState({
           showDetails: true,
+          menuSelect: 'detail',
           selectedVisit: goLinkVisit,
           tabKey: 'detail'
         })
@@ -399,7 +413,7 @@ searchVisits = (event) => {
         field:"${field}",
         query:"${query}"
       )
-      {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress},complaints{title,description,anamnesis,attachments,highlighted},surveys{title,description,attachments,highlighted},systematicInquiry{title,description,attachments,highlighted},vitals{pr,bp1,bp2,rr,temp,sp02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value},highlighted},examination{general,area,type,measure,value,description,followUp,attachments,highlighted},investigation{type,title,description,attachments,highlighted},diagnosis{type,title,description,attachments,highlighted},treatment{type,title,description,dose,frequency,attachments,highlighted},billing{title,type,description,amount,paid,attachments,notes,highlighted},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}},highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted}}}
+      {_id,date,time,title,type,subType,followUp,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress},complaints{title,description,anamnesis,attachments,highlighted},surveys{title,description,attachments,highlighted},systematicInquiry{title,description,attachments,highlighted},vitals{pr,bp1,bp2,rr,temp,sp02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value},highlighted},examination{general,area,type,measure,value,description,followUp,attachments,highlighted},investigation{type,title,description,attachments,highlighted},diagnosis{type,title,description,attachments,highlighted},treatment{type,title,description,dose,frequency,attachments,highlighted},billing{title,type,description,amount,paid,attachments,notes,highlighted},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}},highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted}}}
       `};
   }
   if (regex === false) {
@@ -410,7 +424,7 @@ searchVisits = (event) => {
           field:"${field}",
           query:"${query}"
         )
-        {_id,date,time,title,type,subType,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress},complaints{title,description,anamnesis,attachments,highlighted},surveys{title,description,attachments,highlighted},systematicInquiry{title,description,attachments,highlighted},vitals{pr,bp1,bp2,rr,temp,sp02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value},highlighted},examination{general,area,type,measure,value,description,followUp,attachments,highlighted},investigation{type,title,description,attachments,highlighted},diagnosis{type,title,description,attachments,highlighted},treatment{type,title,description,dose,frequency,attachments,highlighted},billing{title,type,description,amount,paid,attachments,notes,highlighted},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}},highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted}}}
+        {_id,date,time,title,type,subType,followUp,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress},complaints{title,description,anamnesis,attachments,highlighted},surveys{title,description,attachments,highlighted},systematicInquiry{title,description,attachments,highlighted},vitals{pr,bp1,bp2,rr,temp,sp02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value},highlighted},examination{general,area,type,measure,value,description,followUp,attachments,highlighted},investigation{type,title,description,attachments,highlighted},diagnosis{type,title,description,attachments,highlighted},treatment{type,title,description,dose,frequency,attachments,highlighted},billing{title,type,description,amount,paid,attachments,notes,highlighted},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}},highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted}}}
       `};
   }
    fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
@@ -597,6 +611,7 @@ submitCreateNewVisitForm = (event) => {
 
   const title = this.state.selectedAppointment.patient.name+'visit'+this.state.selectedAppointment.date;
   const type = event.target.type.value;
+  const followUp = event.target.followUp.checked;
   const subType = '';
 
   if (
@@ -611,10 +626,10 @@ submitCreateNewVisitForm = (event) => {
   // const tooLate = moment().format('YYYY-MM-DD') > moment.unix(this.state.selectedAppointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
   let tooEarly;
   let tooLate;
-  if (this.state.selectedAppointment.date.length == 12) {
+  if (this.state.selectedAppointment.date.length === 12) {
     tooEarly = moment().tz("America/Bogota").format('YYYY-MM-DD') < moment.unix(this.state.selectedAppointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
     tooLate = moment().tz("America/Bogota").format('YYYY-MM-DD') > moment.unix(this.state.selectedAppointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
-  } else if (this.state.selectedAppointment.date.length == 13) {
+  } else if (this.state.selectedAppointment.date.length === 13) {
     tooEarly = moment().tz("America/Bogota").format('YYYY-MM-DD') < moment.unix(this.state.selectedAppointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
     tooLate = moment().tz("America/Bogota").format('YYYY-MM-DD') > moment.unix(this.state.selectedAppointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
   }
@@ -643,9 +658,10 @@ submitCreateNewVisitForm = (event) => {
         visitInput:{
           title:"${title}",
           type:"${type}",
-          subType:"${subType}"
+          subType:"${subType}",
+          followUp:${followUp},
         })
-        {_id,date,time,title,type,subType,
+        {_id,date,time,title,type,subType,followUp,
           patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted}},
           consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress},complaints{title,description,anamnesis,attachments,highlighted},surveys{title,description,attachments,highlighted},systematicInquiry{title,description,attachments,highlighted},vitals{pr,bp1,bp2,rr,temp,sp02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value},highlighted},examination{general,area,type,measure,value,description,followUp,attachments,highlighted},investigation{type,title,description,attachments,highlighted},diagnosis{type,title,description,attachments,highlighted},treatment{type,title,description,dose,frequency,attachments,highlighted},billing{title,type,description,amount,paid,attachments,notes,highlighted},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}},highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted}}}
     `};
@@ -949,9 +965,9 @@ parseForCalendar = (args) => {
   let calendarVisits2 = [];
   for (const x of args) {
     let date;
-    if (x.date.length == 12) {
+    if (x.date.length === 12) {
       date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
-    } else if (x.date.length == 13) {
+    } else if (x.date.length === 13) {
       date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
     }
     let evt = {
@@ -995,9 +1011,9 @@ parseForCalendarAppts = (args) => {
     let calendarAppointments2 = [];
     for (const x of args) {
       let date;
-      if (x.date.length == 12) {
+      if (x.date.length === 12) {
         date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
-      } else if (x.date.length == 13) {
+      } else if (x.date.length === 13) {
         date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
       }
       let evt = {
@@ -1226,20 +1242,18 @@ render() {
 
     <div className="topContainer">
       <div className="headTop">
-        <Row className="">
-          <h1>Visits:
+        <Row className="headTopRow">
+          <h1>Visits: </h1>
           {this.state.showDetails === true &&
             this.state.selectedVisit &&
             this.state.tabKey === 'detail' && (
-                this.state.selectedVisit.title
+                <h1 className="ul"> {this.state.selectedVisit.title} </h1>
             )}
-          </h1>
+
         </Row>
         <Row className="">
-          {this.state.isLoading ? (
+          {this.state.isLoading && (
             <Image src={loadingGif} className="loadingGif" fluid />
-          ):(
-            <p>.</p>
           )}
         </Row>
       </div>
@@ -1340,7 +1354,8 @@ render() {
                 <h3>Select a Visit to see details</h3>
               )}
               {this.state.showDetails === true &&
-                this.state.selectedVisit && (
+                this.state.selectedVisit &&
+                this.state.canViewVisit === true && (
                   <VisitDetail
                     visit={this.state.selectedVisit}
                     updateVisit={this.updateVisit}
@@ -1350,6 +1365,11 @@ render() {
                     hasComorbidities={this.hasComorbidities}
                   />
               )}
+              {this.state.showDetails === true &&
+                this.state.selectedVisit &&
+                this.state.canViewVisit === false && (
+                  <h3>Only Doctors and Nurses can view visit details!!</h3>
+              )}
             </Col>
           )}
           {this.state.menuSelect === 'new' && (
@@ -1357,6 +1377,20 @@ render() {
               {this.state.creatingVisit === false && (
                 <Button variant="secondary" className="filterFormBtn" onClick={this.onStartCreateNewVisit}>Create New</Button>
               )}
+              {
+              //   this.state.creatingVisit === false &&
+              //   this.context.role === 'Nurse' && (
+              //   <Button variant="secondary" className="filterFormBtn" onClick={this.onStartCreateNewVisit}>Create New</Button>
+              // )
+            }
+              {
+              //   this.context.role === 'Doctor' ||
+              //   this.context.role === 'Nurse' && (
+              //     <h3>
+              //     Only Doctors and Nurses can create Visits
+              //     </h3>
+              // )
+            }
               {this.state.creatingVisit === true &&
                 this.state.appointments &&
                 !this.state.selectedAppointment && (

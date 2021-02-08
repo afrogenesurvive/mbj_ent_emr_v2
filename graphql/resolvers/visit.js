@@ -2712,7 +2712,9 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
+
         const visit = await Visit.findByIdAndRemove({_id:args.visitId});
+
         return {
           ...visit._doc,
           _id: visit.id,
@@ -2774,6 +2776,7 @@ module.exports = {
         time: appointment.time,
         title: args.visitInput.title,
         type: args.visitInput.type,
+        followUp: args.visitInput.followUp,
         subType: args.visitInput.subType,
         patient: patient,
         consultants: consultants,
@@ -2809,6 +2812,16 @@ module.exports = {
         {new: true, useFindAndModify: false}
       )
 
+      for (let index = 0; index < consultants.length; index++) {
+        let consultant = consultants[index];
+
+        const updateConsultants = await User.findOneAndUpdate(
+          {_id: consultant._id},
+          {$addToSet: {visits: result}},
+          {new: true, useFindAndModify: false}
+        )
+
+      }
 
       // console.log('start');
       // for (let index = 0; index < array.length; index++) {
