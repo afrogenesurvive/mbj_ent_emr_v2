@@ -17,17 +17,19 @@ return (
 
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="title" className="formGroup">
-        <Form.Label className="formLabel">Name * </Form.Label>
+        <Form.Label className="formLabel">Comorbidity * </Form.Label>
         <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
-    <Form.Row className="formRow">
-      <Form.Group as={Col} controlId="type" className="formGroup">
-        <Form.Label className="formLabel">Type * </Form.Label>
-        <Form.Control type="text" placeholder="..."/>
-      </Form.Group>
-    </Form.Row>
+    {
+      // <Form.Row className="formRow">
+      //   <Form.Group as={Col} controlId="type" className="formGroup">
+      //     <Form.Label className="formLabel">Type * </Form.Label>
+      //     <Form.Control type="text" placeholder="..."/>
+      //   </Form.Group>
+      // </Form.Row>
+    }
 
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="description" className="formGroup">

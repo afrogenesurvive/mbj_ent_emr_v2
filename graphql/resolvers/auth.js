@@ -58,32 +58,45 @@ module.exports = {
     const userLoggedIn = await User.findOneAndUpdate({_id: user.id},{loggedIn: true},{new: true, useFindAndModify: false})
 
     const userAttendance = user.attendance.map(x=> x= {
-      date: moment(x.date).add(1, 'days').format('YYYY-MM-DD'),
+      date: moment(x.date).tz("America/Bogota").format('YYYY-MM-DD'),
+      status: x.status
+    })
+    const userAttendance2 = user.attendance.map(x=> x= {
+      date: x.date,
+      date2: moment(x.date).tz("America/Bogota"),
       status: x.status
     })
     // console.log('today', moment());
-    // console.log('foo',userAttendance);
-    const userAttendanceToday = userAttendance.filter(x => x.date === moment().format('YYYY-MM-DD'))
-    // console.log('bar',userAttendanceToday);
+    console.log('foo',userAttendance);
+    console.log('foo2',userAttendance2);
+    console.log('loof',moment().tz("America/Bogota").format('YYYY-MM-DD'));
+    const userAttendanceToday = userAttendance.filter(x => x.date === moment().tz("America/Bogota").format('YYYY-MM-DD'))
+    console.log('bar',userAttendanceToday);
     if (userAttendanceToday.length <= 0) {
       console.log('no attendance found...');
       const attendance = {
-        date: moment().format('YYYY-MM-DD'),
+        date: moment().tz("America/Bogota").format('YYYY-MM-DD'),
         status: 'present',
         description: 'login auto attendance',
         highlighted: false,
       };
-
+      console.log('result',attendance);
       const user2 = await User.findOneAndUpdate(
         {_id:user._id},
         {$addToSet: {attendance: attendance}},
         {new: true, useFindAndModify: false}
       )
+
     } else {
       console.log('...attendance found...');
     }
 
-    return { activityId: userLoggedIn.id, role: userLoggedIn.role, token: token, tokenExpiration: 4 };
+    return {
+      activityId: userLoggedIn.id,
+      role: userLoggedIn.role,
+      token: token,
+      tokenExpiration: 4
+    };
   },
   logout: async (args) => {
     console.log("Resolver: Logout...");

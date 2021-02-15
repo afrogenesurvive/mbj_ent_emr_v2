@@ -45,7 +45,10 @@ class LoginPage extends Component {
     const username = event.target.username.value;
     const password = event.target.password.value;
 
-    if (username.trim().length === 0 || password.trim().length === 0) {
+    if (
+      username.trim().length === 0 ||
+      password.trim().length === 0
+    ) {
       this.context.setUserAlert("...blank required fields!!!...")
       return;
     }
@@ -55,7 +58,7 @@ class LoginPage extends Component {
           {activityId,role,token,tokenExpiration,error}}`
         };
 
-     fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+     fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -127,7 +130,7 @@ class LoginPage extends Component {
     const token = seshStore.token;
     const userId = activityId;
     const request = this.state.activityA;
-    const activityDate = moment().format('YYYY-MM-DD');
+    const activityDate = moment().tz("America/Bogota").format('YYYY-MM-DD');
     let requestBody = {
       query: `
         mutation {addUserActivity(
@@ -138,7 +141,7 @@ class LoginPage extends Component {
           })
         {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id},reminders{_id},activity{date,request}}}
       `};
-     fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+     fetch('http://localhost:8088/graphql', {
         method: 'POST',
         body: JSON.stringify(requestBody),
         headers: {
@@ -188,7 +191,7 @@ class LoginPage extends Component {
         {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id},reminders{_id},activity{date,request}}}
         `};
 
-     fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+     fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -268,7 +271,7 @@ class LoginPage extends Component {
            {_id,username,contact{email}verification{verified,type,code}}}
         `};
 
-     fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+     fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {

@@ -136,7 +136,7 @@ getPocketVars (args) {
           // **f*etch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {**
           // **f*etch('http://localhost:8088/graphql', {**
 
-     fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+     fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -170,6 +170,7 @@ getPocketVars (args) {
         this.context.setUserAlert(err);
       });
     }
+
 getThisUser (args) {
   console.log('...retrieving your profile info...');
   this.context.setUserAlert('...retrieving your profile info...')
@@ -189,7 +190,7 @@ getThisUser (args) {
     `};
 
 
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -246,13 +247,14 @@ getThisUser (args) {
       this.setState({isLoading: false })
     });
 };
+
 logUserActivity(args) {
   console.log('...logUserActivity...');
   const activityId = args.activityId;
   const token = args.token;
   const userId = activityId;
   const request = this.state.activityA;
-  const activityDate = moment().format('YYYY-MM-DD');
+  const activityDate = moment().tz("America/Bogota").format('YYYY-MM-DD');
   let requestBody = {
     query: `
       mutation {addUserActivity(
@@ -263,7 +265,7 @@ logUserActivity(args) {
         })
       {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -336,7 +338,7 @@ submitAddAddressForm = (event) => {
         })
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -410,7 +412,7 @@ deleteAddress = (args) => {
         })
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -479,7 +481,7 @@ setAddressPrimary = (args) => {
         })
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -523,6 +525,7 @@ setAddressPrimary = (args) => {
       this.setState({isLoading: false, overlay2: false })
     });
 }
+
 submitAddAttendanceForm = (event) => {
   event.preventDefault();
   console.log('...adding attendance...');
@@ -557,7 +560,7 @@ submitAddAttendanceForm = (event) => {
         })
       {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -632,7 +635,7 @@ deleteAttendance = (args) => {
           })
           {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -681,6 +684,81 @@ deleteAttendance = (args) => {
       this.setState({isLoading: false, overlay2: false })
     });
 }
+toggleStaffAttendanceHighlighted = (args) => {
+  console.log('toggleStaffAttendanceHighlighted');
+  this.context.setUserAlert('...toggling staff attendance highlight...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const userId = activityId;  let requestBody;
+
+  requestBody = {
+    query: `
+      mutation {toggleUserAttendanceHighlighted(
+        activityId:"${activityId}",
+        userId:"${userId}",
+        userInput:{
+          attendanceDate:"${args.date}",
+          attendanceStatus:"${args.status}",
+          attendanceDescription:"${args.description}",
+          attendanceHighlighted:${args.highlighted}
+        }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.toggleUserAttendanceHighlighted);
+      let responseAlert = `...attendance highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      // this.props.updateUser(resData.data.toggleUserAttendanceHighlighted)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        activityUser: resData.data.toggleUserAttendanceHighlighted,
+        activityA: `toggleUserAttendanceHighlighted?activityId:${activityId},userId:${userId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+
+      this.context.selectedUser = resData.data.toggleUserAttendanceHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
+
 submitAddLeaveForm = (event) => {
   event.preventDefault();
   console.log('...adding leave...');
@@ -718,7 +796,7 @@ submitAddLeaveForm = (event) => {
         })
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -794,7 +872,7 @@ deleteLeave = (args) => {
           })
           {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -843,6 +921,81 @@ deleteLeave = (args) => {
       this.setState({isLoading: false, overlay2: false })
     });
 }
+toggleStaffLeaveHighlighted = (args) => {
+  console.log('toggleStaffLeaveHighlighted');
+  this.context.setUserAlert('...toggling staff leave highlight...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const userId = activityId;  let requestBody;
+
+  requestBody = {
+    query: `
+      mutation {toggleUserLeaveHighlighted(
+        activityId:"${activityId}",
+        userId:"${userId}",
+        userInput:{
+          leaveType:"${args.type}",
+          leaveStartDate:"${args.startDate}",
+          leaveEndDate:"${args.endDate}",
+          leaveDescription:"${args.description}",
+          leaveHighlighted:${args.highlighted}
+        }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.toggleUserLeaveHighlighted);
+      let responseAlert = `...leave highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      // this.props.updateUser(resData.data.toggleUserLeaveHighlighted)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        activityUser: resData.data.toggleUserLeaveHighlighted,
+        activityA: `toggleUserLeaveHighlighted?activityId:${activityId},userId:${userId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+
+      this.context.selectedUser = resData.data.toggleUserLeaveHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+}
+
 submitAddImageForm = (event) => {
   event.preventDefault();
   console.log('...adding image...');
@@ -948,7 +1101,7 @@ submitAddImageForm = (event) => {
         })
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1022,7 +1175,7 @@ deleteImage = (args) => {
           })
           {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1116,6 +1269,87 @@ deleteImage = (args) => {
     });
 
 }
+toggleStaffImageHighlighted = (args) => {
+  console.log('toggleStaffImageHighlighted');
+  this.context.setUserAlert('...toggling staff image highlight...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const userId = activityId;  let requestBody;
+
+  const name = args.name;
+  const type = args.type;
+  const path = args.path;
+  let highlighted = args.highlighted;
+
+  requestBody = {
+    query: `
+      mutation {
+        toggleUserImageHighlighted(
+          activityId:"${activityId}",
+          userId:"${userId}",
+          userInput:{
+            imageName:"${name}",
+            imageType:"${type}",
+            imagePath:"${path}",
+            imageHighlighted: ${highlighted}
+          })
+          {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.toggleUserImageHighlighted);
+      let responseAlert = `...image highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      // this.props.updateUser(resData.data.toggleUserImageHighlighted)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        activityUser: resData.data.toggleUserImageHighlighted,
+        activityA: `toggleUserImageHighlighted?activityId:${activityId},userId:${userId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedUser = resData.data.toggleUserImageHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
+
 submitAddFileForm = (event) => {
   event.preventDefault();
   console.log('...adding file...');
@@ -1221,7 +1455,7 @@ submitAddFileForm = (event) => {
         })
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1293,7 +1527,7 @@ deleteFile = (args) => {
           })
           {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1386,6 +1620,87 @@ deleteFile = (args) => {
       this.setState({isLoading: false, overlay2: false })
     });
 }
+toggleStaffFileHighlighted = (args) => {
+  console.log('toggleStaffFileHighlighted');
+  this.context.setUserAlert('...toggling staff file highlight...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const userId = activityId;  let requestBody;
+
+  const name = args.name;
+  const type = args.type;
+  const path = args.path;
+  let highlighted = args.highlighted;
+
+  requestBody = {
+    query: `
+      mutation {
+        toggleUserFileHighlighted(
+          activityId:"${activityId}",
+          userId:"${userId}",
+          userInput:{
+            fileName:"${name}",
+            fileType:"${type}",
+            filePath:"${path}",
+            fileHighlighted: ${highlighted}
+          })
+          {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.toggleUserFileHighlighted);
+      let responseAlert = `...file highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      // this.props.updateUser(resData.data.toggleUserFileHighlighted)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        activityUser: resData.data.toggleUserFileHighlighted,
+        activityA: `toggleUserFileHighlighted?activityId:${activityId},userId:${userId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedUser = resData.data.toggleUserFileHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
+
 submitAddNoteForm = (event) => {
   event.preventDefault();
   console.log('...adding note...');
@@ -1415,7 +1730,7 @@ submitAddNoteForm = (event) => {
         })
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1481,7 +1796,7 @@ deleteNote = (args) => {
           })
           {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1556,7 +1871,7 @@ submitUpdateSingleFieldForm = (event) => {
       )
       {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -1938,315 +2253,6 @@ toggleOverlay = () => {
   this.setState({
     overlay: false
   })
-}
-
-toggleStaffImageHighlighted = (args) => {
-  console.log('toggleStaffImageHighlighted');
-  this.context.setUserAlert('...toggling staff image highlight...')
-  this.setState({isLoading: true, overlay2: true});
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const userId = activityId;  let requestBody;
-
-  const name = args.name;
-  const type = args.type;
-  const path = args.path;
-  let highlighted = args.highlighted;
-
-  requestBody = {
-    query: `
-      mutation {
-        toggleUserImageHighlighted(
-          activityId:"${activityId}",
-          userId:"${userId}",
-          userInput:{
-            imageName:"${name}",
-            imageType:"${type}",
-            imagePath:"${path}",
-            imageHighlighted: ${highlighted}
-          })
-          {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
-    `};
-
-
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      // console.log('...resData...',resData.data.toggleUserImageHighlighted);
-      let responseAlert = `...image highlight toggled!...`;
-      let error = null;
-
-      if (resData.errors) {
-        error = resData.errors[0].message;
-        responseAlert = error;
-      }
-
-      if (resData.data.error) {
-        error = resData.data.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      // this.props.updateUser(resData.data.toggleUserImageHighlighted)
-      this.setState({
-        isLoading: false,
-        overlay2: false,
-        activityUser: resData.data.toggleUserImageHighlighted,
-        activityA: `toggleUserImageHighlighted?activityId:${activityId},userId:${userId}`,
-        adding: {
-          state: null,
-          field: null
-        }
-      });
-      this.context.selectedUser = resData.data.toggleUserImageHighlighted;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false, overlay2: false })
-    });
-
-}
-toggleStaffLeaveHighlighted = (args) => {
-  console.log('toggleStaffLeaveHighlighted');
-  this.context.setUserAlert('...toggling staff leave highlight...')
-  this.setState({isLoading: true, overlay2: true});
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const userId = activityId;  let requestBody;
-
-  requestBody = {
-    query: `
-      mutation {toggleUserLeaveHighlighted(
-        activityId:"${activityId}",
-        userId:"${userId}",
-        userInput:{
-          leaveType:"${args.type}",
-          leaveStartDate:"${args.startDate}",
-          leaveEndDate:"${args.endDate}",
-          leaveDescription:"${args.description}",
-          leaveHighlighted:${args.highlighted}
-        }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
-    `};
-
-
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      // console.log('...resData...',resData.data.toggleUserLeaveHighlighted);
-      let responseAlert = `...leave highlight toggled!...`;
-      let error = null;
-
-      if (resData.errors) {
-        error = resData.errors[0].message;
-        responseAlert = error;
-      }
-
-      if (resData.data.error) {
-        error = resData.data.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      // this.props.updateUser(resData.data.toggleUserLeaveHighlighted)
-      this.setState({
-        isLoading: false,
-        overlay2: false,
-        activityUser: resData.data.toggleUserLeaveHighlighted,
-        activityA: `toggleUserLeaveHighlighted?activityId:${activityId},userId:${userId}`,
-        adding: {
-          state: null,
-          field: null
-        }
-      });
-
-      this.context.selectedUser = resData.data.toggleUserLeaveHighlighted;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false, overlay2: false })
-    });
-}
-toggleStaffAttendanceHighlighted = (args) => {
-  console.log('toggleStaffAttendanceHighlighted');
-  this.context.setUserAlert('...toggling staff attendance highlight...')
-  this.setState({isLoading: true, overlay2: true});
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const userId = activityId;  let requestBody;
-
-  requestBody = {
-    query: `
-      mutation {toggleUserAttendanceHighlighted(
-        activityId:"${activityId}",
-        userId:"${userId}",
-        userInput:{
-          attendanceDate:"${args.date}",
-          attendanceStatus:"${args.status}",
-          attendanceDescription:"${args.description}",
-          attendanceHighlighted:${args.highlighted}
-        }){_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
-    `};
-
-
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      // console.log('...resData...',resData.data.toggleUserAttendanceHighlighted);
-      let responseAlert = `...attendance highlight toggled!...`;
-      let error = null;
-
-      if (resData.errors) {
-        error = resData.errors[0].message;
-        responseAlert = error;
-      }
-
-      if (resData.data.error) {
-        error = resData.data.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      // this.props.updateUser(resData.data.toggleUserAttendanceHighlighted)
-      this.setState({
-        isLoading: false,
-        overlay2: false,
-        activityUser: resData.data.toggleUserAttendanceHighlighted,
-        activityA: `toggleUserAttendanceHighlighted?activityId:${activityId},userId:${userId}`,
-        adding: {
-          state: null,
-          field: null
-        }
-      });
-
-      this.context.selectedUser = resData.data.toggleUserAttendanceHighlighted;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false, overlay2: false })
-    });
-
-}
-toggleStaffFileHighlighted = (args) => {
-  console.log('toggleStaffFileHighlighted');
-  this.context.setUserAlert('...toggling staff file highlight...')
-  this.setState({isLoading: true, overlay2: true});
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const userId = activityId;  let requestBody;
-
-  const name = args.name;
-  const type = args.type;
-  const path = args.path;
-  let highlighted = args.highlighted;
-
-  requestBody = {
-    query: `
-      mutation {
-        toggleUserFileHighlighted(
-          activityId:"${activityId}",
-          userId:"${userId}",
-          userInput:{
-            fileName:"${name}",
-            fileType:"${type}",
-            filePath:"${path}",
-            fileHighlighted: ${highlighted}
-          })
-          {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
-    `};
-
-
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      // console.log('...resData...',resData.data.toggleUserFileHighlighted);
-      let responseAlert = `...file highlight toggled!...`;
-      let error = null;
-
-      if (resData.errors) {
-        error = resData.errors[0].message;
-        responseAlert = error;
-      }
-
-      if (resData.data.error) {
-        error = resData.data.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      // this.props.updateUser(resData.data.toggleUserFileHighlighted)
-      this.setState({
-        isLoading: false,
-        overlay2: false,
-        activityUser: resData.data.toggleUserFileHighlighted,
-        activityA: `toggleUserFileHighlighted?activityId:${activityId},userId:${userId}`,
-        adding: {
-          state: null,
-          field: null
-        }
-      });
-      this.context.selectedUser = resData.data.toggleUserFileHighlighted;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false, overlay2: false })
-    });
-
 }
 
 

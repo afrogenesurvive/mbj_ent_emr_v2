@@ -32,7 +32,7 @@ return (
 
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="anamnesis" className="formGroup">
-        <Form.Label className="formLabel">Anamnesis * </Form.Label>
+        <Form.Label className="formLabel">Anamnesis/History * </Form.Label>
         <Form.Control as="textarea" rows="3" placeholder="..."/>
       </Form.Group>
     </Form.Row>

@@ -17,17 +17,19 @@ return (
 
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="title" className="formGroup">
-        <Form.Label className="formLabel">Title * </Form.Label>
+        <Form.Label className="formLabel">Treatment * </Form.Label>
         <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
 
-    <Form.Row className="formRow">
-      <Form.Group as={Col} controlId="type" className="formGroup">
-        <Form.Label className="formLabel">Type * </Form.Label>
-        <Form.Control type="text" placeholder="..."/>
-      </Form.Group>
-    </Form.Row>
+    {
+      // <Form.Row className="formRow">
+      //   <Form.Group as={Col} controlId="type" className="formGroup">
+      //     <Form.Label className="formLabel">Type * </Form.Label>
+      //     <Form.Control type="text" placeholder="..."/>
+      //   </Form.Group>
+      // </Form.Row>
+    }
 
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="description" className="formGroup">
@@ -38,7 +40,7 @@ return (
 
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="dose" className="formGroup">
-        <Form.Label className="formLabel">Dose * </Form.Label>
+        <Form.Label className="formLabel">Dose (medication) * </Form.Label>
         <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>

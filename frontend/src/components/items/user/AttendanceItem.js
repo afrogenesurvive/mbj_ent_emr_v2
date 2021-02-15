@@ -19,7 +19,7 @@ import moment from 'moment-timezone';
 import './UserItem.css';
 
 const AttendanceItem = props => {
-
+  
   let liClass;
   if (props.attendance.highlighted === false) {
     liClass = 'cardBody';
