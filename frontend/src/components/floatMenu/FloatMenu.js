@@ -256,6 +256,7 @@ return (
       )}
     </ul>
   )}
+
   {props.subMenuState === true &&
     props.page === 'patient' && (
     <ul className="FloatSubMenuList">
@@ -280,7 +281,18 @@ return (
       <Button variant="light" onClick={props.subMenuSelect.bind(this, 'comorbidities')}>Comorbidities</Button>
     )}
     {props.hasComorbidities === true && (
-      <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="red" size="sm"/>
+      <OverlayTrigger
+        placement={'top'}
+        overlay={
+          <Popover id={`popover-positioned-${'top'}`}>
+            <Popover.Content>
+              <strong>Comorbidities Present!!</strong>
+            </Popover.Content>
+          </Popover>
+        }
+      >
+        <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="yellow" size="sm"/>
+      </OverlayTrigger>
     )}
     </li>
     <li>
@@ -311,7 +323,32 @@ return (
       <Button variant="light" onClick={props.subMenuSelect.bind(this, 'allergy')}>Allergy</Button>
     )}
     {props.hasAllergies === true && (
-      <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="red" size="sm"/>
+      <OverlayTrigger
+        placement={'top'}
+        overlay={
+          <Popover id={`popover-positioned-${'top'}`}>
+            <Popover.Content>
+              <strong>Allergies Present!!</strong>
+            </Popover.Content>
+          </Popover>
+        }
+      >
+        <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="yellow" size="sm"/>
+      </OverlayTrigger>
+    )}
+    {props.hasAllergies === false && (
+      <OverlayTrigger
+        placement={'top'}
+        overlay={
+          <Popover id={`popover-positioned-${'top'}`}>
+            <Popover.Content>
+              <strong>Allergy Info Needed!!</strong>
+            </Popover.Content>
+          </Popover>
+        }
+      >
+        <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="red" size="sm"/>
+      </OverlayTrigger>
     )}
     </li>
     <li>
@@ -527,7 +564,18 @@ return (
       <Button variant="light" onClick={props.subMenuSelect.bind(this, 'comorbidities')}>Comorbidities</Button>
     )}
     {props.hasComorbidities === true && (
-        <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="red" size="sm"/>
+      <OverlayTrigger
+        placement={'top'}
+        overlay={
+          <Popover id={`popover-positioned-${'top'}`}>
+            <Popover.Content>
+              <strong>Comorbidities Present!!</strong>
+            </Popover.Content>
+          </Popover>
+        }
+      >
+        <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="yellow" size="sm"/>
+      </OverlayTrigger>
     )}
     </li>
     <li>
@@ -537,7 +585,32 @@ return (
       <Button variant="light" onClick={props.subMenuSelect.bind(this, 'allergy')}>Allergy</Button>
     )}
     {props.hasAllergies === true && (
-      <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="red" size="sm"/>
+      <OverlayTrigger
+        placement={'top'}
+        overlay={
+          <Popover id={`popover-positioned-${'top'}`}>
+            <Popover.Content>
+              <strong>Allergies Present!!</strong>
+            </Popover.Content>
+          </Popover>
+        }
+      >
+        <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="yellow" size="sm"/>
+      </OverlayTrigger>
+    )}
+    {props.hasAllergies === false && (
+      <OverlayTrigger
+        placement={'top'}
+        overlay={
+          <Popover id={`popover-positioned-${'top'}`}>
+            <Popover.Content>
+              <strong>Allergy Info Needed!!</strong>
+            </Popover.Content>
+          </Popover>
+        }
+      >
+        <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="yellow" size="sm"/>
+      </OverlayTrigger>
     )}
     </li>
     <li>
