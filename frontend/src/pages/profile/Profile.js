@@ -1936,6 +1936,7 @@ cancelUpdateSingleField = () => {
     }
   })
 }
+
 toggleSideCol = () => {
   if (this.state.sideCol === 'menu') {
     this.setState({sideCol: 'filter'})
@@ -2037,9 +2038,9 @@ parseForCalendar = (args) => {
 
     let date;
     if (x.date.length === 12) {
-      date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+      date = moment.unix(x.date.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD');
     } else if (x.date.length === 13) {
-      date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+      date = moment.unix(x.date.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD');
     }
 
     let evt = {
@@ -2047,7 +2048,7 @@ parseForCalendar = (args) => {
       color: color,
       date: date,
       props: {
-        date: x.date,
+        date: date,
         status: x.status,
         description: x.description,
         highlighted: x.highlighted,
@@ -2066,16 +2067,16 @@ parseForCalendar = (args) => {
     let startDate;
     let endDate;
     if (x.startDate.length === 12) {
-      startDate = moment.unix(x.startDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+      startDate = moment.unix(x.startDate.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD');
     }
     if (x.startDate.length === 13) {
-      startDate = moment.unix(x.startDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+      startDate = moment.unix(x.startDate.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD');
     }
     if (x.endDate.length === 12) {
-      endDate = moment.unix(x.endDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+      endDate = moment.unix(x.endDate.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD');
     }
     if (x.endDate.length === 13) {
-      endDate = moment.unix(x.endDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+      endDate = moment.unix(x.endDate.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD');
     }
 
     let evt = {
@@ -2084,10 +2085,10 @@ parseForCalendar = (args) => {
       date: startDate,
       end: endDate,
       props: {
-        date: x.date,
+        date: startDate,
         type: x.type,
-        startDate: x.startDate,
-        endDate: x.endDate,
+        startDate: startDate,
+        endDate: endDate,
         description: x.description,
         highlighted: x.highlighted,
         field: 'leave'
@@ -2126,7 +2127,7 @@ parseForCalendar = (args) => {
         date: date,
         props: {
           _id: x._id,
-          date: x.date,
+          date: date,
           title: x.title,
           type: x.type,
           subType: x.subType,
@@ -2145,9 +2146,9 @@ parseForCalendar = (args) => {
     for (const x of args.visits) {
       let date;
       if (x.date.length === 12) {
-        date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+        date = moment.unix(x.date.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD');
       } else if (x.date.length === 13) {
-        date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+        date = moment.unix(x.date.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD');
       }
 
       let evt = {
@@ -2176,7 +2177,6 @@ parseForCalendar = (args) => {
       overlay2: false
     })
 }
-
 viewCalendarEvent = (args) => {
 
   let input = args.event.extendedProps.props;
@@ -2341,10 +2341,10 @@ render() {
                     <ListGroup.Item>
                       <p className="listGroupText">DOB:</p>
                       {this.state.activityUser.dob.length === 12 && (
-                        <p className="listGroupText bold">{moment.unix(this.state.activityUser.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                        <p className="listGroupText bold">{moment.unix(this.state.activityUser.dob.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                       )}
                       {this.state.activityUser.dob.length === 13 && (
-                        <p className="listGroupText bold">{moment.unix(this.state.activityUser.dob.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                        <p className="listGroupText bold">{moment.unix(this.state.activityUser.dob.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                       )}
                       <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
                     </ListGroup.Item>
@@ -2388,10 +2388,10 @@ render() {
                     <ListGroup.Item>
                       <p className="listGroupText">Employment Date:</p>
                       {this.state.activityUser.employmentDate && this.state.activityUser.employmentDate.length === 12 (
-                        <p className="listGroupText bold">{moment.unix(this.state.activityUser.employmentDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                        <p className="listGroupText bold">{moment.unix(this.state.activityUser.employmentDate.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                       )}
                       {this.state.activityUser.employmentDate && this.state.activityUser.employmentDate.length === 13 (
-                        <p className="listGroupText bold">{moment.unix(this.state.activityUser.employmentDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                        <p className="listGroupText bold">{moment.unix(this.state.activityUser.employmentDate.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                       )}
 
                       {this.context.role === 'Admin' && (
@@ -2754,10 +2754,10 @@ render() {
               <ListGroup.Item>
                 <p className="listGroupText">DOB:</p>
                 {this.state.activityUser.dob.length === 12 && (
-                  <p className="listGroupText bold">{moment.unix(this.state.activityUser.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  <p className="listGroupText bold">{moment.unix(this.state.activityUser.dob.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                 )}
                 {this.state.activityUser.dob.length === 13 && (
-                  <p className="listGroupText bold">{moment.unix(this.state.activityUser.dob.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  <p className="listGroupText bold">{moment.unix(this.state.activityUser.dob.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                 )}
                 <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
               </ListGroup.Item>
@@ -2801,10 +2801,10 @@ render() {
                 <ListGroup.Item>
                   <p className="listGroupText">Employment Date:</p>
                   {this.state.activityUser.employmentDate && this.state.activityUser.employmentDate.length === 12 (
-                    <p className="listGroupText bold">{moment.unix(this.state.activityUser.employmentDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.state.activityUser.employmentDate.substr(0,9)).add(1,'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.state.activityUser.employmentDate && this.state.activityUser.employmentDate.length === 13 (
-                    <p className="listGroupText bold">{moment.unix(this.state.activityUser.employmentDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.state.activityUser.employmentDate.substr(0,10)).add(1,'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
 
                   {this.context.role === 'Admin' && (

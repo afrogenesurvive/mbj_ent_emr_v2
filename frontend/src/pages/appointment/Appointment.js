@@ -757,7 +757,7 @@ parseForCalendar = (args) => {
         date: date,
         props: {
           _id: x._id,
-          date: x.date,
+          date: date,
           title: x.title,
           type: x.type,
           subType: x.subType,

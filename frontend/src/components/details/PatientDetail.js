@@ -3313,7 +3313,7 @@ parseForCalendar = (args) => {
         date: date,
         props: {
           _id: x._id,
-          date: x.date,
+          date: date,
           title: x.title,
           type: x.type,
           subType: x.subType,
@@ -3340,7 +3340,7 @@ parseForCalendar = (args) => {
         date: date,
         props: {
           _id: x._id,
-          date: x.date,
+          date: date,
           title: x.title,
           type: x.type,
           subType: x.subType,
@@ -3572,10 +3572,10 @@ render() {
                 <ListGroup.Item>
                   <p className="listGroupText">DOB:</p>
                   {this.props.patient.dob.length === 12 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.props.patient.dob.length === 13 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
                 </ListGroup.Item>
@@ -3614,10 +3614,10 @@ render() {
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
                   {this.props.patient.registration.date.length === 12 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.props.patient.registration.date.length === 13 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                 </ListGroup.Item>
                 <ListGroup.Item>
@@ -3630,10 +3630,10 @@ render() {
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
                   {this.props.patient.referral.date && this.props.patient.referral.date.length === 12 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.props.patient.referral.date && this.props.patient.referral.date.length === 13 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.date')}>Edit</Button>
                 </ListGroup.Item>
@@ -3713,10 +3713,10 @@ render() {
                   <ListGroup.Item>
                   <p className="listGroupText">Expiry:</p>
                   {this.props.patient.insurance.expiryDate.length === 12 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.props.patient.insurance.expiryDate.length === 13 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.expiryDate')}>Edit</Button>
                   </ListGroup.Item>
@@ -3737,10 +3737,10 @@ render() {
                 <ListGroup.Item>
                   <p className="listGroupText">Date of Death:</p>
                   {this.props.patient.expiryDate.length === 12 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.props.patient.expiryDate.length === 13 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'expiryDate')}>Edit</Button>
                 </ListGroup.Item>
@@ -4202,10 +4202,10 @@ render() {
                 <ListGroup.Item>
                   <p className="listGroupText">DOB:</p>
                   {this.props.patient.dob.length === 12 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.props.patient.dob.length === 13 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
                 </ListGroup.Item>
@@ -4244,10 +4244,10 @@ render() {
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
                   {this.props.patient.registration.date.length === 12 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.props.patient.registration.date.length === 13 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                 </ListGroup.Item>
                 <ListGroup.Item>
@@ -4260,10 +4260,10 @@ render() {
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
                   {this.props.patient.referral.date && this.props.patient.referral.date.length === 12 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.props.patient.referral.date && this.props.patient.referral.date.length === 13 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.date')}>Edit</Button>
                 </ListGroup.Item>
@@ -4345,10 +4345,10 @@ render() {
                   <ListGroup.Item>
                   <p className="listGroupText">Expiry:</p>
                   {this.props.patient.insurance.expiryDate.length === 12 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.props.patient.insurance.expiryDate.length === 13 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.expiryDate')}>Edit</Button>
                   </ListGroup.Item>
@@ -4369,10 +4369,10 @@ render() {
                 <ListGroup.Item>
                   <p className="listGroupText">Date of Death:</p>
                   {this.props.patient.expiryDate.length === 12 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.props.patient.expiryDate.length === 13 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'expiryDate')}>Edit</Button>
                 </ListGroup.Item>

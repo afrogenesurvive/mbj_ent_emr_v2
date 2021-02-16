@@ -609,7 +609,7 @@ return (
           </Popover>
         }
       >
-        <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="yellow" size="sm"/>
+        <FontAwesomeIcon icon={faExclamationTriangle} className="menuAttentionIcon" color="red" size="sm"/>
       </OverlayTrigger>
     )}
     </li>

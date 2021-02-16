@@ -2794,7 +2794,7 @@ module.exports = {
         images: [],
         files: []
       });
-      console.log('visit', visit);
+      // console.log('visit', visit);
 
       const result = await visit.save();
       const updatePatient = await Patient.findOneAndUpdate(

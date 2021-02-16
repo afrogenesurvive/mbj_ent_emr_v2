@@ -2102,7 +2102,7 @@ module.exports = {
         throw new Error('User w/ that username & email exists already.');
       }
       const hashedPassword = await bcrypt.hash(args.userInput.password, 12);
-      const today = moment();
+      const today = moment().tz("America/Bogota");
       let age = 0;
       let dob = moment(args.userInput.dob).format('YYYY-MM-DD');
       let dob2 = new Date(args.userInput.dob);
@@ -2136,7 +2136,7 @@ module.exports = {
         type: args.userInput.type,
         username: args.userInput.username,
         registrationNumber: regNo,
-        employmentDate: '',
+        employmentDate: today,
         dob: args.userInput.dob,
         age: age,
         gender: args.userInput.gender,

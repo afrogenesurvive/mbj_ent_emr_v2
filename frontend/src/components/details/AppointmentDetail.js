@@ -999,7 +999,12 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  {this.props.appointment.date.length === 12 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
+                  {this.props.appointment.date.length === 13 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Time:</p>
@@ -1206,7 +1211,12 @@ render() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
-                  <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  {this.props.appointment.date.length === 12 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
+                  {this.props.appointment.date.length === 13 && (
+                    <p className="listGroupText bold">{moment.unix(this.props.appointment.date.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  )}
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <p className="listGroupText">Time:</p>
