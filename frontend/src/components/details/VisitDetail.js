@@ -6383,7 +6383,7 @@ render() {
                     <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.props.visit.date.length === 13 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                 </ListGroup.Item>
                 <ListGroup.Item>
@@ -6434,7 +6434,7 @@ render() {
                   <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                 )}
                 {this.props.visit.appointment.date.length === 13 && (
-                  <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                  <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                 )}
                 </ListGroup.Item>
               </ListGroup>
@@ -7098,7 +7098,7 @@ render() {
                     <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.props.visit.date.length === 13 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.visit.date.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   <p className="listGroupText">Time:</p>
                   <p className="listGroupText bold">{this.props.visit.time}</p>
@@ -7137,7 +7137,7 @@ render() {
                     <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.props.visit.appointment.date.length === 13 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.visit.appointment.date.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   <Link
                     to={{

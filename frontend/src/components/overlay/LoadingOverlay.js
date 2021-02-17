@@ -26,6 +26,7 @@ import {
 import "./loadingOverlay.css"
 
 const LoadingOverlay = (props) => {
+  console.log('fubar:',props.status.data.date);
 
 return (
   <div className="attachmentViewerBg">

@@ -493,6 +493,7 @@ return (
     </li>
     </ul>
   )}
+
   {props.subMenuState === true &&
     props.page === 'appointment' && (
     <ul className="FloatSubMenuList">
@@ -540,6 +541,7 @@ return (
     </li>
     </ul>
   )}
+
   {props.subMenuState === true &&
     props.page === 'visit' && (
     <ul className="FloatSubMenuList">

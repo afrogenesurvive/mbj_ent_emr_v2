@@ -1054,6 +1054,12 @@ parseForCalendarAppts = (args) => {
 viewCalendarEvent = (args) => {
   console.log('...viewing calendar visit...');
   const visit = this.state.visits.filter(x => x._id === args.event.extendedProps.props._id)[0];
+  if (visit.date.length === 12) {
+    visit.date = moment.unix(visit.date.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD');
+  }
+  if (visit.date.length === 13) {
+    visit.date = moment.unix(visit.date.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD');
+  }
   this.setState({
     overlay: true,
     overlayStatus: {type: 'calendarVisit', data: visit}
