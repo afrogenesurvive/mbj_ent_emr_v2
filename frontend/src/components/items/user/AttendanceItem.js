@@ -53,12 +53,12 @@ const AttendanceItem = props => {
         <Card.Body className={liClass}>
           {props.attendance.date.length === 12 && (
             <Card.Text className="cardText">
-            Date: <span className="bold">{moment.unix(props.attendance.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+            Date: <span className="bold">{moment.unix(props.attendance.date.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</span>
             </Card.Text>
           )}
           {props.attendance.date.length === 13 && (
             <Card.Text className="cardText">
-            Date: <span className="bold">{moment.unix(props.attendance.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+            Date: <span className="bold">{moment.unix(props.attendance.date.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</span>
             </Card.Text>
           )}
 
@@ -101,12 +101,12 @@ const AttendanceItem = props => {
               <li>
               {props.attendance.date.length === 12 && (
                 <Card.Text className="cardText">
-                Date: <span className="bold">{moment.unix(props.attendance.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                Date: <span className="bold">{moment.unix(props.attendance.date.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</span>
                 </Card.Text>
               )}
               {props.attendance.date.length === 13 && (
                 <Card.Text className="cardText">
-                Date: <span className="bold">{moment.unix(props.attendance.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                Date: <span className="bold">{moment.unix(props.attendance.date.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</span>
                 </Card.Text>
               )}
               </li>
