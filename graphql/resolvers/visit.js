@@ -117,7 +117,19 @@ module.exports = {
           //   'vitals.$[].sp02': 0
           // },
           // {$unset: {"vitals.$[].ps02": 1}},
-          {$unset: {"vitals.$[]._id": 1}},
+          // {$unset: {"vitals.$[]._id": 1}},
+          {'examination.$[]': {
+            general: '',
+            area: '',
+            inspection: '',
+            palpation: '',
+            percussion: '',
+            auscultation: '',
+            description: '',
+            followUp: false,
+            attachments: [],
+            highlighted: false
+          }},
           {new: true, useFindAndModify: false}
         )
       }
@@ -1036,9 +1048,10 @@ module.exports = {
         const examination = {
           general: args.visitInput.examinationGeneral,
           area: args.visitInput.examinationArea,
-          type: args.visitInput.examinationType,
-          measure: args.visitInput.examinationMeasure,
-          value: args.visitInput.examinationValue,
+          inspection: args.visitInput.examinationInspection,
+          palpation: args.visitInput.examinationPalpation,
+          percussion: args.visitInput.examinationPercussion,
+          auscultation: args.visitInput.examinationAuscultation,
           description: args.visitInput.examinationDescription,
           followUp: args.visitInput.examinationFollowUp,
           attachments: [args.visitInput.examinationAttachment],
@@ -1072,9 +1085,10 @@ module.exports = {
         const examination = {
           general: args.visitInput.examinationGeneral,
           area: args.visitInput.examinationArea,
-          type: args.visitInput.examinationType,
-          measure: args.visitInput.examinationMeasure,
-          value: args.visitInput.examinationValue,
+          inspection: args.visitInput.examinationInspection,
+          palpation: args.visitInput.examinationPalpation,
+          percussion: args.visitInput.examinationPercussion,
+          auscultation: args.visitInput.examinationAuscultation,
           description: args.visitInput.examinationDescription,
           followUp: args.visitInput.examinationFollowUp
         }
@@ -1083,9 +1097,10 @@ module.exports = {
           {_id:args.visitId,
             'examination.general': examination.general,
             'examination.area': examination.area,
-            'examination.type': examination.type,
-            'examination.measure': examination.measure,
-            'examination.value': examination.value,
+            'examination.inspection': examination.inspection,
+            'examination.palpation': examination.palpation,
+            'examination.percussion': examination.percussion,
+            'examination.auscultation': examination.auscultation,
             'examination.description': examination.description,
             'examination.followUp': examination.followUp
           },
@@ -1114,9 +1129,10 @@ module.exports = {
         const examination = {
           general: args.visitInput.examinationGeneral,
           area: args.visitInput.examinationArea,
-          type: args.visitInput.examinationType,
-          measure: args.visitInput.examinationMeasure,
-          value: args.visitInput.examinationValue,
+          inspection: args.visitInput.examinationInspection,
+          palpation: args.visitInput.examinationPalpation,
+          percussion: args.visitInput.examinationPercussion,
+          auscultation: args.visitInput.examinationAuscultation,
           description: args.visitInput.examinationDescription,
           followUp: args.visitInput.examinationFollowUp
         }
@@ -1125,9 +1141,10 @@ module.exports = {
           {_id:args.visitId,
             'examination.general': examination.general,
             'examination.area': examination.area,
-            'examination.type': examination.type,
-            'examination.measure': examination.measure,
-            'examination.value': examination.value,
+            'examination.inspection': examination.inspection,
+            'examination.palpation': examination.palpation,
+            'examination.percussion': examination.percussion,
+            'examination.auscultation': examination.auscultation,
             'examination.description': examination.description,
             'examination.followUp': examination.followUp
           },
@@ -1158,9 +1175,10 @@ module.exports = {
         const examination = {
           general: args.visitInput.examinationGeneral,
           area: args.visitInput.examinationArea,
-          type: args.visitInput.examinationType,
-          measure: args.visitInput.examinationMeasure,
-          value: args.visitInput.examinationValue,
+          inspection: args.visitInput.examinationInspection,
+          palpation: args.visitInput.examinationPalpation,
+          percussion: args.visitInput.examinationPercussion,
+          auscultation: args.visitInput.examinationAuscultation,
           description: args.visitInput.examinationDescription,
           followUp: args.visitInput.examinationFollowUp,
           attachments: attachments,
@@ -1196,9 +1214,10 @@ module.exports = {
         const examination = {
           general: args.visitInput.examinationGeneral,
           area: args.visitInput.examinationArea,
-          type: args.visitInput.examinationType,
-          measure: args.visitInput.examinationMeasure,
-          value: args.visitInput.examinationValue,
+          inspection: args.visitInput.examinationInspection,
+          palpation: args.visitInput.examinationPalpation,
+          percussion: args.visitInput.examinationPercussion,
+          auscultation: args.visitInput.examinationAuscultation,
           description: args.visitInput.examinationDescription,
           followUp: args.visitInput.examinationFollowUp,
           attachments: attachments,

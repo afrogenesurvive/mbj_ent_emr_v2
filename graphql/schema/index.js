@@ -391,9 +391,10 @@ module.exports = buildSchema(`
   type VisitExamination {
     general: String
     area: String
-    type: String
-    measure: String
-    value: String
+    inspection: String
+    palpation: String
+    percussion: String
+    auscultation: String
     description: String
     followUp: Boolean
     attachments: [String]
@@ -520,9 +521,10 @@ module.exports = buildSchema(`
     vitalsHighlighted: Boolean
     examinationGeneral: String
     examinationArea: String
-    examinationType: String
-    examinationMeasure: String
-    examinationValue: String
+    examinationInspection: String
+    examinationPalpation: String
+    examinationPercussion: String
+    examinationAuscultation: String
     examinationDescription: String
     examinationFollowUp: Boolean
     examinationAttachment: String

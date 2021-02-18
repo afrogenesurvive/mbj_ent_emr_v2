@@ -31,20 +31,26 @@ return (
     </Form.Row>
 
     <Form.Row className="formRow">
-      <Form.Group as={Col} controlId="type" className="formGroup">
-        <Form.Label className="formLabel">Type * </Form.Label>
+      <Form.Group as={Col} controlId="inspection" className="formGroup">
+        <Form.Label className="formLabel">Inspection * </Form.Label>
         <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
     <Form.Row className="formRow">
-      <Form.Group as={Col} controlId="measure" className="formGroup">
-        <Form.Label className="formLabel">Measure * </Form.Label>
+      <Form.Group as={Col} controlId="palpation" className="formGroup">
+        <Form.Label className="formLabel">Palpation * </Form.Label>
         <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>
     <Form.Row className="formRow">
-      <Form.Group as={Col} controlId="value" className="formGroup">
-        <Form.Label className="formLabel">Value * </Form.Label>
+      <Form.Group as={Col} controlId="percussion" className="formGroup">
+        <Form.Label className="formLabel">Percussion * </Form.Label>
+        <Form.Control type="text" placeholder="..."/>
+      </Form.Group>
+    </Form.Row>
+    <Form.Row className="formRow">
+      <Form.Group as={Col} controlId="auscultation" className="formGroup">
+        <Form.Label className="formLabel">Auscultation * </Form.Label>
         <Form.Control type="text" placeholder="..."/>
       </Form.Group>
     </Form.Row>

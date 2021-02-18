@@ -104,27 +104,32 @@ const ExaminationItem = props => {
               </li>
               <li>
               <Card.Text className="cardText">
-                type: <span className="bold">{props.examination.type}</span>
+                Inspection: <span className="bold">{props.examination.inspection}</span>
               </Card.Text>
               </li>
               <li>
               <Card.Text className="cardText">
-                measure: <span className="bold">{props.examination.measure}</span>
+                Palpation: <span className="bold">{props.examination.palpation}</span>
               </Card.Text>
               </li>
               <li>
               <Card.Text className="cardText">
-                value: <span className="bold">{props.examination.value}</span>
+                Percussion: <span className="bold">{props.examination.percussion}</span>
               </Card.Text>
               </li>
               <li>
               <Card.Text className="cardText">
-                description: <span className="bold">{props.examination.description}</span>
+                Auscultation: <span className="bold">{props.examination.auscultation}</span>
               </Card.Text>
               </li>
               <li>
               <Card.Text className="cardText">
-                 followUp: <span className="bold">{props.examination.followUp === true ?(<FontAwesomeIcon icon={faCheckSquare} className="listIcon"/>):(<FontAwesomeIcon icon={faBan} className="listIcon"/>)}</span>
+                Description: <span className="bold">{props.examination.description}</span>
+              </Card.Text>
+              </li>
+              <li>
+              <Card.Text className="cardText">
+                 FollowUp: <span className="bold">{props.examination.followUp === true ?(<FontAwesomeIcon icon={faCheckSquare} className="listIcon"/>):(<FontAwesomeIcon icon={faBan} className="listIcon"/>)}</span>
               </Card.Text>
               </li>
               <li>

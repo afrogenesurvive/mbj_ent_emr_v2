@@ -70,9 +70,9 @@ module.exports = {
       status: x.status
     })
     // console.log('today', moment());
-    console.log('foo',userAttendance);
-    console.log('foo2',userAttendance2);
-    console.log('foo2',userAttendance3);
+    // console.log('foo',userAttendance);
+    // console.log('foo2',userAttendance2);
+    // console.log('foo2',userAttendance3);
     // console.log('loof',moment().tz("America/Bogota").format('YYYY-MM-DD'));
 
     const userAttendanceToday = userAttendance.filter(x => x.date === moment().tz("America/Bogota").format('YYYY-MM-DD'))
