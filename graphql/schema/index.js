@@ -825,12 +825,15 @@ module.exports = buildSchema(`
 
     addUserAddress(activityId: ID!, userId: ID!, userInput: UserInput!): User
     setUserAddressPrimary(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    updateUserAddress(activityId: ID!, userId: ID!, userInput: UserInput!, userInput2: UserInput!): User
 
     addUserAttendance(activityId: ID!, userId: ID!, userInput: UserInput!): User
     toggleUserAttendanceHighlighted(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    updateUserAttendance(activityId: ID!, userId: ID!, userInput: UserInput!, userInput2: UserInput!): User
 
     addUserLeave(activityId: ID!, userId: ID!, userInput: UserInput!): User
     toggleUserLeaveHighlighted(activityId: ID!, userId: ID!, userInput: UserInput!): User
+    updateUserLeave(activityId: ID!, userId: ID!, userInput: UserInput!, userInput2: UserInput!): User
 
     addUserImage(activityId: ID!, userId: ID!, userInput: UserInput!): User
     toggleUserImageHighlighted(activityId: ID!, userId: ID!, userInput: UserInput!): User
@@ -863,6 +866,8 @@ module.exports = buildSchema(`
     updatePatientSingleField(activityId: ID!, patientId: ID!, field:String!, query:String!): Patient
     addPatientAddress(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     setPatientAddressPrimary(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    updatePatientAddress(activityId: ID!, patientId: ID!, patientInput: PatientInput!, patientInput2: PatientInput!): Patient
+
     addPatientNextOfKin(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     togglePatientNextOfKinHighlighted(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
 

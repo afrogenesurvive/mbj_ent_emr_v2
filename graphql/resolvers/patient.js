@@ -636,6 +636,70 @@ module.exports = {
       throw err;
     }
   },
+  updatePatientAddress: async (args, req) => {
+    console.log("Resolver: updatePatientAddress...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+        const oldAddress = {
+          number: args.patientInput.addressNumber,
+          street: args.patientInput.addressStreet,
+          town: args.patientInput.addressTown,
+          city: args.patientInput.addressCity,
+          parish: args.patientInput.addressParish,
+          country: args.patientInput.addressCountry,
+          postalCode: args.patientInput.addressPostalCode,
+          primary: args.patientInput.addressPrimary
+        };
+        const newAddress = {
+          number: args.patientInput2.addressNumber,
+          street: args.patientInput2.addressStreet,
+          town: args.patientInput2.addressTown,
+          city: args.patientInput2.addressCity,
+          parish: args.patientInput2.addressParish,
+          country: args.patientInput2.addressCountry,
+          postalCode: args.patientInput2.addressPostalCode,
+          primary: args.patientInput2.addressPrimary
+        };
+
+        const patient = await Patient.findOneAndUpdate(
+          {
+            _id:args.patientId,
+            addresses: oldAddress
+          },
+          { 'addresses.$': newAddress },
+          {new: true, useFindAndModify: false}
+        )
+        .populate('appointments')
+        .populate({
+           path: 'appointments',
+           populate: {
+             path: 'consultants',
+             model: 'User'
+           }
+        })
+        .populate('visits')
+        .populate({
+           path: 'visits',
+           populate: {
+             path: 'consultants',
+             model: 'User'
+           }
+        })
+        .populate('reminders');
+
+        return {
+          ...patient._doc,
+          _id: patient.id,
+          email: patient.contact.email ,
+          name: patient.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   setPatientAddressPrimary: async (args, req) => {
     console.log("Resolver: setPatientAddressPrimary...");
     if (!req.isAuth) {
@@ -741,6 +805,70 @@ module.exports = {
         name: patient.name,
         username: patient.username,
       };
+    } catch (err) {
+      throw err;
+    }
+  },
+  updatePatientNextOfKin: async (args, req) => {
+    console.log("Resolver: updatePatientNextOfKin...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+        const oldNextOfKin = {
+          name: args.patientInput.nextOfKinName,
+          relation: args.patientInput.nextOfKinRelation,
+          contact:{
+            email: args.patientInput.nextOfKinContactEmail,
+            phone1: args.patientInput.nextOfKinContactPhone1,
+            phone2: args.patientInput.nextOfKinContactPhone2
+          },
+          highlighted: args.patientInput.nextOfKinHighlighted
+        };
+        const newNextOfKin = {
+          name: args.patientInput2.nextOfKinName,
+          relation: args.patientInput2.nextOfKinRelation,
+          contact:{
+            email: args.patientInput2.nextOfKinContactEmail,
+            phone1: args.patientInput2.nextOfKinContactPhone1,
+            phone2: args.patientInput2.nextOfKinContactPhone2
+          },
+          highlighted: args.patientInput2.nextOfKinHighlighted
+        };
+
+        const patient = await Patient.findOneAndUpdate(
+          {
+            _id:args.patientId,
+            nextOfKin: oldNextOfKin
+          },
+          { 'nextOfKin.$': newNextOfKin },
+          {new: true, useFindAndModify: false}
+        )
+        .populate('appointments')
+        .populate({
+           path: 'appointments',
+           populate: {
+             path: 'consultants',
+             model: 'User'
+           }
+        })
+        .populate('visits')
+        .populate({
+           path: 'visits',
+           populate: {
+             path: 'consultants',
+             model: 'User'
+           }
+        })
+        .populate('reminders');
+
+        return {
+          ...patient._doc,
+          _id: patient.id,
+          email: patient.contact.email ,
+          name: patient.name,
+        };
     } catch (err) {
       throw err;
     }
@@ -898,6 +1026,64 @@ module.exports = {
       throw err;
     }
   },
+  updatePatientAllergy: async (args, req) => {
+    console.log("Resolver: updatePatientAllergy...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+        const oldAllergy = {
+          type: args.patientInput.allergyType,
+          title: args.patientInput.allergyTitle,
+          description: args.patientInput.allergyDescription,
+          attachments: args.patientInput.allergyAttachments.split(','),
+          highlighted: args.patientInput.allergyHighlighted
+        };
+        const newAllergy = {
+          type: args.patientInput2.allergyType,
+          title: args.patientInput2.allergyTitle,
+          description: args.patientInput2.allergyDescription,
+          attachments: args.patientInput2.allergyAttachments.split(','),
+          highlighted: args.patientInput2.allergyHighlighted
+        };
+
+        const patient = await Patient.findOneAndUpdate(
+          {
+            _id:args.patientId,
+            allergies: oldAllergy
+          },
+          { 'allergies.$': newAllergy },
+          {new: true, useFindAndModify: false}
+        )
+        .populate('appointments')
+        .populate({
+           path: 'appointments',
+           populate: {
+             path: 'consultants',
+             model: 'User'
+           }
+        })
+        .populate('visits')
+        .populate({
+           path: 'visits',
+           populate: {
+             path: 'consultants',
+             model: 'User'
+           }
+        })
+        .populate('reminders');
+
+        return {
+          ...patient._doc,
+          _id: patient.id,
+          email: patient.contact.email ,
+          name: patient.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   deletePatientAllergy: async (args, req) => {
     console.log("Resolver: deletePatientAllergy...");
     if (!req.isAuth) {
@@ -1042,6 +1228,66 @@ module.exports = {
         name: patient.name,
         username: patient.username,
       };
+    } catch (err) {
+      throw err;
+    }
+  },
+  updatePatientMedication: async (args, req) => {
+    console.log("Resolver: updatePatientMedication...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+        const oldMedication = {
+          type: args.patientInput.medicationType,
+          title: args.patientInput.medicationTitle,
+          description: args.patientInput.medicationDescription,
+          dosage: args.patientInput.medicationDosage,
+          attachments: args.patientInput.medicationAttachments.split(','),
+          highlighted: args.patientInput.medicationHighlighted
+        };
+        const newMedication = {
+          type: args.patientInput2.medicationType,
+          title: args.patientInput2.medicationTitle,
+          description: args.patientInput2.medicationDescription,
+          dosage: args.patientInput2.medicationDosage,
+          attachments: args.patientInput2.medicationAttachments.split(','),
+          highlighted: args.patientInput2.medicationHighlighted
+        };
+
+        const patient = await Patient.findOneAndUpdate(
+          {
+            _id:args.patientId,
+            medication: oldMedication
+          },
+          { 'medication.$': newMedication },
+          {new: true, useFindAndModify: false}
+        )
+        .populate('appointments')
+        .populate({
+           path: 'appointments',
+           populate: {
+             path: 'consultants',
+             model: 'User'
+           }
+        })
+        .populate('visits')
+        .populate({
+           path: 'visits',
+           populate: {
+             path: 'consultants',
+             model: 'User'
+           }
+        })
+        .populate('reminders');
+
+        return {
+          ...patient._doc,
+          _id: patient.id,
+          email: patient.contact.email ,
+          name: patient.name,
+        };
     } catch (err) {
       throw err;
     }

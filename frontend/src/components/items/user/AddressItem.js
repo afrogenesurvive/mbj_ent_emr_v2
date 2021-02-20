@@ -21,7 +21,7 @@ import {
 import './UserItem.css';
 
 const AddressItem = props => {
-  
+
   let liClass;
   if (props.address.primary === false) {
     liClass = 'cardBody';
@@ -105,6 +105,11 @@ const AddressItem = props => {
               <li>
               <Card.Text className="cardText">
                 Country: <span className="bold">{props.address.country}</span>
+              </Card.Text>
+              </li>
+              <li>
+              <Card.Text className="cardText">
+                Postal Code: <span className="bold">{props.address.postalCode}</span>
               </Card.Text>
               </li>
               <li>

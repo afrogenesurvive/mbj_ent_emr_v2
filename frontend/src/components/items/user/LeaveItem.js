@@ -53,23 +53,23 @@ const LeaveItem = props => {
         <Card.Body className={liClass}>
           {props.leave.startDate.length === 12 && (
             <Card.Text className="cardText">
-              Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+              Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</span>
             </Card.Text>
           )}
           {props.leave.startDate.length === 13 && (
             <Card.Text className="cardText">
-              Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+              Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</span>
             </Card.Text>
           )}
 
           {props.leave.endDate.length === 12 && (
             <Card.Text className="cardText">
-              End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+              End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</span>
             </Card.Text>
           )}
           {props.leave.endDate.length === 13 && (
             <Card.Text className="cardText">
-              End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+              End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</span>
             </Card.Text>
           )}
 
@@ -114,24 +114,24 @@ const LeaveItem = props => {
               <li>
               {props.leave.startDate.length === 12 && (
                 <Card.Text className="cardText">
-                  Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                  Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</span>
                 </Card.Text>
               )}
               {props.leave.startDate.length === 13 && (
                 <Card.Text className="cardText">
-                  Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                  Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</span>
                 </Card.Text>
               )}
               </li>
               <li>
               {props.leave.endDate.length === 12 && (
                 <Card.Text className="cardText">
-                  End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                  End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</span>
                 </Card.Text>
               )}
               {props.leave.endDate.length === 13 && (
                 <Card.Text className="cardText">
-                  End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                  End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</span>
                 </Card.Text>
               )}
               </li>

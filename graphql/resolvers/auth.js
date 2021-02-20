@@ -76,7 +76,7 @@ module.exports = {
     // console.log('loof',moment().tz("America/Bogota").format('YYYY-MM-DD'));
 
     const userAttendanceToday = userAttendance.filter(x => x.date === moment().tz("America/Bogota").format('YYYY-MM-DD'))
-    console.log('bar',userAttendanceToday);
+    
     if (userAttendanceToday.length <= 0) {
       console.log('no attendance found...');
       const attendance = {
