@@ -1786,6 +1786,46 @@ module.exports = {
       throw err;
     }
   },
+  updateVisitDiagnosis: async (args, req) => {
+    console.log("Resolver: updateVisitDiagnosis...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const oldDiagnosis = {
+        type: args.visitInput.diagnosisType,
+        title: args.visitInput.diagnosisTitle,
+        description: args.visitInput.diagnosisDescription,
+        attachments: args.visitInput.diagnosisAttachments.split(','),
+        highlighted: args.visitInput.diagnosisHighlighted,
+      }
+      const newDiagnosis = {
+        type: args.visitInput2.diagnosisType,
+        title: args.visitInput2.diagnosisTitle,
+        description: args.visitInput2.diagnosisDescription,
+        attachments: args.visitInput2.diagnosisAttachments.split(','),
+        highlighted: args.visitInput2.diagnosisHighlighted,
+      }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,diagnosis: oldDiagnosis},
+          {'diagnosis.$': newDiagnosis},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   addVisitDiagnosisAttachment: async (args, req) => {
     console.log("Resolver: addVisitDiagnosisAttachment...");
     if (!req.isAuth) {
@@ -1949,6 +1989,50 @@ module.exports = {
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$addToSet: {treatment: treatment}},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  updateVisitTreatment: async (args, req) => {
+    console.log("Resolver: updateVisitTreatment...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const oldTreatment = {
+        type: args.visitInput.treatmentType,
+        title: args.visitInput.treatmentTitle,
+        description: args.visitInput.treatmentDescription,
+        dose: args.visitInput.treatmentDose,
+        frequency: args.visitInput.treatmentFrequency,
+        attachments: args.visitInput.treatmentAttachments.split(','),
+        highlighted: args.visitInput.treatmentHighlighted,
+      }
+      const newTreatment = {
+        type: args.visitInput2.treatmentType,
+        title: args.visitInput2.treatmentTitle,
+        description: args.visitInput2.treatmentDescription,
+        dose: args.visitInput2.treatmentDose,
+        frequency: args.visitInput2.treatmentFrequency,
+        attachments: args.visitInput2.treatmentAttachments.split(','),
+        highlighted: args.visitInput2.treatmentHighlighted,
+      }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,treatment: oldTreatment},
+          {'treatment.$': newTreatment},
           {new: true, useFindAndModify: false}
         )
         .populate('consultants')
@@ -2139,6 +2223,52 @@ module.exports = {
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$addToSet: {billing: billing}},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  updateVisitBilling: async (args, req) => {
+    console.log("Resolver: updateVisitBilling...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const oldBilling = {
+        title: args.visitInput.billingTitle,
+        type: args.visitInput.billingType,
+        description: args.visitInput.billingDescription,
+        amount: args.visitInput.billingAmount,
+        paid: args.visitInput.billingPaid,
+        attachments: args.visitInput.billingAttachments.split(','),
+        notes: args.visitInput.billingNotes,
+        highlighted: args.visitInput.billingHighlighted,
+      }
+      const newBilling = {
+        title: args.visitInput2.billingTitle,
+        type: args.visitInput2.billingType,
+        description: args.visitInput2.billingDescription,
+        amount: args.visitInput2.billingAmount,
+        paid: args.visitInput2.billingPaid,
+        attachments: args.visitInput2.billingAttachments.split(','),
+        notes: args.visitInput2.billingNotes,
+        highlighted: args.visitInput2.billingHighlighted,
+      }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,billing: oldBilling},
+          {'billing.$': newBilling},
           {new: true, useFindAndModify: false}
         )
         .populate('consultants')
@@ -2693,9 +2823,291 @@ module.exports = {
           },
           highlighted: false,
         }
+
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$addToSet: {vigilance: vigilance}},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  updateVisitVigilance: async (args, req) => {
+    console.log("Resolver: updateVisitVigilance...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const oldVigilance = {
+        chronicIllness: {
+          diabetes: {
+            medication: args.visitInput.vigilanceChronicIllnessDiabetesMedication,
+            testing: args.visitInput.vigilanceChronicIllnessDiabetesTesting,
+            comment: args.visitInput.vigilanceChronicIllnessDiabetesComment
+          },
+          hbp: {
+            medication: args.visitInput.vigilanceChronicIllnessHbpMedication,
+            testing: args.visitInput.vigilanceChronicIllnessHbpTesting,
+            comment: args.visitInput.vigilanceChronicIllnessHbpComment
+          },
+          dyslipidemia: {
+            medication: args.visitInput.vigilanceChronicIllnessDyslipidemiaMedication,
+            testing: args.visitInput.vigilanceChronicIllnessDyslipidemiaTesting,
+            comment: args.visitInput.vigilanceChronicIllnessDyslipidemiaComment
+          },
+          cad: {
+            medication: args.visitInput.vigilanceChronicIllnessCadMedication,
+            testing: args.visitInput.vigilanceChronicIllnessCadTesting,
+            comment: args.visitInput.vigilanceChronicIllnessCadComment
+          }
+        },
+        lifestyle: {
+          weight: {
+            medication: args.visitInput.vigilanceLifestyleWeightMedication,
+            testing: args.visitInput.vigilanceLifestyleWeightTesting,
+            comment: args.visitInput.vigilanceLifestyleWeightComment
+          },
+          diet: {
+            medication: args.visitInput.vigilanceLifestyleDietMedication,
+            testing: args.visitInput.vigilanceLifestyleDietTesting,
+            comment: args.visitInput.vigilanceLifestyleDietComment
+          },
+          smoking: {
+            medication: args.visitInput.vigilanceLifestyleSmokingMedication,
+            testing: args.visitInput.vigilanceLifestyleSmokingTesting,
+            comment: args.visitInput.vigilanceLifestyleSmokingComment
+          },
+          substanceAbuse: {
+            medication: args.visitInput.vigilanceLifestyleSubstanceAbuseMedication,
+            testing: args.visitInput.vigilanceLifestyleSubstanceAbuseTesting,
+            comment: args.visitInput.vigilanceLifestyleSubstanceAbuseComment
+          },
+          exercise: {
+            medication: args.visitInput.vigilanceLifestyleExerciseMedication,
+            testing: args.visitInput.vigilanceLifestyleExerciseTesting,
+            comment: args.visitInput.vigilanceLifestyleExerciseComment
+          },
+          allergies: {
+            medication: args.visitInput.vigilanceLifestyleAllergiesMedication,
+            testing: args.visitInput.vigilanceLifestyleAllergiesTesting,
+            comment: args.visitInput.vigilanceLifestyleAllergiesComment
+          },
+          asthma: {
+            medication: args.visitInput.vigilanceLifestyleAsthmaMedication,
+            testing: args.visitInput.vigilanceLifestyleAsthmaTesting,
+            comment: args.visitInput.vigilanceLifestyleAsthmaComment
+          }
+        },
+        screening: {
+          breast: {
+            medication: args.visitInput.vigilanceScreeningBreastMedication,
+            testing: args.visitInput.vigilanceScreeningBreastTesting,
+            comment: args.visitInput.vigilanceScreeningBreastComment
+          },
+          prostate: {
+            medication: args.visitInput.vigilanceScreeningProstateMedication,
+            testing: args.visitInput.vigilanceScreeningProstateTesting,
+            comment: args.visitInput.vigilanceScreeningProstateComment
+          },
+          cervix: {
+            medication: args.visitInput.vigilanceScreeningCervixMedication,
+            testing: args.visitInput.vigilanceScreeningCervixTesting,
+            comment: args.visitInput.vigilanceScreeningCervixComment
+          },
+          colon: {
+            medication: args.visitInput.vigilanceScreeningColonMedication,
+            testing: args.visitInput.vigilanceScreeningColonTesting,
+            comment: args.visitInput.vigilanceScreeningColonComment
+          },
+          dental: {
+            medication: args.visitInput.vigilanceScreeningDentalMedication,
+            testing: args.visitInput.vigilanceScreeningDentalTesting,
+            comment: args.visitInput.vigilanceScreeningDentalComment
+          }
+        },
+        vaccines: {
+          influenza: {
+            medication: args.visitInput.vigilanceVaccinesInfluenzaMedication,
+            testing: args.visitInput.vigilanceVaccinesInfluenzaTesting,
+            comment: args.visitInput.vigilanceVaccinesInfluenzaComment
+          },
+          varicella: {
+            medication: args.visitInput.vigilanceVaccinesVaricellaMedication,
+            testing: args.visitInput.vigilanceVaccinesVaricellaTesting,
+            comment: args.visitInput.vigilanceVaccinesVaricellaComment
+          },
+          hpv: {
+            medication: args.visitInput.vigilanceVaccinesHpvMedication,
+            testing: args.visitInput.vigilanceVaccinesHpvTesting,
+            comment: args.visitInput.vigilanceVaccinesHpvComment
+          },
+          mmr: {
+            medication: args.visitInput.vigilanceVaccinesMmrMedication,
+            testing: args.visitInput.vigilanceVaccinesMmrTesting,
+            comment: args.visitInput.vigilanceVaccinesMmrComment
+          },
+          tetanus: {
+            medication: args.visitInput.vigilanceVaccinesTetanusMedication,
+            testing: args.visitInput.vigilanceVaccinesTetanusTesting,
+            comment: args.visitInput.vigilanceVaccinesTetanusComment
+          },
+          pneumovax: {
+            medication: args.visitInput.vigilanceVaccinesPneumovaxMedication,
+            testing: args.visitInput.vigilanceVaccinesPneumovaxTesting,
+            comment: args.visitInput.vigilanceVaccinesPneumovaxComment
+          },
+          other: {
+            name: args.visitInput.vigilanceVaccinesOtherName,
+            medication: args.visitInput.vigilanceVaccinesOtherMedication,
+            testing: args.visitInput.vigilanceVaccinesOtherTesting,
+            comment: args.visitInput.vigilanceVaccinesOtherComment
+          }
+        },
+        highlighted: args.visitInput.vigilanceHighlighted,
+      }
+
+      const newVigilance = {
+        chronicIllness: {
+          diabetes: {
+            medication: args.visitInput2.vigilanceChronicIllnessDiabetesMedication,
+            testing: args.visitInput2.vigilanceChronicIllnessDiabetesTesting,
+            comment: args.visitInput2.vigilanceChronicIllnessDiabetesComment
+          },
+          hbp: {
+            medication: args.visitInput2.vigilanceChronicIllnessHbpMedication,
+            testing: args.visitInput2.vigilanceChronicIllnessHbpTesting,
+            comment: args.visitInput2.vigilanceChronicIllnessHbpComment
+          },
+          dyslipidemia: {
+            medication: args.visitInput2.vigilanceChronicIllnessDyslipidemiaMedication,
+            testing: args.visitInput2.vigilanceChronicIllnessDyslipidemiaTesting,
+            comment: args.visitInput2.vigilanceChronicIllnessDyslipidemiaComment
+          },
+          cad: {
+            medication: args.visitInput2.vigilanceChronicIllnessCadMedication,
+            testing: args.visitInput2.vigilanceChronicIllnessCadTesting,
+            comment: args.visitInput2.vigilanceChronicIllnessCadComment
+          }
+        },
+        lifestyle: {
+          weight: {
+            medication: args.visitInput2.vigilanceLifestyleWeightMedication,
+            testing: args.visitInput2.vigilanceLifestyleWeightTesting,
+            comment: args.visitInput2.vigilanceLifestyleWeightComment
+          },
+          diet: {
+            medication: args.visitInput2.vigilanceLifestyleDietMedication,
+            testing: args.visitInput2.vigilanceLifestyleDietTesting,
+            comment: args.visitInput2.vigilanceLifestyleDietComment
+          },
+          smoking: {
+            medication: args.visitInput2.vigilanceLifestyleSmokingMedication,
+            testing: args.visitInput2.vigilanceLifestyleSmokingTesting,
+            comment: args.visitInput2.vigilanceLifestyleSmokingComment
+          },
+          substanceAbuse: {
+            medication: args.visitInput2.vigilanceLifestyleSubstanceAbuseMedication,
+            testing: args.visitInput2.vigilanceLifestyleSubstanceAbuseTesting,
+            comment: args.visitInput2.vigilanceLifestyleSubstanceAbuseComment
+          },
+          exercise: {
+            medication: args.visitInput2.vigilanceLifestyleExerciseMedication,
+            testing: args.visitInput2.vigilanceLifestyleExerciseTesting,
+            comment: args.visitInput2.vigilanceLifestyleExerciseComment
+          },
+          allergies: {
+            medication: args.visitInput2.vigilanceLifestyleAllergiesMedication,
+            testing: args.visitInput2.vigilanceLifestyleAllergiesTesting,
+            comment: args.visitInput2.vigilanceLifestyleAllergiesComment
+          },
+          asthma: {
+            medication: args.visitInput2.vigilanceLifestyleAsthmaMedication,
+            testing: args.visitInput2.vigilanceLifestyleAsthmaTesting,
+            comment: args.visitInput2.vigilanceLifestyleAsthmaComment
+          }
+        },
+        screening: {
+          breast: {
+            medication: args.visitInput2.vigilanceScreeningBreastMedication,
+            testing: args.visitInput2.vigilanceScreeningBreastTesting,
+            comment: args.visitInput2.vigilanceScreeningBreastComment
+          },
+          prostate: {
+            medication: args.visitInput2.vigilanceScreeningProstateMedication,
+            testing: args.visitInput2.vigilanceScreeningProstateTesting,
+            comment: args.visitInput2.vigilanceScreeningProstateComment
+          },
+          cervix: {
+            medication: args.visitInput2.vigilanceScreeningCervixMedication,
+            testing: args.visitInput2.vigilanceScreeningCervixTesting,
+            comment: args.visitInput2.vigilanceScreeningCervixComment
+          },
+          colon: {
+            medication: args.visitInput2.vigilanceScreeningColonMedication,
+            testing: args.visitInput2.vigilanceScreeningColonTesting,
+            comment: args.visitInput2.vigilanceScreeningColonComment
+          },
+          dental: {
+            medication: args.visitInput2.vigilanceScreeningDentalMedication,
+            testing: args.visitInput2.vigilanceScreeningDentalTesting,
+            comment: args.visitInput2.vigilanceScreeningDentalComment
+          }
+        },
+        vaccines: {
+          influenza: {
+            medication: args.visitInput2.vigilanceVaccinesInfluenzaMedication,
+            testing: args.visitInput2.vigilanceVaccinesInfluenzaTesting,
+            comment: args.visitInput2.vigilanceVaccinesInfluenzaComment
+          },
+          varicella: {
+            medication: args.visitInput2.vigilanceVaccinesVaricellaMedication,
+            testing: args.visitInput2.vigilanceVaccinesVaricellaTesting,
+            comment: args.visitInput2.vigilanceVaccinesVaricellaComment
+          },
+          hpv: {
+            medication: args.visitInput2.vigilanceVaccinesHpvMedication,
+            testing: args.visitInput2.vigilanceVaccinesHpvTesting,
+            comment: args.visitInput2.vigilanceVaccinesHpvComment
+          },
+          mmr: {
+            medication: args.visitInput2.vigilanceVaccinesMmrMedication,
+            testing: args.visitInput2.vigilanceVaccinesMmrTesting,
+            comment: args.visitInput2.vigilanceVaccinesMmrComment
+          },
+          tetanus: {
+            medication: args.visitInput2.vigilanceVaccinesTetanusMedication,
+            testing: args.visitInput2.vigilanceVaccinesTetanusTesting,
+            comment: args.visitInput2.vigilanceVaccinesTetanusComment
+          },
+          pneumovax: {
+            medication: args.visitInput2.vigilanceVaccinesPneumovaxMedication,
+            testing: args.visitInput2.vigilanceVaccinesPneumovaxTesting,
+            comment: args.visitInput2.vigilanceVaccinesPneumovaxComment
+          },
+          other: {
+            name: args.visitInput2.vigilanceVaccinesOtherName,
+            medication: args.visitInput2.vigilanceVaccinesOtherMedication,
+            testing: args.visitInput2.vigilanceVaccinesOtherTesting,
+            comment: args.visitInput2.vigilanceVaccinesOtherComment
+          }
+        },
+        highlighted: args.visitInput2.vigilanceHighlighted,
+      }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,vigilance: oldVigilance},
+          {'vigilance.$': newVigilance},
           {new: true, useFindAndModify: false}
         )
         .populate('consultants')
