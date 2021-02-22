@@ -1649,6 +1649,62 @@ module.exports = {
       throw err;
     }
   },
+  updatePatientComorbidity: async (args, req) => {
+    console.log("Resolver: updatePatientComorbidity...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const oldComorbidity = {
+        type: args.patientInput.comorbidityType,
+        title: args.patientInput.comorbidityTitle,
+        description: args.patientInput.comorbidityDescription,
+        highlighted: args.patientInput.comorbidityHighlighted,
+      };
+      const newComorbidity = {
+        type: args.patientInput2.comorbidityType,
+        title: args.patientInput2.comorbidityTitle,
+        description: args.patientInput2.comorbidityDescription,
+        highlighted: args.patientInput2.comorbidityHighlighted,
+      };
+
+        const patient = await Patient.findOneAndUpdate(
+          {
+            _id:args.patientId,
+            comorbidities: oldComorbidity
+          },
+          { 'comorbidities.$': newComorbidity },
+          {new: true, useFindAndModify: false}
+        )
+        .populate('appointments')
+        .populate({
+           path: 'appointments',
+           populate: {
+             path: 'consultants',
+             model: 'User'
+           }
+        })
+        .populate('visits')
+        .populate({
+           path: 'visits',
+           populate: {
+             path: 'consultants',
+             model: 'User'
+           }
+        })
+        .populate('reminders');
+
+        return {
+          ...patient._doc,
+          _id: patient.id,
+          email: patient.contact.email ,
+          name: patient.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   deletePatientComorbidity: async (args, req) => {
     console.log("Resolver: deletePatientComorbidity...");
     if (!req.isAuth) {

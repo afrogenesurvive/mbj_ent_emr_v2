@@ -390,6 +390,70 @@ module.exports = {
       throw err;
     }
   },
+  updatePatientAddress: async (args, req) => {
+    console.log("Resolver: updatePatientAddress...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+        const oldAddress = {
+          number: args.patientInput.addressNumber,
+          street: args.patientInput.addressStreet,
+          town: args.patientInput.addressTown,
+          city: args.patientInput.addressCity,
+          parish: args.patientInput.addressParish,
+          country: args.patientInput.addressCountry,
+          postalCode: args.patientInput.addressPostalCode,
+          primary: args.patientInput.addressPrimary
+        };
+        const newAddress = {
+          number: args.patientInput2.addressNumber,
+          street: args.patientInput2.addressStreet,
+          town: args.patientInput2.addressTown,
+          city: args.patientInput2.addressCity,
+          parish: args.patientInput2.addressParish,
+          country: args.patientInput2.addressCountry,
+          postalCode: args.patientInput2.addressPostalCode,
+          primary: args.patientInput2.addressPrimary
+        };
+
+        const patient = await Patient.findOneAndUpdate(
+          {
+            _id:args.patientId,
+            addresses: oldAddress
+          },
+          { 'addresses.$': newAddress },
+          {new: true, useFindAndModify: false}
+        )
+        .populate('appointments')
+        .populate({
+           path: 'appointments',
+           populate: {
+             path: 'consultants',
+             model: 'User'
+           }
+        })
+        .populate('visits')
+        .populate({
+           path: 'visits',
+           populate: {
+             path: 'consultants',
+             model: 'User'
+           }
+        })
+        .populate('reminders');
+
+        return {
+          ...patient._doc,
+          _id: patient.id,
+          email: patient.contact.email ,
+          name: patient.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   addVisitComplaint: async (args, req) => {
     console.log("Resolver: addVisitComplaint...");
     if (!req.isAuth) {
@@ -406,6 +470,45 @@ module.exports = {
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$addToSet: {complaints: complaint}},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  updateVisitComplaint: async (args, req) => {
+    console.log("Resolver: updateVisitComplaint...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+        const oldComplaint = {
+          title: args.visitInput.complaintTitle,
+          description: args.visitInput.complaintDescription,
+          anamnesis: args.visitInput.complaintAnamnesis,
+          attachments: args.visitInput.complaintAttachment.split(','),
+          highlighted: args.visitInput.complaintHighlighted,
+        }
+        const newComplaint = {
+          title: args.visitInput2.complaintTitle,
+          description: args.visitInput2.complaintDescription,
+          anamnesis: args.visitInput2.complaintAnamnesis,
+          attachments: args.visitInput2.complaintAttachment.split(','),
+          highlighted: args.visitInput2.complaintHighlighted,
+        }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,complaints: oldComplaint},
+          {'complaints.$': newComplaint},
           {new: true, useFindAndModify: false}
         )
         .populate('consultants')
@@ -594,6 +697,44 @@ module.exports = {
       throw err;
     }
   },
+  updateVisitSurvey: async (args, req) => {
+    console.log("Resolver: updateVisitSurvey...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+        const oldSurvey = {
+          title: args.visitInput.surveyTitle,
+          description: args.visitInput.surveyDescription,
+          attachments: args.visitInput.surveyAttachment.split(','),
+          highlighted: args.visitInput.surveyHighlighted,
+        }
+        const newSurvey = {
+          title: args.visitInput2.surveyTitle,
+          description: args.visitInput2.surveyDescription,
+          attachments: args.visitInput2.surveyAttachment.split(','),
+          highlighted: args.visitInput2.surveyHighlighted,
+        }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,surveys: oldSurvey},
+          {'surveys.$': newSurvey},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   deleteVisitSurvey: async (args, req) => {
     console.log("Resolver: deleteVisitSurvey...");
     if (!req.isAuth) {
@@ -745,6 +886,44 @@ module.exports = {
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$addToSet: {systematicInquiry: systematicInquiry}},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  updateVisitSysInquiry: async (args, req) => {
+    console.log("Resolver: updateVisitSysInquiry...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+        const oldSystematicInquiry = {
+          title: args.visitInput.systematicInquiryTitle,
+          description: args.visitInput.systematicInquiryDescription,
+          attachments: args.visitInput.systematicInquiryAttachment.split(','),
+          highlighted: args.visitInput.systematicInquiryHighlighted,
+        }
+        const newSystematicInquiry = {
+          title: args.visitInput2.systematicInquiryTitle,
+          description: args.visitInput2.systematicInquiryDescription,
+          attachments: args.visitInput2.systematicInquiryAttachment.split(','),
+          highlighted: args.visitInput2.systematicInquiryHighlighted,
+        }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,systematicInquiry: oldSystematicInquiry},
+          {'systematicInquiry.$': newSystematicInquiry},
           {new: true, useFindAndModify: false}
         )
         .populate('consultants')
@@ -938,6 +1117,68 @@ module.exports = {
       throw err;
     }
   },
+  updateVisitVitals: async (args, req) => {
+    console.log("Resolver: updateVisitVitals...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const oldVitals = {
+        pr: args.visitInput.vitalsPr,
+        bp1: args.visitInput.vitalsBp1,
+        bp2: args.visitInput.vitalsBp2,
+        rr: args.visitInput.vitalsRr,
+        temp: args.visitInput.vitalsTemp,
+        sp02: args.visitInput.vitalsSp02,
+        heightUnit: args.visitInput.vitalsHeightUnit,
+        heightValue: args.visitInput.vitalsHeightValue,
+        weightUnit: args.visitInput.vitalsWeightUnit,
+        weightValue: args.visitInput.vitalsWeightValue,
+        bmi: args.visitInput.vitalsBmi,
+        urine: {
+          type: args.visitInput.vitalsUrineType,
+          value: args.visitInput.vitalsUrineValue
+        },
+        highlighted: args.visitInput.vitalsHighlighted,
+      }
+      const newVitals = {
+        pr: args.visitInput2.vitalsPr,
+        bp1: args.visitInput2.vitalsBp1,
+        bp2: args.visitInput2.vitalsBp2,
+        rr: args.visitInput2.vitalsRr,
+        temp: args.visitInput2.vitalsTemp,
+        sp02: args.visitInput2.vitalsSp02,
+        heightUnit: args.visitInput2.vitalsHeightUnit,
+        heightValue: args.visitInput2.vitalsHeightValue,
+        weightUnit: args.visitInput2.vitalsWeightUnit,
+        weightValue: args.visitInput2.vitalsWeightValue,
+        bmi: args.visitInput2.vitalsBmi,
+        urine: {
+          type: args.visitInput2.vitalsUrineType,
+          value: args.visitInput2.vitalsUrineValue
+        },
+        highlighted: args.visitInput2.vitalsHighlighted,
+      }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,vitals: oldVitals},
+          {'vitals.$': newVitals},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   deleteVisitVitals: async (args, req) => {
     console.log("Resolver: deleteVisitVitals...");
     if (!req.isAuth) {
@@ -1061,6 +1302,56 @@ module.exports = {
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$addToSet: {examination: examination}},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  updateVisitVitals: async (args, req) => {
+    console.log("Resolver: updateVisitVitals...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const oldExamination = {
+        general: args.visitInput.examinationGeneral,
+        area: args.visitInput.examinationArea,
+        inspection: args.visitInput.examinationInspection,
+        palpation: args.visitInput.examinationPalpation,
+        percussion: args.visitInput.examinationPercussion,
+        auscultation: args.visitInput.examinationAuscultation,
+        description: args.visitInput.examinationDescription,
+        followUp: args.visitInput.examinationFollowUp,
+        attachments: args.visitInput.examinationAttachments.split(','),
+        highlighted: args.visitInput.examinationHighlighted,
+      }
+      const newExamination = {
+        general: args.visitInput2.examinationGeneral,
+        area: args.visitInput2.examinationArea,
+        inspection: args.visitInput2.examinationInspection,
+        palpation: args.visitInput2.examinationPalpation,
+        percussion: args.visitInput2.examinationPercussion,
+        auscultation: args.visitInput2.examinationAuscultation,
+        description: args.visitInput2.examinationDescription,
+        followUp: args.visitInput2.examinationFollowUp,
+        attachments: args.visitInput2.examinationAttachments.split(','),
+        highlighted: args.visitInput2.examinationHighlighted,
+      }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,examination: oldExamination},
+          {'examination.$': newExamination},
           {new: true, useFindAndModify: false}
         )
         .populate('consultants')
@@ -1263,9 +1554,50 @@ module.exports = {
           attachments: [args.visitInput.investigationAttachment],
           highlighted: true,
         }
+
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$addToSet: {investigation: investigation}},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  updateVisitInvestigation: async (args, req) => {
+    console.log("Resolver: updateVisitInvestigation...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const oldInvestigation = {
+        type: args.visitInput.investigationType,
+        title: args.visitInput.investigationTitle,
+        description: args.visitInput.investigationDescription,
+        attachments: args.visitInput.investigationAttachments.split(','),
+        highlighted: args.visitInput.investigationHighlighted,
+      }
+      const newInvestigation = {
+        type: args.visitInput2.investigationType,
+        title: args.visitInput2.investigationTitle,
+        description: args.visitInput2.investigationDescription,
+        attachments: args.visitInput2.investigationAttachments.split(','),
+        highlighted: args.visitInput2.investigationHighlighted,
+      }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,investigation: oldInvestigation},
+          {'investigation.$': newInvestigation},
           {new: true, useFindAndModify: false}
         )
         .populate('consultants')

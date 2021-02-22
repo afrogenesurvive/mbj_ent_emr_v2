@@ -870,17 +870,21 @@ module.exports = buildSchema(`
 
     addPatientNextOfKin(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     togglePatientNextOfKinHighlighted(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    updatePatientNextOfKin(activityId: ID!, patientId: ID!, patientInput: PatientInput!, patientInput2: PatientInput!): Patient
 
     addPatientAllergy(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientAllergyAttachment(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     togglePatientAllergyHighlighted(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    updatePatientAllergy(activityId: ID!, patientId: ID!, patientInput: PatientInput!, patientInput2: PatientInput!): Patient
 
     addPatientMedication(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     addPatientMedicationAttachment(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     togglePatientMedicationHighlighted(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    updatePatientMedication(activityId: ID!, patientId: ID!, patientInput: PatientInput!, patientInput2: PatientInput!): Patient
 
     addPatientComorbidity(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     togglePatientComorbidityHighlighted(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
+    updatePatientComorbidity(activityId: ID!, patientId: ID!, patientInput: PatientInput!, patientInput2: PatientInput!): Patient
 
     addPatientImage(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
     togglePatientImageHighlighted(activityId: ID!, patientId: ID!, patientInput: PatientInput!): Patient
@@ -931,44 +935,55 @@ module.exports = buildSchema(`
     updateVisitSingleField(activityId: ID!, visitId: ID!, field: String, query: String!): Visit
     updateVisitPatient(activityId: ID!, visitId: ID!, patientId: ID!): Visit
     addVisitConsultant(activityId: ID!, visitId: ID!, consultantId: ID!): Visit
+
     addVisitComplaint(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     toggleVisitComplaintHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitComplaintAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    updateVisitComplaint(activityId: ID!, visitId: ID!, visitInput: VisitInput!, visitInput2: VisitInput!): Visit
 
     addVisitSurvey(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitSurveyAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     toggleVisitSurveyHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    updateVisitSurvey(activityId: ID!, visitId: ID!, visitInput: VisitInput!, visitInput2: VisitInput!): Visit
 
     addVisitSysInquiry(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitSysInquiryAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     toggleVisitSysInquiryHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    updateVisitSysInquiry(activityId: ID!, visitId: ID!, visitInput: VisitInput!, visitInput2: VisitInput!): Visit
 
     addVisitVitals(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     toggleVisitVitalsHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    updateVisitVitals(activityId: ID!, visitId: ID!, visitInput: VisitInput!, visitInput2: VisitInput!): Visit
 
     addVisitExamination(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitExaminationAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     toggleVisitExaminationHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    updateVisitExamination(activityId: ID!, visitId: ID!, visitInput: VisitInput!, visitInput2: VisitInput!): Visit
 
     addVisitInvestigation(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitInvestigationAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     toggleVisitInvestigationHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    updateVisitInvestigation(activityId: ID!, visitId: ID!, visitInput: VisitInput!, visitInput2: VisitInput!): Visit
 
     addVisitDiagnosis(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitDiagnosisAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     toggleVisitDiagnosisHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    updateVisitDiagnosis(activityId: ID!, visitId: ID!, visitInput: VisitInput!, visitInput2: VisitInput!): Visit
 
     addVisitTreatment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitTreatmentAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     toggleVisitTreatmentHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    updateVisitTreatment(activityId: ID!, visitId: ID!, visitInput: VisitInput!, visitInput2: VisitInput!): Visit
 
     addVisitBilling(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     addVisitBillingAttachment(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     updateVisitBillingPaid(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     toggleVisitBillingHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    updateVisitBilling(activityId: ID!, visitId: ID!, visitInput: VisitInput!, visitInput2: VisitInput!): Visit
 
     addVisitVigilance(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     toggleVisitVigilanceHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
+    updateVisitVigilance(activityId: ID!, visitId: ID!, visitInput: VisitInput!, visitInput2: VisitInput!): Visit
 
     addVisitImage(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
     toggleVisitImageHighlighted(activityId: ID!, visitId: ID!, visitInput: VisitInput!): Visit
