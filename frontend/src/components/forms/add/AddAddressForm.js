@@ -6,6 +6,27 @@ import Col from 'react-bootstrap/Col';
 import './addForms.css';
 
 const AddAddressForm = (props) => {
+  let placeHolders = {
+    number: 0,
+    street: '...',
+    town: '...',
+    city: '...',
+    parish: '...',
+    country: '...',
+    postalCode: '...',
+  }
+  if (props.previousAddress) {
+    placeHolders = {
+      number: 0,
+      street: props.previousAddress,
+      town: props.previousAddress,
+      city: props.previousAddress,
+      parish: props.previousAddress,
+      country: props.previousAddress,
+      postalCode: props.previousAddress,
+    }
+  }
+
 
 return (
 <div className="addFormTopDiv">
@@ -15,12 +36,12 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="number" className="formGroup">
         <Form.Label className="formLabel">Address Number * </Form.Label>
-        <Form.Control type="number" placeholder="..."/>
+        <Form.Control type="number" placeholder={placeHolders.number}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="street" className="formGroup">
         <Form.Label className="formLabel">Address Street * </Form.Label>
-        <Form.Control type="text" placeholder="..."/>
+        <Form.Control type="text" placeholder={placeHolders.street}/>
       </Form.Group>
 
     </Form.Row>
@@ -29,12 +50,12 @@ return (
 
       <Form.Group as={Col} controlId="town" className="formGroup">
         <Form.Label className="formLabel">Address Town</Form.Label>
-        <Form.Control type="text" placeholder="..."/>
+        <Form.Control type="text" placeholder={placeHolders.town}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="city" className="formGroup">
         <Form.Label className="formLabel">Address City * </Form.Label>
-        <Form.Control type="text" placeholder="..."/>
+        <Form.Control type="text" placeholder={placeHolders.city}/>
       </Form.Group>
 
     </Form.Row>
@@ -43,7 +64,7 @@ return (
       <Form.Group as={Col} controlId="parish" className="formGroup">
         <Form.Label className="formLabel">Address Parish</Form.Label>
         <Form.Control as="select">
-          <option>none</option>
+          <option>{placeHolders.parish}</option>
           <option>Clarendon</option>
           <option>Hanover</option>
           <option>Kingston</option>
@@ -63,7 +84,7 @@ return (
 
       <Form.Group as={Col} controlId="country" className="formGroup">
         <Form.Label className="formLabel">Address Country * </Form.Label>
-        <Form.Control type="text" placeholder="..."/>
+        <Form.Control type="text" placeholder={placeHolders.country}/>
       </Form.Group>
 
 
@@ -73,7 +94,7 @@ return (
 
       <Form.Group as={Col} controlId="postalCode" className="formGroup">
         <Form.Label className="formLabel">Address PostalCode</Form.Label>
-        <Form.Control type="text" placeholder="..."/>
+        <Form.Control type="text" placeholder={placeHolders.postalCode}/>
       </Form.Group>
     </Form.Row>
 

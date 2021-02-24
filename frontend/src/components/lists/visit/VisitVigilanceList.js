@@ -31,6 +31,7 @@ const VisitVigilanceList = props => {
     return (
       <VigilanceItem
         key={count}
+        count={count}
         vigilance={vigilance}
         canDelete={props.canDelete}
         onDelete={props.onDelete}

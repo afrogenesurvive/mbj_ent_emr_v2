@@ -3062,7 +3062,6 @@ submitAddTreatmentForm = (event) => {
 
   if (
       title.trim().length === 0 ||
-      type.trim().length === 0 ||
       description.trim().length === 0 ||
       dose.trim().length === 0 ||
       frequency.trim().length === 0

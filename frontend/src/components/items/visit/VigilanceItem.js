@@ -11,12 +11,14 @@ import {
   faEye,
   faTrashAlt,
   faHighlighter,
-  faExclamation
+  faExclamation,
+  faEdit,
  } from '@fortawesome/free-solid-svg-icons';
 
 import './visitItem.css';
 
 const VigilanceItem = (props) => {
+
   let liClass;
   if (props.vigilance.highlighted === false) {
     liClass = 'cardBody';
@@ -48,7 +50,7 @@ const VigilanceItem = (props) => {
       <Card>
         <Card.Body className={liClass}>
           <Card.Text className="cardText">
-            number: <span className="bold">{props.key}</span>
+            #: <span className="bold">{props.count}</span>
           </Card.Text>
 
           <OverlayTrigger

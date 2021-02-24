@@ -4,6 +4,7 @@ import AddressItem from '../../items/user/AddressItem';
 import './UserList.css';
 
 const UserAddressList = props => {
+  console.log(props);
 
   const {...filter} = props.filter;
   let addresses2 = props.addresses;
@@ -71,6 +72,8 @@ const UserAddressList = props => {
         onDelete={props.onDelete}
         canDelete={props.canDelete}
         makePrimary={props.makePrimary}
+        canUpdate={props.canUpdate}
+        startUpdateAddress={props.startUpdateAddress}
       />
     );
   });

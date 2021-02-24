@@ -498,6 +498,7 @@ module.exports = {
           attachments: args.visitInput.complaintAttachment.split(','),
           highlighted: args.visitInput.complaintHighlighted,
         }
+
         const newComplaint = {
           title: args.visitInput2.complaintTitle,
           description: args.visitInput2.complaintDescription,
@@ -1317,8 +1318,8 @@ module.exports = {
       throw err;
     }
   },
-  updateVisitVitals: async (args, req) => {
-    console.log("Resolver: updateVisitVitals...");
+  updateVisitExamination: async (args, req) => {
+    console.log("Resolver: updateVisitExamination...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
@@ -1552,7 +1553,7 @@ module.exports = {
           title: args.visitInput.investigationTitle,
           description: args.visitInput.investigationDescription,
           attachments: [args.visitInput.investigationAttachment],
-          highlighted: true,
+          highlighted: false,
         }
 
         const visit = await Visit.findOneAndUpdate(
