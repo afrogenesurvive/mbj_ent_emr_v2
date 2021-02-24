@@ -32,7 +32,7 @@ const NoteItem = props => {
 
           {props.canDelete === true && (
           <OverlayTrigger
-            key={'top'}
+            
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>

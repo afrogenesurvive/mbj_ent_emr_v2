@@ -62,7 +62,7 @@ const BillingItem = props => {
           </Card.Text>
 
           <OverlayTrigger
-            key={'top'}
+            
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -77,7 +77,7 @@ const BillingItem = props => {
 
 
           <OverlayTrigger
-            key={'top'}
+            
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -130,7 +130,7 @@ const BillingItem = props => {
               <Card.Text className="cardText">
                 Attachments:
                 <OverlayTrigger
-                  key={'top'}
+                  
                   placement={'top'}
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>
@@ -155,7 +155,7 @@ const BillingItem = props => {
               {props.canDelete === true && (
                 <li>
                 <OverlayTrigger
-                  key={'top'}
+                  
                   placement={'top'}
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>

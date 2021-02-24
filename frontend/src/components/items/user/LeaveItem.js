@@ -12,7 +12,8 @@ import {
   faEye,
   faTrashAlt,
   faHighlighter,
-  faExclamation
+  faExclamation,
+  faEdit,
 } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment-timezone';
 
@@ -74,7 +75,7 @@ const LeaveItem = props => {
           )}
 
           <OverlayTrigger
-            key={'top'}
+
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -89,7 +90,7 @@ const LeaveItem = props => {
 
 
           <OverlayTrigger
-            key={'top'}
+
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -102,6 +103,20 @@ const LeaveItem = props => {
             <FontAwesomeIcon icon={faHighlighter} className="listIcon" onClick={props.toggleStaffLeaveHighlighted.bind(this, props.leave)}/>
           </OverlayTrigger>
 
+          {props.canUpdate === true && (
+            <OverlayTrigger
+              placement={'top'}
+              overlay={
+                <Popover id={`popover-positioned-${'top'}`}>
+                  <Popover.Content>
+                    <strong>Edit</strong>
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <FontAwesomeIcon icon={faEdit} className="listIcon" onClick={props.startUpdate.bind(this, {field: 'leave', data: props.leave})}/>
+            </OverlayTrigger>
+          )}
 
           {state === true && (
             <Row className="listItemHiddenRow">
@@ -144,7 +159,7 @@ const LeaveItem = props => {
                 <li>
 
                 <OverlayTrigger
-                  key={'top'}
+
                   placement={'top'}
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>

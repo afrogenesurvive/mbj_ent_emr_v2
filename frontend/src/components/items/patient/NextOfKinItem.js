@@ -58,7 +58,7 @@ const NextOfKinItem = props => {
           </Card.Text>
 
           <OverlayTrigger
-            key={'top'}
+            
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -73,7 +73,7 @@ const NextOfKinItem = props => {
 
 
           <OverlayTrigger
-            key={'top'}
+            
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -117,7 +117,7 @@ const NextOfKinItem = props => {
               {props.canDelete === true && (
                 <li>
                 <OverlayTrigger
-                  key={'top'}
+                  
                   placement={'top'}
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>

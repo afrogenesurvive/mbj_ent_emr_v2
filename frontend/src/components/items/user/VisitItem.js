@@ -58,7 +58,7 @@ const VisitItem = (props) => {
 
 
           <OverlayTrigger
-            key={'top'}
+            
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>

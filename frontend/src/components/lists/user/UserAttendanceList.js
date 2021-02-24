@@ -44,6 +44,8 @@ const UserAttendanceList = props => {
         canDelete={props.canDelete}
         onDelete={props.onDelete}
         toggleStaffAttendanceHighlighted={props.toggleStaffAttendanceHighlighted}
+        canUpdate={props.canUpdate}
+        startUpdate={props.startUpdate}
       />
     );
   });

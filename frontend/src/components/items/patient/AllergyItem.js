@@ -60,7 +60,7 @@ const AllergyItem = props => {
           </Card.Text>
 
           <OverlayTrigger
-            key={'top'}
+            
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -75,7 +75,7 @@ const AllergyItem = props => {
 
           {props.visitPage !== true && (
             <OverlayTrigger
-              key={'top'}
+              
               placement={'top'}
               overlay={
                 <Popover id={`popover-positioned-${'top'}`}>
@@ -111,7 +111,7 @@ const AllergyItem = props => {
               <Card.Text className="cardText">
                 attachments:
                 <OverlayTrigger
-                  key={'top'}
+                  
                   placement={'top'}
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>
@@ -140,7 +140,7 @@ const AllergyItem = props => {
               {props.canDelete === true && (
                 <li>
                 <OverlayTrigger
-                  key={'top'}
+                  
                   placement={'top'}
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>

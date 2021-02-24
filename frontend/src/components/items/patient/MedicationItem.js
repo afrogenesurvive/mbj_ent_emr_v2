@@ -57,7 +57,7 @@ const MedicationItem = props => {
           </Card.Text>
 
           <OverlayTrigger
-            key={'top'}
+
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -73,7 +73,7 @@ const MedicationItem = props => {
 
           {props.visitPage !== true && (
             <OverlayTrigger
-              key={'top'}
+              
               placement={'top'}
               overlay={
                 <Popover id={`popover-positioned-${'top'}`}>
@@ -114,7 +114,7 @@ const MedicationItem = props => {
               <Card.Text className="cardText">
                 Attachments:
                 <OverlayTrigger
-                  key={'top'}
+                  
                   placement={'top'}
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>
@@ -142,7 +142,7 @@ const MedicationItem = props => {
               {props.canDelete === true && (
                 <li>
                 <OverlayTrigger
-                  key={'top'}
+                  
                   placement={'top'}
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>

@@ -12,7 +12,8 @@ import {
   faEye,
   faTrashAlt,
   faHighlighter,
-  faExclamation
+  faExclamation,
+  faEdit,
 } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment-timezone';
 
@@ -67,7 +68,6 @@ const AttendanceItem = props => {
           </Card.Text>
 
           <OverlayTrigger
-            key={'right'}
             placement={'right'}
             overlay={
               <Popover id={`popover-positioned-${'right'}`}>
@@ -82,7 +82,6 @@ const AttendanceItem = props => {
 
 
           <OverlayTrigger
-            key={'top'}
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -94,6 +93,23 @@ const AttendanceItem = props => {
           >
             <FontAwesomeIcon icon={faHighlighter} className="listIcon" onClick={props.toggleStaffAttendanceHighlighted.bind(this, props.attendance)}/>
           </OverlayTrigger>
+
+          {
+          //   props.canUpdate === true && (
+          //   <OverlayTrigger
+          //     placement={'top'}
+          //     overlay={
+          //       <Popover id={`popover-positioned-${'top'}`}>
+          //         <Popover.Content>
+          //           <strong>Edit</strong>
+          //         </Popover.Content>
+          //       </Popover>
+          //     }
+          //   >
+          //     <FontAwesomeIcon icon={faEdit} className="listIcon" onClick={props.startUpdate.bind(this, {field: 'attendance', data: props.attendance})}/>
+          //   </OverlayTrigger>
+          // )
+        }
 
           {state === true && (
             <Row className="listItemHiddenRow">
@@ -123,7 +139,6 @@ const AttendanceItem = props => {
               {props.canDelete === true && (
                 <li>
                 <OverlayTrigger
-                  key={'right'}
                   placement={'right'}
                   overlay={
                     <Popover id={`popover-positioned-${'right'}`}>

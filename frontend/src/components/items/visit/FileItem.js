@@ -52,7 +52,7 @@ const FileItem = (props) => {
         </Card.Text>
 
         <OverlayTrigger
-          key={'top'}
+          
           placement={'top'}
           overlay={
             <Popover id={`popover-positioned-${'top'}`}>
@@ -67,7 +67,7 @@ const FileItem = (props) => {
 
 
         <OverlayTrigger
-          key={'top'}
+          
           placement={'top'}
           overlay={
             <Popover id={`popover-positioned-${'top'}`}>
@@ -101,7 +101,7 @@ const FileItem = (props) => {
               {props.canDelete === true && (
                 <li>
                 <OverlayTrigger
-                  key={'top'}
+                  
                   placement={'top'}
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>

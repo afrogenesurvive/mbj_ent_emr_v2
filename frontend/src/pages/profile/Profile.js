@@ -532,7 +532,6 @@ setAddressPrimary = (args) => {
       this.setState({isLoading: false, overlay2: false })
     });
 }
-
 submitUpdateAddressForm = (event) => {
   event.preventDefault();
   console.log('updating address...');
@@ -563,10 +562,6 @@ submitUpdateAddressForm = (event) => {
     postalCode: event.target.postalCode.value,
     primary: oldAddress.primary,
   }
-
-  console.log('0:',this.state.updating.previous);
-  console.log('1:', oldAddress);
-  console.log('2:', newAddress);
 
   if (
       newAddress.number.trim().length === 0 ||
@@ -622,7 +617,7 @@ submitUpdateAddressForm = (event) => {
       return res.json();
     })
     .then(resData => {
-      console.log('...resData...',resData.data.updateUserAddress);
+      // console.log('...resData...',resData.data.updateUserAddress);
       let responseAlert = '...address update success!...';
       let error = null;
 
@@ -891,6 +886,114 @@ toggleStaffAttendanceHighlighted = (args) => {
     });
 
 }
+submitUpdateAttendanceForm = (event) => {
+  event.preventDefault();
+  console.log('updating attendance...');
+  this.context.setUserAlert('...updating attendance...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.state.activityUser._id;
+  const userId = activityId;
+
+  const oldAttendance = {
+    date: this.state.updating.previous.date,
+    status: this.state.updating.previous.status,
+    description: this.state.updating.previous.description,
+    highlighted: this.state.updating.previous.highlighted,
+  }
+  const newAttendance = {
+    date: event.target.date.value,
+    status: event.target.status.value,
+    description: event.target.description.value,
+    highlighted: oldAttendance.highlighted,
+  }
+
+  if (
+      newAttendance.date.trim().length === 0 ||
+      newAttendance.status.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank required fields!!!...")
+    this.setState({isLoading: false, overlay2: false})
+    return;
+  }
+
+  let requestBody = {
+    query: `
+      mutation {updateUserAttendance(
+        activityId:"${activityId}",
+        userId:"${userId}",
+        userInput:{
+          attendanceDate:"${oldAttendance.date}",
+          attendanceStatus:"${oldAttendance.status}",
+          attendanceDescription:"${oldAttendance.description}",
+          attendanceHighlighted: ${oldAttendance.highlighted}
+        }
+        userInput2:{
+          attendanceDate:"${newAttendance.date}",
+          attendanceStatus:"${newAttendance.status}",
+          attendanceDescription:"${newAttendance.description}",
+          attendanceHighlighted: ${newAttendance.highlighted}
+        }
+      )
+      {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
+    `};
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.updateUserAttendance);
+      let responseAlert = '...attendance update success!...';
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        activityUser: resData.data.updateUserAttendance,
+        activityA: `updateUserAttendance?activityId:${activityId},userId:${userId}`,
+        updating: {
+          state: null,
+          field: null,
+          previous: {}
+        }
+      });
+      this.parseForCalendar({
+        attendance: resData.data.updateUserAttendance.attendance,
+        leave: resData.data.updateUserAttendance.leave,
+        appointments: resData.data.updateUserAttendance.appointments,
+      })
+      this.context.activityUser = resData.data.updateUserAttendance;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
 
 submitAddLeaveForm = (event) => {
   event.preventDefault();
@@ -901,6 +1004,7 @@ submitAddLeaveForm = (event) => {
   const token = this.context.token;
   const activityId = this.state.activityUser._id;
   const userId = activityId;
+
   const startDate = event.target.startDate.value;
   const endDate = event.target.endDate.value;
   const type = event.target.type.value;
@@ -1128,6 +1232,119 @@ toggleStaffLeaveHighlighted = (args) => {
       this.context.setUserAlert(err);
       this.setState({isLoading: false, overlay2: false })
     });
+}
+submitUpdateLeaveForm = (event) => {
+  event.preventDefault();
+  console.log('updating leave...');
+  this.context.setUserAlert('...updating leave...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.state.activityUser._id;
+  const userId = activityId;
+
+  const oldLeave = {
+    startDate: this.state.updating.previous.startDate,
+    endDate: this.state.updating.previous.endDate,
+    type: this.state.updating.previous.type,
+    description: this.state.updating.previous.description,
+    highlighted: this.state.updating.previous.highlighted,
+  }
+  const newLeave = {
+    startDate: event.target.startDate.value,
+    endDate: event.target.endDate.value,
+    type: event.target.type.value,
+    description: event.target.description.value,
+    highlighted: oldLeave.highlighted,
+  }
+
+  if (
+      newLeave.startDate.trim().length === 0 ||
+      newLeave.endDate.trim().length === 0 ||
+      newLeave.type.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank required fields!!!...")
+    this.setState({isLoading: false, overlay2: false})
+    return;
+  }
+
+  let requestBody = {
+    query: `
+      mutation {updateUserLeave(
+        activityId:"${activityId}",
+        userId:"${userId}",
+        userInput:{
+          leaveStartDate:"${oldLeave.startDate}",
+          leaveEndDate:"${oldLeave.endDate}",
+          leaveType:"${oldLeave.type}",
+          leaveDescription:"${oldLeave.description}",
+          leaveHighlighted: ${oldLeave.highlighted}
+        }
+        userInput2:{
+          leaveStartDate:"${newLeave.startDate}",
+          leaveEndDate:"${newLeave.endDate}",
+          leaveType:"${newLeave.type}",
+          leaveDescription:"${newLeave.description}",
+          leaveHighlighted: ${newLeave.highlighted}
+        }
+      )
+      {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
+    `};
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.updateUserLeave);
+      let responseAlert = '...leave update success!...';
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        activityUser: resData.data.updateUserLeave,
+        activityA: `updateUserLeave?activityId:${activityId},userId:${userId}`,
+        updating: {
+          state: null,
+          field: null,
+          previous: {}
+        }
+      });
+      this.parseForCalendar({
+        attendance: resData.data.updateUserLeave.attendance,
+        leave: resData.data.updateUserLeave.leave,
+        appointments: resData.data.updateUserLeave.appointments,
+      })
+      this.context.activityUser = resData.data.updateUserLeave;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
 }
 
 submitAddImageForm = (event) => {
@@ -2628,6 +2845,14 @@ render() {
                         onCancel={this.cancelAdd}
                       />
                   )}
+                  {this.state.updating.state === true &&
+                    this.state.updating.field === 'attendance' && (
+                      <AddAttendanceForm
+                        onConfirm={this.submitUpdateAttendanceForm}
+                        onCancel={this.cancelAdd}
+                        previousAttendance={this.state.updating.previous}
+                      />
+                  )}
                   <Tabs defaultActiveKey="2" id="uncontrolled-tab-example"className="subTabs">
                     <Tab eventKey="1" title="list">
                     {this.state.startFilter === true &&
@@ -2647,6 +2872,8 @@ render() {
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteAttendance}
                       toggleStaffAttendanceHighlighted={this.toggleStaffAttendanceHighlighted}
+                      canUpdate={this.state.canUpdate}
+                      startUpdate={this.startUpdate}
                     />
                     </Tab>
                     <Tab eventKey="2" title="calendar" className="calendarTab">
@@ -2676,6 +2903,14 @@ render() {
                         onCancel={this.cancelAdd}
                       />
                   )}
+                  {this.state.updating.state === true &&
+                    this.state.updating.field === 'leave' && (
+                      <AddLeaveForm
+                        onConfirm={this.submitUpdateLeaveForm}
+                        onCancel={this.cancelAdd}
+                        previousLeave={this.state.updating.previous}
+                      />
+                  )}
                   <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                     <Tab eventKey="1" title="list">
                     <Col className="subTabCol">
@@ -2695,6 +2930,8 @@ render() {
                       canDelete={this.state.canDelete}
                       onDelete={this.deleteLeave}
                       toggleStaffLeaveHighlighted={this.toggleStaffLeaveHighlighted}
+                      canUpdate={this.state.canUpdate}
+                      startUpdate={this.startUpdate}
                     />
                     </Tab>
                     <Tab eventKey="2" title="calendar" className="calendarTab">
@@ -3050,6 +3287,14 @@ render() {
                     onCancel={this.cancelAdd}
                   />
               )}
+              {this.state.updating.state === true &&
+                this.state.updating.field === 'attendance' && (
+                  <AddAttendanceForm
+                    onConfirm={this.submitUpdateAttendanceForm}
+                    onCancel={this.cancelAdd}
+                    previousAttendance={this.state.updating.previous}
+                  />
+              )}
               <Tabs defaultActiveKey="2" id="uncontrolled-tab-example"className="subTabs">
                 <Tab eventKey="1" title="list">
                 <Col className="subTabCol">
@@ -3069,6 +3314,8 @@ render() {
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteAttendance}
                   toggleStaffAttendanceHighlighted={this.toggleStaffAttendanceHighlighted}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
                 </Tab>
                 <Tab eventKey="2" title="calendar" className="calendarTab">
@@ -3099,6 +3346,14 @@ render() {
                     onCancel={this.cancelAdd}
                   />
               )}
+              {this.state.updating.state === true &&
+                this.state.updating.field === 'leave' && (
+                  <AddLeaveForm
+                    onConfirm={this.submitUpdateLeaveForm}
+                    onCancel={this.cancelAdd}
+                    previousLeave={this.state.updating.previous}
+                  />
+              )}
               <Tabs defaultActiveKey="2" id="uncontrolled-tab-example">
                 <Tab eventKey="1" title="list">
                 {this.state.startFilter === true &&
@@ -3118,6 +3373,8 @@ render() {
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteLeave}
                   toggleStaffLeaveHighlighted={this.toggleStaffLeaveHighlighted}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
                 </Tab>
                 <Tab eventKey="2" title="calendar" className="calendarTab">

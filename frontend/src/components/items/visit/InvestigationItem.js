@@ -59,7 +59,7 @@ const InvestigationItem = props => {
           </Card.Text>
 
           <OverlayTrigger
-            key={'top'}
+            
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -73,7 +73,7 @@ const InvestigationItem = props => {
           </OverlayTrigger>
 
           <OverlayTrigger
-            key={'top'}
+            
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -108,7 +108,7 @@ const InvestigationItem = props => {
               <Card.Text className="cardText">
                 Attachments:
                 <OverlayTrigger
-                  key={'top'}
+                  
                   placement={'top'}
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>
@@ -133,7 +133,7 @@ const InvestigationItem = props => {
               {props.canDelete === true && (
                 <li>
                 <OverlayTrigger
-                  key={'top'}
+                  
                   placement={'top'}
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>

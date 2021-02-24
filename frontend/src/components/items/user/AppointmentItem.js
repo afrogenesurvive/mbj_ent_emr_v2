@@ -57,7 +57,7 @@ const AppointmentItem = (props) => {
           )}
 
           <OverlayTrigger
-            key={'top'}
+
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -78,7 +78,7 @@ const AppointmentItem = (props) => {
           >
 
           <OverlayTrigger
-            key={'top'}
+
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>

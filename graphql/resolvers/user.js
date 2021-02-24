@@ -1210,6 +1210,9 @@ module.exports = {
         highlighted: args.userInput2.attendanceHighlighted
       };
 
+      console.log('1:',oldAttendance);
+      console.log('2:',newAttendance);
+
       const user = await User.findOneAndUpdate(
         {_id:args.userId,
           attendance: oldAttendance

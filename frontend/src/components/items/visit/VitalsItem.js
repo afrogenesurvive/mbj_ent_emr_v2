@@ -55,7 +55,7 @@ const VitalsItem = props => {
           </Card.Text>
 
           <OverlayTrigger
-            key={'top'}
+            
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -69,7 +69,7 @@ const VitalsItem = props => {
           </OverlayTrigger>
 
           <OverlayTrigger
-            key={'top'}
+            
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -137,7 +137,7 @@ const VitalsItem = props => {
             <li>
             {props.canDelete === true && (
               <OverlayTrigger
-                key={'top'}
+                
                 placement={'top'}
                 overlay={
                   <Popover id={`popover-positioned-${'top'}`}>

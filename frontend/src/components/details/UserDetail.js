@@ -80,6 +80,12 @@ class UserDetail extends Component {
       state: null,
       field: null
     },
+    canUpdate: true,
+    updating: {
+      state: null,
+      field: null,
+      previous: {}
+    },
     canDelete: false,
     updateSingleField: {
       state: null,
