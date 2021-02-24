@@ -345,53 +345,53 @@ submitAddAddressForm = (event) => {
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
     `};
 
-   // fetch('http://localhost:8088/graphql', {
-   //    method: 'POST',
-   //    body: JSON.stringify(requestBody),
-   //    headers: {
-   //      'Content-Type': 'application/json',
-   //      Authorization: 'Bearer ' + token
-   //    }
-   //  })
-   //  .then(res => {
-   //    if (res.status !== 200 && res.status !== 201) {
-   //      throw new Error('Failed!');
-   //    }
-   //    return res.json();
-   //  })
-   //  .then(resData => {
-   //    // console.log('...resData...',resData.data.addUserAddress);
-   //    let responseAlert = '...address add success!...';
-   //    let error = null;
-   //
-   //    if (resData.errors) {
-   //      error = resData.errors[0].message;
-   //      responseAlert = error;
-   //    }
-   //
-   //    if (resData.data.error) {
-   //      error = resData.data.error;
-   //      responseAlert = error;
-   //    }
-   //    this.context.setUserAlert(responseAlert)
-   //    this.setState({
-   //      isLoading: false,
-   //      overlay2: false,
-   //      activityUser: resData.data.addUserAddress,
-   //      activityA: `addUserAddress?activityId:${activityId},userId:${userId}`,
-   //      adding: {
-   //        state: null,
-   //        field: null
-   //      }
-   //    });
-   //    this.context.activityUser = resData.data.addUserAddress;
-   //    this.logUserActivity({activityId: activityId,token: token});
-   //  })
-   //  .catch(err => {
-   //    console.log(err);
-   //    this.context.setUserAlert(err);
-   //    this.setState({isLoading: false, overlay2: false })
-   //  });
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.addUserAddress);
+      let responseAlert = '...address add success!...';
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        activityUser: resData.data.addUserAddress,
+        activityA: `addUserAddress?activityId:${activityId},userId:${userId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.activityUser = resData.data.addUserAddress;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
 }
 deleteAddress = (args) => {
   console.log('...deleting address...');
@@ -532,12 +532,130 @@ setAddressPrimary = (args) => {
       this.setState({isLoading: false, overlay2: false })
     });
 }
-startUpdateAddress = (args) => {
-  console.log('startUpdateAddress',args);
-// setsate updating {state, field, previous}
-}
+
 submitUpdateAddressForm = (event) => {
+  event.preventDefault();
   console.log('updating address...');
+  this.context.setUserAlert('...updating address...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.state.activityUser._id;
+  const userId = activityId;
+
+  const oldAddress = {
+    number: this.state.updating.previous.number,
+    street: this.state.updating.previous.street,
+    town: this.state.updating.previous.town,
+    city: this.state.updating.previous.city,
+    parish: this.state.updating.previous.parish,
+    country: this.state.updating.previous.country,
+    postalCode: this.state.updating.previous.postalCode,
+    primary: this.state.updating.previous.primary,
+  }
+  const newAddress = {
+    number: event.target.number.value,
+    street: event.target.street.value,
+    town: event.target.town.value,
+    city: event.target.city.value,
+    parish: event.target.parish.value,
+    country: event.target.country.value,
+    postalCode: event.target.postalCode.value,
+    primary: oldAddress.primary,
+  }
+
+  console.log('0:',this.state.updating.previous);
+  console.log('1:', oldAddress);
+  console.log('2:', newAddress);
+
+  if (
+      newAddress.number.trim().length === 0 ||
+      newAddress.street.trim().length === 0 ||
+      newAddress.city.trim().length === 0 ||
+      newAddress.country.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank required fields!!!...")
+    this.setState({isLoading: false, overlay2: false})
+    return;
+  }
+
+  let requestBody = {
+    query: `
+      mutation {updateUserAddress(
+        activityId:"${activityId}",
+        userId:"${userId}",
+        userInput:{
+          addressNumber:${oldAddress.number},
+          addressStreet:"${oldAddress.street}",
+          addressTown:"${oldAddress.town}",
+          addressCity:"${oldAddress.city}",
+          addressParish:"${oldAddress.parish}",
+          addressCountry:"${oldAddress.country}",
+          addressPostalCode:"${oldAddress.postalCode}",
+          addressPrimary: ${oldAddress.primary}
+        }
+        userInput2:{
+          addressNumber:${newAddress.number},
+          addressStreet:"${newAddress.street}",
+          addressTown:"${newAddress.town}",
+          addressCity:"${newAddress.city}",
+          addressParish:"${newAddress.parish}",
+          addressCountry:"${newAddress.country}",
+          addressPostalCode:"${newAddress.postalCode}",
+          addressPrimary: ${newAddress.primary},
+        })
+        {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
+    `};
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      console.log('...resData...',resData.data.updateUserAddress);
+      let responseAlert = '...address update success!...';
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        activityUser: resData.data.updateUserAddress,
+        activityA: `updateUserAddress?activityId:${activityId},userId:${userId}`,
+        updating: {
+          state: null,
+          field: null,
+          previous: {}
+        }
+      });
+      this.context.activityUser = resData.data.updateUserAddress;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
 }
 
 submitAddAttendanceForm = (event) => {
@@ -2018,6 +2136,15 @@ cancelAdd = () => {
     }
   })
 }
+startUpdate = (args) => {
+  this.setState({
+    updating: {
+      state: true,
+      field: args.field,
+      previous: args.data
+    }
+  })
+}
 
 parseForCalendar = (args) => {
   console.log('...parsing profile dates for calendar...');
@@ -2481,8 +2608,7 @@ render() {
                     canDelete={this.state.canDelete}
                     makePrimary={this.setAddressPrimary}
                     canUpdate={this.state.canUpdate}
-                    startUpdateAddress={this.startUpdateAddress}
-
+                    startUpdate={this.startUpdate}
                   />
                 </Col>
               </li>
@@ -2889,6 +3015,14 @@ render() {
                     onCancel={this.cancelAdd}
                   />
               )}
+              {this.state.updating.state === true &&
+                this.state.updating.field === 'address' && (
+                  <AddAddressForm
+                    onConfirm={this.submitUpdateAddressForm}
+                    onCancel={this.cancelAdd}
+                    previousAddress={this.state.updating.previous}
+                  />
+              )}
               <UserAddressList
                 filter={this.state.filter}
                 addresses={this.state.activityUser.addresses}
@@ -2896,6 +3030,8 @@ render() {
                 onDelete={this.deleteAddress}
                 canDelete={this.state.canDelete}
                 makePrimary={this.setAddressPrimary}
+                canUpdate={this.state.canUpdate}
+                startUpdate={this.startUpdate}
               />
             </Col>
             )}

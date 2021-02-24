@@ -17,13 +17,13 @@ const AddAddressForm = (props) => {
   }
   if (props.previousAddress) {
     placeHolders = {
-      number: 0,
-      street: props.previousAddress,
-      town: props.previousAddress,
-      city: props.previousAddress,
-      parish: props.previousAddress,
-      country: props.previousAddress,
-      postalCode: props.previousAddress,
+      number: props.previousAddress.number,
+      street: props.previousAddress.street,
+      town: props.previousAddress.town,
+      city: props.previousAddress.city,
+      parish: props.previousAddress.parish,
+      country: props.previousAddress.country,
+      postalCode: props.previousAddress.postalCode,
     }
   }
 
@@ -31,7 +31,13 @@ const AddAddressForm = (props) => {
 return (
 <div className="addFormTopDiv">
   <Form onSubmit={props.onConfirm}>
-    <h4>Add Address</h4>
+
+    {props.previousAddress && (
+      <h4>Update Address</h4>
+    )}
+    {!props.previousAddress && (
+      <h4>Add Address</h4>
+    )}
     <p>required feilds are denoted by a ' * '</p>
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="number" className="formGroup">
@@ -99,7 +105,12 @@ return (
     </Form.Row>
 
     <Form.Row className="formBtnRow">
+    {props.previousAddress && (
+      <Button variant="success" type="submit" className="addFormBtn">Update</Button>
+    )}
+    {!props.previousAddress && (
       <Button variant="success" type="submit" className="addFormBtn">Add</Button>
+    )}
       <Button variant="danger" className="addFormBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>

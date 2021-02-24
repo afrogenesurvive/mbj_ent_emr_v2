@@ -23,7 +23,6 @@ import './UserItem.css';
 
 const AddressItem = props => {
 
-
   let liClass;
   if (props.address.primary === false) {
     liClass = 'cardBody';
@@ -88,7 +87,7 @@ const AddressItem = props => {
                 </Popover>
               }
             >
-              <FontAwesomeIcon icon={faEdit} className="listIcon" onClick={props.startUpdateAddress.bind(this, props.address)}/>
+              <FontAwesomeIcon icon={faEdit} className="listIcon" onClick={props.startUpdate.bind(this, {field: 'address', data: props.address})}/>
             </OverlayTrigger>
           )}
 
