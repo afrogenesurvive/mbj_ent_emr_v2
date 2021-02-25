@@ -72,6 +72,7 @@ const PatientAddressList = props => {
         canDelete={props.canDelete}
         makePrimary={props.makePrimary}
         canUpdate={props.canUpdate}
+        startUpdate={props.startUpdate}
       />
     );
   });

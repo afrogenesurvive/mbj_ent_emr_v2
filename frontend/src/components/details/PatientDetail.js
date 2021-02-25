@@ -100,6 +100,12 @@ class PatientDetail extends Component {
       state: null,
       field: null
     },
+    canUpdate: true,
+    updating: {
+      state: null,
+      field: null,
+      previous: {}
+    },
     canDelete: false,
     updateSingleField: {
       state: null,
@@ -479,6 +485,127 @@ setAddressPrimary = (args) => {
       this.context.setUserAlert(err);
       this.setState({isLoading: false, overlay2: false })
     });
+}
+submitUpdateAddressForm = (event) => {
+  event.preventDefault();
+  console.log('updating address...');
+  this.context.setUserAlert('...updating address...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+
+  const oldAddress = {
+    number: this.state.updating.previous.number,
+    street: this.state.updating.previous.street,
+    town: this.state.updating.previous.town,
+    city: this.state.updating.previous.city,
+    parish: this.state.updating.previous.parish,
+    country: this.state.updating.previous.country,
+    postalCode: this.state.updating.previous.postalCode,
+    primary: this.state.updating.previous.primary,
+  }
+  const newAddress = {
+    number: event.target.number.value,
+    street: event.target.street.value,
+    town: event.target.town.value,
+    city: event.target.city.value,
+    parish: event.target.parish.value,
+    country: event.target.country.value,
+    postalCode: event.target.postalCode.value,
+    primary: oldAddress.primary,
+  }
+
+  if (
+      newAddress.number.trim().length === 0 ||
+      newAddress.street.trim().length === 0 ||
+      newAddress.city.trim().length === 0 ||
+      newAddress.country.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank required fields!!!...")
+    this.setState({isLoading: false, overlay2: false})
+    return;
+  }
+
+  let requestBody = {
+    query: `
+      mutation {updatePatientAddress(
+        activityId:"${activityId}",
+        patientId:"${patientId}",
+        patientInput:{
+          addressNumber:${oldAddress.number},
+          addressStreet:"${oldAddress.street}",
+          addressTown:"${oldAddress.town}",
+          addressCity:"${oldAddress.city}",
+          addressParish:"${oldAddress.parish}",
+          addressCountry:"${oldAddress.country}",
+          addressPostalCode:"${oldAddress.postalCode}",
+          addressPrimary: ${oldAddress.primary}
+        }
+        patientInput2:{
+          addressNumber:${newAddress.number},
+          addressStreet:"${newAddress.street}",
+          addressTown:"${newAddress.town}",
+          addressCity:"${newAddress.city}",
+          addressParish:"${newAddress.parish}",
+          addressCountry:"${newAddress.country}",
+          addressPostalCode:"${newAddress.postalCode}",
+          addressPrimary: ${newAddress.primary},
+        })
+        {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
+    `};
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.updatePatientAddress);
+      let responseAlert = '...address update success!...';
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.updatePatientAddress)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedPatient: resData.data.updatePatientAddress,
+        activityA: `updatePatientAddress?activityId:${activityId},patientId:${patientId}`,
+        updating: {
+          state: null,
+          field: null,
+          previous: {}
+        }
+      });
+      this.context.selectedPatient = resData.data.updatePatientAddress;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
 }
 
 submitAddNextOfKinForm = (event) => {
@@ -3260,6 +3387,20 @@ cancelAdd = () => {
     adding: {
       state: null,
       field: null
+    },
+    updating: {
+      state: null,
+      field: null,
+      previous: {}
+    }
+  })
+}
+startUpdate = (args) => {
+  this.setState({
+    updating: {
+      state: true,
+      field: args.field,
+      previous: args.data
     }
   })
 }
@@ -3836,6 +3977,14 @@ render() {
                       onCancel={this.cancelAdd}
                     />
                 )}
+                {this.state.updating.state === true &&
+                  this.state.updating.field === 'address' && (
+                    <AddAddressForm
+                      onConfirm={this.submitUpdateAddressForm}
+                      onCancel={this.cancelAdd}
+                      previousAddress={this.state.updating.previous}
+                    />
+                )}
                 <PatientAddressList
                   filter={this.state.filter}
                   addresses={this.props.patient.addresses}
@@ -3843,6 +3992,8 @@ render() {
                   onDelete={this.deleteAddress}
                   canDelete={this.state.canDelete}
                   makePrimary={this.setAddressPrimary}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
               </Col>
               </li>
@@ -4431,6 +4582,14 @@ render() {
                       onCancel={this.cancelAdd}
                     />
                 )}
+                {this.state.updating.state === true &&
+                  this.state.updating.field === 'address' && (
+                    <AddAddressForm
+                      onConfirm={this.submitUpdateAddressForm}
+                      onCancel={this.cancelAdd}
+                      previousAddress={this.state.updating.previous}
+                    />
+                )}
                 <PatientAddressList
                   filter={this.state.filter}
                   addresses={this.props.patient.addresses}
@@ -4438,6 +4597,8 @@ render() {
                   onDelete={this.deleteAddress}
                   canDelete={this.state.canDelete}
                   makePrimary={this.setAddressPrimary}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
               </Col>
             )}

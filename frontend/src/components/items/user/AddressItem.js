@@ -62,7 +62,7 @@ const AddressItem = props => {
           </Card.Text>
 
           <OverlayTrigger
-            
+
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -77,7 +77,7 @@ const AddressItem = props => {
 
           {props.canUpdate === true && (
             <OverlayTrigger
-              
+
               placement={'top'}
               overlay={
                 <Popover id={`popover-positioned-${'top'}`}>
@@ -142,7 +142,7 @@ const AddressItem = props => {
               {props.canDelete === true && (
                 <li>
                 <OverlayTrigger
-                  
+
                   placement={'top'}
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>
