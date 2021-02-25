@@ -125,6 +125,12 @@ class VisitDetail extends Component {
       state: null,
       field: null
     },
+    canUpdate: false,
+    updating: {
+      state: null,
+      field: null,
+      previous: {}
+    },
     canDelete: false,
     canEdit: false,
     updateSingleField: {
@@ -181,7 +187,8 @@ componentDidMount () {
   if ( this.props.visit.consultants.map(x=>x._id).includes(this.context.activityId) === true) {
     console.log('You can edit!!');
     this.setState({
-      canEdit: true
+      canEdit: true,
+      canUpdate: true
     })
   }
 
@@ -728,6 +735,118 @@ toggleVisitComplaintHighlighted = (args) => {
       this.context.setUserAlert(err);
       this.setState({isLoading: false, overlay2: false })
     });
+}
+submitUpdateComplaintForm = (event) => {
+  event.preventDefault();
+  console.log('updating complaint...');
+  this.context.setUserAlert('...updating complaint...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const visitId = this.props.visit._id;
+
+  const oldComplaint = {
+    title: this.state.updating.previous.title,
+    description: this.state.updating.previous.description,
+    anamnesis: this.state.updating.previous.anamnesis,
+    attachments: this.state.updating.previous.attachments,
+    highlighted: this.state.updating.previous.highlighted,
+  }
+  const newComplaint = {
+    title: this.props.visit.patient.name+'_complaint_'+moment().format('YYYY-MM-DD, h:mm:ss a'),
+    description: event.target.description.value,
+    anamnesis: event.target.anamnesis.value,
+    attachments: oldComplaint.attachments,
+    highlighted: oldComplaint.highlighted,
+  }
+  console.log('1',oldComplaint);
+  console.log('2',newComplaint);
+
+
+  if (
+      newComplaint.title.trim().length === 0 ||
+      newComplaint.description.trim().length === 0 ||
+      newComplaint.anamnesis.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank required fields!!!...")
+    this.setState({isLoading: false, overlay2: false})
+    return;
+  }
+
+
+  let requestBody = {
+    query: `
+      mutation {updateVisitComplaint(
+        activityId:"${activityId}",
+        visitId:"${visitId}",
+        visitInput:{
+          complaintTitle:"${oldComplaint.title}",
+          complaintDescription:"${oldComplaint.description}",
+          complaintAnamnesis:"${oldComplaint.anamnesis}",
+          complaintAttachments:"${oldComplaint.attachments}",
+          complaintHighlighted: ${oldComplaint.highlighted}
+        }
+        visitInput2:{
+          complaintTitle:"${newComplaint.title}",
+          complaintDescription:"${newComplaint.description}",
+          complaintAnamnesis:"${newComplaint.anamnesis}",
+          complaintAttachments:"${newComplaint.attachments}",
+          complaintHighlighted: ${newComplaint.highlighted}
+        })
+        {_id,date,time,title,type,subType,followUp,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress},complaints{title,description,anamnesis,attachments,highlighted},surveys{title,description,attachments,highlighted},systematicInquiry{title,description,attachments,highlighted},vitals{pr,bp1,bp2,rr,temp,sp02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value},highlighted},examination{general,area,inspection,palpation,percussion,auscultation,description,followUp,attachments,highlighted},investigation{type,title,description,attachments,highlighted},diagnosis{type,title,description,attachments,highlighted},treatment{type,title,description,dose,frequency,attachments,highlighted},billing{title,type,description,amount,paid,attachments,notes,highlighted},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}},highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted}}}
+    `};
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.updatePatientComplaint);
+      let responseAlert = '...complaint update success!...';
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updateVisit(resData.data.updateVisitComplaint)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedVisit: resData.data.updateVisitComplaint,
+        activityA: `updateVisitComplaint?activityId:${activityId},visitId:${visitId}`,
+        updating: {
+          state: null,
+          field: null,
+          previous: {}
+        }
+      });
+      this.context.selectedVisit = resData.data.updateVisitComplaint;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
 }
 
 submitAddSurveyForm = (event) => {
@@ -6181,6 +6300,20 @@ cancelAdd = () => {
     adding: {
       state: null,
       field: null
+    },
+    updating: {
+      state: null,
+      field: null,
+      previous: {}
+    }
+  })
+}
+startUpdate = (args) => {
+  this.setState({
+    updating: {
+      state: true,
+      field: args.field,
+      previous: args.data
     }
   })
 }
@@ -6451,7 +6584,7 @@ render() {
               <Col className="subTabCol">
                 <h3 className="">Comorbidities:
                 {this.hasComorbidities === true && (
-                  <FontAwesomeIcon icon={faExclamationTriangle} className="visitAttentionIcon" color="yellow" size="md"/>
+                  <FontAwesomeIcon icon={faExclamationTriangle} className="visitAttentionIcon" color="yellow" size="lg"/>
                 )}
                 </h3>
               </Col>
@@ -6604,6 +6737,14 @@ render() {
                       onCancel={this.cancelAdd}
                     />
                 )}
+                {this.state.updating.state === true &&
+                  this.state.updating.field === 'complaint' && (
+                    <AddComplaintForm
+                      onConfirm={this.submitUpdateComplaintForm}
+                      onCancel={this.cancelAdd}
+                      previousComplaint={this.state.updating.previous}
+                    />
+                )}
                 {this.state.addAttachmentForm === true && (
                   <AddAttachmentForm
                     onCancel={this.cancelAddAttachment}
@@ -6619,6 +6760,8 @@ render() {
                   onAddAttachment={this.startAddAttachment}
                   deleteAttachment={this.deleteAttachment}
                   toggleVisitComplaintHighlighted={this.toggleVisitComplaintHighlighted}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
               </Col>
               </li>
@@ -7315,6 +7458,14 @@ render() {
                       onCancel={this.cancelAdd}
                     />
                 )}
+                {this.state.updating.state === true &&
+                  this.state.updating.field === 'complaint' && (
+                    <AddComplaintForm
+                      onConfirm={this.submitUpdateComplaintForm}
+                      onCancel={this.cancelAdd}
+                      previousComplaint={this.state.updating.previous}
+                    />
+                )}
                 {this.state.addAttachmentForm === true && (
                   <AddAttachmentForm
                     onCancel={this.cancelAddAttachment}
@@ -7330,6 +7481,8 @@ render() {
                   onAddAttachment={this.startAddAttachment}
                   deleteAttachment={this.deleteAttachment}
                   toggleVisitComplaintHighlighted={this.toggleVisitComplaintHighlighted}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
               </Col>
             )}

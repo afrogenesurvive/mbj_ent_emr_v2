@@ -491,11 +491,13 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
+
+      console.log(args);
         const oldComplaint = {
           title: args.visitInput.complaintTitle,
           description: args.visitInput.complaintDescription,
           anamnesis: args.visitInput.complaintAnamnesis,
-          attachments: args.visitInput.complaintAttachment.split(','),
+          attachments: args.visitInput.complaintAttachments.split(','),
           highlighted: args.visitInput.complaintHighlighted,
         }
 
@@ -503,9 +505,12 @@ module.exports = {
           title: args.visitInput2.complaintTitle,
           description: args.visitInput2.complaintDescription,
           anamnesis: args.visitInput2.complaintAnamnesis,
-          attachments: args.visitInput2.complaintAttachment.split(','),
+          attachments: args.visitInput2.complaintAttachments.split(','),
           highlighted: args.visitInput2.complaintHighlighted,
         }
+
+        console.log('1',oldComplaint);
+        console.log('2',newComplaint);
 
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId,complaints: oldComplaint},

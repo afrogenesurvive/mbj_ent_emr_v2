@@ -12,7 +12,8 @@ import {
   faEye,
   faTrashAlt,
   faHighlighter,
-  faExclamation
+  faExclamation,
+  faEdit,
 } from '@fortawesome/free-solid-svg-icons';
 
 import './PatientItem.css';
@@ -56,7 +57,7 @@ const ComorbidityItem = props => {
           </Card.Text>
 
           <OverlayTrigger
-            
+
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -72,7 +73,7 @@ const ComorbidityItem = props => {
 
           {props.visitPage !== true && (
             <OverlayTrigger
-              
+
               placement={'top'}
               overlay={
                 <Popover id={`popover-positioned-${'top'}`}>
@@ -83,6 +84,22 @@ const ComorbidityItem = props => {
               }
             >
               <FontAwesomeIcon icon={faHighlighter} className="listIcon" onClick={props.togglePatientComorbidityHighlighted.bind(this, props.comorbidity)}/>
+            </OverlayTrigger>
+          )}
+
+          {props.canUpdate === true && (
+            <OverlayTrigger
+
+              placement={'top'}
+              overlay={
+                <Popover id={`popover-positioned-${'top'}`}>
+                  <Popover.Content>
+                    <strong>Edit</strong>
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <FontAwesomeIcon icon={faEdit} className="listIcon" onClick={props.startUpdate.bind(this, {field: 'comorbidity', data: props.comorbidity})}/>
             </OverlayTrigger>
           )}
 
@@ -108,7 +125,7 @@ const ComorbidityItem = props => {
               {props.canDelete === true && (
                 <li>
                 <OverlayTrigger
-                  
+
                   placement={'top'}
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>

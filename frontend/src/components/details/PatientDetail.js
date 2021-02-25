@@ -847,6 +847,119 @@ togglePatientNextOfKinHighlighted = (args) => {
     });
 
 }
+submitUpdateNextOfKinForm = (event) => {
+  event.preventDefault();
+  console.log('updating nextOfKin...');
+  this.context.setUserAlert('...updating nextOfKin...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+
+  const oldNextOfKin = {
+    name: this.state.updating.previous.name,
+    relation: this.state.updating.previous.relation,
+    email: this.state.updating.previous.contact.email,
+    phone: this.state.updating.previous.contact.phone1,
+    phone2: this.state.updating.previous.contact.phone2,
+    highlighted: this.state.updating.previous.highlighted,
+  }
+  const newNextOfKin = {
+    name: event.target.name.value,
+    relation: event.target.relation.value,
+    email: event.target.email.value,
+    phone: event.target.phone.value,
+    phone2: event.target.phone2.value,
+    highlighted: oldNextOfKin.highlighted,
+  }
+
+  if (
+      newNextOfKin.name.trim().length === 0 ||
+      newNextOfKin.relation.trim().length === 0 ||
+      newNextOfKin.phone.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank required fields!!!...")
+    this.setState({isLoading: false, overlay2: false})
+    return;
+  }
+
+
+  let requestBody = {
+    query: `
+      mutation {updatePatientNextOfKin(
+        activityId:"${activityId}",
+        patientId:"${patientId}",
+        patientInput:{
+          nextOfKinName: "${oldNextOfKin.name}",
+          nextOfKinRelation: "${oldNextOfKin.relation}",
+          nextOfKinContactEmail: "${oldNextOfKin.email}",
+          nextOfKinContactPhone1: "${oldNextOfKin.phone}",
+          nextOfKinContactPhone2: "${oldNextOfKin.phone2}",
+          nextOfKinHighlighted: ${oldNextOfKin.highlighted},
+        }
+        patientInput2:{
+          nextOfKinName: "${newNextOfKin.name}",
+          nextOfKinRelation: "${newNextOfKin.relation}",
+          nextOfKinContactEmail: "${newNextOfKin.email}",
+          nextOfKinContactPhone1: "${newNextOfKin.phone}",
+          nextOfKinContactPhone2: "${newNextOfKin.phone2}",
+          nextOfKinHighlighted: ${newNextOfKin.highlighted},
+        })
+        {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
+    `};
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.updatePatientNextOfKin);
+      let responseAlert = '...nextOfKin update success!...';
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.updatePatientNextOfKin)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedPatient: resData.data.updatePatientNextOfKin,
+        activityA: `updatePatientNextOfKin?activityId:${activityId},patientId:${patientId}`,
+        updating: {
+          state: null,
+          field: null,
+          previous: {}
+        }
+      });
+      this.context.selectedPatient = resData.data.updatePatientNextOfKin;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
 
 submitAddAllergyForm = (event) => {
   event.preventDefault();
@@ -1215,6 +1328,113 @@ togglePatientAllergyHighlighted = (args) => {
         }
       });
       this.context.selectedPatient = resData.data.togglePatientAllergyHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
+submitUpdateAllergyForm = (event) => {
+  event.preventDefault();
+  console.log('updating allergy...');
+  this.context.setUserAlert('...updating allergy...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+
+  const oldAllergy = {
+    title: this.state.updating.previous.title,
+    type: this.state.updating.previous.type,
+    description: this.state.updating.previous.description,
+    attachments: this.state.updating.previous.attachments,
+    highlighted: this.state.updating.previous.highlighted,
+  }
+  const newAllergy = {
+    title: this.props.patient.name+"_allergy_"+moment().format("YYYY-MM-DD, h:mm:ss a"),
+    type: event.target.type.value,
+    description: event.target.description.value,
+    attachments: oldAllergy.attachments,
+    highlighted: oldAllergy.highlighted,
+  }
+
+  if (
+      newAllergy.description.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank required fields!!!...")
+    this.setState({isLoading: false, overlay2: false})
+    return;
+  }
+
+
+  let requestBody = {
+    query: `
+      mutation {updatePatientAllergy(
+        activityId:"${activityId}",
+        patientId:"${patientId}",
+        patientInput:{
+          allergyType:"${oldAllergy.type}",
+          allergyTitle:"${oldAllergy.title}",
+          allergyDescription:"${oldAllergy.description}",
+          allergyAttachments:"${oldAllergy.attachments}",
+          allergyHighlighted: ${oldAllergy.highlighted}
+        }
+        patientInput2:{
+          allergyType:"${newAllergy.type}",
+          allergyTitle:"${newAllergy.title}",
+          allergyDescription:"${newAllergy.description}",
+          allergyAttachments:"${newAllergy.attachments}",
+          allergyHighlighted: ${newAllergy.highlighted}
+        })
+        {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
+    `};
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.updatePatientAllergy);
+      let responseAlert = '...allergy update success!...';
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.updatePatientAllergy)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedPatient: resData.data.updatePatientAllergy,
+        activityA: `updatePatientAllergy?activityId:${activityId},patientId:${patientId}`,
+        updating: {
+          state: null,
+          field: null,
+          previous: {}
+        }
+      });
+      this.context.selectedPatient = resData.data.updatePatientAllergy;
       this.logUserActivity({activityId: activityId,token: token});
     })
     .catch(err => {
@@ -1608,6 +1828,118 @@ togglePatientMedicationHighlighted = (args) => {
     });
 
 }
+submitUpdateMedicationForm = (event) => {
+  event.preventDefault();
+  console.log('updating medication...');
+  this.context.setUserAlert('...updating medication...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+
+  const oldMedication = {
+    title: this.state.updating.previous.title,
+    type: this.state.updating.previous.type,
+    dosage: this.state.updating.previous.dosage,
+    description: this.state.updating.previous.description,
+    attachments: this.state.updating.previous.attachments,
+    highlighted: this.state.updating.previous.highlighted,
+  }
+  const newMedication = {
+    title: event.target.title.value,
+    type: event.target.type.value,
+    dosage: event.target.dosage.value,
+    description: event.target.description.value,
+    attachments: oldMedication.attachments,
+    highlighted: oldMedication.highlighted,
+  }
+
+  if (
+      newMedication.title.trim().length === 0 ||
+      newMedication.type.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank required fields!!!...")
+    this.setState({isLoading: false, overlay2: false})
+    return;
+  }
+
+
+  let requestBody = {
+    query: `
+      mutation {updatePatientMedication(
+        activityId:"${activityId}",
+        patientId:"${patientId}",
+        patientInput:{
+          medicationType:"${oldMedication.type}",
+          medicationTitle:"${oldMedication.title}",
+          medicationDescription:"${oldMedication.description}",
+          medicationDosage:"${oldMedication.dosage}",
+          medicationAttachments:"${oldMedication.attachments}",
+          medicationHighlighted: ${oldMedication.highlighted}
+        }
+        patientInput2:{
+          medicationType:"${newMedication.type}",
+          medicationTitle:"${newMedication.title}",
+          medicationDescription:"${newMedication.description}",
+          medicationDosage:"${newMedication.dosage}",
+          medicationAttachments:"${newMedication.attachments}",
+          medicationHighlighted: ${newMedication.highlighted}
+        })
+        {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
+    `};
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.updatePatientMedication);
+      let responseAlert = '...medication update success!...';
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.updatePatientMedication)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedPatient: resData.data.updatePatientMedication,
+        activityA: `updatePatientMedication?activityId:${activityId},patientId:${patientId}`,
+        updating: {
+          state: null,
+          field: null,
+          previous: {}
+        }
+      });
+      this.context.selectedPatient = resData.data.updatePatientMedication;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
 
 submitAddComorbidityForm = (event) => {
   event.preventDefault();
@@ -1833,6 +2165,109 @@ togglePatientComorbidityHighlighted = (args) => {
         }
       });
       this.context.selectedPatient = resData.data.togglePatientComorbidityHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
+submitUpdateComorbidityForm = (event) => {
+  event.preventDefault();
+  console.log('updating medication...');
+  this.context.setUserAlert('...updating medication...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+
+  const oldComorbidity = {
+    title: this.state.updating.previous.title,
+    type: this.state.updating.previous.type,
+    description: this.state.updating.previous.description,
+    highlighted: this.state.updating.previous.highlighted,
+  }
+  const newComorbidity = {
+    title: event.target.title.value,
+    type: oldComorbidity.type,
+    description: event.target.description.value,
+    highlighted: oldComorbidity.highlighted,
+  }
+
+  if (
+      newComorbidity.title.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank required fields!!!...")
+    this.setState({isLoading: false, overlay2: false})
+    return;
+  }
+
+
+  let requestBody = {
+    query: `
+      mutation {updatePatientComorbidity(
+        activityId:"${activityId}",
+        patientId:"${patientId}",
+        patientInput:{
+          comorbidityType:"${oldComorbidity.type}",
+          comorbidityTitle:"${oldComorbidity.title}",
+          comorbidityDescription:"${oldComorbidity.description}",
+          comorbidityHighlighted: ${oldComorbidity.highlighted}
+        }
+        patientInput2:{
+          comorbidityType:"${newComorbidity.type}",
+          comorbidityTitle:"${newComorbidity.title}",
+          comorbidityDescription:"${newComorbidity.description}",
+          comorbidityHighlighted: ${newComorbidity.highlighted}
+        })
+        {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
+    `};
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.updatePatientComorbidity);
+      let responseAlert = '...medication update success!...';
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.updatePatientComorbidity)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedPatient: resData.data.updatePatientComorbidity,
+        activityA: `updatePatientComorbidity?activityId:${activityId},patientId:${patientId}`,
+        updating: {
+          state: null,
+          field: null,
+          previous: {}
+        }
+      });
+      this.context.selectedPatient = resData.data.updatePatientComorbidity;
       this.logUserActivity({activityId: activityId,token: token});
     })
     .catch(err => {
@@ -3915,6 +4350,14 @@ render() {
                       onCancel={this.cancelAdd}
                     />
                 )}
+                {this.state.updating.state === true &&
+                  this.state.updating.field === 'comorbidity' && (
+                    <AddComorbidityForm
+                      onConfirm={this.submitUpdateComorbidityForm}
+                      onCancel={this.cancelAdd}
+                      previousComorbidity={this.state.updating.previous}
+                    />
+                )}
                 <PatientComorbidityList
                   filter={this.state.filter}
                   comorbidities={this.props.patient.comorbidities}
@@ -3922,6 +4365,8 @@ render() {
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteComorbidity}
                   togglePatientComorbidityHighlighted={this.togglePatientComorbidityHighlighted}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
               </Col>
               </li>
@@ -4020,6 +4465,14 @@ render() {
                       onCancel={this.cancelAdd}
                     />
                 )}
+                {this.state.updating.state === true &&
+                  this.state.updating.field === 'nextOfKin' && (
+                    <AddNextOfKinForm
+                      onConfirm={this.submitUpdateNextOfKinForm}
+                      onCancel={this.cancelAdd}
+                      previousNextOfKin={this.state.updating.previous}
+                    />
+                )}
                 <PatientNextOfKinList
                   filter={this.state.filter}
                   nextOfKin={this.props.patient.nextOfKin}
@@ -4027,6 +4480,8 @@ render() {
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteNextOfKin}
                   togglePatientNextOfKinHighlighted={this.togglePatientNextOfKinHighlighted}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
               </Col>
               </li>
@@ -4035,7 +4490,7 @@ render() {
               <Col className="subTabCol">
                 <h3 className="">Allergies:
                 {this.hasAllergies === true && (
-                  <FontAwesomeIcon icon={faExclamationTriangle} className="visitAttentionIcon" color="red" size="md"/>
+                  <FontAwesomeIcon icon={faExclamationTriangle} className="visitAttentionIcon" color="red" size="lg"/>
                 )}
                 </h3>
               </Col>
@@ -4058,6 +4513,14 @@ render() {
                       onCancel={this.cancelAdd}
                     />
                 )}
+                {this.state.updating.state === true &&
+                  this.state.updating.field === 'allergy' && (
+                    <AddAllergyForm
+                      onConfirm={this.submitUpdateAllergyForm}
+                      onCancel={this.cancelAdd}
+                      previousAllergy={this.state.updating.previous}
+                    />
+                )}
                 {this.state.addAttachmentForm === true && (
                   <AddAttachmentForm
                     onCancel={this.cancelAddAttachment}
@@ -4073,6 +4536,8 @@ render() {
                   onAddAttachment={this.startAddAttachment}
                   deleteAttachment={this.deleteAttachment}
                   togglePatientAllergyHighlighted={this.togglePatientAllergyHighlighted}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
               </Col>
               </li>
@@ -4099,6 +4564,14 @@ render() {
                       onCancel={this.cancelAdd}
                     />
                 )}
+                {this.state.updating.state === true &&
+                  this.state.updating.field === 'medication' && (
+                    <AddMedicationForm
+                      onConfirm={this.submitUpdateMedicationForm}
+                      onCancel={this.cancelAdd}
+                      previousMedication={this.state.updating.previous}
+                    />
+                )}
                 {this.state.addAttachmentForm === true && (
                   <AddAttachmentForm
                     onCancel={this.cancelAddAttachment}
@@ -4114,6 +4587,8 @@ render() {
                   onAddAttachment={this.startAddAttachment}
                   deleteAttachment={this.deleteAttachment}
                   togglePatientMedicationHighlighted={this.togglePatientMedicationHighlighted}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
               </Col>
               </li>
@@ -4625,6 +5100,14 @@ render() {
                       onCancel={this.cancelAdd}
                     />
                 )}
+                {this.state.updating.state === true &&
+                  this.state.updating.field === 'nextOfKin' && (
+                    <AddNextOfKinForm
+                      onConfirm={this.submitUpdateNextOfKinForm}
+                      onCancel={this.cancelAdd}
+                      previousNextOfKin={this.state.updating.previous}
+                    />
+                )}
                 <PatientNextOfKinList
                   filter={this.state.filter}
                   nextOfKin={this.props.patient.nextOfKin}
@@ -4632,6 +5115,8 @@ render() {
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteNextOfKin}
                   togglePatientNextOfKinHighlighted={this.togglePatientNextOfKinHighlighted}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
               </Col>
             )}
@@ -4640,7 +5125,7 @@ render() {
               <Col className="subTabCol">
                 <h3 className="">Allergies:
                 {this.hasAllergies === true && (
-                  <FontAwesomeIcon icon={faExclamationTriangle} className="visitAttentionIcon" color="red" size="md"/>
+                  <FontAwesomeIcon icon={faExclamationTriangle} className="visitAttentionIcon" color="red" size="lg"/>
                 )}
                 </h3>
               </Col>
@@ -4662,6 +5147,14 @@ render() {
                       onCancel={this.cancelAdd}
                     />
                 )}
+                {this.state.updating.state === true &&
+                  this.state.updating.field === 'allergy' && (
+                    <AddAllergyForm
+                      onConfirm={this.submitUpdateAllergyForm}
+                      onCancel={this.cancelAdd}
+                      previousAllergy={this.state.updating.previous}
+                    />
+                )}
                 {this.state.addAttachmentForm === true && (
                   <AddAttachmentForm
                     onCancel={this.cancelAddAttachment}
@@ -4677,6 +5170,8 @@ render() {
                   onAddAttachment={this.startAddAttachment}
                   deleteAttachment={this.deleteAttachment}
                   togglePatientAllergyHighlighted={this.togglePatientAllergyHighlighted}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
               </Col>
             )}
@@ -4703,6 +5198,14 @@ render() {
                       onCancel={this.cancelAdd}
                     />
                 )}
+                {this.state.updating.state === true &&
+                  this.state.updating.field === 'medication' && (
+                    <AddMedicationForm
+                      onConfirm={this.submitUpdateMedicationForm}
+                      onCancel={this.cancelAdd}
+                      previousMedication={this.state.updating.previous}
+                    />
+                )}
                 {this.state.addAttachmentForm === true && (
                   <AddAttachmentForm
                     onCancel={this.cancelAddAttachment}
@@ -4718,6 +5221,8 @@ render() {
                   onAddAttachment={this.startAddAttachment}
                   deleteAttachment={this.deleteAttachment}
                   togglePatientMedicationHighlighted={this.togglePatientMedicationHighlighted}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
               </Col>
             )}
@@ -4744,6 +5249,14 @@ render() {
                       onCancel={this.cancelAdd}
                     />
                 )}
+                {this.state.updating.state === true &&
+                  this.state.updating.field === 'comorbidity' && (
+                    <AddComorbidityForm
+                      onConfirm={this.submitUpdateComorbidityForm}
+                      onCancel={this.cancelAdd}
+                      previousComorbidity={this.state.updating.previous}
+                    />
+                )}
                 <PatientComorbidityList
                   filter={this.state.filter}
                   comorbidities={this.props.patient.comorbidities}
@@ -4751,6 +5264,8 @@ render() {
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteComorbidity}
                   togglePatientComorbidityHighlighted={this.togglePatientComorbidityHighlighted}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
               </Col>
             )}

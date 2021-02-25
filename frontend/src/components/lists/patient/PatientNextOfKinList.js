@@ -34,7 +34,7 @@ const PatientNextOfKinList = props => {
   let count = 0;
 
   const nextOfKin = propsNextOfKin.map(nextOfKinItem => {
-    // console.log('nok',nextOfKinItem);
+    
     count = propsNextOfKin.indexOf(nextOfKinItem)+1;
 
     return (
@@ -45,6 +45,8 @@ const PatientNextOfKinList = props => {
         canDelete={props.canDelete}
         makePrimary={props.makePrimary}
         togglePatientNextOfKinHighlighted={props.togglePatientNextOfKinHighlighted}
+        canUpdate={props.canUpdate}
+        startUpdate={props.startUpdate}
       />
     );
   });

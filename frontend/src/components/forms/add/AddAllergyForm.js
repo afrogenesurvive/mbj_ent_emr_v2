@@ -9,10 +9,29 @@ import './addForms.css';
 
 const AddAllergyForm = (props) => {
 
+  let placeHolders = {
+    title: '...',
+    type: '...',
+    description: '...',
+  }
+  if (props.previousAllergy) {
+    placeHolders = {
+      title: props.previousAllergy.title,
+      type: props.previousAllergy.type,
+      description: props.previousAllergy.description,
+    }
+  }
+
 return (
 <div className="addFormTopDiv">
   <Form onSubmit={props.onConfirm}>
-    <h4>Add Allergy</h4>
+
+    {props.previousAllergy && (
+      <h4>Update Allergy</h4>
+    )}
+    {!props.previousAllergy && (
+      <h4>Add Allergy</h4>
+    )}
     <p>Required fields are denoted by a ' * '</p>
 
     {
@@ -29,6 +48,7 @@ return (
       <Form.Group as={Col} controlId="type" className="formGroup">
         <Form.Label className="formLabel">Type (select) * </Form.Label>
         <Form.Control as="select">
+          <option>{placeHolders.type}</option>
           <option>Food</option>
           <option>Drug</option>
         </Form.Control>
@@ -38,7 +58,7 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="description" className="formGroup">
         <Form.Label className="formLabel">Description * </Form.Label>
-        <Form.Control as="textarea" rows="3" placeholder="..."/>
+        <Form.Control as="textarea" rows="3" placeholder={placeHolders.description}/>
       </Form.Group>
     </Form.Row>
 
@@ -50,7 +70,13 @@ return (
     </Form.Row>
 
     <Form.Row className="formBtnRow">
-      <Button variant="success" type="submit" className="addFormBtn">Add</Button>
+
+      {props.previousAllergy && (
+        <Button variant="success" type="submit" className="addFormBtn">Update</Button>
+      )}
+      {!props.previousAllergy && (
+        <Button variant="success" type="submit" className="addFormBtn">Add</Button>
+      )}
       <Button variant="danger" className="addFormBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>

@@ -12,7 +12,8 @@ import {
   faEye,
   faTrashAlt,
   faHighlighter,
-  faExclamation
+  faExclamation,
+  faEdit,
 } from '@fortawesome/free-solid-svg-icons';
 
 import './PatientItem.css';
@@ -58,7 +59,7 @@ const NextOfKinItem = props => {
           </Card.Text>
 
           <OverlayTrigger
-            
+
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -73,7 +74,7 @@ const NextOfKinItem = props => {
 
 
           <OverlayTrigger
-            
+
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -85,6 +86,22 @@ const NextOfKinItem = props => {
           >
             <FontAwesomeIcon icon={faHighlighter} className="listIcon" onClick={props.togglePatientNextOfKinHighlighted.bind(this, props.nextOfKin)}/>
           </OverlayTrigger>
+
+          {props.canUpdate === true && (
+            <OverlayTrigger
+
+              placement={'top'}
+              overlay={
+                <Popover id={`popover-positioned-${'top'}`}>
+                  <Popover.Content>
+                    <strong>Edit</strong>
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <FontAwesomeIcon icon={faEdit} className="listIcon" onClick={props.startUpdate.bind(this, {field: 'nextOfKin', data: props.nextOfKin})}/>
+            </OverlayTrigger>
+          )}
 
           {state === true && (
             <Row className="listItemHiddenRow">
@@ -106,7 +123,7 @@ const NextOfKinItem = props => {
               </li>
               <li>
               <Card.Text className="cardText">
-                Phone: <span className="bold">{props.nextOfKin.contact.phone}</span>
+                Phone: <span className="bold">{props.nextOfKin.contact.phone1}</span>
               </Card.Text>
               </li>
               <li>
@@ -117,7 +134,7 @@ const NextOfKinItem = props => {
               {props.canDelete === true && (
                 <li>
                 <OverlayTrigger
-                  
+
                   placement={'top'}
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>

@@ -52,6 +52,8 @@ const VisitComplaintList = props => {
         onAddAttachment={props.onAddAttachment}
         deleteAttachment={props.deleteAttachment}
         toggleVisitComplaintHighlighted={props.toggleVisitComplaintHighlighted}
+        canUpdate={props.canUpdate}
+        startUpdate={props.startUpdate}
       />
     );
   });
