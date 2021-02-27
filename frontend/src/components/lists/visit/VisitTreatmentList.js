@@ -64,6 +64,8 @@ const VisitTreatmentList = props => {
         onAddAttachment={props.onAddAttachment}
         deleteAttachment={props.deleteAttachment}
         toggleVisitTreatmentHighlighted={props.toggleVisitTreatmentHighlighted}
+        canUpdate={props.canUpdate}
+        startUpdate={props.startUpdate}
       />
     );
   });

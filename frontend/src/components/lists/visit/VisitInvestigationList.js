@@ -46,6 +46,8 @@ const VisitInvestigationList = props => {
         onAddAttachment={props.onAddAttachment}
         deleteAttachment={props.deleteAttachment}
         toggleVisitInvestigationHighlighted={props.toggleVisitInvestigationHighlighted}
+        canUpdate={props.canUpdate}
+        startUpdate={props.startUpdate}
       />
     );
   });

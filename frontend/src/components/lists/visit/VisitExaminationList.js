@@ -76,6 +76,8 @@ const VisitExaminationList = props => {
         onAddAttachment={props.onAddAttachment}
         deleteAttachment={props.deleteAttachment}
         toggleVisitExaminationHighlighted={props.toggleVisitExaminationHighlighted}
+        canUpdate={props.canUpdate}
+        startUpdate={props.startUpdate}
       />
     );
   });

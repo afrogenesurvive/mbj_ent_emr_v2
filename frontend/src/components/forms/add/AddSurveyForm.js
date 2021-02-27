@@ -9,10 +9,27 @@ import './addForms.css';
 
 const AddSurveyForm = (props) => {
 
+  let placeHolders = {
+    title: '....',
+    description: '....',
+  }
+  if (props.previousSurvey) {
+    placeHolders = {
+      title: props.previousSurvey.title,
+      description: props.previousSurvey.description,
+    }
+  }
+
 return (
 <div className="addFormTopDiv">
   <Form onSubmit={props.onConfirm}>
-    <h4>Add Survey</h4>
+
+    {props.previousSurvey && (
+      <h4>Update Survey</h4>
+    )}
+    {!props.previousSurvey && (
+      <h4>Add Survey</h4>
+    )}
     <p>required feilds are denoted by a ' * '</p>
 
     {
@@ -27,7 +44,7 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="description" className="formGroup">
         <Form.Label className="formLabel">Description * </Form.Label>
-        <Form.Control as="textarea" rows="3" placeholder="..."/>
+        <Form.Control as="textarea" rows="3" placeholder={placeHolders.description}/>
       </Form.Group>
     </Form.Row>
 
@@ -39,7 +56,13 @@ return (
     </Form.Row>
 
     <Form.Row className="formBtnRow">
-      <Button variant="success" type="submit" className="addFormBtn">Add</Button>
+
+      {props.previousSurvey && (
+        <Button variant="success" type="submit" className="addFormBtn">Update</Button>
+      )}
+      {!props.previousSurvey && (
+        <Button variant="success" type="submit" className="addFormBtn">Add</Button>
+      )}
       <Button variant="danger" className="addFormBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>

@@ -52,6 +52,8 @@ const VisitDiagnosisList = props => {
         onAddAttachment={props.onAddAttachment}
         deleteAttachment={props.deleteAttachment}
         toggleVisitDiagnosisHighlighted={props.toggleVisitDiagnosisHighlighted}
+        canUpdate={props.canUpdate}
+        startUpdate={props.startUpdate}
       />
     );
   });

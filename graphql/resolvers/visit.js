@@ -509,9 +509,6 @@ module.exports = {
           highlighted: args.visitInput2.complaintHighlighted,
         }
 
-        console.log('1',oldComplaint);
-        console.log('2',newComplaint);
-
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId,complaints: oldComplaint},
           {'complaints.$': newComplaint},
@@ -713,13 +710,13 @@ module.exports = {
         const oldSurvey = {
           title: args.visitInput.surveyTitle,
           description: args.visitInput.surveyDescription,
-          attachments: args.visitInput.surveyAttachment.split(','),
+          attachments: args.visitInput.surveyAttachments.split(','),
           highlighted: args.visitInput.surveyHighlighted,
         }
         const newSurvey = {
           title: args.visitInput2.surveyTitle,
           description: args.visitInput2.surveyDescription,
-          attachments: args.visitInput2.surveyAttachment.split(','),
+          attachments: args.visitInput2.surveyAttachments.split(','),
           highlighted: args.visitInput2.surveyHighlighted,
         }
 
@@ -917,13 +914,13 @@ module.exports = {
         const oldSystematicInquiry = {
           title: args.visitInput.systematicInquiryTitle,
           description: args.visitInput.systematicInquiryDescription,
-          attachments: args.visitInput.systematicInquiryAttachment.split(','),
+          attachments: args.visitInput.systematicInquiryAttachments.split(','),
           highlighted: args.visitInput.systematicInquiryHighlighted,
         }
         const newSystematicInquiry = {
           title: args.visitInput2.systematicInquiryTitle,
           description: args.visitInput2.systematicInquiryDescription,
-          attachments: args.visitInput2.systematicInquiryAttachment.split(','),
+          attachments: args.visitInput2.systematicInquiryAttachments.split(','),
           highlighted: args.visitInput2.systematicInquiryHighlighted,
         }
 
@@ -1166,6 +1163,7 @@ module.exports = {
         },
         highlighted: args.visitInput2.vitalsHighlighted,
       }
+
 
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId,vitals: oldVitals},

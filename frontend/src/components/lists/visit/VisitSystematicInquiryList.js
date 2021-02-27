@@ -46,6 +46,8 @@ const VisitSystematicInquiryList = props => {
         onAddAttachment={props.onAddAttachment}
         deleteAttachment={props.deleteAttachment}
         toggleVisitSysInquiryHighlighted={props.toggleVisitSysInquiryHighlighted}
+        canUpdate={props.canUpdate}
+        startUpdate={props.startUpdate}
       />
     );
   });

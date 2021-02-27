@@ -17,7 +17,8 @@ import {
   faCheckSquare,
   faExternalLinkAlt,
   faHighlighter,
-  faExclamation
+  faExclamation,
+  faEdit,
 } from '@fortawesome/free-solid-svg-icons';
 import PatientAttachmentList from '../../lists/patient/PatientAttachmentList';
 
@@ -62,7 +63,7 @@ const ExaminationItem = props => {
           </Card.Text>
 
           <OverlayTrigger
-            
+
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -76,7 +77,7 @@ const ExaminationItem = props => {
           </OverlayTrigger>
 
           <OverlayTrigger
-            
+
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -88,6 +89,22 @@ const ExaminationItem = props => {
           >
             <FontAwesomeIcon icon={faHighlighter} className="listIcon" onClick={props.toggleVisitExaminationHighlighted.bind(this, props.examination)}/>
           </OverlayTrigger>
+
+          {props.canUpdate === true && (
+            <OverlayTrigger
+
+              placement={'top'}
+              overlay={
+                <Popover id={`popover-positioned-${'top'}`}>
+                  <Popover.Content>
+                    <strong>Edit</strong>
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <FontAwesomeIcon icon={faEdit} className="listIcon" onClick={props.startUpdate.bind(this, {field: 'examination', data: props.examination})}/>
+            </OverlayTrigger>
+          )}
 
           {state === true && (
             <Row className="listItemHiddenRow">
@@ -136,7 +153,7 @@ const ExaminationItem = props => {
               <Card.Text className="cardText">
                 Attachments:
                 <OverlayTrigger
-                  
+
                   placement={'top'}
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>
@@ -161,7 +178,7 @@ const ExaminationItem = props => {
               {props.canDelete === true && (
                 <li>
                 <OverlayTrigger
-                  
+
                   placement={'top'}
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>

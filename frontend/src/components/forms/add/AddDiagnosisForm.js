@@ -9,16 +9,35 @@ import './addForms.css';
 
 const AddDiagnosisForm = (props) => {
 
+  let placeHolders = {
+    title: '...',
+    type: '...',
+    description: '...',
+  }
+  if (props.previousDiagnosis) {
+    placeHolders = {
+      title: props.previousDiagnosis.title,
+      type: props.previousDiagnosis.type,
+      description: props.previousDiagnosis.description,
+    }
+  }
+
 return (
 <div className="addFormTopDiv">
   <Form onSubmit={props.onConfirm}>
-    <h4>Add Diagnosis</h4>
+
+    {props.previousDiagnosis && (
+      <h4>Update Diagnosis</h4>
+    )}
+    {!props.previousDiagnosis && (
+      <h4>Add Diagnosis</h4>
+    )}
     <p>required feilds are denoted by a ' * '</p>
 
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="title" className="formGroup">
         <Form.Label className="formLabel">Diagnosis * </Form.Label>
-        <Form.Control type="text" placeholder="..."/>
+        <Form.Control type="text" placeholder={placeHolders.title}/>
       </Form.Group>
 
     </Form.Row>
@@ -26,7 +45,7 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="description" className="formGroup">
         <Form.Label className="formLabel">Description * </Form.Label>
-        <Form.Control as="textarea" rows="3" placeholder="..."/>
+        <Form.Control as="textarea" rows="3" placeholder={placeHolders.description}/>
       </Form.Group>
     </Form.Row>
 
@@ -38,7 +57,13 @@ return (
     </Form.Row>
 
     <Form.Row className="formBtnRow">
-      <Button variant="success" type="submit" className="addFormBtn">Add</Button>
+
+      {props.previousDiagnosis && (
+        <Button variant="success" type="submit" className="addFormBtn">Update</Button>
+      )}
+      {!props.previousDiagnosis && (
+        <Button variant="success" type="submit" className="addFormBtn">Add</Button>
+      )}
       <Button variant="danger" className="addFormBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>

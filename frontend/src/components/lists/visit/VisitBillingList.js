@@ -65,6 +65,8 @@ const VisitBillingList = props => {
         deleteAttachment={props.deleteAttachment}
         updateBillingPaid={props.updateBillingPaid}
         toggleVisitBillingHighlighted={props.toggleVisitBillingHighlighted}
+        canUpdate={props.canUpdate}
+        startUpdate={props.startUpdate}
       />
     );
   });
