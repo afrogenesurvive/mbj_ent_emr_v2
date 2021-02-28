@@ -100,6 +100,12 @@ class PatientDetail extends Component {
       state: null,
       field: null
     },
+    canUpdate: true,
+    updating: {
+      state: null,
+      field: null,
+      previous: {}
+    },
     canDelete: false,
     updateSingleField: {
       state: null,
@@ -210,7 +216,7 @@ logUserActivity(args) {
   const token = args.token;
   const userId = activityId;
   const request = this.state.activityA;
-  const activityDate = moment().format('YYYY-MM-DD');
+  const activityDate = moment().tz("America/Bogota").format('YYYY-MM-DD');
   let requestBody = {
     query: `
       mutation {addUserActivity(
@@ -480,6 +486,127 @@ setAddressPrimary = (args) => {
       this.setState({isLoading: false, overlay2: false })
     });
 }
+submitUpdateAddressForm = (event) => {
+  event.preventDefault();
+  console.log('updating address...');
+  this.context.setUserAlert('...updating address...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+
+  const oldAddress = {
+    number: this.state.updating.previous.number,
+    street: this.state.updating.previous.street,
+    town: this.state.updating.previous.town,
+    city: this.state.updating.previous.city,
+    parish: this.state.updating.previous.parish,
+    country: this.state.updating.previous.country,
+    postalCode: this.state.updating.previous.postalCode,
+    primary: this.state.updating.previous.primary,
+  }
+  const newAddress = {
+    number: event.target.number.value,
+    street: event.target.street.value,
+    town: event.target.town.value,
+    city: event.target.city.value,
+    parish: event.target.parish.value,
+    country: event.target.country.value,
+    postalCode: event.target.postalCode.value,
+    primary: oldAddress.primary,
+  }
+
+  if (
+      newAddress.number.trim().length === 0 ||
+      newAddress.street.trim().length === 0 ||
+      newAddress.city.trim().length === 0 ||
+      newAddress.country.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank required fields!!!...")
+    this.setState({isLoading: false, overlay2: false})
+    return;
+  }
+
+  let requestBody = {
+    query: `
+      mutation {updatePatientAddress(
+        activityId:"${activityId}",
+        patientId:"${patientId}",
+        patientInput:{
+          addressNumber:${oldAddress.number},
+          addressStreet:"${oldAddress.street}",
+          addressTown:"${oldAddress.town}",
+          addressCity:"${oldAddress.city}",
+          addressParish:"${oldAddress.parish}",
+          addressCountry:"${oldAddress.country}",
+          addressPostalCode:"${oldAddress.postalCode}",
+          addressPrimary: ${oldAddress.primary}
+        }
+        patientInput2:{
+          addressNumber:${newAddress.number},
+          addressStreet:"${newAddress.street}",
+          addressTown:"${newAddress.town}",
+          addressCity:"${newAddress.city}",
+          addressParish:"${newAddress.parish}",
+          addressCountry:"${newAddress.country}",
+          addressPostalCode:"${newAddress.postalCode}",
+          addressPrimary: ${newAddress.primary},
+        })
+        {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
+    `};
+
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.updatePatientAddress);
+      let responseAlert = '...address update success!...';
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.updatePatientAddress)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedPatient: resData.data.updatePatientAddress,
+        activityA: `updatePatientAddress?activityId:${activityId},patientId:${patientId}`,
+        updating: {
+          state: null,
+          field: null,
+          previous: {}
+        }
+      });
+      this.context.selectedPatient = resData.data.updatePatientAddress;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
 
 submitAddNextOfKinForm = (event) => {
   event.preventDefault();
@@ -641,6 +768,197 @@ deleteNextOfKin = (args) => {
       this.context.setUserAlert(err);
       this.setState({isLoading: false, overlay2: false })
     });
+}
+togglePatientNextOfKinHighlighted = (args) => {
+  console.log('togglePatientNextOfKinHighlighted');
+  this.context.setUserAlert('...toggling patient nextOfKin highlight...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+  let requestBody;
+
+  requestBody = {
+    query: `
+      mutation {
+        togglePatientNextOfKinHighlighted(
+          activityId:"${activityId}",
+          patientId:"${patientId}",
+          patientInput:{
+            nextOfKinName:"${args.name}",
+            nextOfKinRelation:"${args.relation}",
+            nextOfKinContactEmail:"${args.contact.email}",
+            nextOfKinContactPhone1:"${args.contact.phone1}",
+            nextOfKinContactPhone2:"${args.contact.phone2}",
+            nextOfKinHighlighted: ${args.highlighted},
+          })
+          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.togglePatientNextOfKinHighlighted);
+      let responseAlert = `...nextOfKin highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.togglePatientNextOfKinHighlighted)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedPatient: resData.data.togglePatientNextOfKinHighlighted,
+        activityA: `togglePatientNextOfKinHighlighted?activityId:${activityId},patientId:${patientId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedPatient = resData.data.togglePatientNextOfKinHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
+submitUpdateNextOfKinForm = (event) => {
+  event.preventDefault();
+  console.log('updating nextOfKin...');
+  this.context.setUserAlert('...updating nextOfKin...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+
+  const oldNextOfKin = {
+    name: this.state.updating.previous.name,
+    relation: this.state.updating.previous.relation,
+    email: this.state.updating.previous.contact.email,
+    phone: this.state.updating.previous.contact.phone1,
+    phone2: this.state.updating.previous.contact.phone2,
+    highlighted: this.state.updating.previous.highlighted,
+  }
+  const newNextOfKin = {
+    name: event.target.name.value,
+    relation: event.target.relation.value,
+    email: event.target.email.value,
+    phone: event.target.phone.value,
+    phone2: event.target.phone2.value,
+    highlighted: oldNextOfKin.highlighted,
+  }
+
+  if (
+      newNextOfKin.name.trim().length === 0 ||
+      newNextOfKin.relation.trim().length === 0 ||
+      newNextOfKin.phone.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank required fields!!!...")
+    this.setState({isLoading: false, overlay2: false})
+    return;
+  }
+
+
+  let requestBody = {
+    query: `
+      mutation {updatePatientNextOfKin(
+        activityId:"${activityId}",
+        patientId:"${patientId}",
+        patientInput:{
+          nextOfKinName: "${oldNextOfKin.name}",
+          nextOfKinRelation: "${oldNextOfKin.relation}",
+          nextOfKinContactEmail: "${oldNextOfKin.email}",
+          nextOfKinContactPhone1: "${oldNextOfKin.phone}",
+          nextOfKinContactPhone2: "${oldNextOfKin.phone2}",
+          nextOfKinHighlighted: ${oldNextOfKin.highlighted},
+        }
+        patientInput2:{
+          nextOfKinName: "${newNextOfKin.name}",
+          nextOfKinRelation: "${newNextOfKin.relation}",
+          nextOfKinContactEmail: "${newNextOfKin.email}",
+          nextOfKinContactPhone1: "${newNextOfKin.phone}",
+          nextOfKinContactPhone2: "${newNextOfKin.phone2}",
+          nextOfKinHighlighted: ${newNextOfKin.highlighted},
+        })
+        {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
+    `};
+
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.updatePatientNextOfKin);
+      let responseAlert = '...nextOfKin update success!...';
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.updatePatientNextOfKin)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedPatient: resData.data.updatePatientNextOfKin,
+        activityA: `updatePatientNextOfKin?activityId:${activityId},patientId:${patientId}`,
+        updating: {
+          state: null,
+          field: null,
+          previous: {}
+        }
+      });
+      this.context.selectedPatient = resData.data.updatePatientNextOfKin;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
 }
 
 submitAddAllergyForm = (event) => {
@@ -942,6 +1260,191 @@ deleteAllergy = (args) => {
       this.setState({isLoading: false, overlay2: false })
     });
 }
+togglePatientAllergyHighlighted = (args) => {
+  console.log('togglePatientAllergyHighlighted');
+  this.context.setUserAlert('...toggling patient allergy highlight...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+  let requestBody;
+
+  requestBody = {
+    query: `
+      mutation {
+        togglePatientAllergyHighlighted(
+          activityId:"${activityId}",
+          patientId:"${patientId}",
+          patientInput:{
+            allergyType:"${args.type}",
+            allergyTitle:"${args.title}",
+            allergyDescription:"${args.description}",
+            allergyAttachments:"${args.attachments}",
+            allergyHighlighted: ${args.highlighted}
+          })
+          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.togglePatientAllergyHighlighted);
+      let responseAlert = `...allergy highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.togglePatientAllergyHighlighted)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedPatient: resData.data.togglePatientAllergyHighlighted,
+        activityA: `togglePatientAllergyHighlighted?activityId:${activityId},patientId:${patientId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedPatient = resData.data.togglePatientAllergyHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
+submitUpdateAllergyForm = (event) => {
+  event.preventDefault();
+  console.log('updating allergy...');
+  this.context.setUserAlert('...updating allergy...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+
+  const oldAllergy = {
+    title: this.state.updating.previous.title,
+    type: this.state.updating.previous.type,
+    description: this.state.updating.previous.description,
+    attachments: this.state.updating.previous.attachments,
+    highlighted: this.state.updating.previous.highlighted,
+  }
+  const newAllergy = {
+    title: this.props.patient.name+"_allergy_"+moment().format("YYYY-MM-DD, h:mm:ss a"),
+    type: event.target.type.value,
+    description: event.target.description.value,
+    attachments: oldAllergy.attachments,
+    highlighted: oldAllergy.highlighted,
+  }
+
+  if (
+      newAllergy.description.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank required fields!!!...")
+    this.setState({isLoading: false, overlay2: false})
+    return;
+  }
+
+
+  let requestBody = {
+    query: `
+      mutation {updatePatientAllergy(
+        activityId:"${activityId}",
+        patientId:"${patientId}",
+        patientInput:{
+          allergyType:"${oldAllergy.type}",
+          allergyTitle:"${oldAllergy.title}",
+          allergyDescription:"${oldAllergy.description}",
+          allergyAttachments:"${oldAllergy.attachments}",
+          allergyHighlighted: ${oldAllergy.highlighted}
+        }
+        patientInput2:{
+          allergyType:"${newAllergy.type}",
+          allergyTitle:"${newAllergy.title}",
+          allergyDescription:"${newAllergy.description}",
+          allergyAttachments:"${newAllergy.attachments}",
+          allergyHighlighted: ${newAllergy.highlighted}
+        })
+        {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
+    `};
+
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.updatePatientAllergy);
+      let responseAlert = '...allergy update success!...';
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.updatePatientAllergy)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedPatient: resData.data.updatePatientAllergy,
+        activityA: `updatePatientAllergy?activityId:${activityId},patientId:${patientId}`,
+        updating: {
+          state: null,
+          field: null,
+          previous: {}
+        }
+      });
+      this.context.selectedPatient = resData.data.updatePatientAllergy;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
+
 submitAddMedicationForm = (event) => {
   event.preventDefault();
   console.log('...add medication...');
@@ -1247,6 +1750,196 @@ deleteMedication = (args) => {
       this.setState({isLoading: false, overlay2: false })
     });
 }
+togglePatientMedicationHighlighted = (args) => {
+  console.log('togglePatientMedicationHighlighted');
+  this.context.setUserAlert('...toggling patient medication highlight...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+  let requestBody;
+
+  requestBody = {
+    query: `
+      mutation {
+        togglePatientMedicationHighlighted(
+          activityId:"${activityId}",
+          patientId:"${patientId}",
+          patientInput:{
+            medicationType:"${args.type}",
+            medicationTitle:"${args.title}",
+            medicationDescription:"${args.description}",
+            medicationDosage:"${args.dosage}",
+            medicationAttachments:"${args.attachments}",
+            medicationHighlighted:${args.highlighted}
+          })
+          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.togglePatientMedicationHighlighted);
+      let responseAlert = `...medication highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.togglePatientMedicationHighlighted)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedPatient: resData.data.togglePatientMedicationHighlighted,
+        activityA: `togglePatientMedicationHighlighted?activityId:${activityId},patientId:${patientId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedPatient = resData.data.togglePatientMedicationHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
+submitUpdateMedicationForm = (event) => {
+  event.preventDefault();
+  console.log('updating medication...');
+  this.context.setUserAlert('...updating medication...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+
+  const oldMedication = {
+    title: this.state.updating.previous.title,
+    type: this.state.updating.previous.type,
+    dosage: this.state.updating.previous.dosage,
+    description: this.state.updating.previous.description,
+    attachments: this.state.updating.previous.attachments,
+    highlighted: this.state.updating.previous.highlighted,
+  }
+  const newMedication = {
+    title: event.target.title.value,
+    type: event.target.type.value,
+    dosage: event.target.dosage.value,
+    description: event.target.description.value,
+    attachments: oldMedication.attachments,
+    highlighted: oldMedication.highlighted,
+  }
+
+  if (
+      newMedication.title.trim().length === 0 ||
+      newMedication.type.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank required fields!!!...")
+    this.setState({isLoading: false, overlay2: false})
+    return;
+  }
+
+
+  let requestBody = {
+    query: `
+      mutation {updatePatientMedication(
+        activityId:"${activityId}",
+        patientId:"${patientId}",
+        patientInput:{
+          medicationType:"${oldMedication.type}",
+          medicationTitle:"${oldMedication.title}",
+          medicationDescription:"${oldMedication.description}",
+          medicationDosage:"${oldMedication.dosage}",
+          medicationAttachments:"${oldMedication.attachments}",
+          medicationHighlighted: ${oldMedication.highlighted}
+        }
+        patientInput2:{
+          medicationType:"${newMedication.type}",
+          medicationTitle:"${newMedication.title}",
+          medicationDescription:"${newMedication.description}",
+          medicationDosage:"${newMedication.dosage}",
+          medicationAttachments:"${newMedication.attachments}",
+          medicationHighlighted: ${newMedication.highlighted}
+        })
+        {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
+    `};
+
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.updatePatientMedication);
+      let responseAlert = '...medication update success!...';
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.updatePatientMedication)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedPatient: resData.data.updatePatientMedication,
+        activityA: `updatePatientMedication?activityId:${activityId},patientId:${patientId}`,
+        updating: {
+          state: null,
+          field: null,
+          previous: {}
+        }
+      });
+      this.context.selectedPatient = resData.data.updatePatientMedication;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
 
 submitAddComorbidityForm = (event) => {
   event.preventDefault();
@@ -1257,13 +1950,14 @@ submitAddComorbidityForm = (event) => {
   const token = this.context.token;
   const activityId = this.context.activityId;
   const patientId = this.props.patient._id;
-  const title = this.props.patient.name+"_comorbidity_"+moment().format("YYYY-MM-DD, h:mm:ss a");
-  const type = event.target.type.value;
+  const title = event.target.title.value;
+  // const title = this.props.patient.name+"_comorbidity_"+moment().format("YYYY-MM-DD, h:mm:ss a");
+  const type = '';
+  // const type = event.target.type.value;
   const description = event.target.description.value.replace(/\n/g, ' ');
 
   if (
-      title.trim().length === 0 ||
-      type.trim().length === 0
+      title.trim().length === 0
     ) {
     this.context.setUserAlert("...blank required fields!!!...")
     this.setState({isLoading: false, overlay2: false})
@@ -1403,6 +2097,185 @@ deleteComorbidity = (args) => {
       this.context.setUserAlert(err);
       this.setState({isLoading: false, overlay2: false })
     });
+}
+togglePatientComorbidityHighlighted = (args) => {
+  console.log('togglePatientComorbidityHighlighted');
+  this.context.setUserAlert('...toggling patient comorbidity highlight...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+  let requestBody;
+
+  requestBody = {
+    query: `
+      mutation {
+        togglePatientComorbidityHighlighted(
+          activityId:"${activityId}",
+          patientId:"${patientId}",
+          patientInput:{
+            comorbidityType:"${args.type}",
+            comorbidityTitle:"${args.title}",
+            comorbidityDescription:"${args.description}",
+            comorbidityHighlighted: ${args.highlighted}
+          })
+          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.togglePatientComorbidityHighlighted);
+      let responseAlert = `...comorbidity highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.togglePatientComorbidityHighlighted)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedPatient: resData.data.togglePatientComorbidityHighlighted,
+        activityA: `togglePatientComorbidityHighlighted?activityId:${activityId},patientId:${patientId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedPatient = resData.data.togglePatientComorbidityHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
+submitUpdateComorbidityForm = (event) => {
+  event.preventDefault();
+  console.log('updating medication...');
+  this.context.setUserAlert('...updating medication...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+
+  const oldComorbidity = {
+    title: this.state.updating.previous.title,
+    type: this.state.updating.previous.type,
+    description: this.state.updating.previous.description,
+    highlighted: this.state.updating.previous.highlighted,
+  }
+  const newComorbidity = {
+    title: event.target.title.value,
+    type: oldComorbidity.type,
+    description: event.target.description.value,
+    highlighted: oldComorbidity.highlighted,
+  }
+
+  if (
+      newComorbidity.title.trim().length === 0
+    ) {
+    this.context.setUserAlert("...blank required fields!!!...")
+    this.setState({isLoading: false, overlay2: false})
+    return;
+  }
+
+
+  let requestBody = {
+    query: `
+      mutation {updatePatientComorbidity(
+        activityId:"${activityId}",
+        patientId:"${patientId}",
+        patientInput:{
+          comorbidityType:"${oldComorbidity.type}",
+          comorbidityTitle:"${oldComorbidity.title}",
+          comorbidityDescription:"${oldComorbidity.description}",
+          comorbidityHighlighted: ${oldComorbidity.highlighted}
+        }
+        patientInput2:{
+          comorbidityType:"${newComorbidity.type}",
+          comorbidityTitle:"${newComorbidity.title}",
+          comorbidityDescription:"${newComorbidity.description}",
+          comorbidityHighlighted: ${newComorbidity.highlighted}
+        })
+        {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
+    `};
+
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.updatePatientComorbidity);
+      let responseAlert = '...medication update success!...';
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.updatePatientComorbidity)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedPatient: resData.data.updatePatientComorbidity,
+        activityA: `updatePatientComorbidity?activityId:${activityId},patientId:${patientId}`,
+        updating: {
+          state: null,
+          field: null,
+          previous: {}
+        }
+      });
+      this.context.selectedPatient = resData.data.updatePatientComorbidity;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
 }
 
 startAddAttachment = (args) => {
@@ -2079,6 +2952,87 @@ deleteImage = (args) => {
       this.setState({isLoading: false, overlay2: false })
     });
 }
+togglePatientImageHighlighted = (args) => {
+  console.log('togglePatientImageHighlighted');
+  this.context.setUserAlert('...toggling patient image highlight...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+  let requestBody;
+
+  const name = args.name;
+  const type = args.type;
+  const path = args.path;
+  let highlighted = args.highlighted;
+
+  requestBody = {
+    query: `
+      mutation {
+        togglePatientImageHighlighted(
+          activityId:"${activityId}",
+          patientId:"${patientId}",
+          patientInput:{
+            imageName:"${name}",
+            imageType:"${type}",
+            imagePath:"${path}"
+            imageHighlighted: ${highlighted},
+          })
+          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.togglePatientImageHighlighted);
+      let responseAlert = `...image highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.togglePatientImageHighlighted)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedPatient: resData.data.togglePatientImageHighlighted,
+        activityA: `togglePatientImageHighlighted?activityId:${activityId},patientId:${patientId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedPatient = resData.data.togglePatientImageHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
 
 submitAddFileForm = (event) => {
   event.preventDefault();
@@ -2351,6 +3305,83 @@ deleteFile = (args) => {
       this.context.setUserAlert(err);
       this.setState({isLoading: false, overlay2: false })
     });
+}
+togglePatientFileHighlighted = (args) => {
+  console.log('togglePatientFileHighlighted');
+  this.context.setUserAlert('...toggling patient file highlight...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const patientId = this.props.patient._id;
+  let requestBody;
+
+
+  requestBody = {
+    query: `
+      mutation {
+        togglePatientFileHighlighted(
+          activityId:"${activityId}",
+          patientId:"${patientId}",
+          patientInput:{
+            fileName:"${args.name}",
+            fileType:"${args.type}",
+            filePath:"${args.path}",
+            fileHighlighted: ${args.highlighted},
+          })
+          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
+    `};
+
+
+   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.togglePatientFileHighlighted);
+      let responseAlert = `...file highlight toggled!...`;
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updatePatient(resData.data.togglePatientFileHighlighted)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedPatient: resData.data.togglePatientFileHighlighted,
+        activityA: `togglePatientFileHighlighted?activityId:${activityId},patientId:${patientId}`,
+        adding: {
+          state: null,
+          field: null
+        }
+      });
+      this.context.selectedPatient = resData.data.togglePatientFileHighlighted;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
 }
 
 submitAddNoteForm = (event) => {
@@ -2791,6 +3822,20 @@ cancelAdd = () => {
     adding: {
       state: null,
       field: null
+    },
+    updating: {
+      state: null,
+      field: null,
+      previous: {}
+    }
+  })
+}
+startUpdate = (args) => {
+  this.setState({
+    updating: {
+      state: true,
+      field: args.field,
+      previous: args.data
     }
   })
 }
@@ -2844,7 +3889,7 @@ parseForCalendar = (args) => {
         date: date,
         props: {
           _id: x._id,
-          date: x.date,
+          date: date,
           title: x.title,
           type: x.type,
           subType: x.subType,
@@ -2862,16 +3907,16 @@ parseForCalendar = (args) => {
     for (const x of args.visits) {
       let date;
       if (x.date.length === 12) {
-        date = moment.unix(x.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+        date = moment.unix(x.date.substr(0,9)).add(1 ,'days').tz("America/Bogota").format('YYYY-MM-DD');
       } else if (x.date.length === 13) {
-        date = moment.unix(x.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+        date = moment.unix(x.date.substr(0,10)).add(1 ,'days').tz("America/Bogota").format('YYYY-MM-DD');
       }
       let evt = {
         title: x.title,
         date: date,
         props: {
           _id: x._id,
-          date: x.date,
+          date: date,
           title: x.title,
           type: x.type,
           subType: x.subType,
@@ -3005,473 +4050,6 @@ checkAllergies = () => {
   })
 }
 
-togglePatientComorbidityHighlighted = (args) => {
-  console.log('togglePatientComorbidityHighlighted');
-  this.context.setUserAlert('...toggling patient comorbidity highlight...')
-  this.setState({isLoading: true, overlay2: true});
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
-  let requestBody;
-
-  requestBody = {
-    query: `
-      mutation {
-        togglePatientComorbidityHighlighted(
-          activityId:"${activityId}",
-          patientId:"${patientId}",
-          patientInput:{
-            comorbidityType:"${args.type}",
-            comorbidityTitle:"${args.title}",
-            comorbidityDescription:"${args.description}",
-            comorbidityHighlighted: ${args.highlighted}
-          })
-          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
-    `};
-
-
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      // console.log('...resData...',resData.data.togglePatientComorbidityHighlighted);
-      let responseAlert = `...comorbidity highlight toggled!...`;
-      let error = null;
-
-      if (resData.errors) {
-        error = resData.errors[0].message;
-        responseAlert = error;
-      }
-
-      if (resData.data.error) {
-        error = resData.data.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      this.props.updatePatient(resData.data.togglePatientComorbidityHighlighted)
-      this.setState({
-        isLoading: false,
-        overlay2: false,
-        selectedPatient: resData.data.togglePatientComorbidityHighlighted,
-        activityA: `togglePatientComorbidityHighlighted?activityId:${activityId},patientId:${patientId}`,
-        adding: {
-          state: null,
-          field: null
-        }
-      });
-      this.context.selectedPatient = resData.data.togglePatientComorbidityHighlighted;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false, overlay2: false })
-    });
-
-}
-togglePatientAllergyHighlighted = (args) => {
-  console.log('togglePatientAllergyHighlighted');
-  this.context.setUserAlert('...toggling patient allergy highlight...')
-  this.setState({isLoading: true, overlay2: true});
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
-  let requestBody;
-
-  requestBody = {
-    query: `
-      mutation {
-        togglePatientAllergyHighlighted(
-          activityId:"${activityId}",
-          patientId:"${patientId}",
-          patientInput:{
-            allergyType:"${args.type}",
-            allergyTitle:"${args.title}",
-            allergyDescription:"${args.description}",
-            allergyAttachments:"${args.attachments}",
-            allergyHighlighted: ${args.highlighted}
-          })
-          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
-    `};
-
-
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      // console.log('...resData...',resData.data.togglePatientAllergyHighlighted);
-      let responseAlert = `...allergy highlight toggled!...`;
-      let error = null;
-
-      if (resData.errors) {
-        error = resData.errors[0].message;
-        responseAlert = error;
-      }
-
-      if (resData.data.error) {
-        error = resData.data.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      this.props.updatePatient(resData.data.togglePatientAllergyHighlighted)
-      this.setState({
-        isLoading: false,
-        overlay2: false,
-        selectedPatient: resData.data.togglePatientAllergyHighlighted,
-        activityA: `togglePatientAllergyHighlighted?activityId:${activityId},patientId:${patientId}`,
-        adding: {
-          state: null,
-          field: null
-        }
-      });
-      this.context.selectedPatient = resData.data.togglePatientAllergyHighlighted;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false, overlay2: false })
-    });
-
-}
-togglePatientFileHighlighted = (args) => {
-  console.log('togglePatientFileHighlighted');
-  this.context.setUserAlert('...toggling patient file highlight...')
-  this.setState({isLoading: true, overlay2: true});
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
-  let requestBody;
-
-
-  requestBody = {
-    query: `
-      mutation {
-        togglePatientFileHighlighted(
-          activityId:"${activityId}",
-          patientId:"${patientId}",
-          patientInput:{
-            fileName:"${args.name}",
-            fileType:"${args.type}",
-            filePath:"${args.path}",
-            fileHighlighted: ${args.highlighted},
-          })
-          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
-    `};
-
-
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      // console.log('...resData...',resData.data.togglePatientFileHighlighted);
-      let responseAlert = `...file highlight toggled!...`;
-      let error = null;
-
-      if (resData.errors) {
-        error = resData.errors[0].message;
-        responseAlert = error;
-      }
-
-      if (resData.data.error) {
-        error = resData.data.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      this.props.updatePatient(resData.data.togglePatientFileHighlighted)
-      this.setState({
-        isLoading: false,
-        overlay2: false,
-        selectedPatient: resData.data.togglePatientFileHighlighted,
-        activityA: `togglePatientFileHighlighted?activityId:${activityId},patientId:${patientId}`,
-        adding: {
-          state: null,
-          field: null
-        }
-      });
-      this.context.selectedPatient = resData.data.togglePatientFileHighlighted;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false, overlay2: false })
-    });
-
-}
-togglePatientImageHighlighted = (args) => {
-  console.log('togglePatientImageHighlighted');
-  this.context.setUserAlert('...toggling patient image highlight...')
-  this.setState({isLoading: true, overlay2: true});
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
-  let requestBody;
-
-  const name = args.name;
-  const type = args.type;
-  const path = args.path;
-  let highlighted = args.highlighted;
-
-  requestBody = {
-    query: `
-      mutation {
-        togglePatientImageHighlighted(
-          activityId:"${activityId}",
-          patientId:"${patientId}",
-          patientInput:{
-            imageName:"${name}",
-            imageType:"${type}",
-            imagePath:"${path}"
-            imageHighlighted: ${highlighted},
-          })
-          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
-    `};
-
-
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      // console.log('...resData...',resData.data.togglePatientImageHighlighted);
-      let responseAlert = `...image highlight toggled!...`;
-      let error = null;
-
-      if (resData.errors) {
-        error = resData.errors[0].message;
-        responseAlert = error;
-      }
-
-      if (resData.data.error) {
-        error = resData.data.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      this.props.updatePatient(resData.data.togglePatientImageHighlighted)
-      this.setState({
-        isLoading: false,
-        overlay2: false,
-        selectedPatient: resData.data.togglePatientImageHighlighted,
-        activityA: `togglePatientImageHighlighted?activityId:${activityId},patientId:${patientId}`,
-        adding: {
-          state: null,
-          field: null
-        }
-      });
-      this.context.selectedPatient = resData.data.togglePatientImageHighlighted;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false, overlay2: false })
-    });
-
-}
-togglePatientMedicationHighlighted = (args) => {
-  console.log('togglePatientMedicationHighlighted');
-  this.context.setUserAlert('...toggling patient medication highlight...')
-  this.setState({isLoading: true, overlay2: true});
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
-  let requestBody;
-
-  requestBody = {
-    query: `
-      mutation {
-        togglePatientMedicationHighlighted(
-          activityId:"${activityId}",
-          patientId:"${patientId}",
-          patientInput:{
-            medicationType:"${args.type}",
-            medicationTitle:"${args.title}",
-            medicationDescription:"${args.description}",
-            medicationDosage:"${args.dosage}",
-            medicationAttachments:"${args.attachments}",
-            medicationHighlighted:${args.highlighted}
-          })
-          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
-    `};
-
-
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      // console.log('...resData...',resData.data.togglePatientMedicationHighlighted);
-      let responseAlert = `...medication highlight toggled!...`;
-      let error = null;
-
-      if (resData.errors) {
-        error = resData.errors[0].message;
-        responseAlert = error;
-      }
-
-      if (resData.data.error) {
-        error = resData.data.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      this.props.updatePatient(resData.data.togglePatientMedicationHighlighted)
-      this.setState({
-        isLoading: false,
-        overlay2: false,
-        selectedPatient: resData.data.togglePatientMedicationHighlighted,
-        activityA: `togglePatientMedicationHighlighted?activityId:${activityId},patientId:${patientId}`,
-        adding: {
-          state: null,
-          field: null
-        }
-      });
-      this.context.selectedPatient = resData.data.togglePatientMedicationHighlighted;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false, overlay2: false })
-    });
-
-}
-togglePatientNextOfKinHighlighted = (args) => {
-  console.log('togglePatientNextOfKinHighlighted');
-  this.context.setUserAlert('...toggling patient nextOfKin highlight...')
-  this.setState({isLoading: true, overlay2: true});
-
-  const token = this.context.token;
-  const activityId = this.context.activityId;
-  const patientId = this.props.patient._id;
-  let requestBody;
-
-  requestBody = {
-    query: `
-      mutation {
-        togglePatientNextOfKinHighlighted(
-          activityId:"${activityId}",
-          patientId:"${patientId}",
-          patientInput:{
-            nextOfKinName:"${args.name}",
-            nextOfKinRelation:"${args.relation}",
-            nextOfKinContactEmail:"${args.contact.email}",
-            nextOfKinContactPhone1:"${args.contact.phone1}",
-            nextOfKinContactPhone2:"${args.contact.phone2}",
-            nextOfKinHighlighted: ${args.highlighted},
-          })
-          {_id,active,title,name,lastName,role,username,registration{date,number},dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},expiryDate,referral{date,reason,physician{name,email,phone}},attendingPhysician,occupation{role,employer{name,phone,email,address}},insurance{company,policyNumber,description,expiryDate,subscriber{company,description}},nextOfKin{name,relation,contact{email,phone1,phone2},highlighted},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,tags,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress,attended,important,notes,tags},visits{_id,date,time,title,type,subType,patient{_id,title,name,lastName,role,username,dob,age,gender,contact{phone,phone2,email}},consultants{_id,title,name,role,username,gender,contact{phone,phone2,email}}},reminders{_id},activity{date,request}}}
-    `};
-
-
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      }
-    })
-    .then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-      }
-      return res.json();
-    })
-    .then(resData => {
-      // console.log('...resData...',resData.data.togglePatientNextOfKinHighlighted);
-      let responseAlert = `...nextOfKin highlight toggled!...`;
-      let error = null;
-
-      if (resData.errors) {
-        error = resData.errors[0].message;
-        responseAlert = error;
-      }
-
-      if (resData.data.error) {
-        error = resData.data.error;
-        responseAlert = error;
-      }
-      this.context.setUserAlert(responseAlert)
-      this.props.updatePatient(resData.data.togglePatientNextOfKinHighlighted)
-      this.setState({
-        isLoading: false,
-        overlay2: false,
-        selectedPatient: resData.data.togglePatientNextOfKinHighlighted,
-        activityA: `togglePatientNextOfKinHighlighted?activityId:${activityId},patientId:${patientId}`,
-        adding: {
-          state: null,
-          field: null
-        }
-      });
-      this.context.selectedPatient = resData.data.togglePatientNextOfKinHighlighted;
-      this.logUserActivity({activityId: activityId,token: token});
-    })
-    .catch(err => {
-      console.log(err);
-      this.context.setUserAlert(err);
-      this.setState({isLoading: false, overlay2: false })
-    });
-
-}
 
 render() {
 
@@ -3570,10 +4148,10 @@ render() {
                 <ListGroup.Item>
                   <p className="listGroupText">DOB:</p>
                   {this.props.patient.dob.length === 12 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.props.patient.dob.length === 13 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
                 </ListGroup.Item>
@@ -3612,10 +4190,10 @@ render() {
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
                   {this.props.patient.registration.date.length === 12 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.props.patient.registration.date.length === 13 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                 </ListGroup.Item>
                 <ListGroup.Item>
@@ -3628,10 +4206,10 @@ render() {
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
                   {this.props.patient.referral.date && this.props.patient.referral.date.length === 12 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.props.patient.referral.date && this.props.patient.referral.date.length === 13 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.date')}>Edit</Button>
                 </ListGroup.Item>
@@ -3711,10 +4289,10 @@ render() {
                   <ListGroup.Item>
                   <p className="listGroupText">Expiry:</p>
                   {this.props.patient.insurance.expiryDate.length === 12 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.props.patient.insurance.expiryDate.length === 13 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.expiryDate')}>Edit</Button>
                   </ListGroup.Item>
@@ -3735,10 +4313,10 @@ render() {
                 <ListGroup.Item>
                   <p className="listGroupText">Date of Death:</p>
                   {this.props.patient.expiryDate.length === 12 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.props.patient.expiryDate.length === 13 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'expiryDate')}>Edit</Button>
                 </ListGroup.Item>
@@ -3772,6 +4350,14 @@ render() {
                       onCancel={this.cancelAdd}
                     />
                 )}
+                {this.state.updating.state === true &&
+                  this.state.updating.field === 'comorbidity' && (
+                    <AddComorbidityForm
+                      onConfirm={this.submitUpdateComorbidityForm}
+                      onCancel={this.cancelAdd}
+                      previousComorbidity={this.state.updating.previous}
+                    />
+                )}
                 <PatientComorbidityList
                   filter={this.state.filter}
                   comorbidities={this.props.patient.comorbidities}
@@ -3779,6 +4365,8 @@ render() {
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteComorbidity}
                   togglePatientComorbidityHighlighted={this.togglePatientComorbidityHighlighted}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
               </Col>
               </li>
@@ -3834,6 +4422,14 @@ render() {
                       onCancel={this.cancelAdd}
                     />
                 )}
+                {this.state.updating.state === true &&
+                  this.state.updating.field === 'address' && (
+                    <AddAddressForm
+                      onConfirm={this.submitUpdateAddressForm}
+                      onCancel={this.cancelAdd}
+                      previousAddress={this.state.updating.previous}
+                    />
+                )}
                 <PatientAddressList
                   filter={this.state.filter}
                   addresses={this.props.patient.addresses}
@@ -3841,6 +4437,8 @@ render() {
                   onDelete={this.deleteAddress}
                   canDelete={this.state.canDelete}
                   makePrimary={this.setAddressPrimary}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
               </Col>
               </li>
@@ -3867,6 +4465,14 @@ render() {
                       onCancel={this.cancelAdd}
                     />
                 )}
+                {this.state.updating.state === true &&
+                  this.state.updating.field === 'nextOfKin' && (
+                    <AddNextOfKinForm
+                      onConfirm={this.submitUpdateNextOfKinForm}
+                      onCancel={this.cancelAdd}
+                      previousNextOfKin={this.state.updating.previous}
+                    />
+                )}
                 <PatientNextOfKinList
                   filter={this.state.filter}
                   nextOfKin={this.props.patient.nextOfKin}
@@ -3874,6 +4480,8 @@ render() {
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteNextOfKin}
                   togglePatientNextOfKinHighlighted={this.togglePatientNextOfKinHighlighted}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
               </Col>
               </li>
@@ -3882,7 +4490,7 @@ render() {
               <Col className="subTabCol">
                 <h3 className="">Allergies:
                 {this.hasAllergies === true && (
-                  <FontAwesomeIcon icon={faExclamationTriangle} className="visitAttentionIcon" color="red" size="md"/>
+                  <FontAwesomeIcon icon={faExclamationTriangle} className="visitAttentionIcon" color="red" size="lg"/>
                 )}
                 </h3>
               </Col>
@@ -3905,6 +4513,14 @@ render() {
                       onCancel={this.cancelAdd}
                     />
                 )}
+                {this.state.updating.state === true &&
+                  this.state.updating.field === 'allergy' && (
+                    <AddAllergyForm
+                      onConfirm={this.submitUpdateAllergyForm}
+                      onCancel={this.cancelAdd}
+                      previousAllergy={this.state.updating.previous}
+                    />
+                )}
                 {this.state.addAttachmentForm === true && (
                   <AddAttachmentForm
                     onCancel={this.cancelAddAttachment}
@@ -3920,6 +4536,8 @@ render() {
                   onAddAttachment={this.startAddAttachment}
                   deleteAttachment={this.deleteAttachment}
                   togglePatientAllergyHighlighted={this.togglePatientAllergyHighlighted}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
               </Col>
               </li>
@@ -3946,6 +4564,14 @@ render() {
                       onCancel={this.cancelAdd}
                     />
                 )}
+                {this.state.updating.state === true &&
+                  this.state.updating.field === 'medication' && (
+                    <AddMedicationForm
+                      onConfirm={this.submitUpdateMedicationForm}
+                      onCancel={this.cancelAdd}
+                      previousMedication={this.state.updating.previous}
+                    />
+                )}
                 {this.state.addAttachmentForm === true && (
                   <AddAttachmentForm
                     onCancel={this.cancelAddAttachment}
@@ -3961,6 +4587,8 @@ render() {
                   onAddAttachment={this.startAddAttachment}
                   deleteAttachment={this.deleteAttachment}
                   togglePatientMedicationHighlighted={this.togglePatientMedicationHighlighted}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
               </Col>
               </li>
@@ -4200,10 +4828,10 @@ render() {
                 <ListGroup.Item>
                   <p className="listGroupText">DOB:</p>
                   {this.props.patient.dob.length === 12 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.props.patient.dob.length === 13 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.dob.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'dob')}>Edit</Button>
                 </ListGroup.Item>
@@ -4242,10 +4870,10 @@ render() {
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
                   {this.props.patient.registration.date.length === 12 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.props.patient.registration.date.length === 13 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.registration.date.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                 </ListGroup.Item>
                 <ListGroup.Item>
@@ -4258,10 +4886,10 @@ render() {
                 <ListGroup.Item>
                   <p className="listGroupText">Date:</p>
                   {this.props.patient.referral.date && this.props.patient.referral.date.length === 12 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.props.patient.referral.date && this.props.patient.referral.date.length === 13 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.referral.date.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'referral.date')}>Edit</Button>
                 </ListGroup.Item>
@@ -4328,6 +4956,8 @@ render() {
                   <p className="listGroupText">Company:</p>
                   <p className="listGroupText bold">{this.props.patient.insurance.company}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.company')}>Edit</Button>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <p className="listGroupText">Number:</p>
                   <p className="listGroupText bold">{this.props.patient.insurance.policyNumber}</p>
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.policyNumber')}>Edit</Button>
@@ -4341,10 +4971,10 @@ render() {
                   <ListGroup.Item>
                   <p className="listGroupText">Expiry:</p>
                   {this.props.patient.insurance.expiryDate.length === 12 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.props.patient.insurance.expiryDate.length === 13 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.insurance.expiryDate.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'insurance.expiryDate')}>Edit</Button>
                   </ListGroup.Item>
@@ -4365,10 +4995,10 @@ render() {
                 <ListGroup.Item>
                   <p className="listGroupText">Date of Death:</p>
                   {this.props.patient.expiryDate.length === 12 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   {this.props.patient.expiryDate.length === 13 && (
-                    <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</p>
+                    <p className="listGroupText bold">{moment.unix(this.props.patient.expiryDate.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</p>
                   )}
                   <Button variant="outline-primary" size="sm" onClick={this.startUpdateSingleField.bind(this, 'expiryDate')}>Edit</Button>
                 </ListGroup.Item>
@@ -4427,6 +5057,14 @@ render() {
                       onCancel={this.cancelAdd}
                     />
                 )}
+                {this.state.updating.state === true &&
+                  this.state.updating.field === 'address' && (
+                    <AddAddressForm
+                      onConfirm={this.submitUpdateAddressForm}
+                      onCancel={this.cancelAdd}
+                      previousAddress={this.state.updating.previous}
+                    />
+                )}
                 <PatientAddressList
                   filter={this.state.filter}
                   addresses={this.props.patient.addresses}
@@ -4434,6 +5072,8 @@ render() {
                   onDelete={this.deleteAddress}
                   canDelete={this.state.canDelete}
                   makePrimary={this.setAddressPrimary}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
               </Col>
             )}
@@ -4460,6 +5100,14 @@ render() {
                       onCancel={this.cancelAdd}
                     />
                 )}
+                {this.state.updating.state === true &&
+                  this.state.updating.field === 'nextOfKin' && (
+                    <AddNextOfKinForm
+                      onConfirm={this.submitUpdateNextOfKinForm}
+                      onCancel={this.cancelAdd}
+                      previousNextOfKin={this.state.updating.previous}
+                    />
+                )}
                 <PatientNextOfKinList
                   filter={this.state.filter}
                   nextOfKin={this.props.patient.nextOfKin}
@@ -4467,6 +5115,8 @@ render() {
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteNextOfKin}
                   togglePatientNextOfKinHighlighted={this.togglePatientNextOfKinHighlighted}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
               </Col>
             )}
@@ -4475,7 +5125,7 @@ render() {
               <Col className="subTabCol">
                 <h3 className="">Allergies:
                 {this.hasAllergies === true && (
-                  <FontAwesomeIcon icon={faExclamationTriangle} className="visitAttentionIcon" color="red" size="md"/>
+                  <FontAwesomeIcon icon={faExclamationTriangle} className="visitAttentionIcon" color="red" size="lg"/>
                 )}
                 </h3>
               </Col>
@@ -4497,6 +5147,14 @@ render() {
                       onCancel={this.cancelAdd}
                     />
                 )}
+                {this.state.updating.state === true &&
+                  this.state.updating.field === 'allergy' && (
+                    <AddAllergyForm
+                      onConfirm={this.submitUpdateAllergyForm}
+                      onCancel={this.cancelAdd}
+                      previousAllergy={this.state.updating.previous}
+                    />
+                )}
                 {this.state.addAttachmentForm === true && (
                   <AddAttachmentForm
                     onCancel={this.cancelAddAttachment}
@@ -4512,6 +5170,8 @@ render() {
                   onAddAttachment={this.startAddAttachment}
                   deleteAttachment={this.deleteAttachment}
                   togglePatientAllergyHighlighted={this.togglePatientAllergyHighlighted}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
               </Col>
             )}
@@ -4538,6 +5198,14 @@ render() {
                       onCancel={this.cancelAdd}
                     />
                 )}
+                {this.state.updating.state === true &&
+                  this.state.updating.field === 'medication' && (
+                    <AddMedicationForm
+                      onConfirm={this.submitUpdateMedicationForm}
+                      onCancel={this.cancelAdd}
+                      previousMedication={this.state.updating.previous}
+                    />
+                )}
                 {this.state.addAttachmentForm === true && (
                   <AddAttachmentForm
                     onCancel={this.cancelAddAttachment}
@@ -4553,6 +5221,8 @@ render() {
                   onAddAttachment={this.startAddAttachment}
                   deleteAttachment={this.deleteAttachment}
                   togglePatientMedicationHighlighted={this.togglePatientMedicationHighlighted}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
               </Col>
             )}
@@ -4579,6 +5249,14 @@ render() {
                       onCancel={this.cancelAdd}
                     />
                 )}
+                {this.state.updating.state === true &&
+                  this.state.updating.field === 'comorbidity' && (
+                    <AddComorbidityForm
+                      onConfirm={this.submitUpdateComorbidityForm}
+                      onCancel={this.cancelAdd}
+                      previousComorbidity={this.state.updating.previous}
+                    />
+                )}
                 <PatientComorbidityList
                   filter={this.state.filter}
                   comorbidities={this.props.patient.comorbidities}
@@ -4586,6 +5264,8 @@ render() {
                   canDelete={this.state.canDelete}
                   onDelete={this.deleteComorbidity}
                   togglePatientComorbidityHighlighted={this.togglePatientComorbidityHighlighted}
+                  canUpdate={this.state.canUpdate}
+                  startUpdate={this.startUpdate}
                 />
               </Col>
             )}

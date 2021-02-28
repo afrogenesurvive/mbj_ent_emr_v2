@@ -71,6 +71,8 @@ const UserAddressList = props => {
         onDelete={props.onDelete}
         canDelete={props.canDelete}
         makePrimary={props.makePrimary}
+        canUpdate={props.canUpdate}
+        startUpdate={props.startUpdate}
       />
     );
   });

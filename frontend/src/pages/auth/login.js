@@ -45,7 +45,10 @@ class LoginPage extends Component {
     const username = event.target.username.value;
     const password = event.target.password.value;
 
-    if (username.trim().length === 0 || password.trim().length === 0) {
+    if (
+      username.trim().length === 0 ||
+      password.trim().length === 0
+    ) {
       this.context.setUserAlert("...blank required fields!!!...")
       return;
     }
@@ -127,7 +130,7 @@ class LoginPage extends Component {
     const token = seshStore.token;
     const userId = activityId;
     const request = this.state.activityA;
-    const activityDate = moment().format('YYYY-MM-DD');
+    const activityDate = moment().tz("America/Bogota").format('YYYY-MM-DD');
     let requestBody = {
       query: `
         mutation {addUserActivity(

@@ -21,23 +21,29 @@ const VisitExaminationList = props => {
   if (filter.field === 'examination' && filter.key === 'area' && filter.value === 'Descending') {
     propsExaminations = examinations2.sort((a, b) => (a.area < b.area) ? 1 : -1);
   }
-  if (filter.field === 'examination' && filter.key === 'type' && filter.value === 'Ascending') {
-    propsExaminations = examinations2.sort((a, b) => (a.type > b.type) ? 1 : -1);
+  if (filter.field === 'examination' && filter.key === 'inspection' && filter.value === 'Ascending') {
+    propsExaminations = examinations2.sort((a, b) => (a.inspection > b.inspection) ? 1 : -1);
   }
-  if (filter.field === 'examination' && filter.key === 'type' && filter.value === 'Descending') {
-    propsExaminations = examinations2.sort((a, b) => (a.type < b.type) ? 1 : -1);
+  if (filter.field === 'examination' && filter.key === 'inspection' && filter.value === 'Descending') {
+    propsExaminations = examinations2.sort((a, b) => (a.inspection < b.inspection) ? 1 : -1);
   }
-  if (filter.field === 'examination' && filter.key === 'measure' && filter.value === 'Ascending') {
-    propsExaminations = examinations2.sort((a, b) => (a.measure > b.measure) ? 1 : -1);
+  if (filter.field === 'examination' && filter.key === 'palpation' && filter.value === 'Ascending') {
+    propsExaminations = examinations2.sort((a, b) => (a.palpation > b.palpation) ? 1 : -1);
   }
-  if (filter.field === 'examination' && filter.key === 'measure' && filter.value === 'Descending') {
-    propsExaminations = examinations2.sort((a, b) => (a.measure < b.measure) ? 1 : -1);
+  if (filter.field === 'examination' && filter.key === 'palpation' && filter.value === 'Descending') {
+    propsExaminations = examinations2.sort((a, b) => (a.palpation < b.palpation) ? 1 : -1);
   }
-  if (filter.field === 'examination' && filter.key === 'value' && filter.value === 'Ascending') {
-    propsExaminations = examinations2.sort((a, b) => (a.value > b.value) ? 1 : -1);
+  if (filter.field === 'examination' && filter.key === 'percussion' && filter.value === 'Ascending') {
+    propsExaminations = examinations2.sort((a, b) => (a.percussion > b.percussion) ? 1 : -1);
   }
-  if (filter.field === 'examination' && filter.key === 'value' && filter.value === 'Descending') {
-    propsExaminations = examinations2.sort((a, b) => (a.value < b.value) ? 1 : -1);
+  if (filter.field === 'examination' && filter.key === 'percussion' && filter.value === 'Descending') {
+    propsExaminations = examinations2.sort((a, b) => (a.percussion < b.percussion) ? 1 : -1);
+  }
+  if (filter.field === 'examination' && filter.key === 'auscultation' && filter.value === 'Ascending') {
+    propsExaminations = examinations2.sort((a, b) => (a.auscultation > b.auscultation) ? 1 : -1);
+  }
+  if (filter.field === 'examination' && filter.key === 'auscultation' && filter.value === 'Descending') {
+    propsExaminations = examinations2.sort((a, b) => (a.auscultation < b.auscultation) ? 1 : -1);
   }
   if (filter.field === 'examination' && filter.key === 'description' && filter.value === 'Ascending') {
     propsExaminations = examinations2.sort((a, b) => (a.description > b.description) ? 1 : -1);
@@ -70,6 +76,8 @@ const VisitExaminationList = props => {
         onAddAttachment={props.onAddAttachment}
         deleteAttachment={props.deleteAttachment}
         toggleVisitExaminationHighlighted={props.toggleVisitExaminationHighlighted}
+        canUpdate={props.canUpdate}
+        startUpdate={props.startUpdate}
       />
     );
   });

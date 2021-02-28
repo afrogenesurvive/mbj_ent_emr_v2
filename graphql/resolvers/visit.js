@@ -117,7 +117,19 @@ module.exports = {
           //   'vitals.$[].sp02': 0
           // },
           // {$unset: {"vitals.$[].ps02": 1}},
-          {$unset: {"vitals.$[]._id": 1}},
+          // {$unset: {"vitals.$[]._id": 1}},
+          {'examination.$[]': {
+            general: '',
+            area: '',
+            inspection: '',
+            palpation: '',
+            percussion: '',
+            auscultation: '',
+            description: '',
+            followUp: false,
+            attachments: [],
+            highlighted: false
+          }},
           {new: true, useFindAndModify: false}
         )
       }
@@ -378,6 +390,70 @@ module.exports = {
       throw err;
     }
   },
+  updatePatientAddress: async (args, req) => {
+    console.log("Resolver: updatePatientAddress...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+        const oldAddress = {
+          number: args.patientInput.addressNumber,
+          street: args.patientInput.addressStreet,
+          town: args.patientInput.addressTown,
+          city: args.patientInput.addressCity,
+          parish: args.patientInput.addressParish,
+          country: args.patientInput.addressCountry,
+          postalCode: args.patientInput.addressPostalCode,
+          primary: args.patientInput.addressPrimary
+        };
+        const newAddress = {
+          number: args.patientInput2.addressNumber,
+          street: args.patientInput2.addressStreet,
+          town: args.patientInput2.addressTown,
+          city: args.patientInput2.addressCity,
+          parish: args.patientInput2.addressParish,
+          country: args.patientInput2.addressCountry,
+          postalCode: args.patientInput2.addressPostalCode,
+          primary: args.patientInput2.addressPrimary
+        };
+
+        const patient = await Patient.findOneAndUpdate(
+          {
+            _id:args.patientId,
+            addresses: oldAddress
+          },
+          { 'addresses.$': newAddress },
+          {new: true, useFindAndModify: false}
+        )
+        .populate('appointments')
+        .populate({
+           path: 'appointments',
+           populate: {
+             path: 'consultants',
+             model: 'User'
+           }
+        })
+        .populate('visits')
+        .populate({
+           path: 'visits',
+           populate: {
+             path: 'consultants',
+             model: 'User'
+           }
+        })
+        .populate('reminders');
+
+        return {
+          ...patient._doc,
+          _id: patient.id,
+          email: patient.contact.email ,
+          name: patient.name,
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   addVisitComplaint: async (args, req) => {
     console.log("Resolver: addVisitComplaint...");
     if (!req.isAuth) {
@@ -394,6 +470,48 @@ module.exports = {
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$addToSet: {complaints: complaint}},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  updateVisitComplaint: async (args, req) => {
+    console.log("Resolver: updateVisitComplaint...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      console.log(args);
+        const oldComplaint = {
+          title: args.visitInput.complaintTitle,
+          description: args.visitInput.complaintDescription,
+          anamnesis: args.visitInput.complaintAnamnesis,
+          attachments: args.visitInput.complaintAttachments.split(','),
+          highlighted: args.visitInput.complaintHighlighted,
+        }
+
+        const newComplaint = {
+          title: args.visitInput2.complaintTitle,
+          description: args.visitInput2.complaintDescription,
+          anamnesis: args.visitInput2.complaintAnamnesis,
+          attachments: args.visitInput2.complaintAttachments.split(','),
+          highlighted: args.visitInput2.complaintHighlighted,
+        }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,complaints: oldComplaint},
+          {'complaints.$': newComplaint},
           {new: true, useFindAndModify: false}
         )
         .populate('consultants')
@@ -582,6 +700,44 @@ module.exports = {
       throw err;
     }
   },
+  updateVisitSurvey: async (args, req) => {
+    console.log("Resolver: updateVisitSurvey...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+        const oldSurvey = {
+          title: args.visitInput.surveyTitle,
+          description: args.visitInput.surveyDescription,
+          attachments: args.visitInput.surveyAttachments.split(','),
+          highlighted: args.visitInput.surveyHighlighted,
+        }
+        const newSurvey = {
+          title: args.visitInput2.surveyTitle,
+          description: args.visitInput2.surveyDescription,
+          attachments: args.visitInput2.surveyAttachments.split(','),
+          highlighted: args.visitInput2.surveyHighlighted,
+        }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,surveys: oldSurvey},
+          {'surveys.$': newSurvey},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   deleteVisitSurvey: async (args, req) => {
     console.log("Resolver: deleteVisitSurvey...");
     if (!req.isAuth) {
@@ -733,6 +889,44 @@ module.exports = {
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$addToSet: {systematicInquiry: systematicInquiry}},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  updateVisitSysInquiry: async (args, req) => {
+    console.log("Resolver: updateVisitSysInquiry...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+        const oldSystematicInquiry = {
+          title: args.visitInput.systematicInquiryTitle,
+          description: args.visitInput.systematicInquiryDescription,
+          attachments: args.visitInput.systematicInquiryAttachments.split(','),
+          highlighted: args.visitInput.systematicInquiryHighlighted,
+        }
+        const newSystematicInquiry = {
+          title: args.visitInput2.systematicInquiryTitle,
+          description: args.visitInput2.systematicInquiryDescription,
+          attachments: args.visitInput2.systematicInquiryAttachments.split(','),
+          highlighted: args.visitInput2.systematicInquiryHighlighted,
+        }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,systematicInquiry: oldSystematicInquiry},
+          {'systematicInquiry.$': newSystematicInquiry},
           {new: true, useFindAndModify: false}
         )
         .populate('consultants')
@@ -926,6 +1120,69 @@ module.exports = {
       throw err;
     }
   },
+  updateVisitVitals: async (args, req) => {
+    console.log("Resolver: updateVisitVitals...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const oldVitals = {
+        pr: args.visitInput.vitalsPr,
+        bp1: args.visitInput.vitalsBp1,
+        bp2: args.visitInput.vitalsBp2,
+        rr: args.visitInput.vitalsRr,
+        temp: args.visitInput.vitalsTemp,
+        sp02: args.visitInput.vitalsSp02,
+        heightUnit: args.visitInput.vitalsHeightUnit,
+        heightValue: args.visitInput.vitalsHeightValue,
+        weightUnit: args.visitInput.vitalsWeightUnit,
+        weightValue: args.visitInput.vitalsWeightValue,
+        bmi: args.visitInput.vitalsBmi,
+        urine: {
+          type: args.visitInput.vitalsUrineType,
+          value: args.visitInput.vitalsUrineValue
+        },
+        highlighted: args.visitInput.vitalsHighlighted,
+      }
+      const newVitals = {
+        pr: args.visitInput2.vitalsPr,
+        bp1: args.visitInput2.vitalsBp1,
+        bp2: args.visitInput2.vitalsBp2,
+        rr: args.visitInput2.vitalsRr,
+        temp: args.visitInput2.vitalsTemp,
+        sp02: args.visitInput2.vitalsSp02,
+        heightUnit: args.visitInput2.vitalsHeightUnit,
+        heightValue: args.visitInput2.vitalsHeightValue,
+        weightUnit: args.visitInput2.vitalsWeightUnit,
+        weightValue: args.visitInput2.vitalsWeightValue,
+        bmi: args.visitInput2.vitalsBmi,
+        urine: {
+          type: args.visitInput2.vitalsUrineType,
+          value: args.visitInput2.vitalsUrineValue
+        },
+        highlighted: args.visitInput2.vitalsHighlighted,
+      }
+
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,vitals: oldVitals},
+          {'vitals.$': newVitals},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   deleteVisitVitals: async (args, req) => {
     console.log("Resolver: deleteVisitVitals...");
     if (!req.isAuth) {
@@ -1036,9 +1293,10 @@ module.exports = {
         const examination = {
           general: args.visitInput.examinationGeneral,
           area: args.visitInput.examinationArea,
-          type: args.visitInput.examinationType,
-          measure: args.visitInput.examinationMeasure,
-          value: args.visitInput.examinationValue,
+          inspection: args.visitInput.examinationInspection,
+          palpation: args.visitInput.examinationPalpation,
+          percussion: args.visitInput.examinationPercussion,
+          auscultation: args.visitInput.examinationAuscultation,
           description: args.visitInput.examinationDescription,
           followUp: args.visitInput.examinationFollowUp,
           attachments: [args.visitInput.examinationAttachment],
@@ -1063,6 +1321,56 @@ module.exports = {
       throw err;
     }
   },
+  updateVisitExamination: async (args, req) => {
+    console.log("Resolver: updateVisitExamination...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const oldExamination = {
+        general: args.visitInput.examinationGeneral,
+        area: args.visitInput.examinationArea,
+        inspection: args.visitInput.examinationInspection,
+        palpation: args.visitInput.examinationPalpation,
+        percussion: args.visitInput.examinationPercussion,
+        auscultation: args.visitInput.examinationAuscultation,
+        description: args.visitInput.examinationDescription,
+        followUp: args.visitInput.examinationFollowUp,
+        attachments: args.visitInput.examinationAttachments.split(','),
+        highlighted: args.visitInput.examinationHighlighted,
+      }
+      const newExamination = {
+        general: args.visitInput2.examinationGeneral,
+        area: args.visitInput2.examinationArea,
+        inspection: args.visitInput2.examinationInspection,
+        palpation: args.visitInput2.examinationPalpation,
+        percussion: args.visitInput2.examinationPercussion,
+        auscultation: args.visitInput2.examinationAuscultation,
+        description: args.visitInput2.examinationDescription,
+        followUp: args.visitInput2.examinationFollowUp,
+        attachments: args.visitInput2.examinationAttachments.split(','),
+        highlighted: args.visitInput2.examinationHighlighted,
+      }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,examination: oldExamination},
+          {'examination.$': newExamination},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   addVisitExaminationAttachment: async (args, req) => {
     console.log("Resolver: addVisitExaminationAttachment...");
     if (!req.isAuth) {
@@ -1072,9 +1380,10 @@ module.exports = {
         const examination = {
           general: args.visitInput.examinationGeneral,
           area: args.visitInput.examinationArea,
-          type: args.visitInput.examinationType,
-          measure: args.visitInput.examinationMeasure,
-          value: args.visitInput.examinationValue,
+          inspection: args.visitInput.examinationInspection,
+          palpation: args.visitInput.examinationPalpation,
+          percussion: args.visitInput.examinationPercussion,
+          auscultation: args.visitInput.examinationAuscultation,
           description: args.visitInput.examinationDescription,
           followUp: args.visitInput.examinationFollowUp
         }
@@ -1083,9 +1392,10 @@ module.exports = {
           {_id:args.visitId,
             'examination.general': examination.general,
             'examination.area': examination.area,
-            'examination.type': examination.type,
-            'examination.measure': examination.measure,
-            'examination.value': examination.value,
+            'examination.inspection': examination.inspection,
+            'examination.palpation': examination.palpation,
+            'examination.percussion': examination.percussion,
+            'examination.auscultation': examination.auscultation,
             'examination.description': examination.description,
             'examination.followUp': examination.followUp
           },
@@ -1114,9 +1424,10 @@ module.exports = {
         const examination = {
           general: args.visitInput.examinationGeneral,
           area: args.visitInput.examinationArea,
-          type: args.visitInput.examinationType,
-          measure: args.visitInput.examinationMeasure,
-          value: args.visitInput.examinationValue,
+          inspection: args.visitInput.examinationInspection,
+          palpation: args.visitInput.examinationPalpation,
+          percussion: args.visitInput.examinationPercussion,
+          auscultation: args.visitInput.examinationAuscultation,
           description: args.visitInput.examinationDescription,
           followUp: args.visitInput.examinationFollowUp
         }
@@ -1125,9 +1436,10 @@ module.exports = {
           {_id:args.visitId,
             'examination.general': examination.general,
             'examination.area': examination.area,
-            'examination.type': examination.type,
-            'examination.measure': examination.measure,
-            'examination.value': examination.value,
+            'examination.inspection': examination.inspection,
+            'examination.palpation': examination.palpation,
+            'examination.percussion': examination.percussion,
+            'examination.auscultation': examination.auscultation,
             'examination.description': examination.description,
             'examination.followUp': examination.followUp
           },
@@ -1158,9 +1470,10 @@ module.exports = {
         const examination = {
           general: args.visitInput.examinationGeneral,
           area: args.visitInput.examinationArea,
-          type: args.visitInput.examinationType,
-          measure: args.visitInput.examinationMeasure,
-          value: args.visitInput.examinationValue,
+          inspection: args.visitInput.examinationInspection,
+          palpation: args.visitInput.examinationPalpation,
+          percussion: args.visitInput.examinationPercussion,
+          auscultation: args.visitInput.examinationAuscultation,
           description: args.visitInput.examinationDescription,
           followUp: args.visitInput.examinationFollowUp,
           attachments: attachments,
@@ -1196,9 +1509,10 @@ module.exports = {
         const examination = {
           general: args.visitInput.examinationGeneral,
           area: args.visitInput.examinationArea,
-          type: args.visitInput.examinationType,
-          measure: args.visitInput.examinationMeasure,
-          value: args.visitInput.examinationValue,
+          inspection: args.visitInput.examinationInspection,
+          palpation: args.visitInput.examinationPalpation,
+          percussion: args.visitInput.examinationPercussion,
+          auscultation: args.visitInput.examinationAuscultation,
           description: args.visitInput.examinationDescription,
           followUp: args.visitInput.examinationFollowUp,
           attachments: attachments,
@@ -1242,11 +1556,52 @@ module.exports = {
           title: args.visitInput.investigationTitle,
           description: args.visitInput.investigationDescription,
           attachments: [args.visitInput.investigationAttachment],
-          highlighted: true,
+          highlighted: false,
         }
+
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$addToSet: {investigation: investigation}},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  updateVisitInvestigation: async (args, req) => {
+    console.log("Resolver: updateVisitInvestigation...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const oldInvestigation = {
+        type: args.visitInput.investigationType,
+        title: args.visitInput.investigationTitle,
+        description: args.visitInput.investigationDescription,
+        attachments: args.visitInput.investigationAttachments.split(','),
+        highlighted: args.visitInput.investigationHighlighted,
+      }
+      const newInvestigation = {
+        type: args.visitInput2.investigationType,
+        title: args.visitInput2.investigationTitle,
+        description: args.visitInput2.investigationDescription,
+        attachments: args.visitInput2.investigationAttachments.split(','),
+        highlighted: args.visitInput2.investigationHighlighted,
+      }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,investigation: oldInvestigation},
+          {'investigation.$': newInvestigation},
           {new: true, useFindAndModify: false}
         )
         .populate('consultants')
@@ -1420,6 +1775,46 @@ module.exports = {
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$addToSet: {diagnosis: diagnosis}},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  updateVisitDiagnosis: async (args, req) => {
+    console.log("Resolver: updateVisitDiagnosis...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const oldDiagnosis = {
+        type: args.visitInput.diagnosisType,
+        title: args.visitInput.diagnosisTitle,
+        description: args.visitInput.diagnosisDescription,
+        attachments: args.visitInput.diagnosisAttachments.split(','),
+        highlighted: args.visitInput.diagnosisHighlighted,
+      }
+      const newDiagnosis = {
+        type: args.visitInput2.diagnosisType,
+        title: args.visitInput2.diagnosisTitle,
+        description: args.visitInput2.diagnosisDescription,
+        attachments: args.visitInput2.diagnosisAttachments.split(','),
+        highlighted: args.visitInput2.diagnosisHighlighted,
+      }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,diagnosis: oldDiagnosis},
+          {'diagnosis.$': newDiagnosis},
           {new: true, useFindAndModify: false}
         )
         .populate('consultants')
@@ -1613,6 +2008,50 @@ module.exports = {
       throw err;
     }
   },
+  updateVisitTreatment: async (args, req) => {
+    console.log("Resolver: updateVisitTreatment...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const oldTreatment = {
+        type: args.visitInput.treatmentType,
+        title: args.visitInput.treatmentTitle,
+        description: args.visitInput.treatmentDescription,
+        dose: args.visitInput.treatmentDose,
+        frequency: args.visitInput.treatmentFrequency,
+        attachments: args.visitInput.treatmentAttachments.split(','),
+        highlighted: args.visitInput.treatmentHighlighted,
+      }
+      const newTreatment = {
+        type: args.visitInput2.treatmentType,
+        title: args.visitInput2.treatmentTitle,
+        description: args.visitInput2.treatmentDescription,
+        dose: args.visitInput2.treatmentDose,
+        frequency: args.visitInput2.treatmentFrequency,
+        attachments: args.visitInput2.treatmentAttachments.split(','),
+        highlighted: args.visitInput2.treatmentHighlighted,
+      }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,treatment: oldTreatment},
+          {'treatment.$': newTreatment},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
   addVisitTreatmentAttachment: async (args, req) => {
     console.log("Resolver: addVisitTreatmentAttachment...");
     if (!req.isAuth) {
@@ -1788,6 +2227,52 @@ module.exports = {
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$addToSet: {billing: billing}},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  updateVisitBilling: async (args, req) => {
+    console.log("Resolver: updateVisitBilling...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const oldBilling = {
+        title: args.visitInput.billingTitle,
+        type: args.visitInput.billingType,
+        description: args.visitInput.billingDescription,
+        amount: args.visitInput.billingAmount,
+        paid: args.visitInput.billingPaid,
+        attachments: args.visitInput.billingAttachments.split(','),
+        notes: args.visitInput.billingNotes,
+        highlighted: args.visitInput.billingHighlighted,
+      }
+      const newBilling = {
+        title: args.visitInput2.billingTitle,
+        type: args.visitInput2.billingType,
+        description: args.visitInput2.billingDescription,
+        amount: args.visitInput2.billingAmount,
+        paid: args.visitInput2.billingPaid,
+        attachments: args.visitInput2.billingAttachments.split(','),
+        notes: args.visitInput2.billingNotes,
+        highlighted: args.visitInput2.billingHighlighted,
+      }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,billing: oldBilling},
+          {'billing.$': newBilling},
           {new: true, useFindAndModify: false}
         )
         .populate('consultants')
@@ -2342,9 +2827,291 @@ module.exports = {
           },
           highlighted: false,
         }
+
         const visit = await Visit.findOneAndUpdate(
           {_id:args.visitId},
           {$addToSet: {vigilance: vigilance}},
+          {new: true, useFindAndModify: false}
+        )
+        .populate('consultants')
+        .populate('appointment')
+        .populate('patient');
+        return {
+          ...visit._doc,
+          _id: visit.id,
+          title: visit.title,
+          date: visit.date
+        };
+    } catch (err) {
+      throw err;
+    }
+  },
+  updateVisitVigilance: async (args, req) => {
+    console.log("Resolver: updateVisitVigilance...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const oldVigilance = {
+        chronicIllness: {
+          diabetes: {
+            medication: args.visitInput.vigilanceChronicIllnessDiabetesMedication,
+            testing: args.visitInput.vigilanceChronicIllnessDiabetesTesting,
+            comment: args.visitInput.vigilanceChronicIllnessDiabetesComment
+          },
+          hbp: {
+            medication: args.visitInput.vigilanceChronicIllnessHbpMedication,
+            testing: args.visitInput.vigilanceChronicIllnessHbpTesting,
+            comment: args.visitInput.vigilanceChronicIllnessHbpComment
+          },
+          dyslipidemia: {
+            medication: args.visitInput.vigilanceChronicIllnessDyslipidemiaMedication,
+            testing: args.visitInput.vigilanceChronicIllnessDyslipidemiaTesting,
+            comment: args.visitInput.vigilanceChronicIllnessDyslipidemiaComment
+          },
+          cad: {
+            medication: args.visitInput.vigilanceChronicIllnessCadMedication,
+            testing: args.visitInput.vigilanceChronicIllnessCadTesting,
+            comment: args.visitInput.vigilanceChronicIllnessCadComment
+          }
+        },
+        lifestyle: {
+          weight: {
+            medication: args.visitInput.vigilanceLifestyleWeightMedication,
+            testing: args.visitInput.vigilanceLifestyleWeightTesting,
+            comment: args.visitInput.vigilanceLifestyleWeightComment
+          },
+          diet: {
+            medication: args.visitInput.vigilanceLifestyleDietMedication,
+            testing: args.visitInput.vigilanceLifestyleDietTesting,
+            comment: args.visitInput.vigilanceLifestyleDietComment
+          },
+          smoking: {
+            medication: args.visitInput.vigilanceLifestyleSmokingMedication,
+            testing: args.visitInput.vigilanceLifestyleSmokingTesting,
+            comment: args.visitInput.vigilanceLifestyleSmokingComment
+          },
+          substanceAbuse: {
+            medication: args.visitInput.vigilanceLifestyleSubstanceAbuseMedication,
+            testing: args.visitInput.vigilanceLifestyleSubstanceAbuseTesting,
+            comment: args.visitInput.vigilanceLifestyleSubstanceAbuseComment
+          },
+          exercise: {
+            medication: args.visitInput.vigilanceLifestyleExerciseMedication,
+            testing: args.visitInput.vigilanceLifestyleExerciseTesting,
+            comment: args.visitInput.vigilanceLifestyleExerciseComment
+          },
+          allergies: {
+            medication: args.visitInput.vigilanceLifestyleAllergiesMedication,
+            testing: args.visitInput.vigilanceLifestyleAllergiesTesting,
+            comment: args.visitInput.vigilanceLifestyleAllergiesComment
+          },
+          asthma: {
+            medication: args.visitInput.vigilanceLifestyleAsthmaMedication,
+            testing: args.visitInput.vigilanceLifestyleAsthmaTesting,
+            comment: args.visitInput.vigilanceLifestyleAsthmaComment
+          }
+        },
+        screening: {
+          breast: {
+            medication: args.visitInput.vigilanceScreeningBreastMedication,
+            testing: args.visitInput.vigilanceScreeningBreastTesting,
+            comment: args.visitInput.vigilanceScreeningBreastComment
+          },
+          prostate: {
+            medication: args.visitInput.vigilanceScreeningProstateMedication,
+            testing: args.visitInput.vigilanceScreeningProstateTesting,
+            comment: args.visitInput.vigilanceScreeningProstateComment
+          },
+          cervix: {
+            medication: args.visitInput.vigilanceScreeningCervixMedication,
+            testing: args.visitInput.vigilanceScreeningCervixTesting,
+            comment: args.visitInput.vigilanceScreeningCervixComment
+          },
+          colon: {
+            medication: args.visitInput.vigilanceScreeningColonMedication,
+            testing: args.visitInput.vigilanceScreeningColonTesting,
+            comment: args.visitInput.vigilanceScreeningColonComment
+          },
+          dental: {
+            medication: args.visitInput.vigilanceScreeningDentalMedication,
+            testing: args.visitInput.vigilanceScreeningDentalTesting,
+            comment: args.visitInput.vigilanceScreeningDentalComment
+          }
+        },
+        vaccines: {
+          influenza: {
+            medication: args.visitInput.vigilanceVaccinesInfluenzaMedication,
+            testing: args.visitInput.vigilanceVaccinesInfluenzaTesting,
+            comment: args.visitInput.vigilanceVaccinesInfluenzaComment
+          },
+          varicella: {
+            medication: args.visitInput.vigilanceVaccinesVaricellaMedication,
+            testing: args.visitInput.vigilanceVaccinesVaricellaTesting,
+            comment: args.visitInput.vigilanceVaccinesVaricellaComment
+          },
+          hpv: {
+            medication: args.visitInput.vigilanceVaccinesHpvMedication,
+            testing: args.visitInput.vigilanceVaccinesHpvTesting,
+            comment: args.visitInput.vigilanceVaccinesHpvComment
+          },
+          mmr: {
+            medication: args.visitInput.vigilanceVaccinesMmrMedication,
+            testing: args.visitInput.vigilanceVaccinesMmrTesting,
+            comment: args.visitInput.vigilanceVaccinesMmrComment
+          },
+          tetanus: {
+            medication: args.visitInput.vigilanceVaccinesTetanusMedication,
+            testing: args.visitInput.vigilanceVaccinesTetanusTesting,
+            comment: args.visitInput.vigilanceVaccinesTetanusComment
+          },
+          pneumovax: {
+            medication: args.visitInput.vigilanceVaccinesPneumovaxMedication,
+            testing: args.visitInput.vigilanceVaccinesPneumovaxTesting,
+            comment: args.visitInput.vigilanceVaccinesPneumovaxComment
+          },
+          other: {
+            name: args.visitInput.vigilanceVaccinesOtherName,
+            medication: args.visitInput.vigilanceVaccinesOtherMedication,
+            testing: args.visitInput.vigilanceVaccinesOtherTesting,
+            comment: args.visitInput.vigilanceVaccinesOtherComment
+          }
+        },
+        highlighted: args.visitInput.vigilanceHighlighted,
+      }
+
+      const newVigilance = {
+        chronicIllness: {
+          diabetes: {
+            medication: args.visitInput2.vigilanceChronicIllnessDiabetesMedication,
+            testing: args.visitInput2.vigilanceChronicIllnessDiabetesTesting,
+            comment: args.visitInput2.vigilanceChronicIllnessDiabetesComment
+          },
+          hbp: {
+            medication: args.visitInput2.vigilanceChronicIllnessHbpMedication,
+            testing: args.visitInput2.vigilanceChronicIllnessHbpTesting,
+            comment: args.visitInput2.vigilanceChronicIllnessHbpComment
+          },
+          dyslipidemia: {
+            medication: args.visitInput2.vigilanceChronicIllnessDyslipidemiaMedication,
+            testing: args.visitInput2.vigilanceChronicIllnessDyslipidemiaTesting,
+            comment: args.visitInput2.vigilanceChronicIllnessDyslipidemiaComment
+          },
+          cad: {
+            medication: args.visitInput2.vigilanceChronicIllnessCadMedication,
+            testing: args.visitInput2.vigilanceChronicIllnessCadTesting,
+            comment: args.visitInput2.vigilanceChronicIllnessCadComment
+          }
+        },
+        lifestyle: {
+          weight: {
+            medication: args.visitInput2.vigilanceLifestyleWeightMedication,
+            testing: args.visitInput2.vigilanceLifestyleWeightTesting,
+            comment: args.visitInput2.vigilanceLifestyleWeightComment
+          },
+          diet: {
+            medication: args.visitInput2.vigilanceLifestyleDietMedication,
+            testing: args.visitInput2.vigilanceLifestyleDietTesting,
+            comment: args.visitInput2.vigilanceLifestyleDietComment
+          },
+          smoking: {
+            medication: args.visitInput2.vigilanceLifestyleSmokingMedication,
+            testing: args.visitInput2.vigilanceLifestyleSmokingTesting,
+            comment: args.visitInput2.vigilanceLifestyleSmokingComment
+          },
+          substanceAbuse: {
+            medication: args.visitInput2.vigilanceLifestyleSubstanceAbuseMedication,
+            testing: args.visitInput2.vigilanceLifestyleSubstanceAbuseTesting,
+            comment: args.visitInput2.vigilanceLifestyleSubstanceAbuseComment
+          },
+          exercise: {
+            medication: args.visitInput2.vigilanceLifestyleExerciseMedication,
+            testing: args.visitInput2.vigilanceLifestyleExerciseTesting,
+            comment: args.visitInput2.vigilanceLifestyleExerciseComment
+          },
+          allergies: {
+            medication: args.visitInput2.vigilanceLifestyleAllergiesMedication,
+            testing: args.visitInput2.vigilanceLifestyleAllergiesTesting,
+            comment: args.visitInput2.vigilanceLifestyleAllergiesComment
+          },
+          asthma: {
+            medication: args.visitInput2.vigilanceLifestyleAsthmaMedication,
+            testing: args.visitInput2.vigilanceLifestyleAsthmaTesting,
+            comment: args.visitInput2.vigilanceLifestyleAsthmaComment
+          }
+        },
+        screening: {
+          breast: {
+            medication: args.visitInput2.vigilanceScreeningBreastMedication,
+            testing: args.visitInput2.vigilanceScreeningBreastTesting,
+            comment: args.visitInput2.vigilanceScreeningBreastComment
+          },
+          prostate: {
+            medication: args.visitInput2.vigilanceScreeningProstateMedication,
+            testing: args.visitInput2.vigilanceScreeningProstateTesting,
+            comment: args.visitInput2.vigilanceScreeningProstateComment
+          },
+          cervix: {
+            medication: args.visitInput2.vigilanceScreeningCervixMedication,
+            testing: args.visitInput2.vigilanceScreeningCervixTesting,
+            comment: args.visitInput2.vigilanceScreeningCervixComment
+          },
+          colon: {
+            medication: args.visitInput2.vigilanceScreeningColonMedication,
+            testing: args.visitInput2.vigilanceScreeningColonTesting,
+            comment: args.visitInput2.vigilanceScreeningColonComment
+          },
+          dental: {
+            medication: args.visitInput2.vigilanceScreeningDentalMedication,
+            testing: args.visitInput2.vigilanceScreeningDentalTesting,
+            comment: args.visitInput2.vigilanceScreeningDentalComment
+          }
+        },
+        vaccines: {
+          influenza: {
+            medication: args.visitInput2.vigilanceVaccinesInfluenzaMedication,
+            testing: args.visitInput2.vigilanceVaccinesInfluenzaTesting,
+            comment: args.visitInput2.vigilanceVaccinesInfluenzaComment
+          },
+          varicella: {
+            medication: args.visitInput2.vigilanceVaccinesVaricellaMedication,
+            testing: args.visitInput2.vigilanceVaccinesVaricellaTesting,
+            comment: args.visitInput2.vigilanceVaccinesVaricellaComment
+          },
+          hpv: {
+            medication: args.visitInput2.vigilanceVaccinesHpvMedication,
+            testing: args.visitInput2.vigilanceVaccinesHpvTesting,
+            comment: args.visitInput2.vigilanceVaccinesHpvComment
+          },
+          mmr: {
+            medication: args.visitInput2.vigilanceVaccinesMmrMedication,
+            testing: args.visitInput2.vigilanceVaccinesMmrTesting,
+            comment: args.visitInput2.vigilanceVaccinesMmrComment
+          },
+          tetanus: {
+            medication: args.visitInput2.vigilanceVaccinesTetanusMedication,
+            testing: args.visitInput2.vigilanceVaccinesTetanusTesting,
+            comment: args.visitInput2.vigilanceVaccinesTetanusComment
+          },
+          pneumovax: {
+            medication: args.visitInput2.vigilanceVaccinesPneumovaxMedication,
+            testing: args.visitInput2.vigilanceVaccinesPneumovaxTesting,
+            comment: args.visitInput2.vigilanceVaccinesPneumovaxComment
+          },
+          other: {
+            name: args.visitInput2.vigilanceVaccinesOtherName,
+            medication: args.visitInput2.vigilanceVaccinesOtherMedication,
+            testing: args.visitInput2.vigilanceVaccinesOtherTesting,
+            comment: args.visitInput2.vigilanceVaccinesOtherComment
+          }
+        },
+        highlighted: args.visitInput2.vigilanceHighlighted,
+      }
+
+        const visit = await Visit.findOneAndUpdate(
+          {_id:args.visitId,vigilance: oldVigilance},
+          {'vigilance.$': newVigilance},
           {new: true, useFindAndModify: false}
         )
         .populate('consultants')
@@ -2794,7 +3561,7 @@ module.exports = {
         images: [],
         files: []
       });
-      console.log('visit', visit);
+      // console.log('visit', visit);
 
       const result = await visit.save();
       const updatePatient = await Patient.findOneAndUpdate(

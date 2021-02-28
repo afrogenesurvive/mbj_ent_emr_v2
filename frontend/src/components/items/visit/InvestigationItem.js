@@ -14,7 +14,8 @@ import {
   faEraser,
   faTrashAlt,
   faHighlighter,
-  faExclamation
+  faExclamation,
+  faEdit,
 } from '@fortawesome/free-solid-svg-icons';
 import PatientAttachmentList from '../../lists/patient/PatientAttachmentList';
 
@@ -59,7 +60,7 @@ const InvestigationItem = props => {
           </Card.Text>
 
           <OverlayTrigger
-            key={'top'}
+
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -73,7 +74,7 @@ const InvestigationItem = props => {
           </OverlayTrigger>
 
           <OverlayTrigger
-            key={'top'}
+
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -85,6 +86,22 @@ const InvestigationItem = props => {
           >
             <FontAwesomeIcon icon={faHighlighter} className="listIcon" onClick={props.toggleVisitInvestigationHighlighted.bind(this, props.investigation)}/>
           </OverlayTrigger>
+
+          {props.canUpdate === true && (
+            <OverlayTrigger
+
+              placement={'top'}
+              overlay={
+                <Popover id={`popover-positioned-${'top'}`}>
+                  <Popover.Content>
+                    <strong>Edit</strong>
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <FontAwesomeIcon icon={faEdit} className="listIcon" onClick={props.startUpdate.bind(this, {field: 'investigation', data: props.investigation})}/>
+            </OverlayTrigger>
+          )}
 
           {state === true && (
             <Row className="listItemHiddenRow">
@@ -108,7 +125,7 @@ const InvestigationItem = props => {
               <Card.Text className="cardText">
                 Attachments:
                 <OverlayTrigger
-                  key={'top'}
+
                   placement={'top'}
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>
@@ -133,7 +150,7 @@ const InvestigationItem = props => {
               {props.canDelete === true && (
                 <li>
                 <OverlayTrigger
-                  key={'top'}
+
                   placement={'top'}
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>

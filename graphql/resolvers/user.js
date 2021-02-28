@@ -1053,6 +1053,84 @@ module.exports = {
       throw err;
     }
   },
+  updateUserAddress: async (args, req) => {
+    console.log("Resolver: updateUserAddress...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const oldAddress = {
+        number: args.userInput.addressNumber,
+        street: args.userInput.addressStreet,
+        town: args.userInput.addressTown,
+        city: args.userInput.addressCity,
+        parish: args.userInput.addressParish,
+        country: args.userInput.addressCountry,
+        postalCode: args.userInput.addressPostalCode,
+        primary: args.userInput.addressPrimary
+      };
+
+      const newAddress = {
+        number: args.userInput2.addressNumber,
+        street: args.userInput2.addressStreet,
+        town: args.userInput2.addressTown,
+        city: args.userInput2.addressCity,
+        parish: args.userInput2.addressParish,
+        country: args.userInput2.addressCountry,
+        postalCode: args.userInput2.addressPostalCode,
+        primary: args.userInput2.addressPrimary
+      };
+
+      const user = await User.findOneAndUpdate(
+        {_id:args.userId,
+          addresses: oldAddress
+        },
+        {'addresses.$': newAddress},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('reminders');
+
+      return {
+        ...user._doc,
+        _id: user.id,
+        email: user.contact.email,
+        name: user.name,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
   addUserAttendance: async (args, req) => {
     console.log("Resolver: addUserAttendance...");
     if (!req.isAuth) {
@@ -1107,6 +1185,78 @@ module.exports = {
         _id: user.id,
         name: user.name,
         username: user.username,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  updateUserAttendance: async (args, req) => {
+    console.log("Resolver: updateUserAttendance...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+
+      const oldAttendance = {
+        date: args.userInput.attendanceDate,
+        status: args.userInput.attendanceStatus,
+        description: args.userInput.attendanceDescription,
+        highlighted: args.userInput.attendanceHighlighted
+      };
+      const newAttendance = {
+        date: args.userInput2.attendanceDate,
+        status: args.userInput2.attendanceStatus,
+        description: args.userInput2.attendanceDescription,
+        highlighted: args.userInput2.attendanceHighlighted
+      };
+
+      console.log('1:',oldAttendance);
+      console.log('2:',newAttendance);
+
+      const user = await User.findOneAndUpdate(
+        {_id:args.userId,
+          attendance: oldAttendance
+        },
+        {'attendance.$': newAttendance},
+        {new: true, useFindAndModify: false}
+      )
+      .populate('appointments')
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'appointments',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('visits')
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'patient',
+           model: 'Patient'
+         }
+      })
+      .populate({
+         path: 'visits',
+         populate: {
+           path: 'consultants',
+           model: 'User'
+         }
+      })
+      .populate('reminders');
+
+      return {
+        ...user._doc,
+        _id: user.id,
+        email: user.contact.email,
+        name: user.name,
       };
     } catch (err) {
       throw err;
@@ -1300,13 +1450,14 @@ module.exports = {
       throw err;
     }
   },
-  deleteUserLeave: async (args, req) => {
-    console.log("Resolver: deleteUserLeave...");
+  updateUserLeave: async (args, req) => {
+    console.log("Resolver: updateUserLeave...");
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-      const leave = {
+
+      const oldLeave = {
         type: args.userInput.leaveType,
         startDate: args.userInput.leaveStartDate,
         endDate: args.userInput.leaveEndDate,
@@ -1314,9 +1465,20 @@ module.exports = {
         highlighted: args.userInput.leaveHighlighted
       };
 
+      const newLeave = {
+        type: args.userInput2.leaveType,
+        startDate: args.userInput2.leaveStartDate,
+        endDate: args.userInput2.leaveEndDate,
+        description: args.userInput2.leaveDescription,
+        highlighted: args.userInput2.leaveHighlighted
+      };
+
+
       const user = await User.findOneAndUpdate(
-        {_id:args.userId},
-        {$pull: {leave: leave}},
+        {_id:args.userId,
+          leave: oldLeave
+        },
+        {'leave.$': newLeave},
         {new: true, useFindAndModify: false}
       )
       .populate('appointments')
@@ -1350,6 +1512,67 @@ module.exports = {
          }
       })
       .populate('reminders');
+
+      return {
+        ...user._doc,
+        _id: user.id,
+        email: user.contact.email,
+        name: user.name,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteUserLeave: async (args, req) => {
+    console.log("Resolver: deleteUserLeave...");
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const leave = {
+        type: args.userInput.leaveType,
+        startDate: args.userInput.leaveStartDate,
+        endDate: args.userInput.leaveEndDate,
+        description: args.userInput.leaveDescription,
+        highlighted: args.userInput.leaveHighlighted
+      };
+
+      // const user = await User.findOneAndUpdate(
+      //   {_id:args.userId},
+      //   {$pull: {leave: leave}},
+      //   {new: true, useFindAndModify: false}
+      // )
+      // .populate('appointments')
+      // .populate({
+      //    path: 'appointments',
+      //    populate: {
+      //      path: 'patient',
+      //      model: 'Patient'
+      //    }
+      // })
+      // .populate({
+      //    path: 'appointments',
+      //    populate: {
+      //      path: 'consultants',
+      //      model: 'User'
+      //    }
+      // })
+      // .populate('visits')
+      // .populate({
+      //    path: 'visits',
+      //    populate: {
+      //      path: 'patient',
+      //      model: 'Patient'
+      //    }
+      // })
+      // .populate({
+      //    path: 'visits',
+      //    populate: {
+      //      path: 'consultants',
+      //      model: 'User'
+      //    }
+      // })
+      // .populate('reminders');
       return {
         ...user._doc,
         _id: user.id,
@@ -2102,7 +2325,7 @@ module.exports = {
         throw new Error('User w/ that username & email exists already.');
       }
       const hashedPassword = await bcrypt.hash(args.userInput.password, 12);
-      const today = moment();
+      const today = moment().tz("America/Bogota");
       let age = 0;
       let dob = moment(args.userInput.dob).format('YYYY-MM-DD');
       let dob2 = new Date(args.userInput.dob);
@@ -2136,7 +2359,7 @@ module.exports = {
         type: args.userInput.type,
         username: args.userInput.username,
         registrationNumber: regNo,
-        employmentDate: '',
+        employmentDate: today,
         dob: args.userInput.dob,
         age: age,
         gender: args.userInput.gender,

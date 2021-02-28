@@ -9,10 +9,27 @@ import './addForms.css';
 
 const AddSystematicInquiryForm = (props) => {
 
+  let placeHolders = {
+    title: '....',
+    description: '....',
+  }
+  if (props.previousSystematicInquiry) {
+    placeHolders = {
+      title: props.previousSystematicInquiry.title,
+      description: props.previousSystematicInquiry.description,
+    }
+  }
+
 return (
 <div className="addFormTopDiv">
   <Form onSubmit={props.onConfirm}>
+  {props.previousSystematicInquiry && (
+    <h4>Update SystematicInquiry</h4>
+  )}
+  {!props.previousSystematicInquiry && (
     <h4>Add SystematicInquiry</h4>
+  )}
+
     <p>required feilds are denoted by a ' * '</p>
 
     {
@@ -26,7 +43,7 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="description" className="formGroup">
         <Form.Label className="formLabel">Description * </Form.Label>
-        <Form.Control as="textarea" rows="3" placeholder="..."/>
+        <Form.Control as="textarea" rows="3" placeholder={placeHolders.description}/>
       </Form.Group>
     </Form.Row>
 
@@ -38,7 +55,12 @@ return (
     </Form.Row>
 
     <Form.Row className="formBtnRow">
-      <Button variant="success" type="submit" className="addFormBtn">Add</Button>
+      {props.previousSystematicInquiry && (
+        <Button variant="success" type="submit" className="addFormBtn">Update</Button>
+      )}
+      {!props.previousSystematicInquiry && (
+        <Button variant="success" type="submit" className="addFormBtn">Add</Button>
+      )}
       <Button variant="danger" className="addFormBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>

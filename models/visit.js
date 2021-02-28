@@ -56,9 +56,10 @@ const visitSchema = new Schema({
   examination: [{
     general: {type: String},
     area: {type:String},
-    type: {type:String,},
-    measure: {type:String},
-    value: {type:String},
+    inspection: {type:String},
+    palpation: {type:String},
+    percussion: {type:String},
+    auscultation: {type:String},
     description: {type:String},
     followUp: {type:Boolean},
     attachments:[{type: String}],

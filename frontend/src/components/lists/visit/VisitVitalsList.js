@@ -99,6 +99,8 @@ const VisitVitalsList = props => {
         onDelete={props.onDelete}
         onAddAttachment={props.onAddAttachment}
         toggleVisitVitalsHighlighted={props.toggleVisitVitalsHighlighted}
+        canUpdate={props.canUpdate}
+        startUpdate={props.startUpdate}
       />
     );
   });

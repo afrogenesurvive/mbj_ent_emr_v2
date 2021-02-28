@@ -46,6 +46,8 @@ const VisitSurveyList = props => {
         onAddAttachment={props.onAddAttachment}
         deleteAttachment={props.deleteAttachment}
         toggleVisitSurveyHighlighted={props.toggleVisitSurveyHighlighted}
+        canUpdate={props.canUpdate}
+        startUpdate={props.startUpdate}
       />
     );
   });

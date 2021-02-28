@@ -15,13 +15,14 @@ import {
   faTrashAlt,
   faBan,
   faCheckSquare,
-  faExternalLinkAlt
+  faExternalLinkAlt,
+  faEdit,
 } from '@fortawesome/free-solid-svg-icons';
 
 import './UserItem.css';
 
 const AddressItem = props => {
-  
+
   let liClass;
   if (props.address.primary === false) {
     liClass = 'cardBody';
@@ -61,7 +62,7 @@ const AddressItem = props => {
           </Card.Text>
 
           <OverlayTrigger
-            key={'top'}
+
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -73,6 +74,22 @@ const AddressItem = props => {
           >
             <FontAwesomeIcon icon={faEye} className="listIcon" onClick={handleStateChange}/>
           </OverlayTrigger>
+
+          {props.canUpdate === true && (
+            <OverlayTrigger
+
+              placement={'top'}
+              overlay={
+                <Popover id={`popover-positioned-${'top'}`}>
+                  <Popover.Content>
+                    <strong>Edit</strong>
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <FontAwesomeIcon icon={faEdit} className="listIcon" onClick={props.startUpdate.bind(this, {field: 'address', data: props.address})}/>
+            </OverlayTrigger>
+          )}
 
           {state === true && (
             <Row className="listItemHiddenRow">
@@ -109,6 +126,11 @@ const AddressItem = props => {
               </li>
               <li>
               <Card.Text className="cardText">
+                Postal Code: <span className="bold">{props.address.postalCode}</span>
+              </Card.Text>
+              </li>
+              <li>
+              <Card.Text className="cardText">
                 Primary: <span className="bold"> {props.address.primary === true && (<FontAwesomeIcon icon={faCheckSquare} className="listIcon"/>)} {props.address.primary === false && (<FontAwesomeIcon icon={faBan} className="listIcon"/>)}</span>
               </Card.Text>
               </li>
@@ -120,7 +142,7 @@ const AddressItem = props => {
               {props.canDelete === true && (
                 <li>
                 <OverlayTrigger
-                  key={'top'}
+
                   placement={'top'}
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>

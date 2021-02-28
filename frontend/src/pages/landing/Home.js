@@ -1133,7 +1133,7 @@ selectUser = (args) => {
 
       <Row className="landingPageTopRow">
 
-        <Button variant="secondary" size="md" onClick={this.loadHome}>Refresh</Button>
+        <Button variant="secondary" size="lg" onClick={this.loadHome}>Refresh</Button>
         {this.state.isLoading ? (
           <Image src={loadingGif} className="loadingGif" fluid />
         ):(

@@ -44,6 +44,8 @@ const PatientComorbidityList = props => {
         canDelete={props.canDelete}
         visitPage={props.visitPage}
         togglePatientComorbidityHighlighted={props.togglePatientComorbidityHighlighted}
+        canUpdate={props.canUpdate}
+        startUpdate={props.startUpdate}
       />
     );
   });

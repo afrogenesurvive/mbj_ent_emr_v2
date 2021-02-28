@@ -168,7 +168,7 @@ logUserActivity(args) {
   const token = args.token;
   const userId = activityId;
   const request = this.state.activityA;
-  const activityDate = moment().format('YYYY-MM-DD');
+  const activityDate = moment().tz("America/Bogota").format('YYYY-MM-DD');
   let requestBody = {
     query: `
       mutation {addUserActivity(

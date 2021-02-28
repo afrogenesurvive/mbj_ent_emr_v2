@@ -12,7 +12,8 @@ import {
   faEye,
   faTrashAlt,
   faHighlighter,
-  faExclamation
+  faExclamation,
+  faEdit,
 } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment-timezone';
 
@@ -53,28 +54,28 @@ const LeaveItem = props => {
         <Card.Body className={liClass}>
           {props.leave.startDate.length === 12 && (
             <Card.Text className="cardText">
-              Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+              Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</span>
             </Card.Text>
           )}
           {props.leave.startDate.length === 13 && (
             <Card.Text className="cardText">
-              Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+              Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</span>
             </Card.Text>
           )}
 
           {props.leave.endDate.length === 12 && (
             <Card.Text className="cardText">
-              End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+              End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</span>
             </Card.Text>
           )}
           {props.leave.endDate.length === 13 && (
             <Card.Text className="cardText">
-              End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+              End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</span>
             </Card.Text>
           )}
 
           <OverlayTrigger
-            key={'top'}
+
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -89,7 +90,7 @@ const LeaveItem = props => {
 
 
           <OverlayTrigger
-            key={'top'}
+
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -102,6 +103,20 @@ const LeaveItem = props => {
             <FontAwesomeIcon icon={faHighlighter} className="listIcon" onClick={props.toggleStaffLeaveHighlighted.bind(this, props.leave)}/>
           </OverlayTrigger>
 
+          {props.canUpdate === true && (
+            <OverlayTrigger
+              placement={'top'}
+              overlay={
+                <Popover id={`popover-positioned-${'top'}`}>
+                  <Popover.Content>
+                    <strong>Edit</strong>
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <FontAwesomeIcon icon={faEdit} className="listIcon" onClick={props.startUpdate.bind(this, {field: 'leave', data: props.leave})}/>
+            </OverlayTrigger>
+          )}
 
           {state === true && (
             <Row className="listItemHiddenRow">
@@ -114,24 +129,24 @@ const LeaveItem = props => {
               <li>
               {props.leave.startDate.length === 12 && (
                 <Card.Text className="cardText">
-                  Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                  Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</span>
                 </Card.Text>
               )}
               {props.leave.startDate.length === 13 && (
                 <Card.Text className="cardText">
-                  Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                  Start: <span className="bold">{moment.unix(props.leave.startDate.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</span>
                 </Card.Text>
               )}
               </li>
               <li>
               {props.leave.endDate.length === 12 && (
                 <Card.Text className="cardText">
-                  End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                  End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,9)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</span>
                 </Card.Text>
               )}
               {props.leave.endDate.length === 13 && (
                 <Card.Text className="cardText">
-                  End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD')}</span>
+                  End: <span className="bold">{moment.unix(props.leave.endDate.substr(0,10)).add(1, 'days').tz("America/Bogota").format('YYYY-MM-DD')}</span>
                 </Card.Text>
               )}
               </li>
@@ -144,7 +159,7 @@ const LeaveItem = props => {
                 <li>
 
                 <OverlayTrigger
-                  key={'top'}
+
                   placement={'top'}
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>

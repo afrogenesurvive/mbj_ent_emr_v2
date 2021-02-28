@@ -272,7 +272,7 @@ logUserActivity(args) {
   const token = args.token;
   const userId = activityId;
   const request = this.state.activityA;
-  const activityDate = moment().format('YYYY-MM-DD');
+  const activityDate = moment().tz("America/Bogota").format('YYYY-MM-DD');
   let requestBody = {
     query: `
       mutation {addUserActivity(
@@ -757,7 +757,7 @@ parseForCalendar = (args) => {
         date: date,
         props: {
           _id: x._id,
-          date: x.date,
+          date: date,
           title: x.title,
           type: x.type,
           subType: x.subType,
@@ -778,6 +778,13 @@ parseForCalendar = (args) => {
 viewCalendarEvent = (args) => {
   console.log('...viewing calendar appointment...');
   const appointment = this.state.appointments.filter(x => x._id === args.event.extendedProps.props._id)[0];
+  if (appointment.date.length === 12) {
+      appointment.date = moment.unix(appointment.date.substr(0,9)).tz("America/Bogota").format('YYYY-MM-DD');
+  }
+  if (appointment.date.length === 13) {
+    appointment.date = moment.unix(appointment.date.substr(0,10)).tz("America/Bogota").format('YYYY-MM-DD');
+  }
+
   this.setState({
     overlay: true,
     overlayStatus: {type: 'calendarAppointment', data: appointment}

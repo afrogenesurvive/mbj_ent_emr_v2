@@ -9,10 +9,29 @@ import './addForms.css';
 
 const AddComplaintForm = (props) => {
 
+  let placeHolders = {
+    title: '....',
+    description: '....',
+    anamnesis: '....',
+  }
+  if (props.previousComplaint) {
+    placeHolders = {
+      title: props.previousComplaint.title,
+      description: props.previousComplaint.description,
+      anamnesis: props.previousComplaint.anamnesis,
+    }
+  }
+
 return (
 <div className="addFormTopDiv">
   <Form onSubmit={props.onConfirm}>
-    <h4>Add Complaint</h4>
+    {props.previousComplaint && (
+      <h4>Update Complaint</h4>
+    )}
+    {!props.previousComplaint && (
+      <h4>Add Complaint</h4>
+    )}
+
     <p>required feilds are denoted by a ' * '</p>
 
     {
@@ -26,14 +45,14 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="description" className="formGroup">
         <Form.Label className="formLabel">Description * </Form.Label>
-        <Form.Control as="textarea" rows="3" placeholder="..."/>
+        <Form.Control as="textarea" rows="3" placeholder={placeHolders.description}/>
       </Form.Group>
     </Form.Row>
 
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="anamnesis" className="formGroup">
-        <Form.Label className="formLabel">Anamnesis * </Form.Label>
-        <Form.Control as="textarea" rows="3" placeholder="..."/>
+        <Form.Label className="formLabel">Anamnesis/History * </Form.Label>
+        <Form.Control as="textarea" rows="3" placeholder={placeHolders.anamnesis}/>
       </Form.Group>
     </Form.Row>
 
@@ -45,7 +64,13 @@ return (
     </Form.Row>
 
     <Form.Row className="formBtnRow">
-      <Button variant="success" type="submit" className="addFormBtn">Add</Button>
+
+      {props.previousComplaint && (
+        <Button variant="success" type="submit" className="addFormBtn">Update</Button>
+      )}
+      {!props.previousComplaint && (
+        <Button variant="success" type="submit" className="addFormBtn">Add</Button>
+      )}
       <Button variant="danger" className="addFormBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>

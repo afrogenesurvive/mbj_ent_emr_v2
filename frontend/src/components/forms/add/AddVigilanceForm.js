@@ -1,17 +1,283 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
-import DatePicker from "react-datepicker";
+// import DatePicker from "react-datepicker";
 import './addForms.css';
 
 const AddVigilanceForm = (props) => {
 
+  let placeHolders = {
+      chronicIllness: {
+        diabetes: {
+          medication: false,
+          testing: false,
+          comment: '...'
+        },
+        hbp: {
+          medication: false,
+          testing: false,
+          comment: '...'
+        },
+        dyslipidemia: {
+          medication: false,
+          testing: false,
+          comment: '...'
+        },
+        cad: {
+          medication: false,
+          testing: false,
+          comment: '...'
+        }
+      },
+      lifestyle: {
+        weight: {
+          medication: false,
+          testing: false,
+          comment: '...'
+        },
+        diet: {
+          medication: false,
+          testing: false,
+          comment: '...'
+        },
+        smoking: {
+          medication: false,
+          testing: false,
+          comment: '...'
+        },
+        substanceAbuse: {
+          medication: false,
+          testing: false,
+          comment: '...'
+        },
+        exercise: {
+          medication: false,
+          testing: false,
+          comment: '...'
+        },
+        allergies: {
+          medication: false,
+          testing: false,
+          comment: '...'
+        },
+        asthma: {
+          medication: false,
+          testing: false,
+          comment: '...'
+        }
+      },
+      screening: {
+        breast: {
+          medication: false,
+          testing: false,
+          comment: '...'
+        },
+        prostate: {
+          medication: false,
+          testing: false,
+          comment: '...'
+        },
+        cervix: {
+          medication: false,
+          testing: false,
+          comment: '...'
+        },
+        colon: {
+          medication: false,
+          testing: false,
+          comment: '...'
+        },
+        dental: {
+          medication: false,
+          testing: false,
+          comment: '...'
+        }
+      },
+      vaccines: {
+        influenza: {
+          medication: false,
+          testing: false,
+          comment: '...'
+        },
+        varicella: {
+          medication: false,
+          testing: false,
+          comment: '...'
+        },
+        hpv: {
+          medication: false,
+          testing: false,
+          comment: '...'
+        },
+        mmr: {
+          medication: false,
+          testing: false,
+          comment: '...'
+        },
+        tetanus: {
+          medication: false,
+          testing: false,
+          comment: '...'
+        },
+        pneumovax: {
+          medication: false,
+          testing: false,
+          comment: '...'
+        },
+        other: {
+          name: '...',
+          medication: false,
+          testing: false,
+          comment: '...'
+        }
+      },
+      highlighted: false,
+    }
+
+  if (props.previousVigilance) {
+    placeHolders = {
+      chronicIllness: {
+        diabetes: {
+          medication: props.previousVigilance.chronicIllness.diabetes.medication,
+          testing: props.previousVigilance.chronicIllness.diabetes.testing,
+          comment: props.previousVigilance.chronicIllness.diabetes.comment
+        },
+        hbp: {
+          medication: props.previousVigilance.chronicIllness.hbp.medication,
+          testing: props.previousVigilance.chronicIllness.hbp.testing,
+          comment: props.previousVigilance.chronicIllness.hbp.comment
+        },
+        dyslipidemia: {
+          medication: props.previousVigilance.chronicIllness.dyslipidemia.medication,
+          testing: props.previousVigilance.chronicIllness.dyslipidemia.testing,
+          comment: props.previousVigilance.chronicIllness.dyslipidemia.comment
+        },
+        cad: {
+          medication: props.previousVigilance.chronicIllness.cad.medication,
+          testing: props.previousVigilance.chronicIllness.cad.testing,
+          comment: props.previousVigilance.chronicIllness.cad.comment
+        }
+      },
+      lifestyle: {
+        weight: {
+          medication: props.previousVigilance.lifestyle.weight.medication,
+          testing: props.previousVigilance.lifestyle.weight.testing,
+          comment: props.previousVigilance.lifestyle.weight.comment
+        },
+        diet: {
+          medication: props.previousVigilance.lifestyle.diet.medication,
+          testing: props.previousVigilance.lifestyle.diet.testing,
+          comment: props.previousVigilance.lifestyle.diet.comment
+        },
+        smoking: {
+          medication: props.previousVigilance.lifestyle.smoking.medication,
+          testing: props.previousVigilance.lifestyle.smoking.testing,
+          comment: props.previousVigilance.lifestyle.smoking.comment
+        },
+        substanceAbuse: {
+          medication: props.previousVigilance.lifestyle.substanceAbuse.medication,
+          testing: props.previousVigilance.lifestyle.substanceAbuse.testing,
+          comment: props.previousVigilance.lifestyle.substanceAbuse.comment
+        },
+        exercise: {
+          medication: props.previousVigilance.lifestyle.exercise.medication,
+          testing: props.previousVigilance.lifestyle.exercise.testing,
+          comment: props.previousVigilance.lifestyle.exercise.comment
+        },
+        allergies: {
+          medication: props.previousVigilance.lifestyle.allergies.medication,
+          testing: props.previousVigilance.lifestyle.allergies.testing,
+          comment: props.previousVigilance.lifestyle.allergies.comment
+        },
+        asthma: {
+          medication: props.previousVigilance.lifestyle.asthma.medication,
+          testing: props.previousVigilance.lifestyle.asthma.testing,
+          comment: props.previousVigilance.lifestyle.asthma.comment
+        }
+      },
+      screening: {
+        breast: {
+          medication: props.previousVigilance.screening.breast.medication,
+          testing: props.previousVigilance.screening.breast.testing,
+          comment: props.previousVigilance.screening.breast.comment
+        },
+        prostate: {
+          medication: props.previousVigilance.screening.prostate.medication,
+          testing: props.previousVigilance.screening.prostate.testing,
+          comment: props.previousVigilance.screening.prostate.comment
+        },
+        cervix: {
+          medication: props.previousVigilance.screening.cervix.medication,
+          testing: props.previousVigilance.screening.cervix.testing,
+          comment: props.previousVigilance.screening.cervix.comment
+        },
+        colon: {
+          medication: props.previousVigilance.screening.colon.medication,
+          testing: props.previousVigilance.screening.colon.testing,
+          comment: props.previousVigilance.screening.colon.comment
+        },
+        dental: {
+          medication: props.previousVigilance.screening.dental.medication,
+          testing: props.previousVigilance.screening.dental.testing,
+          comment: props.previousVigilance.screening.dental.comment
+        }
+      },
+      vaccines: {
+        influenza: {
+          medication: props.previousVigilance.vaccines.influenza.medication,
+          testing: props.previousVigilance.vaccines.influenza.testing,
+          comment: props.previousVigilance.vaccines.influenza.comment
+        },
+        varicella: {
+          medication: props.previousVigilance.vaccines.varicella.medication,
+          testing: props.previousVigilance.vaccines.varicella.testing,
+          comment: props.previousVigilance.vaccines.varicella.comment
+        },
+        hpv: {
+          medication: props.previousVigilance.vaccines.hpv.medication,
+          testing: props.previousVigilance.vaccines.hpv.testing,
+          comment: props.previousVigilance.vaccines.hpv.comment
+        },
+        mmr: {
+          medication: props.previousVigilance.vaccines.mmr.medication,
+          testing: props.previousVigilance.vaccines.mmr.testing,
+          comment: props.previousVigilance.vaccines.mmr.comment
+        },
+        tetanus: {
+          medication: props.previousVigilance.vaccines.tetanus.medication,
+          testing: props.previousVigilance.vaccines.tetanus.testing,
+          comment: props.previousVigilance.vaccines.tetanus.comment
+        },
+        pneumovax: {
+          medication: props.previousVigilance.vaccines.pneumovax.medication,
+          testing: props.previousVigilance.vaccines.pneumovax.testing,
+          comment: props.previousVigilance.vaccines.pneumovax.comment
+        },
+        other: {
+          name: props.previousVigilance.vaccines.other.name,
+          medication: props.previousVigilance.vaccines.other.medication,
+          testing: props.previousVigilance.vaccines.other.testing,
+          comment: props.previousVigilance.vaccines.other.comment
+        }
+      },
+      highlighted: false,
+    }
+    // console.log('props.previousVigilance',props.previousVigilance);
+  }
+
+
 return (
 <div className="addFormTopDiv">
   <Form onSubmit={props.onConfirm}>
-    <h3>Add Vigilance</h3>
+
+    {props.previousVigilance && (
+      <h3>Update Vigilance</h3>
+    )}
+    {!props.previousVigilance && (
+      <h3>Add Vigilance</h3>
+    )}
 
     <div className="formDivider1">
     <h4>Chronic Illness:</h4>
@@ -30,7 +296,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessDiabetesComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="..."/>
+        <Form.Control type="text" placeholder={placeHolders.chronicIllness.diabetes.comment}/>
       </Form.Group>
     </Form.Row>
 
@@ -49,7 +315,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessHbpComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="..."/>
+        <Form.Control type="text" placeholder={placeHolders.chronicIllness.hbp.comment}/>
       </Form.Group>
     </Form.Row>
 
@@ -68,7 +334,7 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessDyslipidemiaComment">
         <Form.Label className="formLabel">Comment</Form.Label>
-        <Form.Control type="text" placeholder="..."/>
+        <Form.Control type="text" placeholder={placeHolders.chronicIllness.dyslipidemia.comment}/>
       </Form.Group>
     </Form.Row>
 
@@ -449,7 +715,13 @@ return (
 
 
     <Form.Row className="formBtnRow">
-      <Button variant="success" type="submit" className="addFormBtn">Add</Button>
+
+      {props.previousVigilance && (
+        <Button variant="success" type="submit" className="addFormBtn">Update</Button>
+      )}
+      {!props.previousVigilance && (
+        <Button variant="success" type="submit" className="addFormBtn">Add</Button>
+      )}
       <Button variant="danger" className="addFormBtn" onClick={props.onCancel}>Cancel</Button>
     </Form.Row>
   </Form>

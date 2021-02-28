@@ -151,7 +151,6 @@ class App extends Component {
       this.setState({ userAlert: data.msg})
     };
   };
-
   sendSocketAdminMessage = (args) => {
     // console.log('...sending admin msg client...');
     this.socket.emit('admin_msg', {msg: args})

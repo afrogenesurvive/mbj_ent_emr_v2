@@ -11,12 +11,14 @@ import {
   faEye,
   faTrashAlt,
   faHighlighter,
-  faExclamation
+  faExclamation,
+  faEdit,
  } from '@fortawesome/free-solid-svg-icons';
 
 import './visitItem.css';
 
 const VigilanceItem = (props) => {
+
   let liClass;
   if (props.vigilance.highlighted === false) {
     liClass = 'cardBody';
@@ -48,11 +50,11 @@ const VigilanceItem = (props) => {
       <Card>
         <Card.Body className={liClass}>
           <Card.Text className="cardText">
-            number: <span className="bold">{props.key}</span>
+            #: <span className="bold">{props.count}</span>
           </Card.Text>
 
           <OverlayTrigger
-            key={'top'}
+
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -67,7 +69,7 @@ const VigilanceItem = (props) => {
 
 
           <OverlayTrigger
-            key={'top'}
+
             placement={'top'}
             overlay={
               <Popover id={`popover-positioned-${'top'}`}>
@@ -79,6 +81,22 @@ const VigilanceItem = (props) => {
           >
             <FontAwesomeIcon icon={faHighlighter} className="listIcon" onClick={props.toggleVisitVigilanceHighlighted.bind(this, props.vigilance)}/>
           </OverlayTrigger>
+
+          {props.canUpdate === true && (
+            <OverlayTrigger
+
+              placement={'top'}
+              overlay={
+                <Popover id={`popover-positioned-${'top'}`}>
+                  <Popover.Content>
+                    <strong>Edit</strong>
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <FontAwesomeIcon icon={faEdit} className="listIcon" onClick={props.startUpdate.bind(this, {field: 'vigilance', data: props.vigilance})}/>
+            </OverlayTrigger>
+          )}
 
           {state === true && (
             <Row className="listItemHiddenRow">
@@ -423,7 +441,7 @@ const VigilanceItem = (props) => {
               {props.canDelete === true && (
                 <li>
                 <OverlayTrigger
-                  key={'top'}
+
                   placement={'top'}
                   overlay={
                     <Popover id={`popover-positioned-${'top'}`}>

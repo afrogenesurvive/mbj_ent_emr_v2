@@ -50,6 +50,8 @@ const UserLeaveList = props => {
         canDelete={props.canDelete}
         onDelete={props.onDelete}
         toggleStaffLeaveHighlighted={props.toggleStaffLeaveHighlighted}
+        canUpdate={props.canUpdate}
+        startUpdate={props.startUpdate}
       />
     );
   });
