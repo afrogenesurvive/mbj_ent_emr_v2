@@ -2,31 +2,31 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Image from 'react-bootstrap/Image';
+// import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Tab from 'react-bootstrap/Tab';
-import Nav from 'react-bootstrap/Nav';
-import { NavLink } from 'react-router-dom';
+// import Container from 'react-bootstrap/Container';
+// import Tab from 'react-bootstrap/Tab';
+// import Nav from 'react-bootstrap/Nav';
+// import { NavLink } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
 import moment from 'moment-timezone';
-import AddToCalendar from 'react-add-to-calendar';
+// import AddToCalendar from 'react-add-to-calendar';
 import S3 from 'react-aws-s3';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AuthContext from '../../context/auth-context';
-import AlertBox from '../alertBox/AlertBox';
+// import AlertBox from '../alertBox/AlertBox';
 import LoadingOverlay from '../overlay/LoadingOverlay';
 import LoadingOverlay2 from '../overlay/LoadingOverlay2';
 
-import PatientAddressList from '../lists/patient/PatientAddressList';
-import PatientNextOfKinList from '../lists/patient/PatientNextOfKinList'
+// import PatientAddressList from '../lists/patient/PatientAddressList';
+// import PatientNextOfKinList from '../lists/patient/PatientNextOfKinList'
 import PatientAllergyList from '../lists/patient/PatientAllergyList'
 import PatientMedicationList from '../lists/patient/PatientMedicationList'
-import PatientImageList from '../lists/patient/PatientImageList'
-import PatientFileList from '../lists/patient/PatientFileList'
-import UserAppointmentList from '../lists/user/UserAppointmentList'
-import AppointmentNoteList from '../lists/appointment/AppointmentNoteList'
+// import PatientImageList from '../lists/patient/PatientImageList'
+// import PatientFileList from '../lists/patient/PatientFileList'
+// import UserAppointmentList from '../lists/user/UserAppointmentList'
+// import AppointmentNoteList from '../lists/appointment/AppointmentNoteList'
 import VisitComplaintList from '../lists/visit/VisitComplaintList'
 import VisitSurveyList from '../lists/visit/VisitSurveyList'
 import VisitSystematicInquiryList from '../lists/visit/VisitSystematicInquiryList'
@@ -42,7 +42,7 @@ import VisitFileList from '../lists/visit/VisitFileList'
 import UserList from '../lists/user/UserList'
 
 
-import FilterAppointmentForm from '../forms/filter/FilterAppointmentForm';
+// import FilterAppointmentForm from '../forms/filter/FilterAppointmentForm';
 import FilterComplaintForm from '../forms/filter/FilterComplaintForm';
 import FilterSurveyForm from '../forms/filter/FilterSurveyForm';
 import FilterSystematicInquiryForm from '../forms/filter/FilterSystematicInquiryForm';
@@ -80,19 +80,19 @@ import FilterAllergyForm from '../forms/filter/FilterAllergyForm';
 import FilterMedicationForm from '../forms/filter/FilterMedicationForm';
 import FilterComorbidityForm from '../forms/filter/FilterComorbidityForm';
 
-import loadingGif from '../../assets/loading.gif';
+// import loadingGif from '../../assets/loading.gif';
 import {
-  faBatteryThreeQuarters,
-  faPlusSquare,
-  faBatteryEmpty,
-  faFolderMinus,
-  faEye,
-  faEraser,
-  faTrashAlt,
-  faBan,
-  faCheckSquare,
+  // faBatteryThreeQuarters,
+  // faPlusSquare,
+  // faBatteryEmpty,
+  // faFolderMinus,
+  // faEye,
+  // faEraser,
+  // faTrashAlt,
+  // faBan,
+  // faCheckSquare,
   faExternalLinkAlt,
-  faBath,
+  // faBath,
   faExclamationTriangle
 } from '@fortawesome/free-solid-svg-icons';
 import './details.css';
@@ -389,7 +389,6 @@ submitAddComplaintForm = (event) => {
     console.log('...file present...');
     let fileType = file.type.split('/')[1];
     let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
-    let fileName2 = fileName+'.'+fileType;
 
     file2Path = filePath2;
 
@@ -888,7 +887,6 @@ submitAddSurveyForm = (event) => {
     console.log('...file present...');
     let fileType = file.type.split('/')[1];
     let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
-    let fileName2 = fileName+'.'+fileType;
 
     file2Path = filePath2;
 
@@ -1378,7 +1376,6 @@ submitAddSystematicInquiryForm = (event) => {
     console.log('...file present...');
     let fileType = file.type.split('/')[1];
     let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
-    let fileName2 = fileName+'.'+fileType;
 
     file2Path = filePath2;
 
@@ -2366,7 +2363,6 @@ submitAddExaminationForm = (event) => {
     console.log('...file present...');
     let fileType = file.type.split('/')[1];
     let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
-    let fileName2 = fileName+'.'+fileType;
 
     file2Path = filePath2;
 
@@ -2918,7 +2914,6 @@ submitAddInvestigationForm = (event) => {
     console.log('...file present...');
     let fileType = file.type.split('/')[1];
     let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
-    let fileName2 = fileName+'.'+fileType;
 
     file2Path = filePath2;
 
@@ -3423,7 +3418,6 @@ submitAddDiagnosisForm = (event) => {
     console.log('...file present...');
     let fileType = file.type.split('/')[1];
     let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
-    let fileName2 = fileName+'.'+fileType;
 
     file2Path = filePath2;
 
@@ -3930,7 +3924,6 @@ submitAddTreatmentForm = (event) => {
     console.log('...file present...');
     let fileType = file.type.split('/')[1];
     let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
-    let fileName2 = fileName+'.'+fileType;
 
     file2Path = filePath2;
 
@@ -4458,7 +4451,6 @@ submitAddBillingForm = (event) => {
     console.log('...file present...');
     let fileType = file.type.split('/')[1];
     let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
-    let fileName2 = fileName+'.'+fileType;
 
     file2Path = filePath2;
 
@@ -4924,8 +4916,6 @@ submitUpdateBillingForm = (event) => {
     attachments: oldBilling.attachments,
     highlighted: oldBilling.highlighted,
   }
-  console.log('xx',oldBilling, newBilling);
-  console.log('xx',parseFloat(newBilling.amount) <= 0);
 
 
 if (
@@ -6162,6 +6152,482 @@ toggleVisitVigilanceHighlighted = (args) => {
     });
 
 }
+submitUpdateVigilanceForm = (event) => {
+  event.preventDefault();
+  console.log('updating vigilance...');
+  this.context.setUserAlert('...updating vigilance...')
+  this.setState({isLoading: true, overlay2: true});
+
+  const token = this.context.token;
+  const activityId = this.context.activityId;
+  const visitId = this.props.visit._id;
+
+
+  const oldVigilance = {
+    chronicIllness: {
+      diabetes: {
+        medication: this.state.updating.previous.chronicIllness.diabetes.medication,
+        testing: this.state.updating.previous.chronicIllness.diabetes.testing,
+        comment: this.state.updating.previous.chronicIllness.diabetes.comment
+      },
+      hbp: {
+        medication: this.state.updating.previous.chronicIllness.hbp.medication,
+        testing: this.state.updating.previous.chronicIllness.hbp.testing,
+        comment: this.state.updating.previous.chronicIllness.hbp.comment
+      },
+      dyslipidemia: {
+        medication: this.state.updating.previous.chronicIllness.dyslipidemia.medication,
+        testing: this.state.updating.previous.chronicIllness.dyslipidemia.testing,
+        comment: this.state.updating.previous.chronicIllness.dyslipidemia.comment
+      },
+      cad: {
+        medication: this.state.updating.previous.chronicIllness.cad.medication,
+        testing: this.state.updating.previous.chronicIllness.cad.testing,
+        comment: this.state.updating.previous.chronicIllness.cad.comment
+      }
+    },
+    lifestyle: {
+      weight: {
+        medication: this.state.updating.previous.lifestyle.weight.medication,
+        testing: this.state.updating.previous.lifestyle.weight.testing,
+        comment: this.state.updating.previous.lifestyle.weight.comment
+      },
+      diet: {
+        medication: this.state.updating.previous.lifestyle.diet.medication,
+        testing: this.state.updating.previous.lifestyle.diet.testing,
+        comment: this.state.updating.previous.lifestyle.diet.comment
+      },
+      smoking: {
+        medication: this.state.updating.previous.lifestyle.smoking.medication,
+        testing: this.state.updating.previous.lifestyle.smoking.testing,
+        comment: this.state.updating.previous.lifestyle.smoking.comment
+      },
+      substanceAbuse: {
+        medication: this.state.updating.previous.lifestyle.substanceAbuse.medication,
+        testing: this.state.updating.previous.lifestyle.substanceAbuse.testing,
+        comment: this.state.updating.previous.lifestyle.substanceAbuse.comment
+      },
+      exercise: {
+        medication: this.state.updating.previous.lifestyle.exercise.medication,
+        testing: this.state.updating.previous.lifestyle.exercise.testing,
+        comment: this.state.updating.previous.lifestyle.exercise.comment
+      },
+      allergies: {
+        medication: this.state.updating.previous.lifestyle.allergies.medication,
+        testing: this.state.updating.previous.lifestyle.allergies.testing,
+        comment: this.state.updating.previous.lifestyle.allergies.comment
+      },
+      asthma: {
+        medication: this.state.updating.previous.lifestyle.asthma.medication,
+        testing: this.state.updating.previous.lifestyle.asthma.testing,
+        comment: this.state.updating.previous.lifestyle.asthma.comment
+      }
+    },
+    screening: {
+      breast: {
+        medication: this.state.updating.previous.screening.breast.medication,
+        testing: this.state.updating.previous.screening.breast.testing,
+        comment: this.state.updating.previous.screening.breast.comment
+      },
+      prostate: {
+        medication: this.state.updating.previous.screening.prostate.medication,
+        testing: this.state.updating.previous.screening.prostate.testing,
+        comment: this.state.updating.previous.screening.prostate.comment
+      },
+      cervix: {
+        medication: this.state.updating.previous.screening.cervix.medication,
+        testing: this.state.updating.previous.screening.cervix.testing,
+        comment: this.state.updating.previous.screening.cervix.comment
+      },
+      colon: {
+        medication: this.state.updating.previous.screening.colon.medication,
+        testing: this.state.updating.previous.screening.colon.testing,
+        comment: this.state.updating.previous.screening.colon.comment
+      },
+      dental: {
+        medication: this.state.updating.previous.screening.dental.medication,
+        testing: this.state.updating.previous.screening.dental.testing,
+        comment: this.state.updating.previous.screening.dental.comment
+      }
+    },
+    vaccines: {
+      influenza: {
+        medication: this.state.updating.previous.vaccines.influenza.medication,
+        testing: this.state.updating.previous.vaccines.influenza.testing,
+        comment: this.state.updating.previous.vaccines.influenza.comment
+      },
+      varicella: {
+        medication: this.state.updating.previous.vaccines.varicella.medication,
+        testing: this.state.updating.previous.vaccines.varicella.testing,
+        comment: this.state.updating.previous.vaccines.varicella.comment
+      },
+      hpv: {
+        medication: this.state.updating.previous.vaccines.hpv.medication,
+        testing: this.state.updating.previous.vaccines.hpv.testing,
+        comment: this.state.updating.previous.vaccines.hpv.comment
+      },
+      mmr: {
+        medication: this.state.updating.previous.vaccines.mmr.medication,
+        testing: this.state.updating.previous.vaccines.mmr.testing,
+        comment: this.state.updating.previous.vaccines.mmr.comment
+      },
+      tetanus: {
+        medication: this.state.updating.previous.vaccines.tetanus.medication,
+        testing: this.state.updating.previous.vaccines.tetanus.testing,
+        comment: this.state.updating.previous.vaccines.tetanus.comment
+      },
+      pneumovax: {
+        medication: this.state.updating.previous.vaccines.pneumovax.medication,
+        testing: this.state.updating.previous.vaccines.pneumovax.testing,
+        comment: this.state.updating.previous.vaccines.pneumovax.comment
+      },
+      other: {
+        name: this.state.updating.previous.vaccines.other.name,
+        medication: this.state.updating.previous.vaccines.other.medication,
+        testing: this.state.updating.previous.vaccines.other.testing,
+        comment: this.state.updating.previous.vaccines.other.comment
+      }
+    },
+    highlighted: this.state.updating.previous.higlighted,
+  }
+  const newVigilance = {
+    chronicIllness: {
+      diabetes: {
+        medication: event.target.vigilanceChronicIllnessDiabetesMedication.checked,
+        testing: event.target.vigilanceChronicIllnessDiabetesTesting.checked,
+        comment: event.target.vigilanceChronicIllnessDiabetesComment.value
+      },
+      hbp: {
+        medication: event.target.vigilanceChronicIllnessHbpMedication.checked,
+        testing: event.target.vigilanceChronicIllnessHbpTesting.checked,
+        comment: event.target.vigilanceChronicIllnessHbpComment.value
+      },
+      dyslipidemia: {
+        medication: event.target.vigilanceChronicIllnessDyslipidemiaMedication.checked,
+        testing: event.target.vigilanceChronicIllnessDyslipidemiaTesting.checked,
+        comment: event.target.vigilanceChronicIllnessDyslipidemiaComment.value
+      },
+      cad: {
+        medication: event.target.vigilanceChronicIllnessCadMedication.checked,
+        testing: event.target.vigilanceChronicIllnessCadTesting.checked,
+        comment: event.target.vigilanceChronicIllnessCadComment.value
+      }
+    },
+    lifestyle: {
+      weight: {
+        medication: event.target.vigilanceLifestyleWeightMedication.checked,
+        testing: event.target.vigilanceLifestyleWeightTesting.checked,
+        comment: event.target.vigilanceLifestyleWeightComment.value
+      },
+      diet: {
+        medication: event.target.vigilanceLifestyleDietMedication.checked,
+        testing: event.target.vigilanceLifestyleDietTesting.checked,
+        comment: event.target.vigilanceLifestyleDietComment.value
+      },
+      smoking: {
+        medication: event.target.vigilanceLifestyleSmokingMedication.checked,
+        testing: event.target.vigilanceLifestyleSmokingTesting.checked,
+        comment: event.target.vigilanceLifestyleSmokingComment.value
+      },
+      substanceAbuse: {
+        medication: event.target.vigilanceLifestyleSubstanceAbuseMedication.checked,
+        testing: event.target.vigilanceLifestyleSubstanceAbuseTesting.checked,
+        comment: event.target.vigilanceLifestyleSubstanceAbuseComment.value
+      },
+      exercise: {
+        medication: event.target.vigilanceLifestyleExerciseMedication.checked,
+        testing: event.target.vigilanceLifestyleExerciseTesting.checked,
+        comment: event.target.vigilanceLifestyleExerciseComment.value
+      },
+      allergies: {
+        medication: event.target.vigilanceLifestyleAllergiesMedication.checked,
+        testing: event.target.vigilanceLifestyleAllergiesTesting.checked,
+        comment: event.target.vigilanceLifestyleAllergiesComment.value
+      },
+      asthma: {
+        medication: event.target.vigilanceLifestyleAsthmaMedication.checked,
+        testing: event.target.vigilanceLifestyleAsthmaTesting.checked,
+        comment: event.target.vigilanceLifestyleAsthmaComment.value
+      }
+    },
+    screening: {
+      breast: {
+        medication: event.target.vigilanceScreeningBreastMedication.checked,
+        testing: event.target.vigilanceScreeningBreastTesting.checked,
+        comment: event.target.vigilanceScreeningBreastComment.value
+      },
+      prostate: {
+        medication: event.target.vigilanceScreeningProstateMedication.checked,
+        testing: event.target.vigilanceScreeningProstateTesting.checked,
+        comment: event.target.vigilanceScreeningProstateComment.value
+      },
+      cervix: {
+        medication: event.target.vigilanceScreeningCervixMedication.checked,
+        testing: event.target.vigilanceScreeningCervixTesting.checked,
+        comment: event.target.vigilanceScreeningCervixComment.value
+      },
+      colon: {
+        medication: event.target.vigilanceScreeningColonMedication.checked,
+        testing: event.target.vigilanceScreeningColonTesting.checked,
+        comment: event.target.vigilanceScreeningColonComment.value
+      },
+      dental: {
+        medication: event.target.vigilanceScreeningDentalMedication.checked,
+        testing: event.target.vigilanceScreeningDentalTesting.checked,
+        comment: event.target.vigilanceScreeningDentalComment.value
+      }
+    },
+    vaccines: {
+      influenza: {
+        medication: event.target.vigilanceVaccinesInfluenzaMedication.checked,
+        testing: event.target.vigilanceVaccinesInfluenzaTesting.checked,
+        comment: event.target.vigilanceVaccinesInfluenzaComment.value
+      },
+      varicella: {
+        medication: event.target.vigilanceVaccinesVaricellaMedication.checked,
+        testing: event.target.vigilanceVaccinesVaricellaTesting.checked,
+        comment: event.target.vigilanceVaccinesVaricellaComment.value
+      },
+      hpv: {
+        medication: event.target.vigilanceVaccinesHpvMedication.checked,
+        testing: event.target.vigilanceVaccinesHpvTesting.checked,
+        comment: event.target.vigilanceVaccinesHpvComment.value
+      },
+      mmr: {
+        medication: event.target.vigilanceVaccinesMmrMedication.checked,
+        testing: event.target.vigilanceVaccinesMmrTesting.checked,
+        comment: event.target.vigilanceVaccinesMmrComment.value
+      },
+      tetanus: {
+        medication: event.target.vigilanceVaccinesTetanusMedication.checked,
+        testing: event.target.vigilanceVaccinesTetanusTesting.checked,
+        comment: event.target.vigilanceVaccinesTetanusComment.value
+      },
+      pneumovax: {
+        medication: event.target.vigilanceVaccinesPneumovaxMedication.checked,
+        testing: event.target.vigilanceVaccinesPneumovaxTesting.checked,
+        comment: event.target.vigilanceVaccinesPneumovaxComment.value
+      },
+      other: {
+        name: event.target.vigilanceVaccinesOtherName.value,
+        medication: event.target.vigilanceVaccinesOtherMedication.checked,
+        testing: event.target.vigilanceVaccinesOtherTesting.checked,
+        comment: event.target.vigilanceVaccinesOtherComment.value
+      }
+    },
+    highlighted: oldVigilance.higlighted,
+  }
+
+  console.log('1',oldVigilance);
+  console.log('2',newVigilance);
+
+
+  let requestBody = {
+    query: `
+      mutation {updateVisitVigilance(
+        activityId:"${activityId}",
+        visitId:"${visitId}",
+        visitInput:{
+          vigilanceChronicIllnessDiabetesMedication:${oldVigilance.chronicIllness.diabetes.medication},
+          vigilanceChronicIllnessDiabetesTesting:${oldVigilance.chronicIllness.diabetes.testing},
+          vigilanceChronicIllnessDiabetesComment:"${oldVigilance.chronicIllness.diabetes.comment}",
+          vigilanceChronicIllnessHbpMedication:${oldVigilance.chronicIllness.hbp.medication},
+          vigilanceChronicIllnessHbpTesting:${oldVigilance.chronicIllness.hbp.testing},
+          vigilanceChronicIllnessHbpComment:"${oldVigilance.chronicIllness.hbp.comment}",
+          vigilanceChronicIllnessDyslipidemiaMedication:${oldVigilance.chronicIllness.dyslipidemia.medication},
+          vigilanceChronicIllnessDyslipidemiaTesting:${oldVigilance.chronicIllness.dyslipidemia.testing},
+          vigilanceChronicIllnessDyslipidemiaComment:"${oldVigilance.chronicIllness.dyslipidemia.comment}",
+          vigilanceChronicIllnessCadMedication:${oldVigilance.chronicIllness.cad.medication},
+          vigilanceChronicIllnessCadTesting:${oldVigilance.chronicIllness.cad.testing},
+          vigilanceChronicIllnessCadComment:"${oldVigilance.chronicIllness.cad.comment}",
+          vigilanceLifestyleWeightMedication:${oldVigilance.lifestyle.weight.medication},
+          vigilanceLifestyleWeightTesting:${oldVigilance.lifestyle.weight.testing},
+          vigilanceLifestyleWeightComment:"${oldVigilance.lifestyle.weight.comment}",
+          vigilanceLifestyleDietMedication:${oldVigilance.lifestyle.diet.medication},
+          vigilanceLifestyleDietTesting:${oldVigilance.lifestyle.diet.testing},
+          vigilanceLifestyleDietComment:"${oldVigilance.lifestyle.diet.comment}",
+          vigilanceLifestyleSmokingMedication:${oldVigilance.lifestyle.smoking.medication},
+          vigilanceLifestyleSmokingTesting:${oldVigilance.lifestyle.smoking.testing},
+          vigilanceLifestyleSmokingComment:"${oldVigilance.lifestyle.smoking.comment}",
+          vigilanceLifestyleSubstanceAbuseMedication:${oldVigilance.lifestyle.substanceAbuse.medication},
+          vigilanceLifestyleSubstanceAbuseTesting:${oldVigilance.lifestyle.substanceAbuse.testing},
+          vigilanceLifestyleSubstanceAbuseComment:"${oldVigilance.lifestyle.substanceAbuse.comment}",
+          vigilanceLifestyleExerciseMedication:${oldVigilance.lifestyle.exercise.medication},
+          vigilanceLifestyleExerciseTesting:${oldVigilance.lifestyle.exercise.testing},
+          vigilanceLifestyleExerciseComment:"${oldVigilance.lifestyle.exercise.comment}",
+          vigilanceLifestyleAllergiesMedication:${oldVigilance.lifestyle.allergies.medication},
+          vigilanceLifestyleAllergiesTesting:${oldVigilance.lifestyle.allergies.testing},
+          vigilanceLifestyleAllergiesComment:"${oldVigilance.lifestyle.allergies.comment}",
+          vigilanceLifestyleAsthmaMedication:${oldVigilance.lifestyle.asthma.medication},
+          vigilanceLifestyleAsthmaTesting:${oldVigilance.lifestyle.asthma.testing},
+          vigilanceLifestyleAsthmaComment:"${oldVigilance.lifestyle.asthma.comment}",
+          vigilanceScreeningBreastMedication:${oldVigilance.screening.breast.medication},
+          vigilanceScreeningBreastTesting:${oldVigilance.screening.breast.testing},
+          vigilanceScreeningBreastComment:"${oldVigilance.screening.breast.comment}",
+          vigilanceScreeningProstateMedication:${oldVigilance.screening.prostate.medication},
+          vigilanceScreeningProstateTesting:${oldVigilance.screening.prostate.testing},
+          vigilanceScreeningProstateComment:"${oldVigilance.screening.prostate.comment}",
+          vigilanceScreeningCervixMedication:${oldVigilance.screening.cervix.medication},
+          vigilanceScreeningCervixTesting:${oldVigilance.screening.cervix.testing},
+          vigilanceScreeningCervixComment:"${oldVigilance.screening.cervix.comment}",
+          vigilanceScreeningColonMedication:${oldVigilance.screening.colon.medication},
+          vigilanceScreeningColonTesting:${oldVigilance.screening.colon.testing},
+          vigilanceScreeningColonComment:"${oldVigilance.screening.colon.comment}",
+          vigilanceScreeningDentalMedication:${oldVigilance.screening.dental.medication},
+          vigilanceScreeningDentalTesting:${oldVigilance.screening.dental.testing},
+          vigilanceScreeningDentalComment:"${oldVigilance.screening.dental.comment}",
+          vigilanceVaccinesInfluenzaMedication:${oldVigilance.vaccines.influenza.medication},
+          vigilanceVaccinesInfluenzaTesting:${oldVigilance.vaccines.influenza.testing},
+          vigilanceVaccinesInfluenzaComment:"${oldVigilance.vaccines.influenza.comment}",
+          vigilanceVaccinesVaricellaMedication:${oldVigilance.vaccines.varicella.medication},
+          vigilanceVaccinesVaricellaTesting:${oldVigilance.vaccines.varicella.testing},
+          vigilanceVaccinesVaricellaComment:"${oldVigilance.vaccines.varicella.comment}",
+          vigilanceVaccinesHpvMedication:${oldVigilance.vaccines.hpv.medication},
+          vigilanceVaccinesHpvTesting:${oldVigilance.vaccines.hpv.testing},
+          vigilanceVaccinesHpvComment:"${oldVigilance.vaccines.hpv.comment}",
+          vigilanceVaccinesMmrMedication:${oldVigilance.vaccines.mmr.medication},
+          vigilanceVaccinesMmrTesting:${oldVigilance.vaccines.mmr.testing},
+          vigilanceVaccinesMmrComment:"${oldVigilance.vaccines.mmr.comment}",
+          vigilanceVaccinesTetanusMedication:${oldVigilance.vaccines.tetanus.medication},
+          vigilanceVaccinesTetanusTesting:${oldVigilance.vaccines.tetanus.testing},
+          vigilanceVaccinesTetanusComment:"${oldVigilance.vaccines.tetanus.comment}",
+          vigilanceVaccinesPneumovaxMedication:${oldVigilance.vaccines.pneumovax.medication},
+          vigilanceVaccinesPneumovaxTesting:${oldVigilance.vaccines.pneumovax.testing},
+          vigilanceVaccinesPneumovaxComment:"${oldVigilance.vaccines.pneumovax.comment}",
+          vigilanceVaccinesOtherName:"${oldVigilance.vaccines.other.name}",
+          vigilanceVaccinesOtherMedication:${oldVigilance.vaccines.other.medication},
+          vigilanceVaccinesOtherTesting:${oldVigilance.vaccines.other.testing},
+          vigilanceVaccinesOtherComment:"${oldVigilance.vaccines.other.comment}",
+          vigilanceHighlighted: ${oldVigilance.higlighted}
+        }
+        visitInput2: {
+          vigilanceChronicIllnessDiabetesMedication:${newVigilance.chronicIllness.diabetes.medication},
+          vigilanceChronicIllnessDiabetesTesting:${newVigilance.chronicIllness.diabetes.testing},
+          vigilanceChronicIllnessDiabetesComment:"${newVigilance.chronicIllness.diabetes.comment}",
+          vigilanceChronicIllnessHbpMedication:${newVigilance.chronicIllness.hbp.medication},
+          vigilanceChronicIllnessHbpTesting:${newVigilance.chronicIllness.hbp.testing},
+          vigilanceChronicIllnessHbpComment:"${newVigilance.chronicIllness.hbp.comment}",
+          vigilanceChronicIllnessDyslipidemiaMedication:${newVigilance.chronicIllness.dyslipidemia.medication},
+          vigilanceChronicIllnessDyslipidemiaTesting:${newVigilance.chronicIllness.dyslipidemia.testing},
+          vigilanceChronicIllnessDyslipidemiaComment:"${newVigilance.chronicIllness.dyslipidemia.comment}",
+          vigilanceChronicIllnessCadMedication:${newVigilance.chronicIllness.cad.medication},
+          vigilanceChronicIllnessCadTesting:${newVigilance.chronicIllness.cad.testing},
+          vigilanceChronicIllnessCadComment:"${newVigilance.chronicIllness.cad.comment}",
+          vigilanceLifestyleWeightMedication:${newVigilance.lifestyle.weight.medication},
+          vigilanceLifestyleWeightTesting:${newVigilance.lifestyle.weight.testing},
+          vigilanceLifestyleWeightComment:"${newVigilance.lifestyle.weight.comment}",
+          vigilanceLifestyleDietMedication:${newVigilance.lifestyle.diet.medication},
+          vigilanceLifestyleDietTesting:${newVigilance.lifestyle.diet.testing},
+          vigilanceLifestyleDietComment:"${newVigilance.lifestyle.diet.comment}",
+          vigilanceLifestyleSmokingMedication:${newVigilance.lifestyle.smoking.medication},
+          vigilanceLifestyleSmokingTesting:${newVigilance.lifestyle.smoking.testing},
+          vigilanceLifestyleSmokingComment:"${newVigilance.lifestyle.smoking.comment}",
+          vigilanceLifestyleSubstanceAbuseMedication:${newVigilance.lifestyle.substanceAbuse.medication},
+          vigilanceLifestyleSubstanceAbuseTesting:${newVigilance.lifestyle.substanceAbuse.testing},
+          vigilanceLifestyleSubstanceAbuseComment:"${newVigilance.lifestyle.substanceAbuse.comment}",
+          vigilanceLifestyleExerciseMedication:${newVigilance.lifestyle.exercise.medication},
+          vigilanceLifestyleExerciseTesting:${newVigilance.lifestyle.exercise.testing},
+          vigilanceLifestyleExerciseComment:"${newVigilance.lifestyle.exercise.comment}",
+          vigilanceLifestyleAllergiesMedication:${newVigilance.lifestyle.allergies.medication},
+          vigilanceLifestyleAllergiesTesting:${newVigilance.lifestyle.allergies.testing},
+          vigilanceLifestyleAllergiesComment:"${newVigilance.lifestyle.allergies.comment}",
+          vigilanceLifestyleAsthmaMedication:${newVigilance.lifestyle.asthma.medication},
+          vigilanceLifestyleAsthmaTesting:${newVigilance.lifestyle.asthma.testing},
+          vigilanceLifestyleAsthmaComment:"${newVigilance.lifestyle.asthma.comment}",
+          vigilanceScreeningBreastMedication:${newVigilance.screening.breast.medication},
+          vigilanceScreeningBreastTesting:${newVigilance.screening.breast.testing},
+          vigilanceScreeningBreastComment:"${newVigilance.screening.breast.comment}",
+          vigilanceScreeningProstateMedication:${newVigilance.screening.prostate.medication},
+          vigilanceScreeningProstateTesting:${newVigilance.screening.prostate.testing},
+          vigilanceScreeningProstateComment:"${newVigilance.screening.prostate.comment}",
+          vigilanceScreeningCervixMedication:${newVigilance.screening.cervix.medication},
+          vigilanceScreeningCervixTesting:${newVigilance.screening.cervix.testing},
+          vigilanceScreeningCervixComment:"${newVigilance.screening.cervix.comment}",
+          vigilanceScreeningColonMedication:${newVigilance.screening.colon.medication},
+          vigilanceScreeningColonTesting:${newVigilance.screening.colon.testing},
+          vigilanceScreeningColonComment:"${newVigilance.screening.colon.comment}",
+          vigilanceScreeningDentalMedication:${newVigilance.screening.dental.medication},
+          vigilanceScreeningDentalTesting:${newVigilance.screening.dental.testing},
+          vigilanceScreeningDentalComment:"${newVigilance.screening.dental.comment}",
+          vigilanceVaccinesInfluenzaMedication:${newVigilance.vaccines.influenza.medication},
+          vigilanceVaccinesInfluenzaTesting:${newVigilance.vaccines.influenza.testing},
+          vigilanceVaccinesInfluenzaComment:"${newVigilance.vaccines.influenza.comment}",
+          vigilanceVaccinesVaricellaMedication:${newVigilance.vaccines.varicella.medication},
+          vigilanceVaccinesVaricellaTesting:${newVigilance.vaccines.varicella.testing},
+          vigilanceVaccinesVaricellaComment:"${newVigilance.vaccines.varicella.comment}",
+          vigilanceVaccinesHpvMedication:${newVigilance.vaccines.hpv.medication},
+          vigilanceVaccinesHpvTesting:${newVigilance.vaccines.hpv.testing},
+          vigilanceVaccinesHpvComment:"${newVigilance.vaccines.hpv.comment}",
+          vigilanceVaccinesMmrMedication:${newVigilance.vaccines.mmr.medication},
+          vigilanceVaccinesMmrTesting:${newVigilance.vaccines.mmr.testing},
+          vigilanceVaccinesMmrComment:"${newVigilance.vaccines.mmr.comment}",
+          vigilanceVaccinesTetanusMedication:${newVigilance.vaccines.tetanus.medication},
+          vigilanceVaccinesTetanusTesting:${newVigilance.vaccines.tetanus.testing},
+          vigilanceVaccinesTetanusComment:"${newVigilance.vaccines.tetanus.comment}",
+          vigilanceVaccinesPneumovaxMedication:${newVigilance.vaccines.pneumovax.medication},
+          vigilanceVaccinesPneumovaxTesting:${newVigilance.vaccines.pneumovax.testing},
+          vigilanceVaccinesPneumovaxComment:"${newVigilance.vaccines.pneumovax.comment}",
+          vigilanceVaccinesOtherName:"${newVigilance.vaccines.other.name}",
+          vigilanceVaccinesOtherMedication:${newVigilance.vaccines.other.medication},
+          vigilanceVaccinesOtherTesting:${newVigilance.vaccines.other.testing},
+          vigilanceVaccinesOtherComment:"${newVigilance.vaccines.other.comment}",
+          vigilanceHighlighted: ${newVigilance.higlighted}
+        }
+      )
+        {_id,date,time,title,type,subType,followUp,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress},complaints{title,description,anamnesis,attachments,highlighted},surveys{title,description,attachments,highlighted},systematicInquiry{title,description,attachments,highlighted},vitals{pr,bp1,bp2,rr,temp,sp02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value},highlighted},examination{general,area,inspection,palpation,percussion,auscultation,description,followUp,attachments,highlighted},investigation{type,title,description,attachments,highlighted},diagnosis{type,title,description,attachments,highlighted},treatment{type,title,description,dose,frequency,attachments,highlighted},billing{title,type,description,amount,paid,attachments,notes,highlighted},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}},highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted}}}
+    `};
+
+   fetch('http://localhost:8088/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      // console.log('...resData...',resData.data.updatePatientVigilance);
+      let responseAlert = '...vigilance update success!...';
+      let error = null;
+
+      if (resData.errors) {
+        error = resData.errors[0].message;
+        responseAlert = error;
+      }
+
+      if (resData.data.error) {
+        error = resData.data.error;
+        responseAlert = error;
+      }
+      this.context.setUserAlert(responseAlert)
+      this.props.updateVisit(resData.data.updateVisitVigilance)
+      this.setState({
+        isLoading: false,
+        overlay2: false,
+        selectedVisit: resData.data.updateVisitVigilance,
+        activityA: `updateVisitVigilance?activityId:${activityId},visitId:${visitId}`,
+        updating: {
+          state: null,
+          field: null,
+          previous: {}
+        }
+      });
+      this.context.selectedVisit = resData.data.updateVisitVigilance;
+      this.logUserActivity({activityId: activityId,token: token});
+    })
+    .catch(err => {
+      console.log(err);
+      this.context.setUserAlert(err);
+      this.setState({isLoading: false, overlay2: false })
+    });
+
+}
 
 submitAddUserForm = (event) => {
   event.preventDefault();
@@ -6351,7 +6817,6 @@ addAttachment = (event) => {
     console.log('...file present...');
     let fileType = file.type.split('/')[1];
     let filePath2 = 'https://mbjentemrstorage.s3.amazonaws.com/'+filePath+'/'+fileName+'.'+fileType;
-    let fileName2 = fileName+'.'+fileType;
 
     file2Path = filePath2;
 
@@ -7356,13 +7821,13 @@ nullAttachment = (args) => {
   this.context.setUserAlert(`can't add or delete attachments ${args.field} for here`)
 }
 checkAllergies = () => {
-  if (this.propsVisit.patient.allergies.length > 0 === true) {
+  if ((this.propsVisit.patient.allergies.length > 0) === true) {
     this.setState({
       hasAllergies: true,
     })
     this.hasAllergies = true;
   }
-  if (this.propsVisit.patient.comorbidities.length > 0 === true) {
+  if ((this.propsVisit.patient.comorbidities.length > 0) === true) {
     this.setState({
       hasComorbidities: true,
     })
@@ -8170,6 +8635,14 @@ render() {
                     onCancel={this.cancelAdd}
                   />
               )}
+              {this.state.updating.state === true &&
+                this.state.updating.field === 'vigilance' && (
+                  <AddVigilanceForm
+                    onConfirm={this.submitUpdateVigilanceForm}
+                    onCancel={this.cancelAdd}
+                    previousVigilance={this.state.updating.previous}
+                  />
+              )}
               <VisitVigilanceList
                 filter={this.state.filter}
                 vigilance={this.props.visit.vigilance}
@@ -8177,6 +8650,8 @@ render() {
                 canDelete={this.state.canDelete}
                 onDelete={this.deleteVigilance}
                 toggleVisitVigilanceHighlighted={this.toggleVisitVigilanceHighlighted}
+                canUpdate={this.state.canUpdate}
+                startUpdate={this.startUpdate}
               />
               </Col>
               </li>
@@ -8969,6 +9444,14 @@ render() {
                     onCancel={this.cancelAdd}
                   />
               )}
+              {this.state.updating.state === true &&
+                this.state.updating.field === 'vigilance' && (
+                  <AddVigilanceForm
+                    onConfirm={this.submitUpdateVigilanceForm}
+                    onCancel={this.cancelAdd}
+                    previousVigilance={this.state.updating.previous}
+                  />
+              )}
               <VisitVigilanceList
                 filter={this.state.filter}
                 vigilance={this.props.visit.vigilance}
@@ -8976,6 +9459,8 @@ render() {
                 canDelete={this.state.canDelete}
                 onDelete={this.deleteVigilance}
                 toggleVisitVigilanceHighlighted={this.toggleVisitVigilanceHighlighted}
+                canUpdate={this.state.canUpdate}
+                startUpdate={this.startUpdate}
               />
               </Col>
             )}

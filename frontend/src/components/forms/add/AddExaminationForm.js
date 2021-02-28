@@ -32,6 +32,11 @@ const AddExaminationForm = (props) => {
     }
   }
 
+  const [followUpValue, setFollowUpValue] = useState(placeHolders.followUp)
+  const handleFollowUpValueChange = (args) => {
+    setFollowUpValue(args)
+  }
+
 return (
 <div className="addFormTopDiv">
   <Form onSubmit={props.onConfirm}>
@@ -93,7 +98,7 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="followUp" className="formGroup">
         <Form.Label className="formLabel">FollowUp ?</Form.Label>
-        <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
+        <Form.Control type="checkbox" checked={followUpValue} onChange={(e) => {handleFollowUpValueChange(e.target.checked)}}/>
       </Form.Group>
     </Form.Row>
 

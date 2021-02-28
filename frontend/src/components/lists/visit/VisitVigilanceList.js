@@ -36,6 +36,8 @@ const VisitVigilanceList = props => {
         canDelete={props.canDelete}
         onDelete={props.onDelete}
         toggleVisitVigilanceHighlighted={props.toggleVisitVigilanceHighlighted}
+        canUpdate={props.canUpdate}
+        startUpdate={props.startUpdate}
       />
     );
   });

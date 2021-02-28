@@ -9,6 +9,8 @@ import './addForms.css';
 
 const AddBillingForm = (props) => {
 
+
+
   let placeHolders = {
     title: '...',
     type: '...',
@@ -27,6 +29,12 @@ const AddBillingForm = (props) => {
       notes: props.previousBilling.notes,
     }
   }
+
+  const [paidValue, setPaidValue] = useState(placeHolders.paid)
+  const handlePaidValueChange = (args) => {
+    setPaidValue(args)
+  }
+
 
 return (
 <div className="addFormTopDiv">
@@ -61,7 +69,7 @@ return (
     <Form.Row className="formRow">
       <Form.Group as={Col} controlId="paid" className="formGroup">
         <Form.Label className="formLabel">Paid ?</Form.Label>
-        <Form.Control type="checkbox" onChange={(e) => {console.log(e.target.checked)}}/>
+        <Form.Control type="checkbox" checked={paidValue} onChange={(e) => {handlePaidValueChange(e.target.checked)}}/>
       </Form.Group>
     </Form.Row>
     <Form.Row className="formRow">
