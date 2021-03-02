@@ -2,35 +2,35 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Image from 'react-bootstrap/Image';
+// import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Tab from 'react-bootstrap/Tab';
-import Nav from 'react-bootstrap/Nav';
-import { NavLink } from 'react-router-dom';
+// import Container from 'react-bootstrap/Container';
+// import Tab from 'react-bootstrap/Tab';
+// import Nav from 'react-bootstrap/Nav';
+// import { NavLink } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
 import moment from 'moment-timezone';
 import AddToCalendar from 'react-add-to-calendar';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AuthContext from '../../context/auth-context';
-import AlertBox from '../alertBox/AlertBox';
+// import AlertBox from '../alertBox/AlertBox';
 import LoadingOverlay from '../overlay/LoadingOverlay';
 import LoadingOverlay2 from '../overlay/LoadingOverlay2';
 
-import PatientAddressList from '../lists/patient/PatientAddressList';
-import PatientNextOfKinList from '../lists/patient/PatientNextOfKinList'
-import PatientAllergyList from '../lists/patient/PatientAllergyList'
-import PatientMedicationList from '../lists/patient/PatientMedicationList'
-import PatientImageList from '../lists/patient/PatientImageList'
-import PatientFileList from '../lists/patient/PatientFileList'
-import UserAppointmentList from '../lists/user/UserAppointmentList'
-import AppointmentNoteList from '../lists/appointment/AppointmentNoteList'
-import AppointmentTagList from '../lists/appointment/AppointmentTagList'
-import UserList from '../lists/user/UserList'
+// import PatientAddressList from '../lists/patient/PatientAddressList';
+// import PatientNextOfKinList from '../lists/patient/PatientNextOfKinList';
+// import PatientAllergyList from '../lists/patient/PatientAllergyList';
+// import PatientMedicationList from '../lists/patient/PatientMedicationList';
+// import PatientImageList from '../lists/patient/PatientImageList';
+// import PatientFileList from '../lists/patient/PatientFileList';
+// import UserAppointmentList from '../lists/user/UserAppointmentList';
+import AppointmentNoteList from '../lists/appointment/AppointmentNoteList';
+import AppointmentTagList from '../lists/appointment/AppointmentTagList';
+import UserList from '../lists/user/UserList';
 
 
-import FilterAppointmentForm from '../forms/filter/FilterAppointmentForm';
+// import FilterAppointmentForm from '../forms/filter/FilterAppointmentForm';
 import FilterNoteForm from '../forms/filter/FilterNoteForm';
 import FilterTagForm from '../forms/filter/FilterTagForm';
 import FilterUserForm from '../forms/filter/FilterUserForm';
@@ -40,19 +40,19 @@ import UpdatePatientSingleFieldForm from '../forms/add/UpdatePatientSingleFieldF
 import AddUserForm from '../forms/add/AddUserForm';
 import AddNoteForm from '../forms/add/AddNoteForm';
 import AddTagForm from '../forms/add/AddTagForm';
-import loadingGif from '../../assets/loading.gif';
+// import loadingGif from '../../assets/loading.gif';
 import {
-  faBatteryThreeQuarters,
-  faPlusSquare,
-  faBatteryEmpty,
-  faFolderMinus,
-  faEye,
-  faEraser,
-  faTrashAlt,
-  faBan,
-  faCheckSquare,
+  // faBatteryThreeQuarters,
+  // faPlusSquare,
+  // faBatteryEmpty,
+  // faFolderMinus,
+  // faEye,
+  // faEraser,
+  // faTrashAlt,
+  // faBan,
+  // faCheckSquare,
   faExternalLinkAlt,
-  faBath
+  // faBath
 } from '@fortawesome/free-solid-svg-icons';
 import './details.css';
 

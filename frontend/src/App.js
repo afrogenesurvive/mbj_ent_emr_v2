@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
-import logo from './logo.svg';
+// import { createBrowserHistory } from 'history';
+// import logo from './logo.svg';
 import './App.css';
 
 import AlertBox from './components/alertBox/AlertBox';
@@ -127,7 +127,7 @@ class App extends Component {
   sendSocketMessage (msgObject) {
     const message = msgObject;
     console.log("sending socket message  ",'message',message,'this.socket',this.socket);
-    this.setState({userAlert: "sending socket message  "+'message'+message+'this.socket'+this.socket})
+    this.setState({userAlert: 'sending socket message  '+'message'+message+'this.socket'+this.socket})
     let conversationId = null;
     if (this.context.receiver === null || this.context.receiver === undefined) {
       console.log("select someone to msg 1st...");

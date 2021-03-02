@@ -66,7 +66,7 @@ const PatientAddressList = props => {
 
     return (
       <AddressItem
-        key={count}
+        count={count}
         address={address}
         onDelete={props.onDelete}
         canDelete={props.canDelete}

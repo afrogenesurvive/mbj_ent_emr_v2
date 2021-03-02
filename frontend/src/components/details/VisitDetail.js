@@ -6288,7 +6288,7 @@ submitUpdateVigilanceForm = (event) => {
         comment: this.state.updating.previous.vaccines.other.comment
       }
     },
-    highlighted: this.state.updating.previous.higlighted,
+    highlighted: this.state.updating.previous.highlighted,
   }
   const newVigilance = {
     chronicIllness: {
@@ -6415,7 +6415,7 @@ submitUpdateVigilanceForm = (event) => {
         comment: event.target.vigilanceVaccinesOtherComment.value
       }
     },
-    highlighted: oldVigilance.higlighted,
+    highlighted: oldVigilance.highlighted,
   }
 
   console.log('1',oldVigilance);
@@ -6498,7 +6498,7 @@ submitUpdateVigilanceForm = (event) => {
           vigilanceVaccinesOtherMedication:${oldVigilance.vaccines.other.medication},
           vigilanceVaccinesOtherTesting:${oldVigilance.vaccines.other.testing},
           vigilanceVaccinesOtherComment:"${oldVigilance.vaccines.other.comment}",
-          vigilanceHighlighted: ${oldVigilance.higlighted}
+          vigilanceHighlighted: ${oldVigilance.highlighted}
         }
         visitInput2: {
           vigilanceChronicIllnessDiabetesMedication:${newVigilance.chronicIllness.diabetes.medication},
@@ -6571,7 +6571,7 @@ submitUpdateVigilanceForm = (event) => {
           vigilanceVaccinesOtherMedication:${newVigilance.vaccines.other.medication},
           vigilanceVaccinesOtherTesting:${newVigilance.vaccines.other.testing},
           vigilanceVaccinesOtherComment:"${newVigilance.vaccines.other.comment}",
-          vigilanceHighlighted: ${newVigilance.higlighted}
+          vigilanceHighlighted: ${newVigilance.highlighted}
         }
       )
         {_id,date,time,title,type,subType,followUp,patient{_id,active,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},allergies{type,title,description,attachments,highlighted},medication{type,title,description,dosage,attachments,highlighted},comorbidities{type,title,description,highlighted}},consultants{_id,title,name,role,username,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary}},appointment{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,inProgress},complaints{title,description,anamnesis,attachments,highlighted},surveys{title,description,attachments,highlighted},systematicInquiry{title,description,attachments,highlighted},vitals{pr,bp1,bp2,rr,temp,sp02,heightUnit,heightValue,weightUnit,weightValue,bmi,urine{type,value},highlighted},examination{general,area,inspection,palpation,percussion,auscultation,description,followUp,attachments,highlighted},investigation{type,title,description,attachments,highlighted},diagnosis{type,title,description,attachments,highlighted},treatment{type,title,description,dose,frequency,attachments,highlighted},billing{title,type,description,amount,paid,attachments,notes,highlighted},vigilance{chronicIllness{diabetes{medication,testing,comment},hbp{medication,testing,comment},dyslipidemia{medication,testing,comment},cad{medication,testing,comment}},lifestyle{weight{medication,testing,comment},diet{medication,testing,comment},smoking{medication,testing,comment},substanceAbuse{medication,testing,comment},exercise{medication,testing,comment},allergies{medication,testing,comment},asthma{medication,testing,comment}},screening{breast{medication,testing,comment},prostate{medication,testing,comment},cervix{medication,testing,comment},colon{medication,testing,comment},dental{medication,testing,comment}},vaccines{influenza{medication,testing,comment},varicella{medication,testing,comment},hpv{medication,testing,comment},mmr{medication,testing,comment},tetanus{medication,testing,comment},pneumovax{medication,testing,comment},other{name,medication,testing,comment}},highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted}}}
