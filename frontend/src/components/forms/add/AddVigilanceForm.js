@@ -268,7 +268,6 @@ const AddVigilanceForm = (props) => {
     console.log('placeHolders',placeHolders);
   }
 
-
   const [checkboxValues, setCheckboxValue] = useState({
     chronicIllness: {
       diabetes: {
@@ -409,6 +408,218 @@ const AddVigilanceForm = (props) => {
   }
 
 
+  const [chronicIllnessDiabetesMedication, setChronicIllnessDiabetesMedication] = useState(placeHolders.chronicIllness.diabetes.medication)
+  const handleChronicIllnessDiabetesMedicationChange = (args) => {
+    setChronicIllnessDiabetesMedication(args);
+  }
+  const [chronicIllnessDiabetesTesting, setChronicIllnessDiabetesTesting] = useState(placeHolders.chronicIllness.diabetes.testing)
+  const handleChronicIllnessDiabetesTestingChange = (args) => {
+    setChronicIllnessDiabetesTesting(args);
+  }
+
+  const [chronicIllnessHbpMedication, setChronicIllnessHbpMedication] = useState(placeHolders.chronicIllness.hbp.medication)
+  const handleChronicIllnessHbpMedicationChange = (args) => {
+    setChronicIllnessHbpMedication(args);
+  }
+  const [chronicIllnessHbpTesting, setChronicIllnessHbpTesting] = useState(placeHolders.chronicIllness.hbp.testing)
+  const handleChronicIllnessHbpTestingChange = (args) => {
+    setChronicIllnessHbpTesting(args);
+  }
+
+  const [chronicIllnessDyslipidemiaMedication, setChronicIllnessDyslipidemiaMedication] = useState(placeHolders.chronicIllness.dyslipidemia.medication)
+  const handleChronicIllnessDyslipidemiaMedicationChange = (args) => {
+    setChronicIllnessDyslipidemiaMedication(args);
+  }
+  const [chronicIllnessDyslipidemiaTesting, setChronicIllnessDyslipidemiaTesting] = useState(placeHolders.chronicIllness.dyslipidemia.testing)
+  const handleChronicIllnessDyslipidemiaTestingChange = (args) => {
+    setChronicIllnessDyslipidemiaTesting(args);
+  }
+
+  const [chronicIllnessCadMedication, setChronicIllnessCadMedication] = useState(placeHolders.chronicIllness.cad.medication)
+  const handleChronicIllnessCadMedicationChange = (args) => {
+    setChronicIllnessCadMedication(args);
+  }
+  const [chronicIllnessCadTesting, setChronicIllnessCadTesting] = useState(placeHolders.chronicIllness.cad.testing)
+  const handleChronicIllnessCadTestingChange = (args) => {
+    setChronicIllnessCadTesting(args);
+  }
+
+
+
+  const [lifestyleWeightMedication, setLifestyleWeightMedication] = useState(placeHolders.lifestyle.weight.medication)
+  const handleLifestyleWeightMedicationChange = (args) => {
+    setLifestyleWeightMedication(args);
+  }
+  const [lifestyleWeightTesting, setLifestyleWeightTesting] = useState(placeHolders.lifestyle.weight.testing)
+  const handleLifestyleWeightTestingChange = (args) => {
+    setLifestyleWeightTesting(args);
+  }
+
+  const [lifestyleDietMedication, setLifestyleDietMedication] = useState(placeHolders.lifestyle.diet.medication)
+  const handleLifestyleDietMedicationChange = (args) => {
+    setLifestyleDietMedication(args);
+  }
+  const [lifestyleDietTesting, setLifestyleDietTesting] = useState(placeHolders.lifestyle.diet.testing)
+  const handleLifestyleDietTestingChange = (args) => {
+    setLifestyleDietTesting(args);
+  }
+
+  const [lifestyleSmokingMedication, setLifestyleSmokingMedication] = useState(placeHolders.lifestyle.smoking.medication)
+  const handleLifestyleSmokingMedicationChange = (args) => {
+    setLifestyleSmokingMedication(args);
+  }
+  const [lifestyleSmokingTesting, setLifestyleSmokingTesting] = useState(placeHolders.lifestyle.smoking.testing)
+  const handleLifestyleSmokingTestingChange = (args) => {
+    setLifestyleSmokingTesting(args);
+  }
+
+  const [lifestyleSubstanceAbuseMedication, setLifestyleSubstanceAbuseMedication] = useState(placeHolders.lifestyle.substanceAbuse.medication)
+  const handleLifestyleSubstanceAbuseMedicationChange = (args) => {
+    setLifestyleSubstanceAbuseMedication(args);
+  }
+  const [lifestyleSubstanceAbuseTesting, setLifestyleSubstanceAbuseTesting] = useState(placeHolders.lifestyle.substanceAbuse.testing)
+  const handleLifestyleSubstanceAbuseTestingChange = (args) => {
+    setLifestyleSubstanceAbuseTesting(args);
+  }
+
+  const [lifestyleExerciseMedication, setLifestyleExerciseMedication] = useState(placeHolders.lifestyle.exercise.medication)
+  const handleLifestyleExerciseMedicationChange = (args) => {
+    setLifestyleExerciseMedication(args);
+  }
+  const [lifestyleExerciseTesting, setLifestyleExerciseTesting] = useState(placeHolders.lifestyle.exercise.testing)
+  const handleLifestyleExerciseTestingChange = (args) => {
+    setLifestyleExerciseTesting(args);
+  }
+
+  const [lifestyleAllergiesMedication, setLifestyleAllergiesMedication] = useState(placeHolders.lifestyle.allergies.medication)
+  const handleLifestyleAllergiesMedicationChange = (args) => {
+    setLifestyleAllergiesMedication(args);
+  }
+  const [lifestyleAllergiesTesting, setLifestyleAllergiesTesting] = useState(placeHolders.lifestyle.allergies.testing)
+  const handleLifestyleAllergiesTestingChange = (args) => {
+    setLifestyleAllergiesTesting(args);
+  }
+
+  const [lifestyleAsthmaMedication, setLifestyleAsthmaMedication] = useState(placeHolders.lifestyle.asthma.medication)
+  const handleLifestyleAsthmaMedicationChange = (args) => {
+    setLifestyleAsthmaMedication(args);
+  }
+  const [lifestyleAsthmaTesting, setLifestyleAsthmaTesting] = useState(placeHolders.lifestyle.asthma.testing)
+  const handleLifestyleAsthmaTestingChange = (args) => {
+    setLifestyleAsthmaTesting(args);
+  }
+
+
+  const [screeningBreastMedication, setScreeningBreastMedication] = useState(placeHolders.screening.breast.medication)
+  const handleScreeningBreastMedicationChange = (args) => {
+    setScreeningBreastMedication(args);
+  }
+  const [screeningBreastTesting, setScreeningBreastTesting] = useState(placeHolders.screening.breast.testing)
+  const handleScreeningBreastTestingChange = (args) => {
+    setScreeningBreastTesting(args);
+  }
+
+  const [screeningProstateMedication, setScreeningProstateMedication] = useState(placeHolders.screening.prostate.medication)
+  const handleScreeningProstateMedicationChange = (args) => {
+    setScreeningProstateMedication(args);
+  }
+  const [screeningProstateTesting, setScreeningProstateTesting] = useState(placeHolders.screening.prostate.testing)
+  const handleScreeningProstateTestingChange = (args) => {
+    setScreeningProstateTesting(args);
+  }
+
+  const [screeningCervixMedication, setScreeningCervixMedication] = useState(placeHolders.screening.cervix.medication)
+  const handleScreeningCervixMedicationChange = (args) => {
+    setScreeningCervixMedication(args);
+  }
+  const [screeningCervixTesting, setScreeningCervixTesting] = useState(placeHolders.screening.cervix.testing)
+  const handleScreeningCervixTestingChange = (args) => {
+    setScreeningCervixTesting(args);
+  }
+
+  const [screeningColonMedication, setScreeningColonMedication] = useState(placeHolders.screening.colon.medication)
+  const handleScreeningColonMedicationChange = (args) => {
+    setScreeningColonMedication(args);
+  }
+  const [screeningColonTesting, setScreeningColonTesting] = useState(placeHolders.screening.colon.testing)
+  const handleScreeningColonTestingChange = (args) => {
+    setScreeningColonTesting(args);
+  }
+
+  const [screeningDentalMedication, setScreeningDentalMedication] = useState(placeHolders.screening.dental.medication)
+  const handleScreeningDentalMedicationChange = (args) => {
+    setScreeningDentalMedication(args);
+  }
+  const [screeningDentalTesting, setScreeningDentalTesting] = useState(placeHolders.screening.dental.testing)
+  const handleScreeningDentalTestingChange = (args) => {
+    setScreeningDentalTesting(args);
+  }
+
+
+  const [vaccinesInfluenzaMedication, setVaccinesInfluenzaMedication] = useState(placeHolders.vaccines.influenza.medication)
+  const handleVaccinesInfluenzaMedicationChange = (args) => {
+    setVaccinesInfluenzaMedication(args);
+  }
+  const [vaccinesInfluenzaTesting, setVaccinesInfluenzaTesting] = useState(placeHolders.vaccines.influenza.testing)
+  const handleVaccinesInfluenzaTestingChange = (args) => {
+    setVaccinesInfluenzaTesting(args);
+  }
+
+  const [vaccinesVaricellaMedication, setVaccinesVaricellaMedication] = useState(placeHolders.vaccines.varicella.medication)
+  const handleVaccinesVaricellaMedicationChange = (args) => {
+    setVaccinesVaricellaMedication(args);
+  }
+  const [vaccinesVaricellaTesting, setVaccinesVaricellaTesting] = useState(placeHolders.vaccines.varicella.testing)
+  const handleVaccinesVaricellaTestingChange = (args) => {
+    setVaccinesVaricellaTesting(args);
+  }
+
+  const [vaccinesHpvMedication, setVaccinesHpvMedication] = useState(placeHolders.vaccines.hpv.medication)
+  const handleVaccinesHpvMedicationChange = (args) => {
+    setVaccinesHpvMedication(args);
+  }
+  const [vaccinesHpvTesting, setVaccinesHpvTesting] = useState(placeHolders.vaccines.hpv.testing)
+  const handleVaccinesHpvTestingChange = (args) => {
+    setVaccinesHpvTesting(args);
+  }
+
+  const [vaccinesMmrMedication, setVaccinesMmrMedication] = useState(placeHolders.vaccines.mmr.medication)
+  const handleVaccinesMmrMedicationChange = (args) => {
+    setVaccinesMmrMedication(args);
+  }
+  const [vaccinesMmrTesting, setVaccinesMmrTesting] = useState(placeHolders.vaccines.mmr.testing)
+  const handleVaccinesMmrTestingChange = (args) => {
+    setVaccinesMmrTesting(args);
+  }
+
+  const [vaccinesTetanusMedication, setVaccinesTetanusMedication] = useState(placeHolders.vaccines.tetanus.medication)
+  const handleVaccinesTetanusMedicationChange = (args) => {
+    setVaccinesTetanusMedication(args);
+  }
+  const [vaccinesTetanusTesting, setVaccinesTetanusTesting] = useState(placeHolders.vaccines.tetanus.testing)
+  const handleVaccinesTetanusTestingChange = (args) => {
+    setVaccinesTetanusTesting(args);
+  }
+
+  const [vaccinesPneumovaxMedication, setVaccinesPneumovaxMedication] = useState(placeHolders.vaccines.pneumovax.medication)
+  const handleVaccinesPneumovaxMedicationChange = (args) => {
+    setVaccinesPneumovaxMedication(args);
+  }
+  const [vaccinesPneumovaxTesting, setVaccinesPneumovaxTesting] = useState(placeHolders.vaccines.pneumovax.testing)
+  const handleVaccinesPneumovaxTestingChange = (args) => {
+    setVaccinesPneumovaxTesting(args);
+  }
+
+  const [vaccinesOtherMedication, setVaccinesOtherMedication] = useState(placeHolders.vaccines.other.medication)
+  const handleVaccinesOtherMedicationChange = (args) => {
+    setVaccinesOtherMedication(args);
+  }
+  const [vaccinesOtherTesting, setVaccinesOtherTesting] = useState(placeHolders.vaccines.other.testing)
+  const handleVaccinesOtherTestingChange = (args) => {
+    setVaccinesOtherTesting(args);
+  }
+
+
 return (
 <div className="addFormTopDiv">
   <Form onSubmit={props.onConfirm}>
@@ -427,12 +638,12 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessDiabetesMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" checked={checkboxValues.chronicIllness.diabetes.medication} onChange={(e) => {handleCheckboxValueChange({field:'chronicIllness.diabetes.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" checked={chronicIllnessDiabetesMedication} onChange={(e) => {handleChronicIllnessDiabetesMedicationChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessDiabetesTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" checked={checkboxValues.chronicIllness.diabetes.testing} onChange={(e) => {handleCheckboxValueChange({field:'chronicIllness.diabetes.testing',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" checked={chronicIllnessDiabetesTesting} onChange={(e) => {handleChronicIllnessDiabetesTestingChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessDiabetesComment">
@@ -446,12 +657,12 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessHbpMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" checked={checkboxValues.chronicIllness.hbp.medication} onChange={(e) => {handleCheckboxValueChange({field:'chronicIllness.hbp.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" checked={chronicIllnessHbpMedication} onChange={(e) => {handleChronicIllnessHbpMedicationChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessHbpTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" checked={checkboxValues.chronicIllness.hbp.testing} onChange={(e) => {handleCheckboxValueChange({field:'chronicIllness.hbp.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" checked={chronicIllnessHbpTesting} onChange={(e) => {handleChronicIllnessHbpTestingChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessHbpComment">
@@ -465,12 +676,12 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessDyslipidemiaMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.chronicIllness.dyslipidemia.medication} onChange={(e) => {handleCheckboxValueChange({field:'chronicIllness.dyslipidemia.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={chronicIllnessDyslipidemiaMedication} onChange={(e) => {handleChronicIllnessDyslipidemiaMedicationChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessDyslipidemiaTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.chronicIllness.dyslipidemia.testing} onChange={(e) => {handleCheckboxValueChange({field:'chronicIllness.dyslipidemia.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={chronicIllnessDyslipidemiaTesting} onChange={(e) => {handleChronicIllnessDyslipidemiaTestingChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessDyslipidemiaComment">
@@ -483,12 +694,12 @@ return (
     <Form.Row>
       <Form.Group as={Col} controlId="vigilanceChronicIllnessCadMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.chronicIllness.cad.medication} onChange={(e) => {handleCheckboxValueChange({field:'chronicIllness.cad.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={chronicIllnessCadMedication} onChange={(e) => {handleChronicIllnessCadMedicationChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessCadTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.chronicIllness.cad.testing} onChange={(e) => {handleCheckboxValueChange({field:'chronicIllness.cad.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={chronicIllnessCadTesting} onChange={(e) => {handleChronicIllnessCadTestingChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessCadComment">
@@ -504,12 +715,12 @@ return (
     <Form.Row>
       <Form.Group as={Col} controlId="vigilanceLifestyleWeightMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.lifestyle.weight.medication} onChange={(e) => {handleCheckboxValueChange({field:'lifestyle.weight.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={lifestyleWeightMedication} onChange={(e) => {handleLifestyleWeightMedicationChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceLifestyleWeightTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.lifestyle.weight.testing} onChange={(e) => {handleCheckboxValueChange({field:'lifestyle.weight.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={lifestyleWeightTesting} onChange={(e) => {handleLifestyleWeightTestingChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceLifestyleWeightComment">
@@ -522,12 +733,12 @@ return (
     <Form.Row>
       <Form.Group as={Col} controlId="vigilanceLifestyleDietMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.lifestyle.diet.medication} onChange={(e) => {handleCheckboxValueChange({field:'lifestyle.diet.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={lifestyleDietMedication} onChange={(e) => {handleLifestyleDietMedicationChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceLifestyleDietTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.lifestyle.diet.testing} onChange={(e) => {handleCheckboxValueChange({field:'lifestyle.diet.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={lifestyleDietTesting} onChange={(e) => {handleLifestyleDietTestingChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceLifestyleDietComment">
@@ -540,12 +751,12 @@ return (
     <Form.Row>
       <Form.Group as={Col} controlId="vigilanceLifestyleSmokingMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.lifestyle.smoking.medication} onChange={(e) => {handleCheckboxValueChange({field:'lifestyle.smoking.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={lifestyleSmokingMedication} onChange={(e) => {handleLifestyleSmokingMedicationChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceLifestyleSmokingTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.lifestyle.smoking.testing} onChange={(e) => {handleCheckboxValueChange({field:'lifestyle.smoking.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={lifestyleSmokingTesting} onChange={(e) => {handleLifestyleSmokingTestingChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceLifestyleSmokingComment">
@@ -558,12 +769,12 @@ return (
     <Form.Row>
       <Form.Group as={Col} controlId="vigilanceLifestyleSubstanceAbuseMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.lifestyle.substanceAbuse.medication} onChange={(e) => {handleCheckboxValueChange({field:'lifestyle.substanceAbuse.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={lifestyleSubstanceAbuseMedication} onChange={(e) => {handleLifestyleSubstanceAbuseMedicationChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceLifestyleSubstanceAbuseTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.lifestyle.substanceAbuse.testing} onChange={(e) => {handleCheckboxValueChange({field:'lifestyle.substanceAbuse.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={lifestyleSubstanceAbuseTesting} onChange={(e) => {handleLifestyleSubstanceAbuseTestingChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceLifestyleSubstanceAbuseComment">
@@ -576,12 +787,12 @@ return (
     <Form.Row>
       <Form.Group as={Col} controlId="vigilanceLifestyleExerciseMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.lifestyle.exercise.medication} onChange={(e) => {handleCheckboxValueChange({field:'lifestyle.exercise.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={lifestyleExerciseMedication} onChange={(e) => {handleLifestyleExerciseMedicationChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceLifestyleExerciseTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.lifestyle.exercise.testing} onChange={(e) => {handleCheckboxValueChange({field:'lifestyle.exercise.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={lifestyleExerciseTesting} onChange={(e) => {handleLifestyleExerciseTestingChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceLifestyleExerciseComment">
@@ -594,12 +805,12 @@ return (
     <Form.Row>
       <Form.Group as={Col} controlId="vigilanceLifestyleAllergiesMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.lifestyle.allergies.medication} onChange={(e) => {handleCheckboxValueChange({field:'lifestyle.allergies.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={lifestyleAllergiesMedication} onChange={(e) => {handleLifestyleAllergiesMedicationChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceLifestyleAllergiesTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.lifestyle.allergies.testing} onChange={(e) => {handleCheckboxValueChange({field:'lifestyle.allergies.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={lifestyleAllergiesTesting} onChange={(e) => {handleLifestyleAllergiesTestingChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceLifestyleAllergiesComment">
@@ -612,12 +823,12 @@ return (
     <Form.Row>
       <Form.Group as={Col} controlId="vigilanceLifestyleAsthmaMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.lifestyle.asthma.medication} onChange={(e) => {handleCheckboxValueChange({field:'lifestyle.asthma.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={lifestyleAsthmaMedication} onChange={(e) => {handleLifestyleAsthmaMedicationChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceLifestyleAsthmaTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.lifestyle.asthma.testing} onChange={(e) => {handleCheckboxValueChange({field:'lifestyle.asthma.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={lifestyleAsthmaTesting} onChange={(e) => {handleLifestyleAsthmaTestingChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceLifestyleAsthmaComment">
@@ -633,12 +844,12 @@ return (
     <Form.Row>
       <Form.Group as={Col} controlId="vigilanceScreeningBreastMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.screening.breast.medication} onChange={(e) => {handleCheckboxValueChange({field:'screening.breast.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={screeningBreastMedication} onChange={(e) => {handleScreeningBreastMedicationChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceScreeningBreastTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.screening.breast.testing} onChange={(e) => {handleCheckboxValueChange({field:'screening.breast.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={screeningBreastTesting} onChange={(e) => {handleScreeningBreastTestingChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceScreeningBreastComment">
@@ -651,12 +862,12 @@ return (
     <Form.Row>
       <Form.Group as={Col} controlId="vigilanceScreeningProstateMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.screening.prostate.medication} onChange={(e) => {handleCheckboxValueChange({field:'screening.prostate.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={screeningProstateMedication} onChange={(e) => {handleScreeningProstateMedicationChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceScreeningProstateTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.screening.prostate.testing} onChange={(e) => {handleCheckboxValueChange({field:'screening.prostate.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={screeningProstateTesting} onChange={(e) => {handleScreeningProstateTestingChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceScreeningProstateComment">
@@ -669,12 +880,12 @@ return (
     <Form.Row>
       <Form.Group as={Col} controlId="vigilanceScreeningCervixMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.screening.cervix.medication} onChange={(e) => {handleCheckboxValueChange({field:'screening.cervix.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={screeningCervixMedication} onChange={(e) => {handleScreeningCervixMedicationChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceScreeningCervixTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.screening.cervix.testing} onChange={(e) => {handleCheckboxValueChange({field:'screening.cervix.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={screeningCervixTesting} onChange={(e) => {handleScreeningCervixTestingChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceScreeningCervixComment">
@@ -687,12 +898,12 @@ return (
     <Form.Row>
       <Form.Group as={Col} controlId="vigilanceScreeningColonMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.screening.colon.medication} onChange={(e) => {handleCheckboxValueChange({field:'screening.colon.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={screeningColonMedication} onChange={(e) => {handleScreeningColonMedicationChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceScreeningColonTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.screening.colon.testing} onChange={(e) => {handleCheckboxValueChange({field:'screening.colon.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={screeningColonTesting} onChange={(e) => {handleScreeningColonTestingChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceScreeningColonComment">
@@ -705,12 +916,12 @@ return (
     <Form.Row>
       <Form.Group as={Col} controlId="vigilanceScreeningDentalMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.screening.dental.medication} onChange={(e) => {handleCheckboxValueChange({field:'screening.dental.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={screeningDentalMedication} onChange={(e) => {handleScreeningDentalMedicationChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceScreeningDentalTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.screening.dental.testing} onChange={(e) => {handleCheckboxValueChange({field:'screening.dental.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={screeningDentalTesting} onChange={(e) => {handleScreeningDentalTestingChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceScreeningDentalComment">
@@ -726,12 +937,12 @@ return (
     <Form.Row>
       <Form.Group as={Col} controlId="vigilanceVaccinesInfluenzaMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.vaccines.influenza.medication} onChange={(e) => {handleCheckboxValueChange({field:'vaccines.influenza.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={vaccinesInfluenzaMedication} onChange={(e) => {handleVaccinesInfluenzaMedicationChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceVaccinesInfluenzaTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.vaccines.influenza.testing} onChange={(e) => {handleCheckboxValueChange({field:'vaccines.influenza.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={vaccinesInfluenzaTesting} onChange={(e) => {handleVaccinesInfluenzaTestingChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceVaccinesInfluenzaComment">
@@ -744,12 +955,12 @@ return (
     <Form.Row>
       <Form.Group as={Col} controlId="vigilanceVaccinesVaricellaMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.vaccines.varicella.medication} onChange={(e) => {handleCheckboxValueChange({field:'vaccines.varicella.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={vaccinesVaricellaMedication} onChange={(e) => {handleVaccinesVaricellaMedicationChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceVaccinesVaricellaTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.vaccines.varicella.testing} onChange={(e) => {handleCheckboxValueChange({field:'vaccines.varicella.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={vaccinesVaricellaTesting} onChange={(e) => {handleVaccinesVaricellaTestingChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceVaccinesVaricellaComment">
@@ -762,12 +973,12 @@ return (
     <Form.Row>
       <Form.Group as={Col} controlId="vigilanceVaccinesHpvMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.vaccines.hpv.medication} onChange={(e) => {handleCheckboxValueChange({field:'vaccines.hpv.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={vaccinesHpvMedication} onChange={(e) => {handleVaccinesHpvMedicationChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceVaccinesHpvTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.vaccines.hpv.testing} onChange={(e) => {handleCheckboxValueChange({field:'vaccines.hpv.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={vaccinesHpvTesting} onChange={(e) => {handleVaccinesHpvTestingChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceVaccinesHpvComment">
@@ -780,12 +991,12 @@ return (
     <Form.Row>
       <Form.Group as={Col} controlId="vigilanceVaccinesMmrMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.vaccines.mmr.medication} onChange={(e) => {handleCheckboxValueChange({field:'vaccines.mmr.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={vaccinesMmrMedication} onChange={(e) => {handleVaccinesMmrMedicationChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceVaccinesMmrTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.vaccines.mmr.testing} onChange={(e) => {handleCheckboxValueChange({field:'vaccines.mmr.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={vaccinesMmrTesting} onChange={(e) => {handleVaccinesMmrTestingChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceVaccinesMmrComment">
@@ -798,12 +1009,12 @@ return (
     <Form.Row>
       <Form.Group as={Col} controlId="vigilanceVaccinesTetanusMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.vaccines.tetanus.medication} onChange={(e) => {handleCheckboxValueChange({field:'vaccines.tetanus.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={vaccinesTetanusMedication} onChange={(e) => {handleVaccinesTetanusMedicationChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceVaccinesTetanusTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.vaccines.tetanus.testing} onChange={(e) => {handleCheckboxValueChange({field:'vaccines.tetanus.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={vaccinesTetanusTesting} onChange={(e) => {handleVaccinesTetanusTestingChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceVaccinesTetanusComment">
@@ -816,12 +1027,12 @@ return (
     <Form.Row>
       <Form.Group as={Col} controlId="vigilanceVaccinesPneumovaxMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.vaccines.pneumovax.medication} onChange={(e) => {handleCheckboxValueChange({field:'vaccines.pneumovax.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={vaccinesPneumovaxMedication} onChange={(e) => {handleVaccinesPneumovaxMedicationChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceVaccinesPneumovaxTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.vaccines.pneumovax.testing} onChange={(e) => {handleCheckboxValueChange({field:'vaccines.pneumovax.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={vaccinesPneumovaxTesting} onChange={(e) => {handleVaccinesPneumovaxTestingChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceVaccinesPneumovaxComment">
@@ -839,12 +1050,12 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceVaccinesOtherMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.vaccines.other.medication} onChange={(e) => {handleCheckboxValueChange({field:'vaccines.other.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={vaccinesOtherMedication} onChange={(e) => {handleVaccinesOtherMedicationChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceVaccinesOtherTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.vaccines.other.testing} onChange={(e) => {handleCheckboxValueChange({field:'vaccines.other.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" value={vaccinesOtherTesting} onChange={(e) => {handleVaccinesOtherTestingChange(e.target.checked)}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceVaccinesOtherComment">
