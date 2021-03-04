@@ -427,12 +427,12 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessDiabetesMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.chronicIllness.diabetes.medication} onChange={(e) => {handleCheckboxValueChange({field:'chronicIllness.diabetes.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" checked={checkboxValues.chronicIllness.diabetes.medication} onChange={(e) => {handleCheckboxValueChange({field:'chronicIllness.diabetes.medication',value:e.target.checked})}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessDiabetesTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.chronicIllness.diabetes.testing} onChange={(e) => {handleCheckboxValueChange({field:'chronicIllness.diabetes.testing',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" checked={checkboxValues.chronicIllness.diabetes.testing} onChange={(e) => {handleCheckboxValueChange({field:'chronicIllness.diabetes.testing',value:e.target.checked})}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessDiabetesComment">
@@ -446,12 +446,12 @@ return (
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessHbpMedication">
         <Form.Label className="formLabel">Medication ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.chronicIllness.hbp.medication} onChange={(e) => {handleCheckboxValueChange({field:'chronicIllness.hbp.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" checked={checkboxValues.chronicIllness.hbp.medication} onChange={(e) => {handleCheckboxValueChange({field:'chronicIllness.hbp.medication',value:e.target.checked})}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessHbpTesting">
         <Form.Label className="formLabel">Testing ?</Form.Label>
-        <Form.Control type="checkbox" value={checkboxValues.chronicIllness.hbp.testing} onChange={(e) => {handleCheckboxValueChange({field:'chronicIllness.hbp.medication',value:e.target.checked})}}/>
+        <Form.Control type="checkbox" checked={checkboxValues.chronicIllness.hbp.testing} onChange={(e) => {handleCheckboxValueChange({field:'chronicIllness.hbp.medication',value:e.target.checked})}}/>
       </Form.Group>
 
       <Form.Group as={Col} controlId="vigilanceChronicIllnessHbpComment">

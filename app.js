@@ -18,6 +18,10 @@ const server = require('http').Server(app);
 const https = require("https");
 const io = require('socket.io')(server);
 let cron = require('node-cron');
+
+const { mongoExport } = require('mongoback');
+const mongoexport = require('mongoexport-wrapper');
+
 const User = require('./models/user');
 // const adminSocket = require('./middleware/adminSocket')
 // adminSocket.start(io)
@@ -34,6 +38,17 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+app.use(isAuth);
+
+app.use(
+  '/graphql',
+  graphqlHttp({
+    schema: graphQlSchema,
+    rootValue: graphQlResolvers,
+    graphiql: true
+  })
+);
 
 // if (process.env.APP_SECRET) {
 //   console.log('...env vars present...');
@@ -59,30 +74,73 @@ app.use((req, res, next) => {
 //  });
 
 
-app.use(isAuth);
+const dbs = {
+  local: 'mongodb://localhost:27017/mbj_ent_emr_v2',
+  atlas: `mongodb+srv://${process.env.ATLAS_A}:${process.env.ATLAS_B}@${process.env.ATLAS_C}/test?retryWrites=true&w=majority`
+}
 
-app.use(
-  '/graphql',
-  graphqlHttp({
-    schema: graphQlSchema,
-    rootValue: graphQlResolvers,
-    graphiql: true
-  })
-);
-
-// mongoose.connect(`mongodb+srv://${process.env.ATLAS_A}:${process.env.ATLAS_B}@${process.env.ATLAS_C}/test?retryWrites=true&w=majority`,
-mongoose.connect('mongodb://localhost:27017/mbj_ent_emr_v2',
-{useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(`mongodb+srv://${process.env.ATLAS_A}:${process.env.ATLAS_B}@${process.env.ATLAS_C}/test?retryWrites=true&w=majority`,
+// mongoose.connect('mongodb://localhost:27017/mbj_ent_emr_v2',
+{
+  // auto_reconnect: true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false
+})
   .then(() => {
     console.log(`
       DB connected... Now Serving on Port: ${process.env.PORT}
       `);
     app.listen(process.env.PORT);
     // app.listen(process.env.PORT, '192.168.0.9');
+
+    // const options = {
+    // uri: 'mongodb://user:secret@myhost:27017',
+    //     all: true,
+    //     outType: 'csv',
+    //     outDir: './db'
+    // };
+    // async () => {
+    //   console.log('xx');
+    //     await mongoExport(options);
+    // }
+
   })
   .catch(err => {
-    console.log(err);
+    console.log('mongoose connect error',err);
+
 });
+
+cron.schedule(' */30 * * * * *', () => {
+  let mongooseConnectionState = mongoose.connection.readyState;
+
+  switch (mongooseConnectionState) {
+  case 0:
+    console.log('mongoose disconnected');
+    break;
+  case 1:
+    console.log('mongoose connected');
+    break;
+  case 2:
+    console.log('mongoose connecting');
+    break;
+  case 3:
+    console.log('mongoose disconnecting');
+    break;
+  }
+
+});
+mongoose.connection.on('disconnected', function(){
+    console.log('db: mongodb is disconnected!!!');
+    // if disconnect error reconnect with dbs.local
+
+
+
+});
+mongoose.connection.on('reconnected', function(){
+    console.log('db: mongodb is reconnected: ' + url);
+});
+
 
 const userOffline = async function (args) {
   console.log("Socket.io: userOffline...",args);
@@ -181,13 +239,13 @@ io.on('connection', (socket) => {
 io.on('disconnect', (socket) => {
   console.log("a wild client disappeared..");
 });
+
 server.listen(process.env.SOCKET_PORT, function (err) {
   if (err) throw err
   console.log(`
     socket.io listening on port ${process.env.SOCKET_PORT}
     `)
 })
-
 
 app.use(
   express.static(path.join(__dirname, "./frontend/build"))
