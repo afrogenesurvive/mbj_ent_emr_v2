@@ -115,23 +115,23 @@ mongoose.connect(dbUri,
     console.log('mongoose connect error',err);
 });
 
-// cron.schedule(' */30 * * * * *', () => {
-//   let mongooseConnectionState = mongoose.connection.readyState;
-//   switch (mongooseConnectionState) {
-//   case 0:
-//     console.log('mongoose disconnected');
-//     break;
-//   case 1:
-//     console.log('mongoose connected');
-//     break;
-//   case 2:
-//     console.log('mongoose connecting');
-//     break;
-//   case 3:
-//     console.log('mongoose disconnecting');
-//     break;
-//   }
-// });
+cron.schedule(' */30 * * * * *', () => {
+  let mongooseConnectionState = mongoose.connection.readyState;
+  switch (mongooseConnectionState) {
+  case 0:
+    console.log('mongoose disconnected');
+    break;
+  case 1:
+    console.log('mongoose connected');
+    break;
+  case 2:
+    console.log('mongoose connecting');
+    break;
+  case 3:
+    console.log('mongoose disconnecting');
+    break;
+  }
+});
 
 mongoose.connection.on('connected', function(){
     console.log('db: mongodb is connected!!!');
