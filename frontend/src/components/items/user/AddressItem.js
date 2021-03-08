@@ -6,16 +6,16 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Popover from 'react-bootstrap/Popover';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faBatteryThreeQuarters,
-  faPlusSquare,
-  faBatteryEmpty,
-  faFolderMinus,
+  // faBatteryThreeQuarters,
+  // faPlusSquare,
+  // faBatteryEmpty,
+  // faFolderMinus,
   faEye,
-  faEraser,
+  // faEraser,
   faTrashAlt,
   faBan,
   faCheckSquare,
-  faExternalLinkAlt,
+  // faExternalLinkAlt,
   faEdit,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -51,7 +51,7 @@ const AddressItem = props => {
     }
 
   return (
-    <li key={props.key} className="">
+    <li key={props.count} className="">
       <Card>
         <Card.Body className={liClass}>
           <Card.Text className="cardText">

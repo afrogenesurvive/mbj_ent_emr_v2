@@ -18,6 +18,11 @@ const server = require('http').Server(app);
 const https = require("https");
 const io = require('socket.io')(server);
 let cron = require('node-cron');
+
+const { mongoExport } = require('mongoback');
+const fs = require('fs');
+const AWS = require('aws-sdk');
+
 const User = require('./models/user');
 // const adminSocket = require('./middleware/adminSocket')
 // adminSocket.start(io)
@@ -34,6 +39,17 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+app.use(isAuth);
+
+app.use(
+  '/graphql',
+  graphqlHttp({
+    schema: graphQlSchema,
+    rootValue: graphQlResolvers,
+    graphiql: true
+  })
+);
 
 // if (process.env.APP_SECRET) {
 //   console.log('...env vars present...');
@@ -59,30 +75,117 @@ app.use((req, res, next) => {
 //  });
 
 
-app.use(isAuth);
+const dbs = {
+  local: 'mongodb://localhost:27017/mbj_ent_emr_v2',
+  atlas: `mongodb+srv://${process.env.ATLAS_A}:${process.env.ATLAS_B}@${process.env.ATLAS_C}/test?retryWrites=true&w=majority`
+}
+let dbUri = dbs.local;
+const mongoBackOptions = {
+    uri: 'mongodb://localhost:27017/mbj_ent_emr_v2',
+    databases: 'mbj_ent_emr_v2',
+    // type: 'csv',
+    outDir: './db'
+};
+async function mongoBackup () {
+  try {
+      let result = await mongoExport(mongoBackOptions);
+      console.log('result',result);
+      uploadDbBackup();
+  } catch (err) {
+    throw err;
+  }
+}
 
-app.use(
-  '/graphql',
-  graphqlHttp({
-    schema: graphQlSchema,
-    rootValue: graphQlResolvers,
-    graphiql: true
-  })
-);
-
-mongoose.connect(`mongodb+srv://${process.env.ATLAS_A}:${process.env.ATLAS_B}@${process.env.ATLAS_C}/test?retryWrites=true&w=majority`,
-// mongoose.connect('mongodb://localhost:27017/mbj_ent_emr_v2',
-{useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(dbUri,
+{
+  // auto_reconnect: true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false
+})
   .then(() => {
     console.log(`
       DB connected... Now Serving on Port: ${process.env.PORT}
       `);
     app.listen(process.env.PORT);
     // app.listen(process.env.PORT, '192.168.0.9');
+
   })
   .catch(err => {
-    console.log(err);
+    console.log('mongoose connect error',err);
 });
+
+cron.schedule(' */30 * * * * *', () => {
+  let mongooseConnectionState = mongoose.connection.readyState;
+  switch (mongooseConnectionState) {
+  case 0:
+    console.log('mongoose disconnected');
+    break;
+  case 1:
+    console.log('mongoose connected');
+    break;
+  case 2:
+    console.log('mongoose connecting');
+    break;
+  case 3:
+    console.log('mongoose disconnecting');
+    break;
+  }
+});
+
+mongoose.connection.on('connected', function(){
+    console.log('db: mongodb is connected!!!');
+    // mongoBackup ();
+});
+mongoose.connection.on('disconnected', function(){
+    console.log('db: mongodb is disconnected!!!');
+    // dbUri = dbs.local
+
+});
+mongoose.connection.on('reconnected', function(){
+    console.log('db: mongodb is reconnected: ' + url);
+    // dbUri = dbs.atlas
+
+});
+
+function uploadDbBackup () {
+
+  const s3 = new AWS.S3({
+      accessKeyId: process.env.S3_A,
+      secretAccessKey: process.env.S3_B
+  });
+
+  const apptBackup = './db/mbj_ent_emr_v2/appointments.json';
+  const visitBackup = './db/mbj_ent_emr_v2/visits.json';
+  const patientBackup = './db/mbj_ent_emr_v2/patients.json';
+  const userBackup = './db/mbj_ent_emr_v2/users.json';
+  const queueBackup = './db/mbj_ent_emr_v2/queues.json';
+  const fileNames = [apptBackup,visitBackup,patientBackup,userBackup,queueBackup];
+
+  for (const file of fileNames) {
+    console.log(file);
+
+    const uploadFile = (fname) => {
+      fs.readFile(fname, (err, data) => {
+         if (err) throw err;
+         console.log('fs file data',fname,data);
+         // const params = {
+         //     Bucket: 'mbjentemrstorage',
+         //     Key: 'dbBackup/${fileName}',
+         //     Body: JSON.stringify(data, null, 2)
+         // };
+         // s3.upload(params, function(s3Err, data) {
+         //     if (s3Err) throw s3Err
+         //     console.log('data',data,`File uploaded successfully at ${data.Location}`)
+         // });
+
+      });
+    };
+    uploadFile(file);
+  }
+
+}
+
 
 const userOffline = async function (args) {
   console.log("Socket.io: userOffline...",args);
@@ -106,7 +209,7 @@ const userOnline = async function (args) {
 let connectedClients = [];
 let appSocket = {
   io: io,
-  socket: 'xxx',
+  socket: 'xx',
   log: (args) => {
     adminEmit(args)
   }
@@ -181,13 +284,13 @@ io.on('connection', (socket) => {
 io.on('disconnect', (socket) => {
   console.log("a wild client disappeared..");
 });
+
 server.listen(process.env.SOCKET_PORT, function (err) {
   if (err) throw err
   console.log(`
     socket.io listening on port ${process.env.SOCKET_PORT}
     `)
 })
-
 
 app.use(
   express.static(path.join(__dirname, "./frontend/build"))

@@ -2,35 +2,35 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Image from 'react-bootstrap/Image';
+// import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Tab from 'react-bootstrap/Tab';
-import Nav from 'react-bootstrap/Nav';
-import { NavLink } from 'react-router-dom';
+// import Container from 'react-bootstrap/Container';
+// import Tab from 'react-bootstrap/Tab';
+// import Nav from 'react-bootstrap/Nav';
+// import { NavLink } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
 import moment from 'moment-timezone';
 import AddToCalendar from 'react-add-to-calendar';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AuthContext from '../../context/auth-context';
-import AlertBox from '../alertBox/AlertBox';
+// import AlertBox from '../alertBox/AlertBox';
 import LoadingOverlay from '../overlay/LoadingOverlay';
 import LoadingOverlay2 from '../overlay/LoadingOverlay2';
 
-import PatientAddressList from '../lists/patient/PatientAddressList';
-import PatientNextOfKinList from '../lists/patient/PatientNextOfKinList'
-import PatientAllergyList from '../lists/patient/PatientAllergyList'
-import PatientMedicationList from '../lists/patient/PatientMedicationList'
-import PatientImageList from '../lists/patient/PatientImageList'
-import PatientFileList from '../lists/patient/PatientFileList'
-import UserAppointmentList from '../lists/user/UserAppointmentList'
-import AppointmentNoteList from '../lists/appointment/AppointmentNoteList'
-import AppointmentTagList from '../lists/appointment/AppointmentTagList'
-import UserList from '../lists/user/UserList'
+// import PatientAddressList from '../lists/patient/PatientAddressList';
+// import PatientNextOfKinList from '../lists/patient/PatientNextOfKinList';
+// import PatientAllergyList from '../lists/patient/PatientAllergyList';
+// import PatientMedicationList from '../lists/patient/PatientMedicationList';
+// import PatientImageList from '../lists/patient/PatientImageList';
+// import PatientFileList from '../lists/patient/PatientFileList';
+// import UserAppointmentList from '../lists/user/UserAppointmentList';
+import AppointmentNoteList from '../lists/appointment/AppointmentNoteList';
+import AppointmentTagList from '../lists/appointment/AppointmentTagList';
+import UserList from '../lists/user/UserList';
 
 
-import FilterAppointmentForm from '../forms/filter/FilterAppointmentForm';
+// import FilterAppointmentForm from '../forms/filter/FilterAppointmentForm';
 import FilterNoteForm from '../forms/filter/FilterNoteForm';
 import FilterTagForm from '../forms/filter/FilterTagForm';
 import FilterUserForm from '../forms/filter/FilterUserForm';
@@ -40,19 +40,19 @@ import UpdatePatientSingleFieldForm from '../forms/add/UpdatePatientSingleFieldF
 import AddUserForm from '../forms/add/AddUserForm';
 import AddNoteForm from '../forms/add/AddNoteForm';
 import AddTagForm from '../forms/add/AddTagForm';
-import loadingGif from '../../assets/loading.gif';
+// import loadingGif from '../../assets/loading.gif';
 import {
-  faBatteryThreeQuarters,
-  faPlusSquare,
-  faBatteryEmpty,
-  faFolderMinus,
-  faEye,
-  faEraser,
-  faTrashAlt,
-  faBan,
-  faCheckSquare,
+  // faBatteryThreeQuarters,
+  // faPlusSquare,
+  // faBatteryEmpty,
+  // faFolderMinus,
+  // faEye,
+  // faEraser,
+  // faTrashAlt,
+  // faBan,
+  // faCheckSquare,
   faExternalLinkAlt,
-  faBath
+  // faBath
 } from '@fortawesome/free-solid-svg-icons';
 import './details.css';
 
@@ -146,7 +146,7 @@ logUserActivity(args) {
         })
       {_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description},leave{type,startDate,endDate,description},images{name,type,path},files{name,type,path},notes,appointments{_id},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -185,7 +185,7 @@ getAllUsers (args) {
         activityId:"${activityId}" )
         {_id,title,name,role,username,registrationNumber,employmentDate,dob,age,gender,contact{phone,phone2,email},addresses{number,street,town,city,parish,country,postalCode,primary},loggedIn,clientConnected,verification{verified,type,code},attendance{date,status,description,highlighted},leave{type,startDate,endDate,description,highlighted},images{name,type,path,highlighted},files{name,type,path,highlighted},notes,appointments{_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id},patient{_id,name},consultants{_id},inProgress,attended,important,notes,tags,creator{_id}},reminders{_id},activity{date,request}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -259,7 +259,7 @@ submitAddNoteForm = (event) => {
         })
         {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -329,7 +329,7 @@ deleteNote = (args) => {
         })
         {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -407,7 +407,7 @@ submitAddTagForm = (event) => {
         })
         {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -477,7 +477,7 @@ deleteTag = (args) => {
         })
         {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -562,7 +562,7 @@ submitAddUserForm = (event) => {
       )
       {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -626,7 +626,7 @@ deleteConsultant = (args) => {
       )
       {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -704,7 +704,7 @@ submitUpdateSingleFieldForm = (event) => {
       )
       {_id,title,type,subType,date,time,checkinTime,seenTime,location,description,visit{_id,date,time,title,type,subType},patient{_id,active,title,name,role,username,registration{date,number},dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},consultants{_id,title,name,role,username,registrationNumber,dob,age,gender,loggedIn,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}},inProgress,attended,important,notes,tags,reminders{_id},creator{_id,title,name,role,username,registrationNumber,dob,age,gender,contact{phone,phone,email},addresses{number,street,town,city,parish,country,postalCode,primary}}}}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -847,7 +847,7 @@ checkConsultantAppointments = (date, consultant) => {
         date:"${date2}"
       )}
     `};
-   fetch('http://ec2-3-129-19-78.us-east-2.compute.amazonaws.com/graphql', {
+   fetch('http://localhost:8088/graphql', {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
