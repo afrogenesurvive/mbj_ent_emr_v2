@@ -79,7 +79,7 @@ const dbs = {
   local: 'mongodb://localhost:27017/mbj_ent_emr_v2',
   atlas: `mongodb+srv://${process.env.ATLAS_A}:${process.env.ATLAS_B}@${process.env.ATLAS_C}/test?retryWrites=true&w=majority`
 }
-let dbUri = dbs.local;
+let dbUri = dbs.atlas;
 const mongoBackOptions = {
     uri: 'mongodb://localhost:27017/mbj_ent_emr_v2',
     databases: 'mbj_ent_emr_v2',
