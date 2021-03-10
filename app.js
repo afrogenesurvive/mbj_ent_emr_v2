@@ -19,6 +19,7 @@ const https = require("https");
 const io = require('socket.io')(server);
 let cron = require('node-cron');
 
+const { spawn, exec } = require("child_process");
 const { mongoExport } = require('mongoback');
 const fs = require('fs');
 const AWS = require('aws-sdk');
@@ -79,7 +80,8 @@ const dbs = {
   local: 'mongodb://localhost:27017/mbj_ent_emr_v2',
   atlas: `mongodb+srv://${process.env.ATLAS_A}:${process.env.ATLAS_B}@${process.env.ATLAS_C}/test?retryWrites=true&w=majority`
 }
-let dbUri = dbs.local;
+let dbUri = dbs.atlas;
+
 const mongoBackOptions = {
     uri: 'mongodb://localhost:27017/mbj_ent_emr_v2',
     databases: 'mbj_ent_emr_v2',
@@ -95,58 +97,6 @@ async function mongoBackup () {
     throw err;
   }
 }
-
-mongoose.connect(dbUri,
-{
-  // auto_reconnect: true,
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false
-})
-  .then(() => {
-    console.log(`
-      DB connected... Now Serving on Port: ${process.env.PORT}
-      `);
-    app.listen(process.env.PORT);
-    // app.listen(process.env.PORT, '192.168.0.9');
-
-  })
-  .catch(err => {
-    console.log('mongoose connect error',err);
-});
-
-cron.schedule(' */30 * * * * *', () => {
-  let mongooseConnectionState = mongoose.connection.readyState;
-  switch (mongooseConnectionState) {
-  case 0:
-    console.log('mongoose disconnected');
-    break;
-  case 1:
-    console.log('mongoose connected');
-    break;
-  case 2:
-    console.log('mongoose connecting');
-    break;
-  case 3:
-    console.log('mongoose disconnecting');
-    break;
-  }
-});
-
-mongoose.connection.on('connected', function(){
-    console.log('db: mongodb is connected!!!');
-    // mongoBackup ();
-});
-mongoose.connection.on('disconnected', function(){
-    console.log('db: mongodb is disconnected!!!');
-    // dbUri = dbs.local
-
-});
-mongoose.connection.on('reconnected', function(){
-    console.log('db: mongodb is reconnected: ' + url);
-    // dbUri = dbs.atlas
-
-});
 
 function uploadDbBackup () {
 
@@ -185,6 +135,90 @@ function uploadDbBackup () {
   }
 
 }
+
+
+// cron.schedule(' */30 * * * * *', () => {
+//   let mongooseConnectionState = mongoose.connection.readyState;
+//   switch (mongooseConnectionState) {
+//   case 0:
+//     console.log('mongoose disconnected');
+//     break;
+//   case 1:
+//     console.log('mongoose connected');
+//     break;
+//   case 2:
+//     console.log('mongoose connecting');
+//     break;
+//   case 3:
+//     console.log('mongoose disconnecting');
+//     break;
+//   }
+// });
+
+mongoose.connection.on('connected', function(){
+    console.log('db: mongodb is connected!!!');
+    // mongoBackup ();
+});
+mongoose.connection.on('disconnected', function(){
+    console.log('db: mongodb is disconnected!!!');
+    // dbUri = dbs.local
+
+});
+mongoose.connection.on('reconnected', function(){
+    console.log('db: mongodb is reconnected: ' + url);
+
+
+    // export/backup local db
+
+
+    // dbUri = dbs.atlas
+
+    // import local data to atlas db
+
+    // mongoimport --uri "mongodb://root:<PASSWORD>@atlas-host1:27017,atlas-host2:27017,atlas-host3:27017/<DATABASE>?ssl=true&replicaSet=myAtlasRS&authSource=admin" --collection myData --file /somedir/myFileToImport.json
+
+});
+
+
+// executing shell command with node.js
+// const ls = spawn("ls", ["-la"]);
+//
+// ls.stdout.on("data", data => {
+//     console.log(`stdout: ${data}`);
+// });
+//
+// ls.stderr.on("data", data => {
+//     console.log(`stderr: ${data}`);
+// });
+//
+// ls.on('error', (error) => {
+//     console.log(`error: ${error.message}`);
+// });
+//
+// ls.on("close", code => {
+//     console.log(`child process exited with code ${code}`);
+// });
+
+
+
+mongoose.connect(dbUri,
+{
+  // auto_reconnect: true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false
+})
+  .then(() => {
+    console.log(`
+      DB connected... Now Serving on Port: ${process.env.PORT}
+      `);
+    app.listen(process.env.PORT);
+    // app.listen(process.env.PORT, '192.168.0.9');
+
+  })
+  .catch(err => {
+    console.log('mongoose connect error',err);
+});
 
 
 const userOffline = async function (args) {
